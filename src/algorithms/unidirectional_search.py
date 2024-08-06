@@ -32,8 +32,10 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name):
 
         # Increment the expansion counter
         expansions += 1
-        # if expansions % 10000 == 0:
-        print(f"Expanding state {current_state.path}")
+        if expansions % 10000 == 0:
+            print(
+                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+            )
 
         # Check if the current state is the goal state
         if current_state.head() == goal:
@@ -41,14 +43,14 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name):
             if current_path_length > best_path_length:
                 best_path = current_state.path
                 best_path_length = current_path_length
-                print(
-                    f"This state has head as the goal, and is the longest found, with length {current_path_length}"
-                )
+                # print(
+                #     f"This state has head as the goal, and is the longest found, with length {current_path_length}"
+                # )
             continue
 
         # Finish if the f_value is smaller than the best path length found so far
         if f_value <= best_path_length:
-            print(f"apparently we won't find a path longer than {best_path_length}")
+            # print(f"apparently we won't find a path longer than {best_path_length}")
             break
 
         # Generate successors

@@ -54,6 +54,8 @@ def bcc_heuristic(state, goal):
     # Create the BCT
     bct = nx.Graph()
     for i, component_i in enumerate(bcc):
+        bct.add_node(i)
+    for i, component_i in enumerate(bcc):
         for node in component_i:
             for j, component_j in enumerate(bcc):
                 if j <= i:
@@ -73,6 +75,9 @@ def bcc_heuristic(state, goal):
 
     try:
         bcc_path = nx.shortest_path(bct, head_bcc, goal_bcc)
+    # except nx.NodeNotFound:
+    #     print("node not found in bcc: ", bcc)
+    #     return 0
     except nx.NetworkXNoPath:
         return 0
 

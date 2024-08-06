@@ -1,9 +1,37 @@
 import networkx as nx
 import json
 import random
+import numpy as np
+import matplotlib.patches as patches
+
 
 # from ...src import *
 import matplotlib.pyplot as plt
+
+
+def create_random_graph(n, p=0.1):
+    """
+    Create a random graph with n vertices where each edge is included with probability p.
+
+    Parameters:
+    n (int): Number of vertices.
+    p (float): Probability of edge creation. Default is 0.1.
+
+    Returns:
+    networkx.Graph: The created random graph.
+    """
+    G = nx.Graph()
+
+    # Add n nodes to the graph
+    G.add_nodes_from(range(n))
+
+    # Add edges between pairs of nodes with probability p
+    for i in range(n):
+        for j in range(i + 1, n):
+            if random.random() < p:
+                G.add_edge(i, j)
+
+    return G
 
 
 # Function to create an n-dimensional cube graph
@@ -31,7 +59,7 @@ def create_grid_graph_w_random_blocks(x, y, n):
     nodes_to_remove = random.sample(list(G.nodes()), n)
     G.remove_nodes_from(nodes_to_remove)
 
-    return G
+    return G, nodes_to_remove
 
 
 # Function to create a grid graph and remove specified vertices
@@ -88,27 +116,131 @@ def save_graph_to_file(graph, filename):
         json.dump(data, f)
 
 
-# Inputs
-name_of_graph = "4x4 grid with blocks"
+def save_table_as_png(
+    rows, cols, black_cells, filename="grid.png", path=None, points=None
+):
+    # Create a figure and axis with a bit of padding to ensure all borders are shown
+    fig, ax = plt.subplots(figsize=(cols, rows), dpi=100)
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01)
 
-# Create the graph
-# G = nx.Graph()
-# G.add_nodes_from("stabc")
-# G.add_edges_from(
-#     [("s", "a"), ("s", "c"), ("a", "c"), ("c", "b"), ("c", "t"), ("b", "t")]
-# )
+    # Turn off axis
+    ax.axis("off")
 
-G = create_grid_graph_with_specified_blocks(4,4, [9,14])
+    # Create a table of all white cells
+    grid = np.full((rows, cols), 255)
 
-# x, y, n = 10, 10, 20
-# G = create_grid_graph_w_random_blocks(x, y, n)
-# G = create_nd_cube_graph(9)
+    # Make specified cells black if black_cells is not empty
+    if black_cells:
+        for cell in black_cells:
+            grid[cell // cols, cell % cols] = 0
 
-# Logs
-print("Graph created with:")
-print("number of nodes: ", G.number_of_nodes())
-print("number of edges: ", G.number_of_edges())
-display_graph(G, "Simple Graph", "simple_graph.png")
+    # Plot the grid
+    ax.imshow(grid, cmap="gray", aspect="auto", vmin=0, vmax=255)
 
-# Save the graph as JSON
-save_graph_to_file(G, "data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
+    # Add borders to the table and cells
+    for i in range(rows):
+        for j in range(cols):
+            # Create a rectangle patch for each cell
+            rect = patches.Rectangle(
+                (j - 0.5, i - 0.5),
+                1,
+                1,
+                linewidth=1,
+                edgecolor="black",
+                facecolor="none",
+            )
+            ax.add_patch(rect)
+
+    # Add borders around the entire table
+    outer_rect = patches.Rectangle(
+        (-0.5, -0.5), cols, rows, linewidth=2, edgecolor="black", facecolor="none"
+    )
+    ax.add_patch(outer_rect)
+
+    # Add text to each cell
+    for i in range(rows):
+        for j in range(cols):
+            cell_index = i * cols + j
+            color = "white" if grid[i, j] == 0 else "black"
+            ax.text(
+                j,
+                i,
+                str(cell_index),
+                va="center",
+                ha="center",
+                color=color,
+                fontsize=10,
+            )
+
+    # Add the path if provided
+    if path:
+        path_coords = [(cell % cols, cell // cols) for cell in path]
+        path_x, path_y = zip(*path_coords)
+        ax.plot(path_x, path_y, color="red", linewidth=2)
+
+    # Add points if provided
+    if points:
+        for point in points:
+            point_x, point_y = point % cols, point // cols
+            ax.plot(point_x, point_y, "bo", markersize=20)  # Blue dot
+
+    # Save the figure
+    plt.savefig(filename, bbox_inches="tight", pad_inches=0.1)
+    plt.close(fig)
+
+
+date = "6_8_24"
+number_of_graphs = 10
+size_of_graphs = [7, 6]
+suffled_blocks = list(range(size_of_graphs[0] * size_of_graphs[1]))
+random.shuffle(suffled_blocks)
+
+for i in range(0, number_of_graphs - 1):
+    # Inputs
+    name_of_graph = (
+        f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+    )
+    num_of_blocks = int(i % (size_of_graphs[0] * size_of_graphs[1] / 2))
+
+    # Create the graph
+    # G, blocks = create_grid_graph_w_random_blocks(6, 6, num_of_blocks)
+
+    # G = nx.Graph()
+    # G.add_nodes_from("stabc")
+    # G.add_edges_from(
+    #     [("s", "a"), ("s", "c"), ("a", "c"), ("c", "b"), ("c", "t"), ("b", "t")]
+    # )
+
+    blocks = suffled_blocks[0:i]
+    G = create_grid_graph_with_specified_blocks(
+        size_of_graphs[0], size_of_graphs[1], blocks
+    )
+
+    # G = create_random_graph(25, 0.2)
+
+    # G = create_nd_cube_graph(9)
+
+    # Logs
+    print("Graph created with:")
+    print("number of nodes: ", G.number_of_nodes())
+    print("number of edges: ", G.number_of_edges())
+    # display_graph(G, "Current Graph", "current_graph.png")
+
+    # Save the graph as JSON
+    save_graph_to_file(
+        G, "data/graphs/" + date + "/" + name_of_graph.replace(" ", "_") + ".json"
+    )
+    save_table_as_png(
+        size_of_graphs[0],
+        size_of_graphs[1],
+        blocks,
+        "data/graphs/" + date + "/" + name_of_graph.replace(" ", "_") + ".png",
+        None,
+        None,
+    )
+    c = 1
+    # display_graph(
+    #     G,
+    #     name_of_graph.replace(" ", "_"),
+    #     "data/graphs/" + name_of_graph.replace(" ", "_") + ".png",
+    # )

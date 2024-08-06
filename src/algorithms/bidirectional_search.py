@@ -5,6 +5,9 @@ from models.heapq_state import HeapqState
 
 
 def biHS_for_LSP(graph, start, goal, heuristic_name):
+    # Initialize meeting point of the two searches
+    best_path_meet_point = None
+
     # Initialize custom priority queues for forward and backward searches
     open_set_F = HeapqState()
     open_set_B = HeapqState()
@@ -45,8 +48,12 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
 
         current_path_length = len(current_state.path) - 1
         expansions += 1
-        # if expansions % 10000 == 0:
-        print(f"Expanding state {current_state.path}")
+        if expansions % 1000 == 0:
+            print(
+                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+            )
+            print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
+            print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         if direction == "F":
             closed_set_F.add(current_state)
@@ -57,29 +64,33 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
             for state in closed_set_B:
                 if (
                     current_state.head() == state.head()
-                    and current_state.pi().isdisjoint(state.pi())
+                    and not current_state.shares_vertex_with(state)
+                    # and current_state.pi().isdisjoint(state.pi())
                 ):
                     total_length = current_path_length + len(state.path) - 1
                     if total_length > best_path_length:
                         best_path_length = total_length
                         best_path = current_state.path[:-1] + state.path[::-1]
-                        print(f"Found longer path of length {total_length}")
+                        # print(f"Found longer path of length {total_length}")
         else:
             for state in closed_set_F:
-                if current_state.head() == state.head() and set(
-                    current_state.tail()
-                ).isdisjoint(set(state.tail())):
+                if (
+                    current_state.head() == state.head()
+                    and not current_state.shares_vertex_with(state)
+                    # and current_state.pi().isdisjoint(state.pi())
+                ):
                     total_length = current_path_length + len(state.path) - 1
                     if total_length > best_path_length:
                         best_path_length = total_length
                         best_path = state.path[:-1] + current_state.path[::-1]
-                        print(f"Found longer path of length {total_length}")
+                        best_path_meet_point = current_state.head()
+                        # print(f"Found longer path of length {total_length}")
 
         if best_path_length >= max(
             open_set_F.top()[3] if len(open_set_F) > 0 else float("-inf"),
             open_set_B.top()[3] if len(open_set_B) > 0 else float("-inf"),
         ):
-            print(f"Terminating with best path of length {best_path_length}")
+            # print(f"Terminating with best path of length {best_path_length}")
             break
 
         # Generate successors
@@ -92,8 +103,12 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
             f_value = g_value + h_value
 
             if direction == "F":
-                open_set_F.push(successor, f_value)
+                open_set_F.push(
+                    successor, min(f_value, 2 * h_value)
+                )  # 23.7 tzur used to be f_value
             else:
-                open_set_B.push(successor, f_value)
+                open_set_B.push(
+                    successor, min(f_value, 2 * h_value)
+                )  # 23.7 tzur used to be f_value
 
-    return best_path, expansions
+    return best_path, expansions, best_path_meet_point
