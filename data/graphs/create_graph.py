@@ -3,6 +3,7 @@ import json
 import random
 import numpy as np
 import matplotlib.patches as patches
+import os
 
 
 # from ...src import *
@@ -117,7 +118,7 @@ def save_graph_to_file(graph, filename):
 
 
 def save_table_as_png(
-    rows, cols, black_cells, filename="grid.png", path=None, points=None
+    rows, cols, black_cells=[], filename="grid.png", path=None, points=None
 ):
     # Create a figure and axis with a bit of padding to ensure all borders are shown
     fig, ax = plt.subplots(figsize=(cols, rows), dpi=100)
@@ -189,32 +190,47 @@ def save_table_as_png(
     plt.close(fig)
 
 
-date = "6_8_24"
-number_of_graphs = 10
-size_of_graphs = [7, 6]
+date = "6_10_24"
+number_of_graphs = 1
+size_of_graphs = [3, 3]
 suffled_blocks = list(range(size_of_graphs[0] * size_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
-for i in range(0, number_of_graphs - 1):
-    # Inputs
+# Create folder
+folder_path = "data/graphs/" + date + "/"
+if not os.path.exists(folder_path):
+    # Create the folder
+    os.makedirs(folder_path)
+
+
+for i in range(0, number_of_graphs ):
+    # Create a grid
     name_of_graph = (
         f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
     )
     num_of_blocks = int(i % (size_of_graphs[0] * size_of_graphs[1] / 2))
+    G, blocks = create_grid_graph_w_random_blocks(size_of_graphs[0], size_of_graphs[1], num_of_blocks)
 
-    # Create the graph
-    # G, blocks = create_grid_graph_w_random_blocks(6, 6, num_of_blocks)
-
+    # Create a manual graph
+    # name_of_graph = f"manual_graph_{i}"
     # G = nx.Graph()
-    # G.add_nodes_from("stabc")
+    # # G.add_nodes_from("x")
     # G.add_edges_from(
-    #     [("s", "a"), ("s", "c"), ("a", "c"), ("c", "b"), ("c", "t"), ("b", "t")]
+    #     [("x", "u1"),("x", "w1"),("x", "w4"),
+    #      ("u1", "u2"),("u1", "u4"),("u1", "u5"),
+    #      ("u4", "u2"), ("u4", "u5"),
+    #      ("u5", "u2"),
+    #      ("u2", "u3"),
+    #      ("u3", "t"),
+    #      ("w1", "w2"),("w2", "w3"),("w3", "t"),("w4", "t"),
+    #      ]
     # )
 
-    blocks = suffled_blocks[0:i]
-    G = create_grid_graph_with_specified_blocks(
-        size_of_graphs[0], size_of_graphs[1], blocks
-    )
+    # Create grid with specified blocks
+    # blocks = suffled_blocks[0:i]
+    # G = create_grid_graph_with_specified_blocks(
+    #     size_of_graphs[0], size_of_graphs[1], blocks
+    # )
 
     # G = create_random_graph(25, 0.2)
 
@@ -227,14 +243,12 @@ for i in range(0, number_of_graphs - 1):
     # display_graph(G, "Current Graph", "current_graph.png")
 
     # Save the graph as JSON
-    save_graph_to_file(
-        G, "data/graphs/" + date + "/" + name_of_graph.replace(" ", "_") + ".json"
-    )
+    save_graph_to_file(G, folder_path + name_of_graph.replace(" ", "_") + ".json")
     save_table_as_png(
         size_of_graphs[0],
         size_of_graphs[1],
         blocks,
-        "data/graphs/" + date + "/" + name_of_graph.replace(" ", "_") + ".png",
+        folder_path + name_of_graph.replace(" ", "_") + ".png",
         None,
         None,
     )

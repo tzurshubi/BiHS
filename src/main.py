@@ -1,7 +1,9 @@
 import pandas as pd
-import networkx as nx
+
+# import networkx as nx
 import json
 import random
+import traceback
 import numpy as np
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -94,6 +96,7 @@ def search(
     search_type,
     heuristic,
 ):
+    print(f"Running search with parameters: Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
     G = load_graph_from_file("data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     blocks = []
@@ -144,6 +147,10 @@ def search(
     return logs, path, meet_point
 
 
+from sage.graphs.connectivity import TriconnectivitySPQR
+from sage.graphs.graph import Graph
+
+
 # Initialize an empty DataFrame to store the results
 columns = [
     "# blocks",
@@ -156,9 +163,9 @@ columns = [
 ]
 results_df = pd.DataFrame(columns=columns)
 
-date = "5_8_24"
+date = "6_10_24"
 number_of_graphs = 1
-size_of_graphs = [7, 7]
+size_of_graphs = [3,3]
 
 columns = [
     "# blocks",
@@ -174,14 +181,19 @@ results = []
 for i in range(0, number_of_graphs):
     try:
         # Inputs
-        name_of_graph = f"{date}/{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+        name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
         start = 0  # "s"
         goal = size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
         heuristic = (
-            "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic"
+            "mis_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
         )
 
+        # name_of_graph='manual_graph_0'
+        # start = "s"
+        # goal="t"
+
         print("--------------------------")
+        name_of_graph=f"{date}/"+name_of_graph
         print(name_of_graph)
 
         # # unidirectional s-t
@@ -240,7 +252,9 @@ for i in range(0, number_of_graphs):
                 "Grid with Solution": "file_path_here",  # Update with actual file path if needed
             }
         )
-    except:
+    except Exception as e:
+        print("An error occurred:")
+        traceback.print_exc()
         break
     finally:
         # Convert results to a DataFrame

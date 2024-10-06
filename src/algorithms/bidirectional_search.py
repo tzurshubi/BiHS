@@ -5,6 +5,10 @@ from models.heapq_state import HeapqState
 
 
 def biHS_for_LSP(graph, start, goal, heuristic_name):
+    # Options
+    alternate = False
+    lastDirectionF = False
+
     # Initialize meeting point of the two searches
     best_path_meet_point = None
 
@@ -37,29 +41,40 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
 
     while len(open_set_F) > 0 or len(open_set_B) > 0:
         # Determine which direction to expand
-        if len(open_set_F) > 0 and (
-            len(open_set_B) == 0 or open_set_F.top()[3] >= open_set_B.top()[3]
-        ):
-            _, _, current_state, f_value = open_set_F.pop()
-            direction = "F"
-        else:
-            _, _, current_state, f_value = open_set_B.pop()
-            direction = "B"
+        direction = None
 
-        current_path_length = len(current_state.path) - 1
-        expansions += 1
-        if expansions % 1000 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
-            print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
-            print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
+        if alternate:
+            if lastDirectionF == True:
+                direction = "B"
+            else:
+                direction = "F"
+            lastDirectionF = not lastDirectionF
+        else:
+            if len(open_set_F) > 0 and (
+                len(open_set_B) == 0 or open_set_F.top()[3] >= open_set_B.top()[3]
+            ):
+                direction = "F"
+            else:
+                direction = "B"
 
         if direction == "F":
+            _, _, current_state, f_value = open_set_F.pop()
             closed_set_F.add(current_state)
         else:
+            _, _, current_state, f_value = open_set_B.pop()
             closed_set_B.add(current_state)
 
+        # Logs
+        current_path_length = len(current_state.path) - 1
+        expansions += 1
+        # if expansions % 2001 == 0:
+        #     print(
+        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+        #     )
+        #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
+        #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
+
+        # Check against CLOSED of the other direction
         if direction == "F":
             for state in closed_set_B:
                 if (
@@ -86,6 +101,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
                         best_path_meet_point = current_state.head()
                         # print(f"Found longer path of length {total_length}")
 
+        # Check if U is the largest it will ever be
         if best_path_length >= max(
             open_set_F.top()[3] if len(open_set_F) > 0 else float("-inf"),
             open_set_B.top()[3] if len(open_set_B) > 0 else float("-inf"),
