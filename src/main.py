@@ -13,6 +13,8 @@ import tracemalloc
 from models.graph import *
 from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
+from sage.graphs.connectivity import TriconnectivitySPQR
+from sage.graphs.graph import Graph
 
 
 # This function is only a copy! the original is in create_graph.py
@@ -95,8 +97,9 @@ def search(
     goal,
     search_type,
     heuristic,
+    snake = False,
 ):
-    print(f"Running search with parameters: Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
+    # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
     G = load_graph_from_file("data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     blocks = []
@@ -112,11 +115,13 @@ def search(
     meet_point = None
     tracemalloc.start()
     start_time = time.time()
+
     # Run heuristic search to find LSP in the graph
     if search_type == "unidirectional":
-        path, expansions = uniHS_for_LSP(G, start, goal, heuristic)
+        path, expansions = uniHS_for_LSP(G, start, goal, heuristic, snake)
     elif search_type == "bidirectional":
-        path, expansions, meet_point = biHS_for_LSP(G, start, goal, heuristic)
+        path, expansions, meet_point = biHS_for_LSP(G, start, goal, heuristic, snake)
+
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
     tracemalloc.stop()
@@ -147,9 +152,14 @@ def search(
     return logs, path, meet_point
 
 
-from sage.graphs.connectivity import TriconnectivitySPQR
-from sage.graphs.graph import Graph
 
+# Inputs
+date = "14_10_24"
+number_of_graphs = 1
+graph_type = "cube" # "grid" # "cube" # "manual"
+size_of_graphs = [4,4]
+heuristic = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
+snake = True # True # False
 
 # Initialize an empty DataFrame to store the results
 columns = [
@@ -162,81 +172,71 @@ columns = [
     "Grid with Solution",
 ]
 results_df = pd.DataFrame(columns=columns)
-
-date = "6_10_24"
-number_of_graphs = 1
-size_of_graphs = [3,3]
-
-columns = [
-    "# blocks",
-    "Search type",
-    "# expansions",
-    "Time [ms]",
-    "Memory [kB]",
-    "[g_F,g_B]",
-    "Grid with Solution",
-]
 results = []
+
 
 for i in range(0, number_of_graphs):
     try:
         # Inputs
-        name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-        start = 0  # "s"
-        goal = size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-        heuristic = (
-            "mis_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
-        )
-
-        # name_of_graph='manual_graph_0'
-        # start = "s"
-        # goal="t"
+        if graph_type=="grid":
+            name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+            start = 0  # 0 # "s"
+            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        elif graph_type=="cube":
+            # if i<3: continue
+            name_of_graph=f"{size_of_graphs[0]}d_hypercube"
+            start = 0
+            goal = 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        elif graph_type=="manual":
+            name_of_graph = f"paper_graph_{i}"
+            start = "s"  # 0 # "s"
+            goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
         print("--------------------------")
         name_of_graph=f"{date}/"+name_of_graph
         print(name_of_graph)
 
-        # # unidirectional s-t
-        # logs, path, _ = search(
-        #     name_of_graph, size_of_graphs, start, goal, "unidirectional", heuristic
-        # )
-        # print(
-        #     f"unidirectional s-t. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
-        # )
-        # results.append(
-        #     {
-        #         "# blocks": i,
-        #         "Search type": "unidirectional s-t",
-        #         "# expansions": logs["expansions"],
-        #         "Time [ms]": logs["time[ms]"],
-        #         "Memory [kB]": logs["memory[kB]"],
-        #         "[g_F,g_B]": "[N/A,N/A]",
-        #         "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-        #     }
-        # )
+        # unidirectional s-t
+        logs, path, _ = search(
+            name_of_graph, size_of_graphs, start, goal, "unidirectional", heuristic, snake
+        )
+        print(
+            f"unidirectional s-t. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
+        )
+        results.append(
+            {
+                "# blocks": i,
+                "Search type": "unidirectional s-t",
+                "# expansions": logs["expansions"],
+                "Time [ms]": logs["time[ms]"],
+                "Memory [kB]": logs["memory[kB]"],
+                "[g_F,g_B]": "[N/A,N/A]",
+                "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+            }
+        )
 
-        # # unidirectional t-s
-        # logs, path, _ = search(
-        #     name_of_graph, size_of_graphs, goal, start, "unidirectional", heuristic
-        # )
-        # print(
-        #     f"unidirectional t-s. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
-        # )
-        # results.append(
-        #     {
-        #         "# blocks": i,
-        #         "Search type": "unidirectional t-s",
-        #         "# expansions": logs["expansions"],
-        #         "Time [ms]": logs["time[ms]"],
-        #         "Memory [kB]": logs["memory[kB]"],
-        #         "[g_F,g_B]": "[N/A,N/A]",
-        #         "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-        #     }
-        # )
+        # unidirectional t-s
+        logs, path, _ = search(
+            name_of_graph, size_of_graphs, goal, start, "unidirectional", heuristic, snake
+        )
+        print(
+            f"unidirectional t-s. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
+        )
+        results.append(
+            {
+                "# blocks": i,
+                "Search type": "unidirectional t-s",
+                "# expansions": logs["expansions"],
+                "Time [ms]": logs["time[ms]"],
+                "Memory [kB]": logs["memory[kB]"],
+                "[g_F,g_B]": "[N/A,N/A]",
+                "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+            }
+        )
 
         # bidirectional
         logs, path, meet_point = search(
-            name_of_graph, size_of_graphs, start, goal, "bidirectional", heuristic
+            name_of_graph, size_of_graphs, start, goal, "bidirectional", heuristic, snake
         )
         print(
             f"bidirectional. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges], g_F: {logs['g_F']}, g_B: {logs['g_B']}"

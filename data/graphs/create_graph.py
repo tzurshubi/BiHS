@@ -190,10 +190,11 @@ def save_table_as_png(
     plt.close(fig)
 
 
-date = "6_10_24"
-number_of_graphs = 1
-size_of_graphs = [3, 3]
-suffled_blocks = list(range(size_of_graphs[0] * size_of_graphs[1]))
+date = "14_10_24"
+number_of_graphs = 10
+graph_type = "cube" # "grid" # "cube" # "manual"
+dimension_of_graphs = [5,5] # dimension for cube
+suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
 # Create folder
@@ -203,34 +204,50 @@ if not os.path.exists(folder_path):
     os.makedirs(folder_path)
 
 
-for i in range(0, number_of_graphs ):
+for i in range(0, number_of_graphs):
     # Create a grid
-    name_of_graph = (
-        f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-    )
-    num_of_blocks = int(i % (size_of_graphs[0] * size_of_graphs[1] / 2))
-    G, blocks = create_grid_graph_w_random_blocks(size_of_graphs[0], size_of_graphs[1], num_of_blocks)
+    if graph_type=="grid":
+        name_of_graph = (
+            f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{i}"
+        )
+        num_of_blocks = int(i % (dimension_of_graphs[0] * dimension_of_graphs[1] / 2))
+        G, blocks = create_grid_graph_w_random_blocks(dimension_of_graphs[0], dimension_of_graphs[1], num_of_blocks)
+
+        # Create grid with specified blocks
+        blocks = [3,6,7,16,17,18] # suffled_blocks[0:i]
+        G = create_grid_graph_with_specified_blocks(
+            dimension_of_graphs[0], dimension_of_graphs[1], blocks
+        )
+
+    # Create a cube
+    if graph_type=="cube":
+        name_of_graph=f"{i}d_hypercube"
+        G = create_nd_cube_graph(i)
+        if G.has_edge(0, 1):
+            G.remove_edge(0, 1)
 
     # Create a manual graph
-    # name_of_graph = f"manual_graph_{i}"
-    # G = nx.Graph()
-    # # G.add_nodes_from("x")
-    # G.add_edges_from(
-    #     [("x", "u1"),("x", "w1"),("x", "w4"),
-    #      ("u1", "u2"),("u1", "u4"),("u1", "u5"),
-    #      ("u4", "u2"), ("u4", "u5"),
-    #      ("u5", "u2"),
-    #      ("u2", "u3"),
-    #      ("u3", "t"),
-    #      ("w1", "w2"),("w2", "w3"),("w3", "t"),("w4", "t"),
-    #      ]
-    # )
-
-    # Create grid with specified blocks
-    # blocks = suffled_blocks[0:i]
-    # G = create_grid_graph_with_specified_blocks(
-    #     size_of_graphs[0], size_of_graphs[1], blocks
-    # )
+    # if graph_type=="manual":
+    #     name_of_graph = f"paper_graph_{i}"
+    #     G = nx.Graph()
+    #     G.add_nodes_from("x")
+    #     G.add_edges_from(
+    #         [("s", "1"),("s", "2"),("1", "2"),
+    #         ("3", "4"),("4", "5"),("3", "5"),
+    #         ("6", "7"),("6", "t"),("7", "t"),
+    #         ("2", "3"),("2", "6"),("3", "6"),
+    #         ]
+    #     )
+    #     G.add_edges_from(
+    #     [("s", "v1"), ("s", "y"), ("s", "v2"), ("v1","v2"),("v1", "y"),("x", "v1"),("x", "v2"),("x", "y"),
+    #     ("y", "z'"), ("y", "z"), ("z", "z'"),
+    #     ("w4", "x"), ("w4", "t"),
+    #     ("x","w1"),("w1", "w2"), ("w2", "w3"),("w3", "t"),
+    #     ("u1", "x"), ("u1", "u2"), ("u2", "u3"), ("u3", "t"),
+    #     ("u1", "u4"), ("u2", "u4"),
+    #     ("u4", "u5"), ("u5", "u2"),("u1", "u5")
+    #     ]
+    #         )
 
     # G = create_random_graph(25, 0.2)
 
@@ -240,21 +257,26 @@ for i in range(0, number_of_graphs ):
     print("Graph created with:")
     print("number of nodes: ", G.number_of_nodes())
     print("number of edges: ", G.number_of_edges())
-    # display_graph(G, "Current Graph", "current_graph.png")
+    display_graph(G, "Current Graph", "current_graph.png")
 
     # Save the graph as JSON
     save_graph_to_file(G, folder_path + name_of_graph.replace(" ", "_") + ".json")
-    save_table_as_png(
-        size_of_graphs[0],
-        size_of_graphs[1],
-        blocks,
-        folder_path + name_of_graph.replace(" ", "_") + ".png",
-        None,
-        None,
-    )
-    c = 1
-    # display_graph(
-    #     G,
-    #     name_of_graph.replace(" ", "_"),
-    #     "data/graphs/" + name_of_graph.replace(" ", "_") + ".png",
-    # )
+
+    # If it's a Grid, Save it as PNG
+    if graph_type=="grid": 
+        save_table_as_png(
+            dimension_of_graphs[0],
+            dimension_of_graphs[1],
+            blocks,
+            folder_path + name_of_graph.replace(" ", "_") + ".png",
+            None,
+            None,
+        )
+    
+    # Save the graph as PNG
+    else:
+        display_graph(
+            G,
+            name_of_graph.replace(" ", "_"),
+            folder_path + name_of_graph.replace(" ", "_") + ".png",
+        )

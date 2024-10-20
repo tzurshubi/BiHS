@@ -1,10 +1,18 @@
+import matplotlib.pyplot as plt
 import heapq
 from heuristics.heuristic import heuristic
 from models.state import State
 from models.heapq_state import HeapqState
 
 
-def biHS_for_LSP(graph, start, goal, heuristic_name):
+def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
+    # # For Plotting h
+    # mis_smaller_flag = []
+    # expansions_list = []
+    # h_MIS = []
+    # h_BCC = []
+    # max_f = []
+
     # Options
     alternate = False
     lastDirectionF = False
@@ -17,12 +25,12 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
     open_set_B = HeapqState()
 
     # Initial states
-    initial_state_F = State(graph, [start])
-    initial_state_B = State(graph, [goal])
+    initial_state_F = State(graph, [start], snake)
+    initial_state_B = State(graph, [goal], snake)
 
     # Initial f_values
-    initial_f_value_F = heuristic(initial_state_F, goal, heuristic_name)
-    initial_f_value_B = heuristic(initial_state_B, start, heuristic_name)
+    initial_f_value_F = heuristic(initial_state_F, goal, heuristic_name, snake)
+    initial_f_value_B = heuristic(initial_state_B, start, heuristic_name, snake)
 
     # Push initial states with priority based on f_value
     open_set_F.push(initial_state_F, initial_f_value_F)
@@ -67,10 +75,10 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
         # Logs
         current_path_length = len(current_state.path) - 1
         expansions += 1
-        # if expansions % 2001 == 0:
-        #     print(
-        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-        #     )
+        if expansions % 1 == 0:
+            print(
+                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+            )
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
@@ -79,7 +87,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
             for state in closed_set_B:
                 if (
                     current_state.head() == state.head()
-                    and not current_state.shares_vertex_with(state)
+                    and not current_state.shares_vertex_with(state, snake)
                     # and current_state.pi().isdisjoint(state.pi())
                 ):
                     total_length = current_path_length + len(state.path) - 1
@@ -91,7 +99,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
             for state in closed_set_F:
                 if (
                     current_state.head() == state.head()
-                    and not current_state.shares_vertex_with(state)
+                    and not current_state.shares_vertex_with(state, snake)
                     # and current_state.pi().isdisjoint(state.pi())
                 ):
                     total_length = current_path_length + len(state.path) - 1
@@ -110,21 +118,40 @@ def biHS_for_LSP(graph, start, goal, heuristic_name):
             break
 
         # Generate successors
-        successors = current_state.successor()
+        successors = current_state.successor(snake)
         for successor in successors:
             h_value = heuristic(
-                successor, goal if direction == "F" else start, heuristic_name
+                successor, goal if direction == "F" else start, heuristic_name, snake
             )
+
+            # # For Plotting h
+            # h_BCC.append(h_value)
+            # h_mis = heuristic(successor, goal if direction == "F" else start, "mis_heuristic")
+            # h_MIS.append(h_mis+0.1)
+            # mis_smaller_flag.append(-1 if h_value<h_mis else 0 if h_value==h_mis else 1)
+            # max_f.append(f_value)
+            # expansions_list.append(expansions)
+
             g_value = current_path_length + 1
             f_value = g_value + h_value
 
             if direction == "F":
                 open_set_F.push(
-                    successor, min(f_value, 2 * h_value)
+                    successor, min(f_value, 2 * h_value, 8-successor.g())
                 )  # 23.7 tzur used to be f_value
             else:
                 open_set_B.push(
-                    successor, min(f_value, 2 * h_value)
+                    successor, min(f_value, 2 * h_value, 8-successor.g())
                 )  # 23.7 tzur used to be f_value
+    
+    # # For Plotting h
+    # plt.plot(expansions_list, h_MIS, label='h_MIS')
+    # plt.plot(expansions_list, h_BCC, label='h_BCC')
+    # plt.plot(expansions_list, max_f, label='max_f')
+    # plt.plot(expansions_list, mis_smaller_flag, label='mis_smaller_flag')
+    # plt.legend()
+    # plt.xlabel("# expansions")
+    # plt.ylabel("h value")
+    # plt.savefig("h_vs_expansions.png")
 
     return best_path, expansions, best_path_meet_point
