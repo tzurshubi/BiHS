@@ -5,15 +5,15 @@ from models.state import State
 from models.heapq_state import HeapqState
 
 
-def uniHS_for_LSP(graph, start, goal, heuristic_name):
+def uniHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
     # Initialize custom priority queue
     open_set = HeapqState()
 
     # Initial state
-    initial_state = State(graph, [start])
+    initial_state = State(graph, [start], snake)
 
     # Initial f_value
-    initial_f_value = heuristic(initial_state, goal, heuristic_name)
+    initial_f_value = heuristic(initial_state, goal, heuristic_name, snake)
 
     # Push initial state with priority based on f_value
     open_set.push(initial_state, initial_f_value)
@@ -32,10 +32,10 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name):
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 10000 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
+        # if expansions % 1 == 0:
+        #     print(
+        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+        #     )
 
         # Check if the current state is the goal state
         if current_state.head() == goal:
@@ -54,10 +54,10 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name):
             break
 
         # Generate successors
-        successors = current_state.successor()
+        successors = current_state.successor(snake)
         for successor in successors:
             # Calculate the heuristic value
-            h_value = heuristic(successor, goal, heuristic_name)
+            h_value = heuristic(successor, goal, heuristic_name, snake)
             # Calculate the g_value
             g_value = current_path_length + 1
             # Calculate the f_value
