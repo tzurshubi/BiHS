@@ -37,8 +37,8 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
     open_set_B.push(initial_state_B, initial_f_value_B)
 
     # Best path found and its length
-    best_path = None
-    best_path_length = -1
+    best_path = None        # S in the pseudocode
+    best_path_length = -1   # U in the pseudocode
 
     # Expansion counter
     expansions = 0
@@ -49,23 +49,23 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
 
     while len(open_set_F) > 0 or len(open_set_B) > 0:
         # Determine which direction to expand
-        direction = None
-
+        directionF = None # True - Forward, False - Backward 
         if alternate:
             if lastDirectionF == True:
-                direction = "B"
+                directionF = False
             else:
-                direction = "F"
+                directionF = True
             lastDirectionF = not lastDirectionF
         else:
             if len(open_set_F) > 0 and (
                 len(open_set_B) == 0 or open_set_F.top()[3] >= open_set_B.top()[3]
             ):
-                direction = "F"
+                directionF = True
             else:
-                direction = "B"
+                directionF = False
 
-        if direction == "F":
+        # Pop the best state from OPEN
+        if directionF:
             _, _, current_state, f_value = open_set_F.pop()
             closed_set_F.add(current_state)
         else:
@@ -75,15 +75,15 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
         # Logs
         current_path_length = len(current_state.path) - 1
         expansions += 1
-        if expansions % 1 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
+        # if expansions % 10000 == 0:
+        #     print(
+        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+        #     )
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         # Check against CLOSED of the other direction
-        if direction == "F":
+        if directionF:
             for state in closed_set_B:
                 if (
                     current_state.head() == state.head()
@@ -121,7 +121,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
         successors = current_state.successor(snake)
         for successor in successors:
             h_value = heuristic(
-                successor, goal if direction == "F" else start, heuristic_name, snake
+                successor, goal if directionF else start, heuristic_name, snake
             )
 
             # # For Plotting h
@@ -135,14 +135,10 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
             g_value = current_path_length + 1
             f_value = g_value + h_value
 
-            if direction == "F":
-                open_set_F.push(
-                    successor, min(f_value, 2 * h_value, 8-successor.g())
-                )  # 23.7 tzur used to be f_value
+            if directionF:
+                open_set_F.push(successor, min(f_value, 2 * h_value)) # MM
             else:
-                open_set_B.push(
-                    successor, min(f_value, 2 * h_value, 8-successor.g())
-                )  # 23.7 tzur used to be f_value
+                open_set_B.push(successor, min(f_value, 2 * h_value)) # MM
     
     # # For Plotting h
     # plt.plot(expansions_list, h_MIS, label='h_MIS')

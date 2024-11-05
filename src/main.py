@@ -154,12 +154,12 @@ def search(
 
 
 # Inputs
-date = "14_10_24"
-number_of_graphs = 1
-graph_type = "cube" # "grid" # "cube" # "manual"
-size_of_graphs = [4,4]
+date = "20_10_24"
+number_of_graphs = 20
+graph_type = "maze" # "grid" # "cube" # "manual" # "maze"
+size_of_graphs = [13,13]
 heuristic = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
-snake = True # True # False
+snake = False # True # False
 
 # Initialize an empty DataFrame to store the results
 columns = [
@@ -175,6 +175,7 @@ results_df = pd.DataFrame(columns=columns)
 results = []
 
 
+# for i in list(reversed(range(0, number_of_graphs-10))):
 for i in range(0, number_of_graphs):
     try:
         # Inputs
@@ -182,6 +183,11 @@ for i in range(0, number_of_graphs):
             name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
             start = 0  # 0 # "s"
             goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        elif graph_type=="maze":
+            name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+            start = 0  # 0 # "s"
+            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        
         elif graph_type=="cube":
             # if i<3: continue
             name_of_graph=f"{size_of_graphs[0]}d_hypercube"
@@ -201,7 +207,7 @@ for i in range(0, number_of_graphs):
             name_of_graph, size_of_graphs, start, goal, "unidirectional", heuristic, snake
         )
         print(
-            f"unidirectional s-t. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
+            f"! unidirectional s-t. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
         )
         results.append(
             {
@@ -220,7 +226,7 @@ for i in range(0, number_of_graphs):
             name_of_graph, size_of_graphs, goal, start, "unidirectional", heuristic, snake
         )
         print(
-            f"unidirectional t-s. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
+            f"! unidirectional t-s. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
         )
         results.append(
             {
@@ -239,7 +245,7 @@ for i in range(0, number_of_graphs):
             name_of_graph, size_of_graphs, start, goal, "bidirectional", heuristic, snake
         )
         print(
-            f"bidirectional. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges], g_F: {logs['g_F']}, g_B: {logs['g_B']}"
+            f"! bidirectional. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges], g_F: {logs['g_F']}, g_B: {logs['g_B']}"
         )
         results.append(
             {

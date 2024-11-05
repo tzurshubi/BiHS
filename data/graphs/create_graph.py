@@ -10,6 +10,35 @@ import os
 import matplotlib.pyplot as plt
 
 
+def random_5x5_nodes_from_13x13_grid():
+    blocks = []
+    grid = np.arange(169).reshape(13, 13)
+
+    # Select a random top-left corner for the 5x5 sub-grid
+    start_row = random.randint(0, 13 - 5)
+    start_col = random.randint(0, 13 - 5)
+    print(f"Top-left corner: ({start_row}, {start_col})")
+
+    # Extract the 5x5 sub-grid
+    sub_grid = grid[start_row:start_row + 5, start_col:start_col + 5]
+
+    # Extract the rhombus shape within the 5x5 grid
+    blocks.append(sub_grid[0, 2])  # Middle element in the first row
+    blocks.extend(sub_grid[1, 1:4:1])  # Two middle elements in the second row
+    blocks.extend(sub_grid[2, 0:5])  # All elements in the third row
+    blocks.extend(sub_grid[3, 1:4:1])  # Two middle elements in the fourth row
+    blocks.append(sub_grid[4, 2])  # Middle element in the last row
+
+    return blocks
+
+
+    return sub_grid.tolist()
+
+    # Print the result
+    print("Randomly selected 5x5 grid from the 13x13 grid:")
+    print(sub_grid)
+
+
 def create_random_graph(n, p=0.1):
     """
     Create a random graph with n vertices where each edge is included with probability p.
@@ -190,10 +219,10 @@ def save_table_as_png(
     plt.close(fig)
 
 
-date = "14_10_24"
-number_of_graphs = 10
-graph_type = "cube" # "grid" # "cube" # "manual"
-dimension_of_graphs = [5,5] # dimension for cube
+date = "21_10_24"
+number_of_graphs = 20
+graph_type = "grid" # "grid" # "cube" # "manual" # maze"
+dimension_of_graphs = [8,8] # dimension for cube
 suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
@@ -202,6 +231,9 @@ folder_path = "data/graphs/" + date + "/"
 if not os.path.exists(folder_path):
     # Create the folder
     os.makedirs(folder_path)
+
+if graph_type=="maze":
+    blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
 
 
 for i in range(0, number_of_graphs):
@@ -214,10 +246,8 @@ for i in range(0, number_of_graphs):
         G, blocks = create_grid_graph_w_random_blocks(dimension_of_graphs[0], dimension_of_graphs[1], num_of_blocks)
 
         # Create grid with specified blocks
-        blocks = [3,6,7,16,17,18] # suffled_blocks[0:i]
-        G = create_grid_graph_with_specified_blocks(
-            dimension_of_graphs[0], dimension_of_graphs[1], blocks
-        )
+        blocks = suffled_blocks[0:i] # suffled_blocks[0:i]
+        G = create_grid_graph_with_specified_blocks(dimension_of_graphs[0], dimension_of_graphs[1], blocks)
 
     # Create a cube
     if graph_type=="cube":
@@ -225,6 +255,20 @@ for i in range(0, number_of_graphs):
         G = create_nd_cube_graph(i)
         if G.has_edge(0, 1):
             G.remove_edge(0, 1)
+
+    # Create a maze
+    if graph_type=="maze":
+        name_of_graph = (
+            f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}"
+        )
+        # Create grid with specified blocks
+        # blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
+        # for j in range(0,i):
+        if i>0:
+            blocks = list(set(blocks)-set(random_5x5_nodes_from_13x13_grid()))
+        G = create_grid_graph_with_specified_blocks(
+            dimension_of_graphs[0], dimension_of_graphs[1], blocks
+        )
 
     # Create a manual graph
     # if graph_type=="manual":
@@ -263,7 +307,7 @@ for i in range(0, number_of_graphs):
     save_graph_to_file(G, folder_path + name_of_graph.replace(" ", "_") + ".json")
 
     # If it's a Grid, Save it as PNG
-    if graph_type=="grid": 
+    if graph_type=="grid" or graph_type=="maze" : 
         save_table_as_png(
             dimension_of_graphs[0],
             dimension_of_graphs[1],
