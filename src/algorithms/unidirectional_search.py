@@ -32,7 +32,7 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
 
         # Increment the expansion counter
         expansions += 1
-        # if expansions % 1 == 0:
+        # if expansions % 10000 == 0:
         #     print(
         #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
         #     )
