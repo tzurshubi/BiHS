@@ -21,3 +21,7 @@ class HeapqState:
 
     def __len__(self):
         return len(self.heap)
+    
+    def __iter__(self):
+        # Allow iteration over the heap elements
+        return iter(self.heap)
