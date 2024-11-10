@@ -154,10 +154,10 @@ def search(
 
 
 # Inputs
-date = "20_10_24"
+date = "21_10_24"
 number_of_graphs = 20
-graph_type = "maze" # "grid" # "cube" # "manual" # "maze"
-size_of_graphs = [13,13]
+graph_type = "grid" # "grid" # "cube" # "manual" # "maze"
+size_of_graphs = [8,8]
 heuristic = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 snake = False # True # False
 
@@ -175,8 +175,8 @@ results_df = pd.DataFrame(columns=columns)
 results = []
 
 
-# for i in list(reversed(range(0, number_of_graphs-10))):
-for i in range(0, number_of_graphs):
+for i in list(reversed(range(0, number_of_graphs-1))):
+# for i in range(0, number_of_graphs):
     try:
         # Inputs
         if graph_type=="grid":
