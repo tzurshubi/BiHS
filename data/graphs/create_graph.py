@@ -219,10 +219,10 @@ def save_table_as_png(
     plt.close(fig)
 
 
-date = "21_10_24"
-number_of_graphs = 20
+date = "10_11_24"
+number_of_graphs = 1
 graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-dimension_of_graphs = [8,8] # dimension for cube
+dimension_of_graphs = [3,3] # dimension for cube
 suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
