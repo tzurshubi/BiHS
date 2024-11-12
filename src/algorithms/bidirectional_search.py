@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import heapq
 from heuristics.heuristic import heuristic
 from models.state import State
+from models.openvopen import Openvopen
 from models.heapq_state import HeapqState
 
 
@@ -23,6 +24,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
     # Initialize custom priority queues for forward and backward searches
     OPEN_F = HeapqState()
     OPEN_B = HeapqState()
+    OPENvOPEN = Openvopen(max(graph.nodes)+1)
 
     # Initial states
     initial_state_F = State(graph, [start], snake)
@@ -35,6 +37,8 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
     # Push initial states with priority based on f_value
     OPEN_F.push(initial_state_F, initial_f_value_F)
     OPEN_B.push(initial_state_B, initial_f_value_B)
+    OPENvOPEN.insert_state(initial_state_F, True)
+    OPENvOPEN.insert_state(initial_state_B, False)
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -80,19 +84,14 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         # Check against OPEN of the other direction
-        for state in OPEN_D_hat:
-            state = state[2]
-            if (
-                current_state.head() == state.head()
-                and not current_state.shares_vertex_with(state, snake)
-                # and current_state.pi().isdisjoint(state.pi())
-            ):
-                total_length = current_path_length + len(state.path) - 1
-                if total_length > best_path_length:
-                    best_path_length = total_length
-                    best_path = current_state.path[:-1] + state.path[::-1]
-                    best_path_meet_point = current_state.head()
-                    # print(f"Found longer path of length {total_length}")
+        state = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF)
+        if state:
+            total_length = current_path_length + len(state.path) - 1
+            if total_length > best_path_length:
+                best_path_length = total_length
+                best_path = current_state.path[:-1] + state.path[::-1]
+                best_path_meet_point = current_state.head()
+                # print(f"Found longer path of length {total_length}")
 
         # Check if U is the largest it will ever be
         if best_path_length >= min(
@@ -104,6 +103,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
 
         # Get the current state from OPEN_D TO CLOSED_D
         _, _, current_state, f_value = OPEN_D.pop()
+        OPENvOPEN.remove_state(current_state, directionF)
         CLOSED_D.add(current_state)
 
         # Generate successors
@@ -124,6 +124,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
             g_value = current_path_length + 1
             f_value = g_value + h_value
             OPEN_D.push(successor, min(f_value, 2 * h_value)) # MM
+            OPENvOPEN.insert_state(successor,directionF)
 
     
     # # For Plotting h

@@ -154,10 +154,10 @@ def search(
 
 
 # Inputs
-date = "21_10_24"
-number_of_graphs = 20
-graph_type = "grid" # "grid" # "cube" # "manual" # "maze"
-size_of_graphs = [8,8]
+date = "20_10_24"
+number_of_graphs = 10
+graph_type = "maze" # "grid" # "cube" # "manual" # "maze"
+size_of_graphs = [13,13]
 heuristic = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 snake = False # True # False
 
@@ -175,8 +175,8 @@ results_df = pd.DataFrame(columns=columns)
 results = []
 
 
-for i in list(reversed(range(0, number_of_graphs-1))):
-# for i in range(0, number_of_graphs):
+# for i in list(reversed(range(0, number_of_graphs))):
+for i in range(0, number_of_graphs):
     try:
         # Inputs
         if graph_type=="grid":
@@ -207,8 +207,8 @@ for i in list(reversed(range(0, number_of_graphs-1))):
             name_of_graph, size_of_graphs, start, goal, "unidirectional", heuristic, snake
         )
         print(
-            f"! unidirectional s-t. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
-        )
+            f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
+            )
         results.append(
             {
                 "# blocks": i,
@@ -226,7 +226,7 @@ for i in list(reversed(range(0, number_of_graphs-1))):
             name_of_graph, size_of_graphs, goal, start, "unidirectional", heuristic, snake
         )
         print(
-            f"! unidirectional t-s. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges]"
+            f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
         )
         results.append(
             {
@@ -245,7 +245,7 @@ for i in list(reversed(range(0, number_of_graphs-1))):
             name_of_graph, size_of_graphs, start, goal, "bidirectional", heuristic, snake
         )
         print(
-            f"! bidirectional. expansions: {logs['expansions']}, time: {logs['time[ms]']} [ms], memory: {logs['memory[kB]']} [kB], path length: {len(path)-1} [edges], g_F: {logs['g_F']}, g_B: {logs['g_B']}"
+            f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
         )
         results.append(
             {

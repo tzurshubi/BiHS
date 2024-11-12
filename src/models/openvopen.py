@@ -1,0 +1,81 @@
+from bisect import bisect_left
+
+class Openvopen:
+    def __init__(self, n):
+        """
+        Constructor that initializes an OPENvOPEN object with n cells.
+        Each cell contains two lists: F and B, both of which are initially empty.
+        """
+        self.cells = [{'F': [], 'B': []} for _ in range(n)]
+
+    def insert_state(self, state, is_f):
+        """
+        Inserts a state into the appropriate list (F or B) of the corresponding cell
+        based on the state's head() value, while maintaining the list's order by
+        descending g() value.
+
+        :param state: The state to insert.
+        :param is_f: A boolean indicating whether to insert into F (True) or B (False).
+        """
+        if state.head() is None:
+            raise ValueError("State has no valid head.")
+
+        cell_index = state.head()
+        target_list = 'F' if is_f else 'B'
+        
+        # Insert the state while maintaining descending order by g()
+        cell = self.cells[cell_index]
+        list_to_update = cell[target_list]
+
+        # Use binary search to find the correct position
+        g_value = state.g()
+        index = bisect_left([-s.g() for s in list_to_update], -g_value)  # Use negative values for descending order
+        list_to_update.insert(index, state)
+
+    def remove_state(self, state, is_f):
+        """
+        Removes the specified state from the appropriate list (F or B) in the corresponding cell.
+
+        :param state: The state to remove.
+        :param is_f: A boolean indicating the direction of the state (True for F, False for B).
+        """
+        if state.head() is None:
+            raise ValueError("State has no valid head.")
+
+        cell_index = state.head()
+        target_list = 'F' if is_f else 'B'
+        
+        cell = self.cells[cell_index]
+        list_to_update = cell[target_list]
+
+        # Remove the state by identity (not by value equality)
+        try:
+            list_to_update.remove(state)
+        except ValueError:
+            raise ValueError("State not found in the target list.")
+
+    def find_highest_non_overlapping_state(self, state, is_f):
+        """
+        Finds the state with the highest g() value from the opposite direction
+        that shares the same head() but has no common vertices with the given state.
+
+        :param state: The state to compare against.
+        :param is_f: A boolean indicating the direction of the given state (True for F, False for B).
+        :return: The highest g() state from the opposite direction, or None if no such state exists.
+        """
+        if state.head() is None:
+            raise ValueError("State has no valid head.")
+
+        cell_index = state.head()
+        opposite_list = 'B' if is_f else 'F'
+        
+        cell = self.cells[cell_index]
+        opposite_states = cell[opposite_list]
+        
+        # Iterate over the opposite list, which is sorted by descending g()
+        for opposite_state in opposite_states:
+            if not state.shares_vertex_with(opposite_state):
+                return opposite_state  # Return the first non-overlapping state (highest g() due to sorting)
+
+        return None  # No valid state found
+
