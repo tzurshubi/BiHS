@@ -1,5 +1,5 @@
 import pandas as pd
-
+import argparse
 # import networkx as nx
 import json
 import random
@@ -15,6 +15,31 @@ from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
 from sage.graphs.connectivity import TriconnectivitySPQR
 from sage.graphs.graph import Graph
+
+
+# Define default input values
+DEFAULT_DATE = "14_10_24"
+DEFAULT_NUMBER_OF_GRAPHS = 1
+DEFAULT_GRAPH_TYPE = "cube" # "grid"  "cube"  "manual"  "maze"
+DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
+DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
+DEFAULT_SNAKE = True
+DEFAULT_RUN_UNI = False
+DEFAULT_RUN_BI = True
+
+# Function to parse command-line arguments
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run graph search experiments.")
+    parser.add_argument("--date", type=str, default=DEFAULT_DATE, help="Date for naming files.")
+    parser.add_argument("--number_of_graphs", type=int, default=DEFAULT_NUMBER_OF_GRAPHS, help="Number of graphs to process.")
+    parser.add_argument("--graph_type", type=str, default=DEFAULT_GRAPH_TYPE, help="Type of graph: grid, cube, manual, maze.")
+    parser.add_argument("--size_of_graphs", nargs=2, type=int, default=DEFAULT_SIZE_OF_GRAPHS, help="Size of graphs (e.g., 8 8).")
+    parser.add_argument("--heuristic", type=str, default=DEFAULT_HEURISTIC, help="Heuristic to use: bcc_heuristic, reachable_heuristic, etc.")
+    parser.add_argument("--snake", action="store_true", default=DEFAULT_SNAKE, help="Enable snake mode.")
+    parser.add_argument("--run_uni", action="store_true", default=DEFAULT_RUN_UNI, help="Enable snake mode.")
+    parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
+
+    return parser.parse_args()
 
 
 # This function is only a copy! the original is in create_graph.py
@@ -89,9 +114,51 @@ def save_table_as_png(
     plt.savefig(filename, bbox_inches="tight", pad_inches=0)
     plt.close(fig)
 
+# This function is only a copy! the original is in create_graph.py
+def display_graph_with_path_and_points(graph, title="Graph", filename=None, path=None, points=None):
+    """
+    Display a graph with optional highlighted path and points.
+    
+    Args:
+        graph (networkx.Graph): The graph to display.
+        title (str): Title of the graph.
+        filename (str, optional): If provided, saves the graph as a PNG to the given filename.
+        path (list, optional): List of vertices to highlight as a path. Their edges will be blue.
+        points (list, optional): List of vertices to highlight in red.
+    """
+    plt.figure(figsize=(8, 8))
+    pos = nx.spring_layout(graph)
+
+    # Default node and edge styles
+    node_colors = ["red" if node in (points or []) else "skyblue" for node in graph.nodes()]
+    edge_colors = [
+        "blue" if (u, v) in zip(path or [], (path or [])[1:]) or (v, u) in zip(path or [], (path or [])[1:]) else "gray"
+        for u, v in graph.edges()
+    ]
+    edge_widths = [2 if (u, v) in zip(path or [], (path or [])[1:]) or (v, u) in zip(path or [], (path or [])[1:]) else 1 for u, v in graph.edges()]
+
+    # Draw the graph
+    nx.draw(
+        graph,
+        pos,
+        with_labels=True,
+        node_size=500,
+        node_color=node_colors,
+        font_size=10,
+        font_weight="bold",
+        edge_color=edge_colors,
+        width=edge_widths,
+    )
+    plt.title(title)
+    if filename:
+        plt.savefig(filename)
+        print(f"Graph saved to {filename}")
+    else:
+        plt.show()
+
 
 def search(
-    name_of_graph,
+    name_of_graph,graph_type,
     size_of_graphs,
     start,
     goal,
@@ -132,14 +199,18 @@ def search(
     logs["expansions"] = expansions
 
     if meet_point:
-        save_table_as_png(
-            size_of_graphs[0],
-            size_of_graphs[1],
-            blocks,
-            "data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
-            path,
-            [meet_point],
-        )
+        if graph_type=="grid":
+            save_table_as_png(
+                size_of_graphs[0],
+                size_of_graphs[1],
+                blocks,
+                "data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
+                path,
+                [meet_point],
+            )
+        elif graph_type=="cube":
+            display_graph_with_path_and_points(G,"","data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
+            c=1
         meet_point_index = path.index(meet_point)
         logs["g_F"] = len(path[:meet_point_index])
         logs["g_B"] = len(path[meet_point_index + 1 :])
@@ -152,119 +223,128 @@ def search(
     return logs, path, meet_point
 
 
+# Main script
+if __name__ == "__main__":
+    # Parse arguments
+    args = parse_args()
 
-# Inputs
-date = "20_10_24"
-number_of_graphs = 10
-graph_type = "maze" # "grid" # "cube" # "manual" # "maze"
-size_of_graphs = [13,13]
-heuristic = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
-snake = False # True # False
+    # Assign values from arguments or defaults
+    date = args.date
+    number_of_graphs = args.number_of_graphs
+    graph_type = args.graph_type
+    size_of_graphs = args.size_of_graphs
+    heuristic = args.heuristic
+    snake = args.snake
+    run_uni = args.run_uni
+    run_bi = args.run_bi
 
-# Initialize an empty DataFrame to store the results
-columns = [
-    "# blocks",
-    "Search type",
-    "# expansions",
-    "Time [ms]",
-    "Memory [kB]",
-    "[g_F,g_B]",
-    "Grid with Solution",
-]
-results_df = pd.DataFrame(columns=columns)
-results = []
+    # Initialize an empty DataFrame to store the results
+    columns = [
+        "# blocks",
+        "Search type",
+        "# expansions",
+        "Time [ms]",
+        "Memory [kB]",
+        "[g_F,g_B]",
+        "Grid with Solution",
+    ]
+    results_df = pd.DataFrame(columns=columns)
+    results = []
 
 
-# for i in list(reversed(range(0, number_of_graphs))):
-for i in range(0, number_of_graphs):
-    try:
-        # Inputs
-        if graph_type=="grid":
-            name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-            start = 0  # 0 # "s"
-            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-        elif graph_type=="maze":
-            name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-            start = 0  # 0 # "s"
-            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-        
-        elif graph_type=="cube":
-            # if i<3: continue
-            name_of_graph=f"{size_of_graphs[0]}d_hypercube"
-            start = 0
-            goal = 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-        elif graph_type=="manual":
-            name_of_graph = f"paper_graph_{i}"
-            start = "s"  # 0 # "s"
-            goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+    # for i in list(reversed(range(0, number_of_graphs))):
+    for i in range(0, number_of_graphs):
+        try:
+            # Inputs
+            if graph_type=="grid":
+                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                start = 0  # 0 # "s"
+                goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            elif graph_type=="maze":
+                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                start = 0  # 0 # "s"
+                goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            
+            elif graph_type=="cube":
+                # if i<3: continue
+                name_of_graph=f"{size_of_graphs[0]}d_hypercube"
+                start = 0
+                goal = 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            elif graph_type=="manual":
+                name_of_graph = f"paper_graph_{i}"
+                start = "s"  # 0 # "s"
+                goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
-        print("--------------------------")
-        name_of_graph=f"{date}/"+name_of_graph
-        print(name_of_graph)
+            print("--------------------------")
+            name_of_graph=f"{date}/"+name_of_graph
+            print(name_of_graph)
+            
+            # unidirectional
+            if run_uni:
+                # unidirectional s-t
+                logs, path, _ = search(
+                    name_of_graph, graph_type,size_of_graphs, start, goal, "unidirectional", heuristic, snake
+                )
+                print(
+                    f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
+                    )
+                results.append(
+                    {
+                        "# blocks": i,
+                        "Search type": "unidirectional s-t",
+                        "# expansions": logs["expansions"],
+                        "Time [ms]": logs["time[ms]"],
+                        "Memory [kB]": logs["memory[kB]"],
+                        "[g_F,g_B]": "[N/A,N/A]",
+                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                    }
+                )
 
-        # unidirectional s-t
-        logs, path, _ = search(
-            name_of_graph, size_of_graphs, start, goal, "unidirectional", heuristic, snake
-        )
-        print(
-            f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-            )
-        results.append(
-            {
-                "# blocks": i,
-                "Search type": "unidirectional s-t",
-                "# expansions": logs["expansions"],
-                "Time [ms]": logs["time[ms]"],
-                "Memory [kB]": logs["memory[kB]"],
-                "[g_F,g_B]": "[N/A,N/A]",
-                "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-            }
-        )
+                # unidirectional t-s
+                logs, path, _ = search(
+                    name_of_graph, graph_type, size_of_graphs, goal, start, "unidirectional", heuristic, snake
+                )
+                print(
+                    f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
+                )
+                results.append(
+                    {
+                        "# blocks": i,
+                        "Search type": "unidirectional t-s",
+                        "# expansions": logs["expansions"],
+                        "Time [ms]": logs["time[ms]"],
+                        "Memory [kB]": logs["memory[kB]"],
+                        "[g_F,g_B]": "[N/A,N/A]",
+                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                    }
+                )
 
-        # unidirectional t-s
-        logs, path, _ = search(
-            name_of_graph, size_of_graphs, goal, start, "unidirectional", heuristic, snake
-        )
-        print(
-            f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-        )
-        results.append(
-            {
-                "# blocks": i,
-                "Search type": "unidirectional t-s",
-                "# expansions": logs["expansions"],
-                "Time [ms]": logs["time[ms]"],
-                "Memory [kB]": logs["memory[kB]"],
-                "[g_F,g_B]": "[N/A,N/A]",
-                "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-            }
-        )
+            # bidirectional
+            if run_bi:
+                logs, path, meet_point = search(
+                    name_of_graph,graph_type, size_of_graphs, start, goal, "bidirectional", heuristic, snake
+                )
+                print(
+                    f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
+                )
+                results.append(
+                    {
+                        "# blocks": i,
+                        "Search type": "bidirectional",
+                        "# expansions": logs["expansions"],
+                        "Time [ms]": logs["time[ms]"],
+                        "Memory [kB]": logs["memory[kB]"],
+                        "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                    }
+                )
+        except Exception as e:
+            print("An error occurred:")
+            traceback.print_exc()
+            break
+        finally:
+            # Convert results to a DataFrame
+            results_df = pd.DataFrame(results)
 
-        # bidirectional
-        logs, path, meet_point = search(
-            name_of_graph, size_of_graphs, start, goal, "bidirectional", heuristic, snake
-        )
-        print(
-            f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
-        )
-        results.append(
-            {
-                "# blocks": i,
-                "Search type": "bidirectional",
-                "# expansions": logs["expansions"],
-                "Time [ms]": logs["time[ms]"],
-                "Memory [kB]": logs["memory[kB]"],
-                "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
-                "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-            }
-        )
-    except Exception as e:
-        print("An error occurred:")
-        traceback.print_exc()
-        break
-    finally:
-        # Convert results to a DataFrame
-        results_df = pd.DataFrame(results)
-
-        # Save the DataFrame to an Excel file
-        results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
+            # Save the DataFrame to an Excel file
+            results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")

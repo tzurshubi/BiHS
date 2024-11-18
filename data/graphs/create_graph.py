@@ -138,6 +138,47 @@ def display_graph(graph, title="Graph", filename=None):
     else:
         plt.show()
 
+# Function to display a graph with optional highlighted path and points.
+def display_graph_with_path_and_points(graph, title="Graph", filename=None, path=None, points=None):
+    """
+    Display a graph with optional highlighted path and points.
+    
+    Args:
+        graph (networkx.Graph): The graph to display.
+        title (str): Title of the graph.
+        filename (str, optional): If provided, saves the graph as a PNG to the given filename.
+        path (list, optional): List of vertices to highlight as a path. Their edges will be blue.
+        points (list, optional): List of vertices to highlight in red.
+    """
+    plt.figure(figsize=(8, 8))
+    pos = nx.spring_layout(graph)
+
+    # Default node and edge styles
+    node_colors = ["red" if node in (points or []) else "skyblue" for node in graph.nodes()]
+    edge_colors = [
+        "blue" if (u, v) in zip(path or [], (path or [])[1:]) or (v, u) in zip(path or [], (path or [])[1:]) else "gray"
+        for u, v in graph.edges()
+    ]
+    edge_widths = [2 if (u, v) in zip(path or [], (path or [])[1:]) or (v, u) in zip(path or [], (path or [])[1:]) else 1 for u, v in graph.edges()]
+
+    # Draw the graph
+    nx.draw(
+        graph,
+        pos,
+        with_labels=True,
+        node_size=500,
+        node_color=node_colors,
+        font_size=10,
+        font_weight="bold",
+        edge_color=edge_colors,
+        width=edge_widths,
+    )
+    plt.title(title)
+    if filename:
+        plt.savefig(filename)
+        print(f"Graph saved to {filename}")
+    else:
+        plt.show()
 
 # Function to save the graph as JSON
 def save_graph_to_file(graph, filename):
