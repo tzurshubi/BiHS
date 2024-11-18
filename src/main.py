@@ -168,6 +168,7 @@ def search(
 ):
     # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
+    print("tzsh:data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file("data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     blocks = []
     logs = {}
