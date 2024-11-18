@@ -19,10 +19,10 @@ from algorithms.bidirectional_search import *
 
 
 # Define default input values
-DEFAULT_DATE = "14_10_24"
-DEFAULT_NUMBER_OF_GRAPHS = 1
-DEFAULT_GRAPH_TYPE = "cube" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
+DEFAULT_DATE = "21_10_24"
+DEFAULT_NUMBER_OF_GRAPHS = 2
+DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
+DEFAULT_SIZE_OF_GRAPHS = [8,8] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = True
 DEFAULT_RUN_UNI = False
