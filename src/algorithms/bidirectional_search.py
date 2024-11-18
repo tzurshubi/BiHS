@@ -123,7 +123,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
 
             g_value = current_path_length + 1
             f_value = g_value + h_value
-            OPEN_D.push(successor, min(f_value, 2 * h_value,2*(26-g_value))) # MM
+            OPEN_D.push(successor, min(f_value, 2 * h_value)) # MM # ,2*(OPT-g_value)
             OPENvOPEN.insert_state(successor,directionF)
 
     
