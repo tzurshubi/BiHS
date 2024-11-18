@@ -54,7 +54,7 @@ class Openvopen:
         except ValueError:
             raise ValueError("State not found in the target list.")
 
-    def find_highest_non_overlapping_state(self, state, is_f):
+    def find_highest_non_overlapping_state(self, state, is_f, snake = False):
         """
         Finds the state with the highest g() value from the opposite direction
         that shares the same head() but has no common vertices with the given state.
@@ -74,7 +74,7 @@ class Openvopen:
         
         # Iterate over the opposite list, which is sorted by descending g()
         for opposite_state in opposite_states:
-            if not state.shares_vertex_with(opposite_state):
+            if not state.shares_vertex_with(opposite_state, snake):
                 return opposite_state  # Return the first non-overlapping state (highest g() due to sorting)
 
         return None  # No valid state found
