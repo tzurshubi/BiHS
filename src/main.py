@@ -21,7 +21,7 @@ from sage.graphs.graph import Graph
 DEFAULT_DATE = "14_10_24"
 DEFAULT_NUMBER_OF_GRAPHS = 1
 DEFAULT_GRAPH_TYPE = "cube" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [4,4] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = True
 DEFAULT_RUN_UNI = False
