@@ -1,8 +1,8 @@
 import itertools
 import networkx as nx
-from sage.graphs.connectivity import spqr_tree
-from sage.graphs.connectivity import TriconnectivitySPQR
-from sage.graphs.graph import Graph
+# from sage.graphs.connectivity import spqr_tree
+# from sage.graphs.connectivity import TriconnectivitySPQR
+# from sage.graphs.graph import Graph
 import random
 
 

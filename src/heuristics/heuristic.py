@@ -1,7 +1,7 @@
 import networkx as nx
-from sage.all import *
-from sage.graphs.connectivity import TriconnectivitySPQR
-from sage.graphs.graph import Graph
+# from sage.all import *
+# from sage.graphs.connectivity import TriconnectivitySPQR
+# from sage.graphs.graph import Graph
 from .h_mis import *
 
 # Return the total number of vertices in the graph
