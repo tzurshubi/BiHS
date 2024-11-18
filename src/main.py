@@ -176,7 +176,7 @@ def search(
     # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
     print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
-    G = load_graph_from_file(base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
+    G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     blocks = []
     logs = {}
     for node in range(size_of_graphs[0] * size_of_graphs[1]):
@@ -212,12 +212,12 @@ def search(
                 size_of_graphs[0],
                 size_of_graphs[1],
                 blocks,
-                base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
+                current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
                 path,
                 [meet_point],
             )
         elif graph_type=="cube":
-            display_graph_with_path_and_points(G,"",base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
+            display_graph_with_path_and_points(G,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
             c=1
         meet_point_index = path.index(meet_point)
         logs["g_F"] = len(path[:meet_point_index])
