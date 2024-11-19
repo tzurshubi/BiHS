@@ -176,7 +176,7 @@ def search(
 ):
     # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
-    print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
+    # print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     blocks = []
     logs = {}
@@ -287,6 +287,7 @@ if __name__ == "__main__":
             print("--------------------------")
             name_of_graph=f"{date}/"+name_of_graph
             print(name_of_graph)
+            print(f"snake: {snake}")
             
             # unidirectional
             if run_uni:
