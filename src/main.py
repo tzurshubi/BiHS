@@ -20,10 +20,10 @@ from algorithms.bidirectional_search import *
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
-DEFAULT_DATE = "4_8_24"
+DEFAULT_DATE = "5_10_24"
 DEFAULT_NUMBER_OF_GRAPHS = 1
 DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [5,5] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = False
 DEFAULT_RUN_UNI = False
@@ -247,6 +247,17 @@ if __name__ == "__main__":
     run_uni = args.run_uni
     run_bi = args.run_bi
 
+    # Print the variables with their names and values
+    print("--------------------------")
+    print("date:", date)
+    print("number_of_graphs:", number_of_graphs)
+    print("graph_type:", graph_type)
+    print("size_of_graphs:", size_of_graphs)
+    print("heuristic:", heuristic)
+    print("snake:", snake)
+    print("run_uni:", run_uni)
+    print("run_bi:", run_bi)
+
     # Initialize an empty DataFrame to store the results
     columns = [
         "# blocks",
@@ -284,7 +295,6 @@ if __name__ == "__main__":
                 start = "s"  # 0 # "s"
                 goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
-            print("--------------------------")
             name_of_graph=f"{date}/"+name_of_graph
             print(name_of_graph)
             print(f"snake: {snake}")
