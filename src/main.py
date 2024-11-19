@@ -26,7 +26,7 @@ DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
 DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = False
-DEFAULT_RUN_UNI = True
+DEFAULT_RUN_UNI = False
 DEFAULT_RUN_BI = True
 
 base_dir = "/"
