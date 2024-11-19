@@ -76,10 +76,10 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
         # Logs
         current_path_length = len(current_state.path) - 1
         expansions += 1
-        if expansions % 1000 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
+        # if expansions % 1000 == 0:
+        #     print(
+        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+        #     )
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
