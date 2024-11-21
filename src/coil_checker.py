@@ -22,16 +22,27 @@ def load_open(file_name):
         return pickle.load(f)
 
 # Function to find the longest coil
-def find_longest_coil(openF, openB, above, run_forever, snake=True):
+def find_longest_coil(above, run_forever, snake=True):
     longest_coil = []
     longest_length = -1
     ran_once = False
+    runs = 0
 
     while not ran_once or run_forever:
-        print(f"longest length: {longest_length}")
-        print(f"longest coil: {longest_coil}")
-        pickle.dump(longest_length, open('longest_length.out', 'wb'))
-        pickle.dump(longest_coil, open('longest_coil.out', 'wb'))
+        runs +=1 
+
+        # Load OpenF and OpenB
+        openF_file = "openF"
+        openB_file = "openB"
+        print("Loading OpenF and OpenB...")
+        openF = load_open(openF_file)
+        openB = load_open(openB_file)
+
+        print(f"{runs} longest length: {longest_length}")
+        print(f"{runs} longest coil: {longest_coil}")
+        # pickle.dump(longest_length, open('longest_length.out', 'wb'))
+        # pickle.dump(longest_coil, open('longest_coil.out', 'wb'))
+
         ran_once = True
         # Iterate over indices
         for index in range(len(openF.cells)):
@@ -85,16 +96,9 @@ if __name__ == "__main__":
     above = args.above
     run_forever = args.run_forever
 
-    # Load OpenF and OpenB
-    openF_file = "openF"
-    openB_file = "openB"
-    print("Loading OpenF and OpenB...")
-    openF = load_open(openF_file)
-    openB = load_open(openB_file)
-
     # Find the longest coil
     print(f"Finding the longest coil, longer than {above}")
-    longest_coil, longest_length = find_longest_coil(openF, openB, above,run_forever, snake=True)
+    longest_coil, longest_length = find_longest_coil(above,run_forever, snake=True)
 
     # Output the result
     print("--------------------------")
