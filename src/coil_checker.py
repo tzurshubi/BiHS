@@ -38,8 +38,12 @@ def find_longest_coil(above, run_forever, snake=True):
         openF_file = "openF"
         openB_file = "openB"
         print("Loading OpenF and OpenB...")
-        openF = load_open(openF_file)
-        openB = load_open(openB_file)
+        try:
+            openF = load_open(openF_file)
+            openB = load_open(openB_file)
+        except:
+            time.sleep(2)
+            continue
 
         print(f"{runs} longest length: {longest_length}")
         print(f"{runs} longest coil: {longest_coil}")
