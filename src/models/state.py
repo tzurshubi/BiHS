@@ -20,13 +20,15 @@ class State:
         """
         bitmap = 0
         # Iterate over the vertices in the path, excluding the head (last vertex in the path)
+        head = self.path[-1]
         for vertex in self.path[:-1]:
             # Set the bit for the vertex itself
             bitmap |= 1 << vertex
 
             # Set bits for all neighbors of the vertex
             for neighbor in self.graph.neighbors(vertex):
-                bitmap |= 1 << neighbor
+                if neighbor!=head:
+                    bitmap |= 1 << neighbor
 
         return bitmap
 
