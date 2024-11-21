@@ -1,5 +1,6 @@
 import pickle
 import argparse
+import time
 
 DEFAULT_ABOVE = 0
 DEFAULT_RUN_FOREVER = False 
@@ -32,6 +33,8 @@ def find_longest_coil(above, run_forever, snake=True):
         runs +=1 
 
         # Load OpenF and OpenB
+        if not ran_once:
+            time.sleep(5)
         openF_file = "openF"
         openB_file = "openB"
         print("Loading OpenF and OpenB...")
@@ -44,9 +47,6 @@ def find_longest_coil(above, run_forever, snake=True):
             file.write(f"longest_coil = {longest_coil}\n")
             file.write(f"longest_length = {longest_length}\n")
             file.write(f"runs = {runs}\n")
-
-        # pickle.dump(longest_length, open('longest_length.out', 'wb'))
-        # pickle.dump(longest_coil, open('longest_coil.out', 'wb'))
 
         ran_once = True
         # Iterate over indices
