@@ -90,7 +90,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
             if total_length > best_path_length:
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
-                best_path_meet_point = current_state.head()
+                best_path_meet_point = current_state.head
                 # print(f"Found longer path of length {total_length}")
 
         # Check if U is the largest it will ever be

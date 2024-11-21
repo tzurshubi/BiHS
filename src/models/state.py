@@ -3,6 +3,8 @@ class State:
         self.graph = graph  # graph is a NetworkX graph
         self.path = path  # path is a list of vertices representing the path
         self.path_vertices_bitmap = self.compute_path_vertices_bitmap()
+        self.g = len(path) - 1
+        self.head = path[-1] if path else None
         if snake: self.path_vertices_and_neighbors_bitmap = self.compute_path_vertices_and_neighbors_bitmap()
 
 
@@ -48,7 +50,7 @@ class State:
 
     def successor(self, snake = False):
         successors = []
-        head = self.head()
+        head = self.head
         if head is not None:
             for neighbor in self.graph.neighbors(head):
                 # if neighbor not in self.pi():
