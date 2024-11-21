@@ -44,7 +44,7 @@ def find_longest_coil(openF, openB, above, snake=True):
                 break
 
             if combined_g <= above:
-                return -1, -1
+                break
 
             # Check if the two states do not share vertices
             if not stateF.shares_vertex_with(stateB, snake):
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     openB = load_open(openB_file)
 
     # Find the longest coil
-    print("Finding the longest coil...")
+    print(f"Finding the longest coil, longer than {above}")
     longest_coil, longest_length = find_longest_coil(openF, openB, above, snake=True)
 
     # Output the result
