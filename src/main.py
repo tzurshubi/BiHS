@@ -297,7 +297,6 @@ if __name__ == "__main__":
 
             name_of_graph=f"{date}/"+name_of_graph
             print(name_of_graph)
-            print(f"snake: {snake}")
             
             # unidirectional
             if run_uni:

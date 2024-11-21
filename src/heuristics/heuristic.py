@@ -196,5 +196,5 @@ def heuristic(state, goal, heuristic_name, snake):
     elif heuristic_name == "mis_heuristic":
         return mis_heuristic(state, goal, snake)
     else:
-        print("Invalid heuristic name")
+        print(f"Invalid heuristic name: {heuristic_name}")
         return 1 / 0
