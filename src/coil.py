@@ -21,7 +21,7 @@ from models.state import State
 from models.heapq_state import HeapqState
 
 
-DEFAULT_DIMENSION = 5
+DEFAULT_DIMENSION = 4
 DEFAULT_DIRECTION = "B" # "B"
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 
@@ -99,13 +99,13 @@ if __name__ == "__main__":
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 10000 == 0:
+        if expansions % 10000 == 1:
             with open(open_file_name, 'wb') as f:
                 pickle.dump(open2save, f)
             # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
 
         # Check if the current state is the goal state
-        if current_state.head() == goal:
+        if current_state.head == goal:
             # Update the best path if the current one is longer
             if current_path_length > best_path_length:
                 best_path = current_state.path
@@ -132,7 +132,7 @@ if __name__ == "__main__":
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, f_value)
             open2save.insert_state(successor)
-    
+    print('done')
     with open(open_file_name, 'wb') as f:
         pickle.dump(open2save, f)
 

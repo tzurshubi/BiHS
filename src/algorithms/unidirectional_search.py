@@ -38,7 +38,7 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
         #     )
 
         # Check if the current state is the goal state
-        if current_state.head() == goal:
+        if current_state.head == goal:
             # Update the best path if the current one is longer
             if current_path_length > best_path_length:
                 best_path = current_state.path

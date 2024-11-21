@@ -29,7 +29,7 @@ def dfs_reachable(graph, start, visited):
 
 def reachable_heuristic(state):
     visited = state.tail()
-    head = state.head()
+    head = state.head
     if head is None:
         return 0
     return dfs_reachable(state.graph, head, visited)
@@ -40,7 +40,7 @@ def bcc_heuristic(state, goal):
     tail_nodes = state.tail()  # Nodes to be removed
     graph.remove_nodes_from(tail_nodes)  # Remove tail nodes
 
-    head = state.head()
+    head = state.head
 
     # Find all bi-connected components and articulation points
     bcc = list(nx.biconnected_components(graph))
@@ -120,10 +120,10 @@ def mis_heuristic(state, goal, snake):
     graph = state.graph.copy()  # Clone the graph to avoid modifying the original
     tail_nodes = state.tail()  # Nodes to be removed
     graph.remove_nodes_from(tail_nodes)  # Remove tail nodes
-    # return get_max_nodes_spqr_recursive(graph, state.head(), goal, return_nodes=False)-1
+    # return get_max_nodes_spqr_recursive(graph, state.head, goal, return_nodes=False)-1
 
     
-    head = state.head()
+    head = state.head
 
     # Find all bi-connected components and articulation points
     bcc = list(nx.biconnected_components(graph))

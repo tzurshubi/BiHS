@@ -1,4 +1,17 @@
 import pickle
+import argparse
+
+DEFAULT_ABOVE = 0
+
+# Function to parse command-line arguments
+def parse_args():
+    """
+    Parse command-line arguments to handle only one input:
+    --above: A threshold value.
+    """
+    parser = argparse.ArgumentParser(description="Run graph search experiments.")
+    parser.add_argument("--above", type=int, default=DEFAULT_ABOVE, help="Threshold value for the experiment.")
+    return parser.parse_args()
 
 # Load the Open data structures from files
 def load_open(file_name):
@@ -6,7 +19,7 @@ def load_open(file_name):
         return pickle.load(f)
 
 # Function to find the longest coil
-def find_longest_coil(openF, openB, snake=True):
+def find_longest_coil(openF, openB, above, snake=True):
     longest_coil = []
     longest_length = -1
 
@@ -18,28 +31,49 @@ def find_longest_coil(openF, openB, snake=True):
         listB = openB.cells[index]
 
         # Iterate over the lists to find the longest coil
-        for stateF in listF:
-            for stateB in listB:
-                # Check if the two states do not share vertices
-                if not stateF.shares_vertex_with(stateB, snake):
-                    # Combine the paths
-                    combined_path = stateF.path[:-1] + stateB.path[::-1]
-                    combined_length = len(combined_path) - 1  # Exclude the head overlap
-                    combined_length += 1 # Add the edge (0,1)
+        i, j = 0, 0  # Pointers for listF and listB
+        while i < len(listF) and j < len(listB):
+            stateF = listF[i]
+            stateB = listB[j]
 
-                    # Update the longest coil if this one is longer
-                    if combined_length > longest_length:
-                        longest_coil = combined_path
-                        longest_length = combined_length
+            # Compute the combined g-value
+            combined_g = stateF.g + stateB.g + 1
 
-                    # Break inner loop if the sum of g-values decreases
-                    if stateF.g() + stateB.g() < longest_length:
-                        break
+            # Break the loop if the combined g-value is less than the longest found
+            if combined_g <= longest_length:
+                break
+
+            if combined_g <= above:
+                return -1, -1
+
+            # Check if the two states do not share vertices
+            if not stateF.shares_vertex_with(stateB, snake):
+                # Combine the paths
+                combined_path = stateF.path[:-1] + stateB.path[::-1]
+
+                # Update the longest coil if this one is longer
+                if combined_g > longest_length:
+                    longest_coil = combined_path
+                    longest_length = combined_g
+
+                # Move to the next state in both lists (reduce complexity)
+                i += 1
+                j += 1
+            else:
+                # If they share vertices, move the pointer with the smaller g-value
+                if stateF.g >= stateB.g:
+                    i += 1
+                else:
+                    j += 1
 
     return longest_coil, longest_length
 
+
 # Main script
 if __name__ == "__main__":
+    args = parse_args()
+    above = args.above
+
     # Load OpenF and OpenB
     openF_file = "openF"
     openB_file = "openB"
@@ -49,7 +83,7 @@ if __name__ == "__main__":
 
     # Find the longest coil
     print("Finding the longest coil...")
-    longest_coil, longest_length = find_longest_coil(openF, openB, snake=True)
+    longest_coil, longest_length = find_longest_coil(openF, openB, above, snake=True)
 
     # Output the result
     print("--------------------------")

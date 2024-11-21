@@ -17,10 +17,10 @@ class Openvopen:
         :param state: The state to insert.
         :param is_f: A boolean indicating whether to insert into F (True) or B (False).
         """
-        if state.head() is None:
+        if state.head is None:
             raise ValueError("State has no valid head.")
 
-        cell_index = state.head()
+        cell_index = state.head
         target_list = 'F' if is_f else 'B'
         
         # Insert the state while maintaining descending order by g()
@@ -28,8 +28,8 @@ class Openvopen:
         list_to_update = cell[target_list]
 
         # Use binary search to find the correct position
-        g_value = state.g()
-        index = bisect_left([-s.g() for s in list_to_update], -g_value)  # Use negative values for descending order
+        g_value = state.g
+        index = bisect_left([-s.g for s in list_to_update], -g_value)  # Use negative values for descending order
         list_to_update.insert(index, state)
 
     def remove_state(self, state, is_f):
@@ -39,10 +39,10 @@ class Openvopen:
         :param state: The state to remove.
         :param is_f: A boolean indicating the direction of the state (True for F, False for B).
         """
-        if state.head() is None:
+        if state.head is None:
             raise ValueError("State has no valid head.")
 
-        cell_index = state.head()
+        cell_index = state.head
         target_list = 'F' if is_f else 'B'
         
         cell = self.cells[cell_index]
@@ -63,10 +63,10 @@ class Openvopen:
         :param is_f: A boolean indicating the direction of the given state (True for F, False for B).
         :return: The highest g() state from the opposite direction, or None if no such state exists.
         """
-        if state.head() is None:
+        if state.head is None:
             raise ValueError("State has no valid head.")
 
-        cell_index = state.head()
+        cell_index = state.head
         opposite_list = 'B' if is_f else 'F'
         
         cell = self.cells[cell_index]

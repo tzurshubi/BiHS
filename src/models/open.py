@@ -15,17 +15,17 @@ class Open:
 
         :param state: The state to insert.
         """
-        if state.head() is None:
+        if state.head is None:
             raise ValueError("State has no valid head.")
 
-        cell_index = state.head()
+        cell_index = state.head
         
         # Insert the state while maintaining descending order by g()
         cell = self.cells[cell_index]
 
         # Use binary search to find the correct position
-        g_value = state.g()
-        index = bisect_left([-s.g() for s in cell], -g_value)  # Use negative values for descending order
+        g_value = state.g
+        index = bisect_left([-s.g for s in cell], -g_value)  # Use negative values for descending order
         cell.insert(index, state)
 
     def remove_state(self, state):
@@ -34,10 +34,10 @@ class Open:
 
         :param state: The state to remove.
         """
-        if state.head() is None:
+        if state.head is None:
             raise ValueError("State has no valid head.")
 
-        cell_index = state.head()
+        cell_index = state.head
         cell = self.cells[cell_index]
 
         # Remove the state by identity (not by value equality)
@@ -55,10 +55,10 @@ class Open:
         :param snake: A boolean indicating whether to consider snake mode.
         :return: The highest g() state that doesn't overlap, or None if no such state exists.
         """
-        if state.head() is None:
+        if state.head is None:
             raise ValueError("State has no valid head.")
 
-        cell_index = state.head()
+        cell_index = state.head
         cell = self.cells[cell_index]
         
         # Iterate over the list, which is sorted by descending g()
