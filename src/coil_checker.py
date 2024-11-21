@@ -28,12 +28,14 @@ def find_longest_coil(openF, openB, above, run_forever, snake=True):
     ran_once = False
 
     while not ran_once or run_forever:
+        print(f"longest length: {longest_length}")
+        print(f"longest coil: {longest_coil}")
         pickle.dump(longest_length, open('longest_length.out', 'wb'))
         pickle.dump(longest_coil, open('longest_coil.out', 'wb'))
         ran_once = True
         # Iterate over indices
         for index in range(len(openF.cells)):
-            print(f"Processing index {index}...")
+            # print(f"Processing index {index}...")
 
             listF = openF.cells[index]
             listB = openB.cells[index]
