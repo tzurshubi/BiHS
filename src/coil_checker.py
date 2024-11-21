@@ -40,6 +40,11 @@ def find_longest_coil(above, run_forever, snake=True):
 
         print(f"{runs} longest length: {longest_length}")
         print(f"{runs} longest coil: {longest_coil}")
+        with open('longest.txt', 'w') as file:
+            file.write(f"longest_coil = {longest_coil}\n")
+            file.write(f"longest_length = {longest_length}\n")
+            file.write(f"runs = {runs}\n")
+
         # pickle.dump(longest_length, open('longest_length.out', 'wb'))
         # pickle.dump(longest_coil, open('longest_coil.out', 'wb'))
 
