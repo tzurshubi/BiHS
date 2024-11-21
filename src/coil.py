@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 1 == 0:
+        if expansions % 10000 == 0:
             with open(open_file_name, 'wb') as f:
                 pickle.dump(open2save, f)
             # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
@@ -132,4 +132,7 @@ if __name__ == "__main__":
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, f_value)
             open2save.insert_state(successor)
+    
+    with open(open_file_name, 'wb') as f:
+        pickle.dump(open2save, f)
 
