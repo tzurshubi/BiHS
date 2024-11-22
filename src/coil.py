@@ -102,6 +102,8 @@ if __name__ == "__main__":
         if expansions % 10000 == 1:
             with open(open_file_name, 'wb') as f:
                 pickle.dump(open2save, f)
+            with open(f"expansions{direction}.txt", 'w') as file:
+                file.write(f"expansions = {expansions-1}\n")
             # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
 
         # Check if the current state is the goal state
