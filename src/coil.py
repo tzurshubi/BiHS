@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
 
     name_of_graph=f"{dimension}d_cube"
-    (start , goal)= (0,1) if direction=="F" else (1,0)
+    (start , goal)= ([0,32,48],1) if direction=="F" else ([1],0)
     name_of_graph=f"cubes/"+name_of_graph
     print(name_of_graph)
 
@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
 
     # Initial state
-    initial_state = State(G, [start], True)
+    initial_state = State(G, start, True)
 
     # Initial f_value
     initial_f_value = heuristic(initial_state, goal, heuristic_name, True)
