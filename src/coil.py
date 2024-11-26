@@ -103,12 +103,11 @@ if __name__ == "__main__":
             block_start_time = time.time()
             with open(open_file_name, 'wb') as f:
                 pickle.dump(open2save, f)
-            with open(f"expansions{direction}.txt", 'w') as file:
-                file.write(f"expansions = {expansions-1}\n")
-            # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
             block_end_time = time.time()
-            print(f"after {expansions} expansion, saving OPEN took {block_end_time - block_start_time:.4f} seconds")
-
+            with open(f"expansions{direction}.txt", 'w') as file:
+                file.write(f"after {expansions-1} expansion, saving OPEN took {block_end_time - block_start_time:.4f} seconds\n")
+            # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+            
 
         # Check if the current state is the goal state
         if current_state.head == goal:
