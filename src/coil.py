@@ -79,7 +79,7 @@ if __name__ == "__main__":
     initial_state = State(G, start, True)
 
     # Initial f_value
-    initial_f_value = heuristic(initial_state, goal, heuristic_name, True)
+    initial_f_value = initial_state.g + heuristic(initial_state, goal, heuristic_name, True)
 
     # Push initial state with priority based on f_value
     open_set.push(initial_state, initial_f_value)
@@ -99,12 +99,16 @@ if __name__ == "__main__":
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 10000 == 1:
+        if expansions % 100000 == 1 or expansions==50001 or expansions==10001:
+            block_start_time = time.time()
             with open(open_file_name, 'wb') as f:
                 pickle.dump(open2save, f)
             with open(f"expansions{direction}.txt", 'w') as file:
                 file.write(f"expansions = {expansions-1}\n")
             # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+            block_end_time = time.time()
+            print(f"after {expansions} expansion, saving OPEN took {block_end_time - block_start_time:.4f} seconds")
+
 
         # Check if the current state is the goal state
         if current_state.head == goal:
