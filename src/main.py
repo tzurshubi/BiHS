@@ -26,8 +26,8 @@ DEFAULT_GRAPH_TYPE = "maze" # "grid"  "cube"  "manual"  "maze"
 DEFAULT_SIZE_OF_GRAPHS = [13,13] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = True
-DEFAULT_RUN_UNI = True
-DEFAULT_RUN_BI = True
+DEFAULT_RUN_UNI = False
+DEFAULT_RUN_BI = False
 
 base_dir = "/"
 current_directory = os.getcwd()
