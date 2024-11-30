@@ -20,13 +20,13 @@ from algorithms.bidirectional_search import *
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
-DEFAULT_DATE = "5_10_24"
-DEFAULT_NUMBER_OF_GRAPHS = 1
-DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [5,5] # dimension of cube
+DEFAULT_DATE = "20_10_24"
+DEFAULT_NUMBER_OF_GRAPHS = 3
+DEFAULT_GRAPH_TYPE = "maze" # "grid"  "cube"  "manual"  "maze"
+DEFAULT_SIZE_OF_GRAPHS = [13,13] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
-DEFAULT_SNAKE = False
-DEFAULT_RUN_UNI = False
+DEFAULT_SNAKE = True
+DEFAULT_RUN_UNI = True
 DEFAULT_RUN_BI = True
 
 base_dir = "/"
@@ -248,6 +248,8 @@ if __name__ == "__main__":
     run_bi = args.run_bi
 
     # Print the variables with their names and values
+    with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+        file.write(f"date: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}")
     print("--------------------------")
     print("date:", date)
     print("number_of_graphs:", number_of_graphs)
@@ -273,7 +275,7 @@ if __name__ == "__main__":
 
 
     # for i in list(reversed(range(0, number_of_graphs))):
-    for i in range(0, number_of_graphs):
+    for i in range(number_of_graphs, number_of_graphs+1):
         try:
             # Inputs
             if graph_type=="grid":
@@ -297,6 +299,9 @@ if __name__ == "__main__":
 
             name_of_graph=f"{date}/"+name_of_graph
             print(name_of_graph)
+            with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                file.write(name_of_graph+"\n")
+
             
             # unidirectional
             if run_uni:
@@ -304,6 +309,8 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, graph_type,size_of_graphs, start, goal, "unidirectional", heuristic, snake
                 )
+                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                    file.write(f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
                 print(
                     f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
                     )
@@ -323,6 +330,8 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, graph_type, size_of_graphs, goal, start, "unidirectional", heuristic, snake
                 )
+                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                    file.write(f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
                 print(
                     f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
                 )
@@ -343,6 +352,8 @@ if __name__ == "__main__":
                 logs, path, meet_point = search(
                     name_of_graph,graph_type, size_of_graphs, start, goal, "bidirectional", heuristic, snake
                 )
+                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                    file.write(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}")
                 print(
                     f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
                 )
