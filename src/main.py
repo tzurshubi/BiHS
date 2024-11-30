@@ -248,8 +248,13 @@ if __name__ == "__main__":
     run_bi = args.run_bi
 
     # Print the variables with their names and values
-    with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
-        file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
+    if run_uni:
+        with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
+            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
+    if run_bi:
+        with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_bi.txt", 'a') as file:
+            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
+    
     print("--------------------------")
     print("date:", date)
     print("number_of_graphs:", number_of_graphs)
@@ -309,7 +314,7 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, graph_type,size_of_graphs, start, goal, "unidirectional", heuristic, snake
                 )
-                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
                     file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
                 print(
                     f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
@@ -330,7 +335,7 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, graph_type, size_of_graphs, goal, start, "unidirectional", heuristic, snake
                 )
-                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
                     file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
                 print(
                     f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
@@ -352,7 +357,7 @@ if __name__ == "__main__":
                 logs, path, meet_point = search(
                     name_of_graph,graph_type, size_of_graphs, start, goal, "bidirectional", heuristic, snake
                 )
-                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
+                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_bi.txt", 'a') as file:
                     file.write(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
                 print(
                     f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
