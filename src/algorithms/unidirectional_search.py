@@ -44,7 +44,7 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.path
                 best_path_length = current_path_length
                 print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}")
-                with open(f"bihs_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
+                with open(f"bihs_{args.date}_{args.graph_type}_{args.number_of_graphs}_uni.txt", 'a') as file:
                     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
     
             continue
