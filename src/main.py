@@ -21,13 +21,13 @@ from algorithms.bidirectional_search import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_DATE = "cubes"
-DEFAULT_NUMBER_OF_GRAPHS = 6
+DEFAULT_NUMBER_OF_GRAPHS = 4
 DEFAULT_GRAPH_TYPE = "cube" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [4,4] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = True
-DEFAULT_RUN_UNI = True
-DEFAULT_RUN_BI = True
+DEFAULT_RUN_UNI = False
+DEFAULT_RUN_BI = False
 
 base_dir = "/"
 current_directory = os.getcwd()
