@@ -20,14 +20,14 @@ from algorithms.bidirectional_search import *
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
-DEFAULT_DATE = "20_10_24"
-DEFAULT_NUMBER_OF_GRAPHS = 3
-DEFAULT_GRAPH_TYPE = "maze" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [13,13] # dimension of cube
+DEFAULT_DATE = "cubes"
+DEFAULT_NUMBER_OF_GRAPHS = 6
+DEFAULT_GRAPH_TYPE = "cube" # "grid"  "cube"  "manual"  "maze"
+DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
-DEFAULT_SNAKE = False
-DEFAULT_RUN_UNI = False
-DEFAULT_RUN_BI = False
+DEFAULT_SNAKE = True
+DEFAULT_RUN_UNI = True
+DEFAULT_RUN_BI = True
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -160,43 +160,48 @@ def display_graph_with_path_and_points(graph, title="Graph", filename=None, path
     plt.title(title)
     if filename:
         plt.savefig(filename)
-        print(f"Graph saved to {filename}")
+        # print(f"Graph saved to {filename}")
     else:
         plt.show()
 
 
 def search(
-    name_of_graph,graph_type,
-    size_of_graphs,
+    name_of_graph,
     start,
     goal,
     search_type,
     heuristic,
-    snake = False,
+    snake,
+    args
 ):
-    # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
+    # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {args.size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
     # print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
+    if args.graph_type=="cube" and G.has_edge(0, 1):
+        G.remove_edge(0, 1)
     blocks = []
     logs = {}
-    for node in range(size_of_graphs[0] * size_of_graphs[1]):
+    for node in range(args.size_of_graphs[0] * args.size_of_graphs[1]):
         if node not in G:
             blocks.append(node)
-    while goal not in G:
-        goal -= 1
-    while start not in G:
-        start += 1
+    if isinstance(goal,int):
+        while goal not in G:
+            goal -= 1
+    if isinstance(start,int):
+        while start not in G:
+            start += 1
 
     meet_point = None
     tracemalloc.start()
     start_time = time.time()
+    args.start_time = start_time
 
     # Run heuristic search to find LSP in the graph
     if search_type == "unidirectional":
-        path, expansions = uniHS_for_LSP(G, start, goal, heuristic, snake)
+        path, expansions = uniHS_for_LSP(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
-        path, expansions, meet_point = biHS_for_LSP(G, start, goal, heuristic, snake)
+        path, expansions, meet_point = biHS_for_LSP(G, start, goal, heuristic, snake, args)
 
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
@@ -208,16 +213,16 @@ def search(
     logs["expansions"] = expansions
 
     if meet_point:
-        if graph_type=="grid":
+        if args.graph_type=="grid":
             save_table_as_png(
-                size_of_graphs[0],
-                size_of_graphs[1],
+                args.size_of_graphs[0],
+                args.size_of_graphs[1],
                 blocks,
                 current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
                 path,
                 [meet_point],
             )
-        elif graph_type=="cube":
+        elif args.graph_type=="cube":
             display_graph_with_path_and_points(G,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
             c=1
         meet_point_index = path.index(meet_point)
@@ -291,12 +296,11 @@ if __name__ == "__main__":
                 name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            
             elif graph_type=="cube":
                 # if i<3: continue
-                name_of_graph=f"{size_of_graphs[0]}d_hypercube"
-                start = 0
-                goal = 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+                name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
+                start = [1,3,7]
+                goal = 0  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
             elif graph_type=="manual":
                 name_of_graph = f"paper_graph_{i}"
                 start = "s"  # 0 # "s"
@@ -312,7 +316,7 @@ if __name__ == "__main__":
             if run_uni:
                 # unidirectional s-t
                 logs, path, _ = search(
-                    name_of_graph, graph_type,size_of_graphs, start, goal, "unidirectional", heuristic, snake
+                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args
                 )
                 with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
                     file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
@@ -332,30 +336,31 @@ if __name__ == "__main__":
                 )
 
                 # unidirectional t-s
-                logs, path, _ = search(
-                    name_of_graph, graph_type, size_of_graphs, goal, start, "unidirectional", heuristic, snake
-                )
-                with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
-                    file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
-                print(
-                    f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-                )
-                results.append(
-                    {
-                        "# blocks": i,
-                        "Search type": "unidirectional t-s",
-                        "# expansions": logs["expansions"],
-                        "Time [ms]": logs["time[ms]"],
-                        "Memory [kB]": logs["memory[kB]"],
-                        "[g_F,g_B]": "[N/A,N/A]",
-                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                    }
-                )
+                if graph_type!="cube":
+                    logs, path, _ = search(
+                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args
+                    )
+                    with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
+                        file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
+                    print(
+                        f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
+                    )
+                    results.append(
+                        {
+                            "# blocks": i,
+                            "Search type": "unidirectional t-s",
+                            "# expansions": logs["expansions"],
+                            "Time [ms]": logs["time[ms]"],
+                            "Memory [kB]": logs["memory[kB]"],
+                            "[g_F,g_B]": "[N/A,N/A]",
+                            "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                        }
+                    )
 
             # bidirectional
             if run_bi:
                 logs, path, meet_point = search(
-                    name_of_graph,graph_type, size_of_graphs, start, goal, "bidirectional", heuristic, snake
+                    name_of_graph, start, goal, "bidirectional", heuristic, snake,args
                 )
                 with open(f"bihs_{date}_{graph_type}_{number_of_graphs}_bi.txt", 'a') as file:
                     file.write(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")

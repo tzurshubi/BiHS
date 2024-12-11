@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
-import heapq
+import heapq, time
 from heuristics.heuristic import heuristic
 from models.state import State
 from models.openvopen import Openvopen
 from models.heapq_state import HeapqState
+from utils.utils import *
 
 
-def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
+
+def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
     # # For Plotting h
     # mis_smaller_flag = []
     # expansions_list = []
@@ -15,7 +17,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
     # max_f = []
 
     # Options
-    alternate = False
+    alternate = True # False
     lastDirectionF = False
 
     # Initialize meeting point of the two searches
@@ -27,8 +29,8 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
     OPENvOPEN = Openvopen(max(graph.nodes)+1)
 
     # Initial states
-    initial_state_F = State(graph, [start], snake)
-    initial_state_B = State(graph, [goal], snake)
+    initial_state_F = State(graph, [start], snake) if isinstance(start, int) else State(graph, start, snake)
+    initial_state_B = State(graph, [goal], snake) if isinstance(goal, int) else State(graph, goal, snake)
 
     # Initial f_values
     initial_f_value_F = heuristic(initial_state_F, goal, heuristic_name, snake)
@@ -91,7 +93,10 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                # print(f"Found longer path of length {total_length}")
+                print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}")
+                with open(f"bihs_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
+                    file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}\n")
+    
 
         # Check if U is the largest it will ever be
         if best_path_length >= min(
