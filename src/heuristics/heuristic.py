@@ -186,6 +186,8 @@ def mis_heuristic(state, goal, snake):
 
 def heuristic(state, goal, heuristic_name, snake):
     # print(f"Running heuristic with parameters: state: {state}, goal: {goal}, heuristic_name: {heuristic_name}")
+    if not isinstance(goal,int):
+        goal = max(goal)
 
     if heuristic_name == "heuristic0":
         return heuristic0(state)

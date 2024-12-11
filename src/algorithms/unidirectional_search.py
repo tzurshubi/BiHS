@@ -1,16 +1,16 @@
-import heapq
+import heapq,time
 from heuristics.heuristic import heuristic
-
 from models.state import State
 from models.heapq_state import HeapqState
+from utils.utils import *
 
 
-def uniHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
+def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
     # Initialize custom priority queue
     open_set = HeapqState()
 
     # Initial state
-    initial_state = State(graph, [start], snake)
+    initial_state = State(graph, [start], snake) if isinstance(start, int) else State(graph, start, snake)
 
     # Initial f_value
     initial_f_value = heuristic(initial_state, goal, heuristic_name, snake)
@@ -43,9 +43,10 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
             if current_path_length > best_path_length:
                 best_path = current_state.path
                 best_path_length = current_path_length
-                # print(
-                #     f"This state has head as the goal, and is the longest found, with length {current_path_length}"
-                # )
+                print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}")
+                with open(f"bihs_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
+                    file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
+    
             continue
 
         # Finish if the f_value is smaller than the best path length found so far
@@ -63,6 +64,6 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake = False):
             # Calculate the f_value
             f_value = g_value + h_value
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
-            open_set.push(successor, f_value)
+            open_set.push(successor, min(f_value,14))
 
     return best_path, expansions
