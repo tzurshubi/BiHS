@@ -64,6 +64,6 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
             # Calculate the f_value
             f_value = g_value + h_value
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
-            open_set.push(successor, min(f_value,14))
+            open_set.push(successor, f_value)
 
     return best_path, expansions
