@@ -184,6 +184,79 @@ def mis_heuristic(state, goal, snake):
     return spqr_nodes_count - 1
 
 
+import networkx as nx
+
+def bct_is_heuristic(state, goal, snake=True):
+    """
+    Computes the combined BCT + IS heuristic for the Snake/Coil in the Box problem.
+
+    Args:
+    - state: A dictionary representing the current state, including:
+        - 'path': List of vertices in the current path.
+        - 'g': The cost (length) of the current path.
+        - 'head': The current head of the path.
+        - 'path_vertices_bitmap': Bitmap representation of visited vertices.
+        - 'path_vertices_and_neighbors_bitmap': Bitmap of visited vertices and their neighbors.
+        - 'graph': The NetworkX graph representation of the problem.
+    - goal: The goal vertex (ignored for heuristic computation in MAX problems).
+    - snake: Boolean, True for Snake in the Box, False for Coil in the Box.
+
+    Returns:
+    - A heuristic estimate of the maximum length of the path from the current state.
+    """
+
+    graph = state.graph
+    head = state.head
+    path = state.path
+
+    # Compute the block-cut-point tree of the reachable subgraph
+    reachable_graph = nx.Graph(graph.subgraph(nx.node_connected_component(graph, head)))
+    biconnected_components = list(nx.biconnected_components(reachable_graph))
+    bct = nx.Graph()
+    component_mapping = {}
+
+    # Build the BCT
+    for i, component in enumerate(biconnected_components):
+        bct.add_node(i, vertices=set(component))
+        for vertex in component:
+            component_mapping[vertex] = i
+
+    # Add edges between biconnected components sharing a cut point
+    for vertex in reachable_graph.nodes:
+        connected_components = {component_mapping[neighbor] for neighbor in graph.neighbors(vertex) if neighbor in component_mapping}
+        for c1, c2 in zip(connected_components, list(connected_components)[1:]):
+            bct.add_edge(c1, c2)
+
+    # Heuristic values for each biconnected component
+    def compute_h_component(component):
+        # Calculate IS-based heuristic
+        vertices = bct.nodes[component]['vertices']
+        independent_set = nx.maximal_independent_set(reachable_graph.subgraph(vertices))
+        return len(independent_set) - 1
+
+    def compute_h_bct(component):
+        # Recursive computation of heuristic across BCT
+        h_component = compute_h_component(component)
+        child_components = [neighbor for neighbor in bct.neighbors(component) if neighbor != component_mapping[state['head']]]
+        return max(
+            h_component,
+            max((compute_h_bct(child) + h_component for child in child_components), default=0)
+        )
+
+    # Apply the heuristic calculation
+    root_component = component_mapping[head]
+    h_bct_is = compute_h_bct(root_component)
+    
+    # Adjust heuristic for Coil in the Box
+    if not snake:
+        tail = path[0]
+        h_bct_is += 1 if tail in bct.nodes[root_component]['vertices'] else 0
+
+    return h_bct_is
+
+
+
+
 def heuristic(state, goal, heuristic_name, snake):
     # print(f"Running heuristic with parameters: state: {state}, goal: {goal}, heuristic_name: {heuristic_name}")
     if not isinstance(goal,int):
@@ -197,6 +270,8 @@ def heuristic(state, goal, heuristic_name, snake):
         return bcc_heuristic(state, goal)
     elif heuristic_name == "mis_heuristic":
         return mis_heuristic(state, goal, snake)
+    elif heuristic_name == "bct_is_heuristic":
+        return bct_is_heuristic(state, goal, snake)
     else:
         print(f"Invalid heuristic name: {heuristic_name}")
         return 1 / 0
