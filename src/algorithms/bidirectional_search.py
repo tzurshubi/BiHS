@@ -94,7 +94,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
                 print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}")
-                with open(f"bctis_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
+                with open(f"symbr_bctis_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
                     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}\n")
     
 
@@ -112,7 +112,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         CLOSED_D.add(current_state)
 
         # Generate successors
-        successors = current_state.successor(snake)
+        successors = current_state.successor(snake, directionF)
         for successor in successors:
             h_value = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
