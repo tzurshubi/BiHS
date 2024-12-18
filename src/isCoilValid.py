@@ -47,9 +47,9 @@ def is_legal_coil(dimension, path):
     return True
 
 # Example usage
-dimension = 4
+dimension = 7
 # path = [0, 32, 36, 44, 45, 47, 39, 7, 6, 22, 30, 31, 27, 11, 9, 1]
-path = [0, 8, 12, 13, 15, 7, 3, 1]
+path = [1, 3, 7, 15, 14, 10, 26, 58, 62, 126, 127, 125, 121, 89, 88, 92, 76, 108, 104, 40, 41, 43, 107, 99, 97, 101, 69, 85, 21, 53, 49, 48, 112, 114, 82, 86, 70, 102, 38, 36, 4, 0]
 
 if is_legal_coil(dimension, path):
     print("!!! COIL !!!")

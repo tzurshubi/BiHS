@@ -75,6 +75,11 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         # Get the best state from OPEN_D
         _, _, current_state, f_value = OPEN_D.top()
 
+        # New Check by Shimony. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
+        if (D=='F' and current_state.g > f_value/2) or (D=='B' and current_state.g > (f_value-1)/2): 
+            OPEN_D.pop()
+            continue
+
         # Logs
         current_path_length = len(current_state.path) - 1
         expansions += 1
@@ -93,9 +98,9 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}")
-                with open(f"symbr_bctis_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
-                    file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}\n")
+                print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}")
+                with open(f"gf2_symbr_bctis_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
+                    file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}\n")
     
 
         # Check if U is the largest it will ever be
