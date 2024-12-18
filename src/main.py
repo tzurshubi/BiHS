@@ -27,7 +27,7 @@ DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
 DEFAULT_HEURISTIC = "bct_is_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = True
 DEFAULT_RUN_UNI = False # True # False
-DEFAULT_RUN_BI = True # True # False
+DEFAULT_RUN_BI = False # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
