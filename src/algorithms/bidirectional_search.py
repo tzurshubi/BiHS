@@ -99,7 +99,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
                 print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}")
-                with open(f"gf2_symbr_bctis_{args.date}_{args.graph_type}_{args.number_of_graphs}_bi.txt", 'a') as file:
+                with open(args.log_file_name, 'a') as file:
                     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}\n")
     
 

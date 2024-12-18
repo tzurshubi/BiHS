@@ -27,7 +27,7 @@ DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
 DEFAULT_HEURISTIC = "bct_is_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = True
 DEFAULT_RUN_UNI = False # True # False
-DEFAULT_RUN_BI = False # True # False
+DEFAULT_RUN_BI = True # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -252,14 +252,18 @@ if __name__ == "__main__":
     run_uni = args.run_uni
     run_bi = args.run_bi
 
+    log_file_name = ""
     # Print the variables with their names and values
     if run_uni:
-        with open(f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
+        log_file_name = f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_uni.txt"
+        with open(log_file_name, 'w') as file:
             file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
     if run_bi:
-        with open(f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_bi.txt", 'a') as file:
+        log_file_name = f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_bi.txt"
+        with open(log_file_name, 'w') as file:
             file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
     
+    args.log_file_name = log_file_name
     print("--------------------------")
     print("date:", date)
     print("number_of_graphs:", number_of_graphs)
@@ -308,8 +312,6 @@ if __name__ == "__main__":
 
             name_of_graph=f"{date}/"+name_of_graph
             print(name_of_graph)
-            # with open(f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}.txt", 'a') as file:
-            #     file.write(name_of_graph+"\n")
 
             
             # unidirectional
@@ -318,7 +320,7 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, start, goal, "unidirectional", heuristic, snake, args
                 )
-                with open(f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
+                with open(log_file_name, 'a') as file:
                     file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
                 print(
                     f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
@@ -340,7 +342,7 @@ if __name__ == "__main__":
                     logs, path, _ = search(
                         name_of_graph, goal, start, "unidirectional", heuristic, snake, args
                     )
-                    with open(f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_uni.txt", 'a') as file:
+                    with open(log_file_name, 'a') as file:
                         file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
                     print(
                         f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
@@ -362,7 +364,7 @@ if __name__ == "__main__":
                 logs, path, meet_point = search(
                     name_of_graph, start, goal, "bidirectional", heuristic, snake,args
                 )
-                with open(f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_bi.txt", 'a') as file:
+                with open(log_file_name, 'a') as file:
                     file.write(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
                 print(
                     f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
