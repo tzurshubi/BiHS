@@ -43,9 +43,9 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
             if current_path_length > best_path_length:
                 best_path = current_state.path
                 best_path_length = current_path_length
-                print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}")
-                with open(args.log_file_name, 'a') as file:
-                    file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
+                # print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}")
+                # with open(args.log_file_name, 'a') as file:
+                #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
     
             continue
 

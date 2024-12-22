@@ -20,14 +20,16 @@ from algorithms.bidirectional_search import *
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
-DEFAULT_DATE = "cubes"
-DEFAULT_NUMBER_OF_GRAPHS = 6
-DEFAULT_GRAPH_TYPE = "cube" # "grid"  "cube"  "manual"  "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6] # dimension of cube
-DEFAULT_HEURISTIC = "bct_is_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
-DEFAULT_SNAKE = True
-DEFAULT_RUN_UNI = False # True # False
-DEFAULT_RUN_BI = False # True # False
+DEFAULT_LOG = True
+DEFAULT_DATE = "SM_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10
+DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
+DEFAULT_SIZE_OF_GRAPHS = [5,5] # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 4
+DEFAULT_HEURISTIC = "bcc_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
+DEFAULT_SNAKE = False
+DEFAULT_RUN_UNI = True # True # False
+DEFAULT_RUN_BI = True # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -38,10 +40,12 @@ if current_directory.startswith("/cs_storage/"):
 # Function to parse command-line arguments
 def parse_args():
     parser = argparse.ArgumentParser(description="Run graph search experiments.")
+    parser.add_argument("--log", type=str, default=DEFAULT_LOG, help="Date for naming files.")
     parser.add_argument("--date", type=str, default=DEFAULT_DATE, help="Date for naming files.")
     parser.add_argument("--number_of_graphs", type=int, default=DEFAULT_NUMBER_OF_GRAPHS, help="Number of graphs to process.")
     parser.add_argument("--graph_type", type=str, default=DEFAULT_GRAPH_TYPE, help="Type of graph: grid, cube, manual, maze.")
     parser.add_argument("--size_of_graphs", nargs=2, type=int, default=DEFAULT_SIZE_OF_GRAPHS, help="Size of graphs (e.g., 8 8).")
+    parser.add_argument("--per_blocked", type=int, default=DEFAULT_PER_OF_BLOCKS, help="Number of graphs to process.")
     parser.add_argument("--heuristic", type=str, default=DEFAULT_HEURISTIC, help="Heuristic to use: bcc_heuristic, reachable_heuristic, etc.")
     parser.add_argument("--snake", action="store_true", default=DEFAULT_SNAKE, help="Enable snake mode.")
     parser.add_argument("--run_uni", action="store_true", default=DEFAULT_RUN_UNI, help="Enable snake mode.")
@@ -243,27 +247,30 @@ if __name__ == "__main__":
     args = parse_args()
 
     # Assign values from arguments or defaults
+    log = args.log
     date = args.date
     number_of_graphs = args.number_of_graphs
     graph_type = args.graph_type
     size_of_graphs = args.size_of_graphs
+    per_blocked = args.per_blocked
     heuristic = args.heuristic
     snake = args.snake
     run_uni = args.run_uni
     run_bi = args.run_bi
 
-    log_file_name = ""
-    # Print the variables with their names and values
-    if run_uni:
-        log_file_name = f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_uni.txt"
-        with open(log_file_name, 'w') as file:
-            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
-    if run_bi:
-        log_file_name = f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_bi.txt"
-        with open(log_file_name, 'w') as file:
-            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
-    
-    args.log_file_name = log_file_name
+    if log:
+        log_file_name = "logs"
+        # Print the variables with their names and values
+        # if run_uni:
+        #     log_file_name = f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_uni.txt"
+        #     with open(log_file_name, 'w') as file:
+        #         file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")
+        # if run_bi:
+        #     log_file_name = f"gf2_symbr_bctis_{date}_{graph_type}_{number_of_graphs}_bi.txt"
+        #     with open(log_file_name, 'w') as file:
+        #         file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n")    
+        args.log_file_name = log_file_name
+
     print("--------------------------")
     print("date:", date)
     print("number_of_graphs:", number_of_graphs)
@@ -288,12 +295,15 @@ if __name__ == "__main__":
     results = []
 
 
-    # for i in list(reversed(range(0, number_of_graphs))):
-    for i in range(number_of_graphs, number_of_graphs+1):
+    for i in list(range(0, number_of_graphs)):
+    # for i in range(number_of_graphs, number_of_graphs+1):
         try:
             # Inputs
             if graph_type=="grid":
-                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                if per_blocked:
+                    name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
+                else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                log_file_name = "results_"+name_of_graph[:-2]
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
             elif graph_type=="maze":
@@ -311,7 +321,7 @@ if __name__ == "__main__":
                 goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
             name_of_graph=f"{date}/"+name_of_graph
-            print(name_of_graph)
+            print("\n"+name_of_graph)
 
             
             # unidirectional
@@ -320,8 +330,9 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, start, goal, "unidirectional", heuristic, snake, args
                 )
-                with open(log_file_name, 'a') as file:
-                    file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
+                if log:
+                    with open(log_file_name, 'a') as file:
+                        file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
                 print(
                     f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
                     )
@@ -342,8 +353,9 @@ if __name__ == "__main__":
                     logs, path, _ = search(
                         name_of_graph, goal, start, "unidirectional", heuristic, snake, args
                     )
-                    with open(log_file_name, 'a') as file:
-                        file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]\n")
+                    if log:
+                        with open(log_file_name, 'a') as file:
+                            file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
                     print(
                         f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
                     )
@@ -364,10 +376,11 @@ if __name__ == "__main__":
                 logs, path, meet_point = search(
                     name_of_graph, start, goal, "bidirectional", heuristic, snake,args
                 )
-                with open(log_file_name, 'a') as file:
-                    file.write(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
+                if log:
+                    with open(log_file_name, 'a') as file:
+                        file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
                 print(
-                    f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
+                    f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
                 )
                 results.append(
                     {
