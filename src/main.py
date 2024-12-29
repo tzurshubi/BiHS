@@ -26,7 +26,7 @@ DEFAULT_DATE = "SM_Grids" # "SM_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10
 DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
 DEFAULT_SIZE_OF_GRAPHS = [5,5] # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 16
+DEFAULT_PER_OF_BLOCKS = 4
 DEFAULT_HEURISTIC = "mis_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = False
 DEFAULT_RUN_UNI = True # True # False
@@ -304,7 +304,7 @@ if __name__ == "__main__":
                 if per_blocked:
                     name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
                 else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-                log_file_name = "results_"+name_of_graph[:-2]
+                log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
             elif graph_type=="maze":
@@ -411,4 +411,4 @@ if __name__ == "__main__":
             # Save the DataFrame to an Excel file
             results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
 
-    calculate_averages(avgs)
+    calculate_averages(avgs, log_file_name)
