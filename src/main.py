@@ -14,6 +14,7 @@ import tracemalloc
 from models.graph import *
 from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
+from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
 
@@ -21,12 +22,12 @@ from algorithms.bidirectional_search import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True
-DEFAULT_DATE = "SM_Grids"
+DEFAULT_DATE = "SM_Grids" # "SM_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10
 DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
 DEFAULT_SIZE_OF_GRAPHS = [5,5] # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 4
-DEFAULT_HEURISTIC = "bcc_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
+DEFAULT_PER_OF_BLOCKS = 16
+DEFAULT_HEURISTIC = "mis_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
 DEFAULT_SNAKE = False
 DEFAULT_RUN_UNI = True # True # False
 DEFAULT_RUN_BI = True # True # False
@@ -294,7 +295,7 @@ if __name__ == "__main__":
     results_df = pd.DataFrame(columns=columns)
     results = []
 
-
+    avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}}
     for i in list(range(0, number_of_graphs)):
     # for i in range(number_of_graphs, number_of_graphs+1):
         try:
@@ -330,6 +331,8 @@ if __name__ == "__main__":
                 logs, path, _ = search(
                     name_of_graph, start, goal, "unidirectional", heuristic, snake, args
                 )
+                avgs["uni_st"]["expansions"].append(logs['expansions'])
+                avgs["uni_st"]["time"].append(logs['time[ms]'])
                 if log:
                     with open(log_file_name, 'a') as file:
                         file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
@@ -353,6 +356,8 @@ if __name__ == "__main__":
                     logs, path, _ = search(
                         name_of_graph, goal, start, "unidirectional", heuristic, snake, args
                     )
+                    avgs["uni_ts"]["expansions"].append(logs['expansions'])
+                    avgs["uni_ts"]["time"].append(logs['time[ms]'])
                     if log:
                         with open(log_file_name, 'a') as file:
                             file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
@@ -376,6 +381,8 @@ if __name__ == "__main__":
                 logs, path, meet_point = search(
                     name_of_graph, start, goal, "bidirectional", heuristic, snake,args
                 )
+                avgs["bi"]["expansions"].append(logs['expansions'])
+                avgs["bi"]["time"].append(logs['time[ms]'])
                 if log:
                     with open(log_file_name, 'a') as file:
                         file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
@@ -403,3 +410,5 @@ if __name__ == "__main__":
 
             # Save the DataFrame to an Excel file
             results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
+
+    calculate_averages(avgs)

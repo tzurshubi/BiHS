@@ -75,11 +75,6 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         # Get the best state from OPEN_D
         _, _, current_state, f_value = OPEN_D.top()
 
-        # New Check by Shimony. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
-        if (D=='F' and current_state.g > f_value/2) or (D=='B' and current_state.g > (f_value-1)/2): 
-            OPEN_D.pop()
-            continue
-
         # Logs
         current_path_length = len(current_state.path) - 1
         expansions += 1
@@ -98,11 +93,10 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                # print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}")
+                # print(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}. f_max={f_value}")
                 # with open(args.log_file_name, 'a') as file:
                 #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}\n")
     
-
         # Check if U is the largest it will ever be
         if best_path_length >= min(
             OPEN_F.top()[3] if len(OPEN_F) > 0 else float("inf"),
@@ -110,6 +104,11 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         ):
             # print(f"Terminating with best path of length {best_path_length}")
             break
+
+        # New Check by Shimony. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
+        if (D=='F' and current_state.g > f_value/2) or (D=='B' and current_state.g > (f_value-1)/2): 
+            OPEN_D.pop()
+            continue
 
         # Get the current state from OPEN_D TO CLOSED_D
         _, _, current_state, f_value = OPEN_D.pop()
@@ -119,7 +118,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         # Generate successors
         successors = current_state.successor(snake, directionF)
         for successor in successors:
-            h_value = heuristic(
+            h_successor = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
             )
 
@@ -131,9 +130,11 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
             # max_f.append(f_value)
             # expansions_list.append(expansions)
 
-            g_value = current_path_length + 1
-            f_value = g_value + h_value
-            OPEN_D.push(successor, min(f_value, 2 * h_value)) # MM # ,2*(OPT-g_value)
+            g_successor = current_path_length + 1
+            f_successor = g_successor + h_successor
+            # if f_value<f_successor:
+            #     print(f"f_value {f_value}")
+            OPEN_D.push(successor, min(2 * h_successor, f_value,f_successor)) # MM # ,2*(OPT-g_value) # min(2 * h_successor, f_value,f_successor), f_successor
             OPENvOPEN.insert_state(successor,directionF)
 
     
