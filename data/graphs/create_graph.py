@@ -9,6 +9,24 @@ import os, math
 # from ...src import *
 import matplotlib.pyplot as plt
 
+def check_path_between_nodes(G, node1, node2):
+    """
+    Check if there is a path between two nodes in the graph.
+
+    Parameters:
+    G (networkx.Graph): The input graph.
+    node1 (int): The starting node.
+    node2 (int): The target node.
+
+    Returns:
+    bool: True if a path exists, False otherwise.
+    """
+    # Check if both nodes exist in the graph
+    if node1 not in G or node2 not in G:
+        return False
+
+    # Use NetworkX's has_path function
+    return nx.has_path(G, node1, node2)
 
 def random_5x5_nodes_from_13x13_grid():
     blocks = []
@@ -92,8 +110,16 @@ def create_grid_graph_w_random_blocks(x, y, n):
         if corner in nodes:
             nodes.remove(corner)
 
-    nodes_to_remove = random.sample(nodes, n)
-    G.remove_nodes_from(nodes_to_remove)
+    while True:
+        G_copy = G.copy()
+        nodes_to_remove = random.sample(nodes, n)
+        G_copy.remove_nodes_from(nodes_to_remove)
+        if nx.has_path(G_copy, corner_nodes[0], corner_nodes[1]):
+            G = G_copy  # Update the graph only when the condition holds
+            break
+        # nodes_to_remove = random.sample(nodes, n)
+        # G.remove_nodes_from(nodes_to_remove)
+        # if nx.has_path(G, corner_nodes[0], corner_nodes[1]): break
 
     return G, nodes_to_remove
 
@@ -266,10 +292,10 @@ def save_table_as_png(
     plt.close(fig)
 
 
-date = "L_Grids"
-number_of_graphs = 3
+date = "SM_Grids"
+number_of_graphs = 10
 graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-dimension_of_graphs = [40,40] # dimension for cube
+dimension_of_graphs = [7,8] # dimension for cube
 suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
@@ -282,15 +308,16 @@ if not os.path.exists(folder_path):
 if graph_type=="maze":
     blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
 
-for j in range(0,1):
+for j in range(0,4):
     for i in range(0, number_of_graphs):
         # Create a grid
         if graph_type=="grid":
             name_of_graph = (
-                f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{(25+5*i)}per_{j}"
+                f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{(4+4*j)}per_{i}"
             )
+            print(name_of_graph)
             # num_of_blocks = int(i % (dimension_of_graphs[0] * dimension_of_graphs[1] / 2))
-            num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1])*(25+5*i)/100)
+            num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1])*(4+4*j)/100)
             G, blocks = create_grid_graph_w_random_blocks(dimension_of_graphs[0], dimension_of_graphs[1], num_of_blocks)
 
             # Create grid with specified blocks

@@ -55,3 +55,33 @@ def time2str(start_time, end_time):
         return f"{hours}:{minutes:02}:{seconds:02}"
     else:
         return f"{minutes:02}:{seconds:02}"
+
+
+def calculate_averages(avgs):
+    """
+    Calculate and print the averages for each metric across categories.
+
+    Parameters:
+    avgs (dict): A dictionary where keys are categories (e.g., "uni_st", "uni_ts", "bi"),
+                 and values are dictionaries with metrics (e.g., "expansions", "time") as keys and lists of numbers as values.
+    """
+    metrics = list(next(iter(avgs.values())).keys())  # Get metric names from the first category
+
+    for metric in metrics:
+        averages = []
+        for category in avgs:
+            values = avgs[category][metric]
+            avg = round(sum(values) / len(values)) if values else 0
+            averages.append(avg)
+        formatted_averages = ", ".join(f"{avg}" for avg in averages)
+        print(f"average {metric}: ({formatted_averages})")
+
+    # Calculate and print average expansions per second
+    expansions_per_second = []
+    for category in avgs:
+        expansions = avgs[category]["expansions"]
+        times = avgs[category]["time"]
+        avg_expansions_per_sec = round(sum(expansions) / (sum(times) / 1000)) if times else 0
+        expansions_per_second.append(avg_expansions_per_sec)
+    formatted_expansions_per_second = ", ".join(f"{eps}" for eps in expansions_per_second)
+    print(f"average expansions per second: ({formatted_expansions_per_second})")
