@@ -57,7 +57,7 @@ def time2str(start_time, end_time):
         return f"{minutes:02}:{seconds:02}"
 
 
-def calculate_averages(avgs):
+def calculate_averages(avgs, log_file_name=None):
     """
     Calculate and print the averages for each metric across categories.
 
@@ -75,6 +75,10 @@ def calculate_averages(avgs):
             averages.append(avg)
         formatted_averages = ", ".join(f"{avg}" for avg in averages)
         print(f"average {metric}: ({formatted_averages})")
+        if log_file_name:
+            with open(log_file_name, 'a') as file:
+                file.write(f"average {metric}: ({formatted_averages})\n")
+                
 
     # Calculate and print average expansions per second
     expansions_per_second = []
@@ -85,3 +89,6 @@ def calculate_averages(avgs):
         expansions_per_second.append(avg_expansions_per_sec)
     formatted_expansions_per_second = ", ".join(f"{eps}" for eps in expansions_per_second)
     print(f"average expansions per second: ({formatted_expansions_per_second})")
+    if log_file_name:
+        with open(log_file_name, 'a') as file:
+            file.write(f"average expansions per second: ({formatted_expansions_per_second})")
