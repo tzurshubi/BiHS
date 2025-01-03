@@ -312,6 +312,7 @@ if __name__ == "__main__":
             name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
             start = 0  # 0 # "s"
             goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
         elif graph_type=="cube":
             # if i<3: continue
             name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
