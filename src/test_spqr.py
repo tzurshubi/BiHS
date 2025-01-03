@@ -1,6 +1,6 @@
 # Import SageMath library
-from sage.all import *
-from sage.graphs.connectivity import TriconnectivitySPQR
+# from sage.all import *
+# from sage.graphs.connectivity import TriconnectivitySPQR
 
 # Simple calculation using SPQR Tree in SageMath
 def main():
