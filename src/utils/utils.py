@@ -1,3 +1,11 @@
+import networkx as nx
+import json
+import random
+import numpy as np
+import matplotlib.patches as patches
+import os, math
+import matplotlib.pyplot as plt
+
 def ms2str(time_ms):
     """
     Convert elapsed time in milliseconds to a formatted string: 
@@ -56,7 +64,22 @@ def time2str(start_time, end_time):
     else:
         return f"{minutes:02}:{seconds:02}"
 
+def time_ms(start_time, end_time):
+    """
+    Calculate elapsed time formatted as DD:HH:MM:SS, but remove days if 00 
+    and hours if 00. Always include MM:SS.
 
+    Args:
+        start_time (float): Start time in seconds.
+        end_time (float): End time in seconds.
+
+    Returns:
+        str: A string representing the formatted elapsed time.
+    """
+    elapsed_time = end_time - start_time
+
+    return int(1000*elapsed_time)
+    
 def calculate_averages(avgs, log_file_name=None):
     """
     Calculate and print the averages for each metric across categories.
@@ -92,3 +115,25 @@ def calculate_averages(avgs, log_file_name=None):
     if log_file_name:
         with open(log_file_name, 'a') as file:
             file.write(f"average expansions per second: ({formatted_expansions_per_second})")
+
+
+# Function to display the graph
+def display_graph(graph, title="Graph", filename=None):
+    plt.figure(figsize=(8, 8))
+    pos = nx.spring_layout(graph)
+    nx.draw(
+        graph,
+        pos,
+        with_labels=True,
+        node_size=500,
+        node_color="skyblue",
+        font_size=10,
+        font_weight="bold",
+        edge_color="gray",
+    )
+    plt.title(title)
+    if filename:
+        plt.savefig(filename)
+    else:
+        plt.show()
+

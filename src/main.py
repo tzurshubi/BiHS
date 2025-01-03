@@ -22,12 +22,12 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True
-DEFAULT_DATE = "SM_Grids" # "SM_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 10
-DEFAULT_GRAPH_TYPE = "grid" # "grid"  "cube"  "manual"  "maze"
+DEFAULT_DATE = "SM_Grids" # "SM_Grids" # cubes
+DEFAULT_NUMBER_OF_GRAPHS = 10 # 10
+DEFAULT_GRAPH_TYPE = "grid" # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [5,5] # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4
-DEFAULT_HEURISTIC = "mis_heuristic"  # "bct_is_heuristic" / "heuristic0" / "reachable_heuristic" / "bcc_heuristic" / "mis_heuristic"
+DEFAULT_HEURISTIC = "bcc_heuristic"  # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False
 DEFAULT_RUN_UNI = True # True # False
 DEFAULT_RUN_BI = True # True # False
@@ -183,13 +183,14 @@ def search(
     # Load the graph
     # print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
-    if args.graph_type=="cube" and G.has_edge(0, 1):
-        G.remove_edge(0, 1)
+    if args.graph_type=="cube":
+        if G.has_edge(0, 1): G.remove_edge(0, 1)
+        G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
     blocks = []
     logs = {}
-    for node in range(args.size_of_graphs[0] * args.size_of_graphs[1]):
-        if node not in G:
-            blocks.append(node)
+    # for node in range(args.size_of_graphs[0] * args.size_of_graphs[1]):
+    #     if node not in G:
+    #         blocks.append(node)
     if isinstance(goal,int):
         while goal not in G:
             goal -= 1
@@ -217,7 +218,7 @@ def search(
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
     logs["expansions"] = expansions
 
-    if meet_point:
+    if not meet_point is None:
         if args.graph_type=="grid":
             save_table_as_png(
                 args.size_of_graphs[0],
@@ -298,51 +299,75 @@ if __name__ == "__main__":
     avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}}
     for i in list(range(0, number_of_graphs)):
     # for i in range(number_of_graphs, number_of_graphs+1):
-        try:
-            # Inputs
-            if graph_type=="grid":
-                if per_blocked:
-                    name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
-                else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-                log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
-                start = 0  # 0 # "s"
-                goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            elif graph_type=="maze":
-                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-                start = 0  # 0 # "s"
-                goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            elif graph_type=="cube":
-                # if i<3: continue
-                name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
-                start = [1,3,7]
-                goal = 0  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            elif graph_type=="manual":
-                name_of_graph = f"paper_graph_{i}"
-                start = "s"  # 0 # "s"
-                goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        # try:
+        # Inputs
+        if graph_type=="grid":
+            if per_blocked:
+                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
+            else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+            log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
+            start = 0  # 0 # "s"
+            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        elif graph_type=="maze":
+            name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+            start = 0  # 0 # "s"
+            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        elif graph_type=="cube":
+            # if i<3: continue
+            name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
+            start = 7
+            goal = 0  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+        elif graph_type=="manual":
+            name_of_graph = f"paper_graph_{i}"
+            start = "s"  # 0 # "s"
+            goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
-            name_of_graph=f"{date}/"+name_of_graph
-            print("\n"+name_of_graph)
-
-            
-            # unidirectional
-            if run_uni:
-                # unidirectional s-t
-                logs, path, _ = search(
-                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args
+        name_of_graph=f"{date}/"+name_of_graph
+        print("\n"+name_of_graph)            
+        
+        # unidirectional
+        if run_uni:
+            # unidirectional s-t
+            logs, path, _ = search(
+                name_of_graph, start, goal, "unidirectional", heuristic, snake, args
+            )
+            avgs["uni_st"]["expansions"].append(logs['expansions'])
+            avgs["uni_st"]["time"].append(logs['time[ms]'])
+            if log:
+                with open(log_file_name, 'w' if i==0 else 'a') as file:
+                    file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
+            print(
+                f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
                 )
-                avgs["uni_st"]["expansions"].append(logs['expansions'])
-                avgs["uni_st"]["time"].append(logs['time[ms]'])
+            results.append(
+                {
+                    "# blocks": i,
+                    "Search type": "unidirectional s-t",
+                    "# expansions": logs["expansions"],
+                    "Time [ms]": logs["time[ms]"],
+                    "Memory [kB]": logs["memory[kB]"],
+                    "[g_F,g_B]": "[N/A,N/A]",
+                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                }
+            )
+
+            # unidirectional t-s
+            if graph_type!="cube":
+                logs, path, _ = search(
+                    name_of_graph, goal, start, "unidirectional", heuristic, snake, args
+                )
+                avgs["uni_ts"]["expansions"].append(logs['expansions'])
+                avgs["uni_ts"]["time"].append(logs['time[ms]'])
                 if log:
                     with open(log_file_name, 'a') as file:
-                        file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
+                        file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
                 print(
-                    f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-                    )
+                    f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
+                )
                 results.append(
                     {
                         "# blocks": i,
-                        "Search type": "unidirectional s-t",
+                        "Search type": "unidirectional t-s",
                         "# expansions": logs["expansions"],
                         "Time [ms]": logs["time[ms]"],
                         "Memory [kB]": logs["memory[kB]"],
@@ -351,64 +376,38 @@ if __name__ == "__main__":
                     }
                 )
 
-                # unidirectional t-s
-                if graph_type!="cube":
-                    logs, path, _ = search(
-                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args
-                    )
-                    avgs["uni_ts"]["expansions"].append(logs['expansions'])
-                    avgs["uni_ts"]["time"].append(logs['time[ms]'])
-                    if log:
-                        with open(log_file_name, 'a') as file:
-                            file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
-                    print(
-                        f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-                    )
-                    results.append(
-                        {
-                            "# blocks": i,
-                            "Search type": "unidirectional t-s",
-                            "# expansions": logs["expansions"],
-                            "Time [ms]": logs["time[ms]"],
-                            "Memory [kB]": logs["memory[kB]"],
-                            "[g_F,g_B]": "[N/A,N/A]",
-                            "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                        }
-                    )
-
-            # bidirectional
-            if run_bi:
-                logs, path, meet_point = search(
-                    name_of_graph, start, goal, "bidirectional", heuristic, snake,args
-                )
-                avgs["bi"]["expansions"].append(logs['expansions'])
-                avgs["bi"]["time"].append(logs['time[ms]'])
-                if log:
-                    with open(log_file_name, 'a') as file:
-                        file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
-                print(
-                    f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
-                )
-                results.append(
-                    {
-                        "# blocks": i,
-                        "Search type": "bidirectional",
-                        "# expansions": logs["expansions"],
-                        "Time [ms]": logs["time[ms]"],
-                        "Memory [kB]": logs["memory[kB]"],
-                        "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
-                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                    }
-                )
-        except Exception as e:
-            print("An error occurred:")
-            traceback.print_exc()
-            break
-        finally:
-            # Convert results to a DataFrame
-            results_df = pd.DataFrame(results)
-
-            # Save the DataFrame to an Excel file
-            results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
+        # bidirectional
+        if run_bi:
+            logs, path, meet_point = search(
+                name_of_graph, start, goal, "bidirectional", heuristic, snake,args
+            )
+            avgs["bi"]["expansions"].append(logs['expansions'])
+            avgs["bi"]["time"].append(logs['time[ms]'])
+            if log:
+                with open(log_file_name, 'a') as file:
+                    file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
+            print(
+                f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
+            )
+            results.append(
+                {
+                    "# blocks": i,
+                    "Search type": "bidirectional",
+                    "# expansions": logs["expansions"],
+                    "Time [ms]": logs["time[ms]"],
+                    "Memory [kB]": logs["memory[kB]"],
+                    "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                }
+            )
+        # except Exception as e:
+        #     print("An error occurred:")
+        #     traceback.print_exc()
+        #     break
+        # finally:
+        #     # Convert results to a DataFrame
+        #     results_df = pd.DataFrame(results)
+        #     # Save the DataFrame to an Excel file
+        #     results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
 
     calculate_averages(avgs, log_file_name)

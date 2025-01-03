@@ -4,9 +4,6 @@ import random
 import numpy as np
 import matplotlib.patches as patches
 import os, math
-
-
-# from ...src import *
 import matplotlib.pyplot as plt
 
 def check_path_between_nodes(G, node1, node2):
@@ -295,7 +292,7 @@ def save_table_as_png(
 date = "SM_Grids"
 number_of_graphs = 10
 graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-dimension_of_graphs = [7,8] # dimension for cube
+dimension_of_graphs = [5,8] # dimension for cube
 suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
