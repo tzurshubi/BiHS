@@ -8,8 +8,9 @@ class State:
         self.g = len(path) - 1
         self.head = path[-1] if path else None
         if snake: 
-            self.path_vertices_and_neighbors_bitmap = self.compute_path_vertices_and_neighbors_bitmap()
+            self.illegal, self.path_vertices_and_neighbors_bitmap = self.compute_path_vertices_and_neighbors_bitmap()
             if max_dim_crossed: self.max_dim_crossed = max_dim_crossed
+            elif self.path==[7]: self.max_dim_crossed = 2
             else: self.max_dim_crossed = self.compute_max_dim_crossed()
 
 
@@ -37,6 +38,7 @@ class State:
         This includes setting bits for all the vertices in the path and their neighbors.
         """
         bitmap = 0
+        illegal = set(self.path)
         # Iterate over the vertices in the path, excluding the head (last vertex in the path)
         head = self.path[-1]
         for vertex in self.path[:-1]:
@@ -45,12 +47,11 @@ class State:
 
             # Set bits for all neighbors of the vertex
             for neighbor in self.graph.neighbors(vertex):
+                illegal.add(neighbor)
                 if neighbor!=head:
                     bitmap |= 1 << neighbor
 
-        return bitmap
-
-
+        return illegal, bitmap
 
     def g(self):
         return len(self.path) - 1
@@ -90,7 +91,8 @@ class State:
                         if dimension_crossed <= self.max_dim_crossed + 1 or not directionF:
                             # Append the new state with updated max_dim_crossed
                             new_max_dim_crossed = max(self.max_dim_crossed, dimension_crossed)
-                            successors.append(State(self.graph, new_path, snake, max_dim_crossed=new_max_dim_crossed))
+                            successor_state = State(self.graph, new_path, snake, max_dim_crossed=new_max_dim_crossed)
+                            successors.append(successor_state)
                     else:
                         successors.append(State(self.graph, new_path, snake, max_dim_crossed=None))
 
