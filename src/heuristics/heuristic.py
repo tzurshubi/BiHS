@@ -262,32 +262,32 @@ def Y_heuristic(graph):
     counter = 0
 
     while graph.number_of_nodes() > 0:
-        # Find the vertex with the largest degree
-        largest_degree_node = max(graph.nodes, key=lambda node: graph.degree(node), default=None)
+        # Find the vertex with the smallest degree that has a degree of at least 3
+        smallest_degree_over_3_node = min(
+            (node for node in graph.nodes if graph.degree(node) >= 3),
+            key=lambda node: graph.degree(node),
+            default=None
+        )
 
-        if largest_degree_node is None:
-            break  # Graph is empty, stop
-
-        largest_degree = graph.degree(largest_degree_node)
-
-        # If the degree of the vertex is less than 3, stop the process
-        if largest_degree < 3:
+        if smallest_degree_over_3_node is None:
+            # No vertex with degree >= 3, stop the process
             return counter + len(graph)
 
         # Get the neighbors of the vertex
-        neighbors = list(graph.neighbors(largest_degree_node))
+        neighbors = list(graph.neighbors(smallest_degree_over_3_node))
 
         # Sort the neighbors by degree and select the three with the lowest degree
         neighbors_sorted_by_degree = sorted(neighbors, key=lambda node: graph.degree(node))
         selected_neighbors = neighbors_sorted_by_degree[:3]
 
         # Remove the vertex and the selected neighbors from the graph
-        graph.remove_nodes_from([largest_degree_node] + selected_neighbors)
+        graph.remove_nodes_from([smallest_degree_over_3_node] + selected_neighbors)
 
         # Increment the counter by 3
         counter += 3
 
     return counter
+
 
 
 def bcc_heuristic(state, goal):

@@ -30,7 +30,8 @@ def average_metrics(folder_path):
 
     # Iterate through all files in the folder
     for filename in os.listdir(folder_path):
-        if not '8x8_grid_with_random_blocks_16per' in filename: continue
+        if not 'not full' in filename: continue
+        print(filename)
         file_path = os.path.join(folder_path, filename)
 
         # Read and process each file
