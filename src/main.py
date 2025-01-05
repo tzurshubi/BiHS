@@ -15,8 +15,8 @@ from models.graph import *
 from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
 from utils.utils import *
-from sage.graphs.connectivity import TriconnectivitySPQR
-from sage.graphs.graph import Graph
+# from sage.graphs.connectivity import TriconnectivitySPQR
+# from sage.graphs.graph import Graph
 
 
 # Define default input values
