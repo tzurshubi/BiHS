@@ -26,11 +26,11 @@ DEFAULT_DATE = "cubes" # "SM_Grids" / "cubes" / "mazes"
 DEFAULT_NUMBER_OF_GRAPHS = 1 # 10
 DEFAULT_GRAPH_TYPE = "cube" # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [7,7] # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 4
+DEFAULT_PER_OF_BLOCKS = 8
 DEFAULT_HEURISTIC = "bcc_heuristic"  # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True
-DEFAULT_RUN_UNI = True # True # False
-DEFAULT_RUN_BI = True # True # False
+DEFAULT_RUN_UNI = False # True # False
+DEFAULT_RUN_BI = False # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -205,9 +205,9 @@ def search(
 
     # Run heuristic search to find LSP in the graph
     if search_type == "unidirectional":
-        path, expansions = uniHS_for_LSP(G, start, goal, heuristic, snake, args)
+        path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
-        path, expansions, meet_point = biHS_for_LSP(G, start, goal, heuristic, snake, args)
+        path, expansions, generated, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
 
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
@@ -217,6 +217,7 @@ def search(
     )
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
     logs["expansions"] = expansions
+    logs["generated"] = generated
 
     if not meet_point is None:
         if args.graph_type=="grid":
@@ -318,11 +319,13 @@ if __name__ == "__main__":
             name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
             start = 7
             goal = 0  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            log_file_name = "results_"+name_of_graph+"_"+heuristic[:3]
         elif graph_type=="manual":
             name_of_graph = f"paper_graph_{i}"
             start = "s"  # 0 # "s"
             goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
+        args.log_file_name = log_file_name
         name_of_graph=f"{date}/"+name_of_graph
         print("\n"+name_of_graph)            
         
