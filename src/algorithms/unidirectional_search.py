@@ -5,7 +5,7 @@ from models.heapq_state import HeapqState
 from utils.utils import *
 
 
-def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
+def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # Initialize custom priority queue
     open_set = HeapqState()
 
@@ -23,8 +23,9 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
     best_path = None
     best_path_length = -1
 
-    # Expansion counter
+    # Expansion counter, generated counter
     expansions = 0
+    generated = 0
 
     while len(open_set) > 0:
         # Pop the state with the highest priority (g(N) + h(N))
@@ -45,8 +46,8 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = current_path_length
                 if snake:
                     print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. {best_path}")
-                # with open(args.log_file_name, 'a') as file:
-                #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
+                    with open(args.log_file_name, 'a') as file:
+                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
     
             continue
 
@@ -58,6 +59,7 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         # Generate successors
         successors = current_state.successor(snake, True)
         for successor in successors:
+            generated += 1
             # Check if successor reached the goal
             if successor.head == goal:
                 h_successor = 0
@@ -76,4 +78,4 @@ def uniHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
 
-    return best_path, expansions
+    return best_path, expansions, generated

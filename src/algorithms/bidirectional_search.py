@@ -8,7 +8,7 @@ from utils.utils import *
 
 
 
-def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
+def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # # For Plotting h
     # mis_smaller_flag = []
     # expansions_list = []
@@ -48,8 +48,9 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
     best_path = None        # S in the pseudocode
     best_path_length = -1   # U in the pseudocode
 
-    # Expansion counter
+    # Expansion counter, generated counter
     expansions = 0
+    generated = 0
 
     # Closed sets for forward and backward searches
     CLOSED_F = set()
@@ -76,13 +77,8 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
 
         # Get the best state from OPEN_D
         _, _, current_state, f_value = OPEN_D.top()
-        # print(f"fmax = {f_value}")
-
-        # print(f"Expanding {D} state: {current_state.path}")
-
-        # Logs
         current_path_length = len(current_state.path) - 1
-        expansions += 1
+        
         # if expansions % 1000 == 0:
             # print(
             #     f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
@@ -103,7 +99,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
                     with open(args.log_file_name, 'a') as file:
                         file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}\n")
     
-        # Check if U is the largest it will ever be
+        # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
             OPEN_F.top()[3] if len(OPEN_F) > 0 else float("inf"),
             OPEN_B.top()[3] if len(OPEN_B) > 0 else float("inf"),
@@ -112,10 +108,14 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
             break
 
         # New Check by Shimony. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
+        # if C* = 20, in the F direction we won't expand S with g > 9, in the B direction we won't expand S with g > 9.5 
+        # if C* = 19, in the F direction we won't expand S with g > 8.5, in the B direction we won't expand S with g > 9 
         if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
             OPEN_D.pop()
-            # print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
+            print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
             continue
+
+        expansions += 1
 
         # Get the current state from OPEN_D TO CLOSED_D
         _, _, current_state, f_value = OPEN_D.pop()
@@ -125,6 +125,7 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
         # Generate successors
         successors = current_state.successor(snake, directionF)
         for successor in successors:
+            generated += 1
             h_successor = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
             )
@@ -155,4 +156,4 @@ def biHS_for_LSP(graph, start, goal, heuristic_name, snake, args):
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
 
-    return best_path, expansions, best_path_meet_point
+    return best_path, expansions, generated, best_path_meet_point
