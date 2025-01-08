@@ -21,16 +21,16 @@ from utils.utils import *
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
-DEFAULT_LOG = True
-DEFAULT_DATE = "SM_Grids" # "SM_Grids" / "cubes" / "mazes"
-DEFAULT_NUMBER_OF_GRAPHS = 10 # 10
-DEFAULT_GRAPH_TYPE = "grid" # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8] # dimension of cube
+DEFAULT_LOG = True                  # True # False
+DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes"
+DEFAULT_NUMBER_OF_GRAPHS = 10        # 10
+DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [8,8]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4
-DEFAULT_HEURISTIC = "bcc_heuristic"  # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = False
-DEFAULT_RUN_UNI = False # True # False
-DEFAULT_RUN_BI = False # True # False
+DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
+DEFAULT_SNAKE = False                # True # False
+DEFAULT_RUN_UNI = True              # True # False
+DEFAULT_RUN_BI = True               # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -207,7 +207,7 @@ def search(
     if search_type == "unidirectional":
         path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
-        path, expansions, generated, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
+        path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
 
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
@@ -218,6 +218,7 @@ def search(
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
     logs["expansions"] = expansions
     logs["generated"] = generated
+    log["moved_OPEN_to_AUXOPEN"] = moved_OPEN_to_AUXOPEN
 
     if not meet_point is None:
         if args.graph_type=="grid":
@@ -339,10 +340,8 @@ if __name__ == "__main__":
             avgs["uni_st"]["time"].append(logs['time[ms]'])
             if log:
                 with open(log_file_name, 'w' if i==0 else 'a') as file:
-                    file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
-            print(
-                f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-                )
+                    file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+            print(f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
             results.append(
                 {
                     "# blocks": i,
@@ -364,10 +363,8 @@ if __name__ == "__main__":
                 avgs["uni_ts"]["time"].append(logs['time[ms]'])
                 if log:
                     with open(log_file_name, 'a') as file:
-                        file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]")
-                print(
-                    f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges]"
-                )
+                        file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                print(f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
                 results.append(
                     {
                         "# blocks": i,
@@ -389,10 +386,8 @@ if __name__ == "__main__":
             avgs["bi"]["time"].append(logs['time[ms]'])
             if log:
                 with open(log_file_name, 'a') as file:
-                    file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}\n\n")
-            print(
-                f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}"
-            )
+                    file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}\n\n")
+            print(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}")
             results.append(
                 {
                     "# blocks": i,

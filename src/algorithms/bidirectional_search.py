@@ -51,6 +51,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # Expansion counter, generated counter
     expansions = 0
     generated = 0
+    moved_OPEN_to_AUXOPEN = 0
 
     # Closed sets for forward and backward searches
     CLOSED_F = set()
@@ -95,9 +96,9 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
                 if snake:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}. f_max={f_value}")
+                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}")
                     with open(args.log_file_name, 'a') as file:
-                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}\n")
+                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
@@ -112,6 +113,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         # if C* = 19, in the F direction we won't expand S with g > 8.5, in the B direction we won't expand S with g > 9 
         if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
             OPEN_D.pop()
+            moved_OPEN_to_AUXOPEN += 1
             print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
             continue
 
@@ -156,4 +158,4 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
 
-    return best_path, expansions, generated, best_path_meet_point
+    return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point
