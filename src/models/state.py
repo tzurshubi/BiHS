@@ -65,7 +65,7 @@ class State:
     def tail(self):
         return self.path[:-1] if len(self.path) > 1 else []
 
-    def successor(self, snake=False, directionF = True):
+    def successor(self, args, snake=False, directionF = True):
         """
         Generate successors of the current state.
         Args:
@@ -85,7 +85,7 @@ class State:
                     # Create the new path
                     new_path = self.path + [neighbor]
                     
-                    if snake:
+                    if snake and args.graph_type == "cube":
                         # Calculate the new max_dim_crossed incrementally
                         dimension_crossed = int(math.log2(head ^ neighbor))  # Dimension of the XOR
                         if dimension_crossed <= self.max_dim_crossed + 1 or not directionF:

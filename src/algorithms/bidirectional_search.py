@@ -88,15 +88,15 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         # Check against OPEN of the other direction
-        state = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF, snake)
+        state = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF, best_path_length, snake)
         if state:
             total_length = current_path_length + len(state.path) - 1
             if total_length > best_path_length:
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                if snake:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}")
+                if snake and total_length >= f_value-3:
+                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
                     with open(args.log_file_name, 'a') as file:
                         file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
     
@@ -114,7 +114,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
             OPEN_D.pop()
             moved_OPEN_to_AUXOPEN += 1
-            print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
+            # print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
             continue
 
         expansions += 1
@@ -125,7 +125,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         CLOSED_D.add(current_state)
 
         # Generate successors
-        successors = current_state.successor(snake, directionF)
+        successors = current_state.successor(args, snake, directionF)
         for successor in successors:
             generated += 1
             h_successor = heuristic(
@@ -144,7 +144,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             f_successor = g_successor + h_successor
             # if f_value<f_successor:
             #     print(f"f_value {f_value}")
-            OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor)) # MM # ,2*(OPT-g_value) # min(2 * h_successor, f_value,f_successor), f_successor
+            OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor)) # MM:  min(2 * h_successor, f_value,f_successor)
             OPENvOPEN.insert_state(successor,directionF)
 
     

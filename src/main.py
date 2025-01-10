@@ -22,15 +22,15 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes"
-DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
-DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
+DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10        # 10
+DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [9,9]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = False              # True # False
-DEFAULT_RUN_BI = False               # True # False
+DEFAULT_RUN_UNI = True              # True # False
+DEFAULT_RUN_BI = True               # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -218,7 +218,8 @@ def search(
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
     logs["expansions"] = expansions
     logs["generated"] = generated
-    log["moved_OPEN_to_AUXOPEN"] = moved_OPEN_to_AUXOPEN
+    if search_type == "bidirectional":
+        logs["moved_OPEN_to_AUXOPEN"] = moved_OPEN_to_AUXOPEN
 
     if not meet_point is None:
         if args.graph_type=="grid":
@@ -232,7 +233,6 @@ def search(
             )
         elif args.graph_type=="cube":
             display_graph_with_path_and_points(G,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
-            c=1
         meet_point_index = path.index(meet_point)
         logs["g_F"] = len(path[:meet_point_index])
         logs["g_B"] = len(path[meet_point_index + 1 :])
@@ -304,20 +304,20 @@ if __name__ == "__main__":
             if per_blocked:
                 name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
             else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-            log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
+            # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
             start = 0  # 0 # "s"
             goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
         elif graph_type=="maze":
             name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
             start = 0  # 0 # "s"
             goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
+            # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
         elif graph_type=="cube":
             # if i<3: continue
             name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
             start = 7
             goal = 0  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            log_file_name = "results_"+name_of_graph+"_"+heuristic[:3]
+            # log_file_name = "results_"+name_of_graph+"_"+heuristic[:3]
         elif graph_type=="manual":
             name_of_graph = f"paper_graph_{i}"
             start = "s"  # 0 # "s"
