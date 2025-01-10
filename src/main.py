@@ -25,10 +25,10 @@ DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10        # 10
 DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [9,9]      # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [8,8]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
+DEFAULT_SNAKE = False                # True # False
 DEFAULT_RUN_UNI = True              # True # False
 DEFAULT_RUN_BI = True               # True # False
 
