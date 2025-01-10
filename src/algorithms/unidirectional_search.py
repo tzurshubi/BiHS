@@ -34,10 +34,10 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 5000 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
+        # if expansions % 5000 == 0:
+        #     print(
+        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+        #     )
 
         # Check if the current state is the goal state
         if current_state.head == goal:
@@ -45,7 +45,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.path
                 best_path_length = current_path_length
                 if snake:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. {best_path}")
+                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. {best_path}. generated: {generated}")
                     with open(args.log_file_name, 'a') as file:
                         file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
     
@@ -57,7 +57,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             break
 
         # Generate successors
-        successors = current_state.successor(snake, True)
+        successors = current_state.successor(args, snake, True)
         for successor in successors:
             generated += 1
             # Check if successor reached the goal
