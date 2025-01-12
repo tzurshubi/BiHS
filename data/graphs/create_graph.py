@@ -292,7 +292,7 @@ def save_table_as_png(
 date = "SM_Grids"
 number_of_graphs = 10
 graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-dimension_of_graphs = [9,9] # dimension for cube
+dimension_of_graphs = [8,8] # dimension for cube
 suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
 random.shuffle(suffled_blocks)
 
