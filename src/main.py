@@ -29,7 +29,7 @@ DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = True              # True # False
+DEFAULT_RUN_UNI = False              # True # False
 DEFAULT_RUN_BI = False               # True # False
 
 base_dir = "/"
