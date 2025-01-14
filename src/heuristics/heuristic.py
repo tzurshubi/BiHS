@@ -5,6 +5,7 @@ import networkx as nx
 from .h_mis import *
 from models.state import State
 from utils.utils import *
+from collections import defaultdict
 
 
 def OLD_spqr_heuristic(state, goal, snake):
@@ -257,10 +258,37 @@ def reachable_heuristic(state):
         return 0
     return dfs_reachable(state.graph, head, visited)
 
+def find_square(graph):
+    # D is a dictionary to store pairs of neighbors and the vertex connecting them
+    D = defaultdict(lambda: None)
+
+    # Iterate over each vertex in the graph
+    for v in graph.nodes():
+        neighbors = list(graph.neighbors(v))
+        
+        # Check all pairs of neighbors (s, t)
+        for i in range(len(neighbors)):
+            for j in range(i + 1, len(neighbors)):
+                s, t = neighbors[i], neighbors[j]
+                
+                # Ensure s < t for consistency (undirected graph)
+                if s > t:
+                    s, t = t, s
+
+                if D[(s, t)] is None:
+                    # Store the current vertex for this pair
+                    D[(s, t)] = v
+                else:
+                    # Found a square: return the vertices
+                    return v, s, t, D[(s, t)]
+
+    # If no square is found, return None
+    return None, None, None, None
 
 def Y_heuristic(graph):
     counter = 0
 
+    # Y patters
     while graph.number_of_nodes() > 0:
         # Find the vertex with the smallest degree that has a degree of at least 3
         smallest_degree_over_3_node = min(
@@ -271,7 +299,7 @@ def Y_heuristic(graph):
 
         if smallest_degree_over_3_node is None:
             # No vertex with degree >= 3, stop the process
-            return counter + len(graph)
+            break
 
         # Get the neighbors of the vertex
         neighbors = list(graph.neighbors(smallest_degree_over_3_node))
@@ -285,8 +313,17 @@ def Y_heuristic(graph):
 
         # Increment the counter by 3
         counter += 3
+    
+    # Square pattern
+    # while graph.number_of_nodes() > 0:
+    #     a,b,c,d = find_square(graph)
+    #     if a:
+    #         graph.remove_nodes_from([a,b,c,d])
+    #         counter += 3
+    #     else:
+    #         break
 
-    return counter
+    return counter + len(graph)
 
 
 
@@ -526,8 +563,6 @@ def mis_heuristic(state,goal):
 
     # Combine results from all BCCs to form the h_MIS value
     return total_heuristic
-
-
 
 
 def mis_snake_heuristic(state, goal, snake):

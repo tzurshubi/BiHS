@@ -80,10 +80,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         _, _, current_state, f_value = OPEN_D.top()
         current_path_length = len(current_state.path) - 1
         
-        if expansions % 100000 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
+        # if expansions % 100000 == 0:
+        #     print(
+        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+        #     )
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
@@ -95,11 +95,12 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                if snake: # and total_length >= f_value-3:
+                if snake and total_length >= f_value-3:
                     print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
-                    with open(args.log_file_name, 'a') as file:
-                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
-    
+                    print(f"time checking: {time_checking}")
+                    # with open(args.log_file_name, 'a') as file:
+                    #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
+
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
             OPEN_F.top()[3] if len(OPEN_F) > 0 else float("inf"),
