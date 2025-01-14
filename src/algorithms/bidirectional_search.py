@@ -97,7 +97,6 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path_meet_point = current_state.head
                 if snake and total_length >= f_value-3:
                     print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
-                    print(f"time checking: {time_checking}")
                     # with open(args.log_file_name, 'a') as file:
                     #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
 
