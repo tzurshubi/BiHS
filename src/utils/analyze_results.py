@@ -6,7 +6,10 @@ def parse_line(line):
     """
     Parse a single line to extract metrics.
     """
-    match = re.search(r"expansions: ([\d,]+), time: ([\d,]+) \[ms\], memory: (\d+) \[kB\], path length: (\d+)(?:, g_F: (\d+), g_B: (\d+))?", line)
+    match = re.search(
+        r"expansions: ([\d,]+), time: ([\d,]+) \[ms\], memory: (\d+) \[kB\], path length: (\d+)(?:, g_F: (\d+), g_B: (\d+))?",
+        line
+    )
     if match:
         expansions = int(match.group(1).replace(",", ""))
         time = int(match.group(2).replace(",", ""))
@@ -18,10 +21,15 @@ def parse_line(line):
     return None
 
 
-def average_metrics(folder_path):
+def average_metrics(folder_path,file_name_substring=""):
     """
-    Calculate average metrics for unidirectional s-t, unidirectional t-s, and bidirectional search.
+    Calculate average (and standard deviation) metrics for:
+    - unidirectional s-t
+    - unidirectional t-s
+    - bidirectional search
     """
+    print(folder_path)
+    print(file_name_substring)
     metrics = {
         "unidirectional_s_t": [],
         "unidirectional_t_s": [],
@@ -30,7 +38,8 @@ def average_metrics(folder_path):
 
     # Iterate through all files in the folder
     for filename in os.listdir(folder_path):
-        if not 'not full' in filename: continue
+        if file_name_substring not in filename:
+            continue
         print(filename)
         file_path = os.path.join(folder_path, filename)
 
@@ -50,36 +59,78 @@ def average_metrics(folder_path):
                     if result:
                         metrics["bidirectional"].append(result)
 
-    # Compute averages
-    averages = {}
+    # Compute averages and standard deviations
+    summaries = {}
     for key, values in metrics.items():
         if values:
             expansions, times, memories, path_lengths, g_Fs, g_Bs = zip(*values)
-            averages[key] = {
-                "average_expansions": np.mean(expansions),
-                "average_time_ms": np.mean(times),
-                "average_memory_kb": np.mean(memories),
-                "average_path_length": np.mean(path_lengths),
-                "average_g_F": np.mean([g for g in g_Fs if g is not None]) if any(g_Fs) else None,
-                "average_g_B": np.mean([g for g in g_Bs if g is not None]) if any(g_Bs) else None,
-            }
 
-    return averages
+            # Filter out None values for g_F and g_B
+            valid_g_Fs = [g for g in g_Fs if g is not None]
+            valid_g_Bs = [g for g in g_Bs if g is not None]
+
+            # print(f"{key} - expansion: {expansions}")
+            summaries[key] = {
+                "expansions":expansions,
+                "time":times,
+
+                "average_expansions": np.mean(expansions),
+                "std_expansions": np.std(expansions, ddof=1),  # Sample standard deviation
+
+                "average_time_ms": np.mean(times),
+                "std_time_ms": np.std(times, ddof=1),
+
+                "average_memory_kb": np.mean(memories),
+                "std_memory_kb": np.std(memories, ddof=1),
+
+                "average_path_length": np.mean(path_lengths),
+                "std_path_length": np.std(path_lengths, ddof=1),
+
+                "average_g_F": np.mean(valid_g_Fs) if valid_g_Fs else None,
+                "std_g_F": np.std(valid_g_Fs, ddof=1) if len(valid_g_Fs) > 1 else None,
+
+                "average_g_B": np.mean(valid_g_Bs) if valid_g_Bs else None,
+                "std_g_B": np.std(valid_g_Bs, ddof=1) if len(valid_g_Bs) > 1 else None,
+            }
+        else:
+            # Handle case where there are no lines for that search type
+            summaries[key] = {}
+    min_uni = [min(a, b) for a, b in zip(summaries['unidirectional_s_t']['expansions'], summaries['unidirectional_t_s']['expansions'])]
+    bi = list(summaries['bidirectional']['expansions'])
+    print(min_uni)
+    print(bi)
+    print(f"uni - {len(min_uni)} instances. bi - {len(bi)} instances. ")
+    return summaries
+
 
 if __name__ == "__main__":
     folder_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/SM_Grids"
-    averages = average_metrics(folder_path)
-    expansions_summary = []
-    time_summary = []
+    file_name_substring = '8x8'
+    results = average_metrics(folder_path,file_name_substring)
 
-    for search_type, metrics in averages.items():
-        print(f"{search_type}:")
-        for metric, value in metrics.items():
-            print(f"  {metric}: {value}")
+    # Lists to store average expansions/time and corresponding standard deviations
+    expansions_avg = []
+    expansions_std = []
+    time_avg = []
+    time_std = []
 
-        # Collect expansions and time summaries
-        expansions_summary.append(round(metrics["average_expansions"]))
-        time_summary.append(round(metrics["average_time_ms"]))
+    for search_type, metrics_dict in results.items():
+        # print(f"{search_type}:")
+        # Print out all metrics (including std)
+        # for metric_name, value in metrics_dict.items():
+        #     print(f"  {metric_name}: {value}")
 
-    print(f"expansions: ({', '.join(map(str, expansions_summary))})")
-    print(f"time[ms]: ({', '.join(map(str, time_summary))})")
+        # Collect expansions/time averages and std if they exist
+        if "average_expansions" in metrics_dict:
+            expansions_avg.append(round(metrics_dict["average_expansions"]))
+        if "std_expansions" in metrics_dict:
+            expansions_std.append(round(metrics_dict["std_expansions"]))
+
+        if "average_time_ms" in metrics_dict:
+            time_avg.append(round(metrics_dict["average_time_ms"]))
+        if "std_time_ms" in metrics_dict:
+            time_std.append(round(metrics_dict["std_time_ms"]))
+
+    # Print expansions and time summaries
+    print(f"expansions AVG: ({', '.join(map(str, expansions_avg))}). expansions STD: ({', '.join(map(str, expansions_std))})")
+    print(f"time[ms] AVG: ({', '.join(map(str, time_avg))}). time[ms] STD: ({', '.join(map(str, time_std))})")
