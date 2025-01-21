@@ -22,15 +22,15 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 1       # 10
-DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
+DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
+DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [8,10]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = False              # True # False
-DEFAULT_RUN_BI = False               # True # False
+DEFAULT_RUN_UNI = True              # True # False
+DEFAULT_RUN_BI = True               # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
