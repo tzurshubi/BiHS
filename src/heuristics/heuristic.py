@@ -258,6 +258,7 @@ def reachable_heuristic(state):
         return 0
     return dfs_reachable(state.graph, head, visited)
 
+
 def find_square(graph):
     # D is a dictionary to store pairs of neighbors and the vertex connecting them
     D = defaultdict(lambda: None)
@@ -284,6 +285,7 @@ def find_square(graph):
 
     # If no square is found, return None
     return None, None, None, None
+
 
 def Y_heuristic(graph):
     counter = 0
@@ -324,7 +326,6 @@ def Y_heuristic(graph):
     #         break
 
     return counter + len(graph)
-
 
 
 def bcc_heuristic(state, goal):
