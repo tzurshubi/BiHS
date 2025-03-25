@@ -15,6 +15,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # h_MIS = []
     # h_BCC = []
     # max_f = []
+    calc_h_time = 0
 
     # Options
     alternate = False # False
@@ -128,9 +129,11 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         successors = current_state.successor(args, snake, directionF)
         for successor in successors:
             generated += 1
+            curr_time = time.time()
             h_successor = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
             )
+            calc_h_time += time.time() - curr_time
 
             # # For Plotting h
             # h_BCC.append(h_value)
@@ -145,6 +148,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             # if f_value<f_successor:
             #     print(f"f_value {f_value}")
             OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor)) # MM:  min(2 * h_successor, f_value,f_successor)
+            # 
             OPENvOPEN.insert_state(successor,directionF)
 
     
@@ -157,5 +161,5 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.xlabel("# expansions")
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
-
+    print(f"total time for calculating heuristics: {1000*calc_h_time}")
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point
