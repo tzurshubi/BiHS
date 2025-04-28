@@ -161,5 +161,5 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.xlabel("# expansions")
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
-    print(f"total time for calculating heuristics: {1000*calc_h_time}")
+    # print(f"total time for calculating heuristics: {1000*calc_h_time}")
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point

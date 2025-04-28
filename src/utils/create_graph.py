@@ -6,6 +6,32 @@ import matplotlib.patches as patches
 import os, math
 import matplotlib.pyplot as plt
 
+
+def add_binary_coloring(G):
+    """
+    Adds 'color' attribute to each node in a bipartite graph:
+    - 0 for one partition
+    - 1 for the other
+
+    Args:
+        G (nx.Graph): A bipartite graph
+
+    Raises:
+        ValueError: If the graph is not bipartite
+    """
+    if not nx.is_bipartite(G):
+        raise ValueError("Graph is not bipartite")
+
+    part0, part1 = nx.bipartite.sets(G)
+
+    for node in part0:
+        G.nodes[node]['color'] = 0
+    for node in part1:
+        G.nodes[node]['color'] = 1
+    
+    G.graph['binary_coloring'] = True
+
+
 def check_path_between_nodes(G, node1, node2):
     """
     Check if there is a path between two nodes in the graph.
@@ -24,6 +50,7 @@ def check_path_between_nodes(G, node1, node2):
 
     # Use NetworkX's has_path function
     return nx.has_path(G, node1, node2)
+
 
 def random_5x5_nodes_from_13x13_grid():
     blocks = []
@@ -167,6 +194,7 @@ def display_graph(graph, title="Graph", filename=None):
     else:
         plt.show()
 
+
 # Function to display a graph with optional highlighted path and points.
 def display_graph_with_path_and_points(graph, title="Graph", filename=None, path=None, points=None):
     """
@@ -208,6 +236,7 @@ def display_graph_with_path_and_points(graph, title="Graph", filename=None, path
         print(f"Graph saved to {filename}")
     else:
         plt.show()
+
 
 # Function to save the graph as JSON
 def save_graph_to_file(graph, filename):
@@ -288,111 +317,114 @@ def save_table_as_png(
     plt.savefig(filename, bbox_inches="tight", pad_inches=0.1)
     plt.close(fig)
 
+if __name__ == "__main__":
+    date = "SM_Grids"
+    number_of_graphs = 1
+    graph_type = "grid" # "grid" # "cube" # "manual" # maze"
+    dimension_of_graphs = [8,10] # dimension for cube
+    suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
+    random.shuffle(suffled_blocks)
 
-date = "SM_Grids"
-number_of_graphs = 10
-graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-dimension_of_graphs = [8,10] # dimension for cube
-suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
-random.shuffle(suffled_blocks)
+    # Create folder
+    folder_path = "data/graphs/" + date + "/"
+    if not os.path.exists(folder_path):
+        # Create the folder
+        os.makedirs(folder_path)
 
-# Create folder
-folder_path = "data/graphs/" + date + "/"
-if not os.path.exists(folder_path):
-    # Create the folder
-    os.makedirs(folder_path)
+    if graph_type=="maze":
+        blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
 
-if graph_type=="maze":
-    blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
+    for j in range(0,4):
+        for i in range(0, number_of_graphs):
+            # Create a grid
+            if graph_type=="grid":
+                name_of_graph = (
+                    f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{(4+4*j)}per_{i}"
+                )
+                print(name_of_graph)
+                # num_of_blocks = int(i % (dimension_of_graphs[0] * dimension_of_graphs[1] / 2))
+                num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1])*(4+4*j)/100)
+                G, blocks = create_grid_graph_w_random_blocks(dimension_of_graphs[0], dimension_of_graphs[1], num_of_blocks)
 
-for j in range(0,4):
-    for i in range(0, number_of_graphs):
-        # Create a grid
-        if graph_type=="grid":
-            name_of_graph = (
-                f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{(4+4*j)}per_{i}"
-            )
-            print(name_of_graph)
-            # num_of_blocks = int(i % (dimension_of_graphs[0] * dimension_of_graphs[1] / 2))
-            num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1])*(4+4*j)/100)
-            G, blocks = create_grid_graph_w_random_blocks(dimension_of_graphs[0], dimension_of_graphs[1], num_of_blocks)
+                # Create grid with specified blocks
+                # blocks = suffled_blocks[0:i] # suffled_blocks[0:i]
+                # G = create_grid_graph_with_specified_blocks(dimension_of_graphs[0], dimension_of_graphs[1], blocks)
 
-            # Create grid with specified blocks
-            # blocks = suffled_blocks[0:i] # suffled_blocks[0:i]
-            # G = create_grid_graph_with_specified_blocks(dimension_of_graphs[0], dimension_of_graphs[1], blocks)
+            # Create a cube
+            if graph_type=="cube":
+                name_of_graph=f"{i}d_hypercube"
+                G = create_nd_cube_graph(i)
+                if G.has_edge(0, 1):
+                    G.remove_edge(0, 1)
 
-        # Create a cube
-        if graph_type=="cube":
-            name_of_graph=f"{i}d_hypercube"
-            G = create_nd_cube_graph(i)
-            if G.has_edge(0, 1):
-                G.remove_edge(0, 1)
+            # Create a maze
+            if graph_type=="maze":
+                name_of_graph = (
+                    f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}"
+                )
+                # Create grid with specified blocks
+                # blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
+                # for j in range(0,i):
+                if i>0:
+                    blocks = list(set(blocks)-set(random_5x5_nodes_from_13x13_grid()))
+                G = create_grid_graph_with_specified_blocks(
+                    dimension_of_graphs[0], dimension_of_graphs[1], blocks
+                )
 
-        # Create a maze
-        if graph_type=="maze":
-            name_of_graph = (
-                f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}"
-            )
-            # Create grid with specified blocks
-            # blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
-            # for j in range(0,i):
-            if i>0:
-                blocks = list(set(blocks)-set(random_5x5_nodes_from_13x13_grid()))
-            G = create_grid_graph_with_specified_blocks(
-                dimension_of_graphs[0], dimension_of_graphs[1], blocks
-            )
+            # Create a manual graph
+            # if graph_type=="manual":
+            #     name_of_graph = f"paper_graph_{i}"
+            #     G = nx.Graph()
+            #     G.add_nodes_from("x")
+            #     G.add_edges_from(
+            #         [("s", "1"),("s", "2"),("1", "2"),
+            #         ("3", "4"),("4", "5"),("3", "5"),
+            #         ("6", "7"),("6", "t"),("7", "t"),
+            #         ("2", "3"),("2", "6"),("3", "6"),
+            #         ]
+            #     )
+            #     G.add_edges_from(
+            #     [("s", "v1"), ("s", "y"), ("s", "v2"), ("v1","v2"),("v1", "y"),("x", "v1"),("x", "v2"),("x", "y"),
+            #     ("y", "z'"), ("y", "z"), ("z", "z'"),
+            #     ("w4", "x"), ("w4", "t"),
+            #     ("x","w1"),("w1", "w2"), ("w2", "w3"),("w3", "t"),
+            #     ("u1", "x"), ("u1", "u2"), ("u2", "u3"), ("u3", "t"),
+            #     ("u1", "u4"), ("u2", "u4"),
+            #     ("u4", "u5"), ("u5", "u2"),("u1", "u5")
+            #     ]
+            #         )
 
-        # Create a manual graph
-        # if graph_type=="manual":
-        #     name_of_graph = f"paper_graph_{i}"
-        #     G = nx.Graph()
-        #     G.add_nodes_from("x")
-        #     G.add_edges_from(
-        #         [("s", "1"),("s", "2"),("1", "2"),
-        #         ("3", "4"),("4", "5"),("3", "5"),
-        #         ("6", "7"),("6", "t"),("7", "t"),
-        #         ("2", "3"),("2", "6"),("3", "6"),
-        #         ]
-        #     )
-        #     G.add_edges_from(
-        #     [("s", "v1"), ("s", "y"), ("s", "v2"), ("v1","v2"),("v1", "y"),("x", "v1"),("x", "v2"),("x", "y"),
-        #     ("y", "z'"), ("y", "z"), ("z", "z'"),
-        #     ("w4", "x"), ("w4", "t"),
-        #     ("x","w1"),("w1", "w2"), ("w2", "w3"),("w3", "t"),
-        #     ("u1", "x"), ("u1", "u2"), ("u2", "u3"), ("u3", "t"),
-        #     ("u1", "u4"), ("u2", "u4"),
-        #     ("u4", "u5"), ("u5", "u2"),("u1", "u5")
-        #     ]
-        #         )
+            # G = create_random_graph(25, 0.2)
 
-        # G = create_random_graph(25, 0.2)
+            # G = create_nd_cube_graph(9)
 
-        # G = create_nd_cube_graph(9)
+            # Logs
+            print("Graph created with:")
+            print("number of nodes: ", G.number_of_nodes())
+            print("number of edges: ", G.number_of_edges())
+            display_graph(G, "Current Graph", "current_graph.png")
 
-        # Logs
-        print("Graph created with:")
-        print("number of nodes: ", G.number_of_nodes())
-        print("number of edges: ", G.number_of_edges())
-        display_graph(G, "Current Graph", "current_graph.png")
+            # add BW coloring
+            add_binary_coloring(G)
 
-        # Save the graph as JSON
-        save_graph_to_file(G, folder_path + name_of_graph.replace(" ", "_") + ".json")
+            # Save the graph as JSON
+            save_graph_to_file(G, folder_path + name_of_graph.replace(" ", "_") + ".json")
 
-        # If it's a Grid, Save it as PNG
-        if graph_type=="grid" or graph_type=="maze" : 
-            save_table_as_png(
-                dimension_of_graphs[0],
-                dimension_of_graphs[1],
-                blocks,
-                folder_path + name_of_graph.replace(" ", "_") + ".png",
-                None,
-                None,
-            )
-        
-        # Save the graph as PNG
-        else:
-            display_graph(
-                G,
-                name_of_graph.replace(" ", "_"),
-                folder_path + name_of_graph.replace(" ", "_") + ".png",
-            )
+            # If it's a Grid, Save it as PNG
+            if graph_type=="grid" or graph_type=="maze" : 
+                save_table_as_png(
+                    dimension_of_graphs[0],
+                    dimension_of_graphs[1],
+                    blocks,
+                    folder_path + name_of_graph.replace(" ", "_") + ".png",
+                    None,
+                    None,
+                )
+            
+            # Save the graph as PNG
+            else:
+                display_graph(
+                    G,
+                    name_of_graph.replace(" ", "_"),
+                    folder_path + name_of_graph.replace(" ", "_") + ".png",
+                )
