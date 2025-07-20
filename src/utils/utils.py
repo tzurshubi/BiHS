@@ -89,18 +89,22 @@ def calculate_averages(avgs, log_file_name=None):
                  and values are dictionaries with metrics (e.g., "expansions", "time") as keys and lists of numbers as values.
     """
     metrics = list(next(iter(avgs.values())).keys())  # Get metric names from the first category
+    averages_per_metric = {}
 
     for metric in metrics:
-        averages = []
+        avgs_list = []
         for category in avgs:
-            values = avgs[category][metric]
+            values = avgs[category].get(metric, [])
             avg = round(sum(values) / len(values)) if values else 0
-            averages.append(avg)
-        formatted_averages = ", ".join(f"{avg}" for avg in averages)
-        print(f"average {metric}: ({formatted_averages})")
+            avgs_list.append(avg)
+        averages_per_metric[metric] = avgs_list
+
+        formatted = ", ".join(str(x) for x in avgs_list)
+        line = f"average {metric}: ({formatted})"
+        print(line)
         if log_file_name:
-            with open(log_file_name, 'a') as file:
-                file.write(f"average {metric}: ({formatted_averages})\n")
+            with open(log_file_name, 'a') as f:
+                f.write(line + "\n")
                 
 
     # Calculate and print average expansions per second
@@ -115,6 +119,25 @@ def calculate_averages(avgs, log_file_name=None):
     # if log_file_name:
     #     with open(log_file_name, 'a') as file:
     #         file.write(f"average expansions per second: ({formatted_expansions_per_second})")
+
+    # Summary two lines
+    exp_avgs = averages_per_metric.get("expansions", [])
+    time_avgs = averages_per_metric.get("time", [])
+    if len(exp_avgs) >= 2 and len(time_avgs) >= 2:
+        first_min_exp = min(exp_avgs[0], exp_avgs[1])
+        first_min_time = min(time_avgs[0], time_avgs[1])
+        last_exp = exp_avgs[-1]
+        last_time = time_avgs[-1]
+
+        line1 = f"A*: {first_min_exp} , {first_min_time} (expansions , time[ms])"
+        line2 = f"XMM: {last_exp} , {last_time} (expansions , time[ms])"
+        print()
+        print(line1)
+        print(line2)
+        if log_file_name:
+            with open(log_file_name, 'a') as f:
+                f.write(line1 + "\n")
+                f.write(line2 + "\n")
 
 
 # Function to display the graph
