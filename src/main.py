@@ -35,7 +35,7 @@ DEFAULT_ALGO = "full"              # "basic" # "light" # "full"
 
 base_dir = "/"
 current_directory = os.getcwd()
-if current_directory.startswith("/cs_storage/"):
+if current_directory.startswith("/cs_storage/") or current_directory.startswith("/mnt/"):
     base_dir = "/BiHS/"
 
 
