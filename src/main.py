@@ -22,15 +22,16 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 1       # 10
-DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 8
+DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
+DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [5,5]      # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 4           # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
+DEFAULT_SNAKE = False                # True # False
 DEFAULT_RUN_UNI = True              # True # False
-DEFAULT_RUN_BI = False               # True # False
+DEFAULT_RUN_BI = True               # True # False
+DEFAULT_ALGO = "full"              # "basic" # "light" # "full"
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -51,6 +52,7 @@ def parse_args():
     parser.add_argument("--snake", action="store_true", default=DEFAULT_SNAKE, help="Enable snake mode.")
     parser.add_argument("--run_uni", action="store_true", default=DEFAULT_RUN_UNI, help="Enable snake mode.")
     parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
+    parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
 
     return parser.parse_args()
 
@@ -199,6 +201,7 @@ def search(
             start += 1
 
     meet_point = None
+    g_values = []
     tracemalloc.start()
     start_time = time.time()
     args.start_time = start_time
@@ -207,7 +210,7 @@ def search(
     if search_type == "unidirectional":
         path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
-        path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
+        path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
 
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
@@ -220,6 +223,7 @@ def search(
     logs["generated"] = generated
     if search_type == "bidirectional":
         logs["moved_OPEN_to_AUXOPEN"] = moved_OPEN_to_AUXOPEN
+        logs["g_values"] = g_values
 
     if not meet_point is None:
         if args.graph_type=="grid":
@@ -384,7 +388,8 @@ if __name__ == "__main__":
             if log:
                 with open(log_file_name, 'a') as file:
                     file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}\n\n")
-            print(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}")
+            print(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
             results.append(
                 {
                     "# blocks": i,
@@ -405,5 +410,5 @@ if __name__ == "__main__":
         #     results_df = pd.DataFrame(results)
         #     # Save the DataFrame to an Excel file
         #     results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
-
+    print()
     calculate_averages(avgs, log_file_name)

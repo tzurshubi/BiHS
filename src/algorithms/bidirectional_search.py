@@ -16,6 +16,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # h_BCC = []
     # max_f = []
     calc_h_time = 0
+    g_values = []
+    BF_values = []
 
     # Options
     alternate = False # False
@@ -44,6 +46,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     OPEN_B.push(initial_state_B, initial_f_value_B)
     OPENvOPEN.insert_state(initial_state_F, True)
     OPENvOPEN.insert_state(initial_state_B, False)
+    FNV_F = {(initial_state_F.head,initial_state_F.path_vertices_bitmap)}
+    FNV_B = {(initial_state_B.head,initial_state_B.path_vertices_bitmap)}
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -76,6 +80,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         D, D_hat = ('F', 'B') if directionF else ('B', 'F')
         OPEN_D, OPEN_D_hat = (OPEN_F, OPEN_B) if directionF else (OPEN_B, OPEN_F)
         CLOSED_D, CLOSED_D_hat = (CLOSED_F, CLOSED_B) if directionF else (CLOSED_B, CLOSED_F)
+        FNV_D , FNV_D_hat = (FNV_F, FNV_B) if directionF else (FNV_B, FNV_F)
 
         # Get the best state from OPEN_D
         _, _, current_state, f_value = OPEN_D.top()
@@ -96,8 +101,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                if snake and total_length >= f_value-3:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
+                # if snake and total_length >= f_value-3:
+                    # print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
                     # with open(args.log_file_name, 'a') as file:
                     #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
 
@@ -109,16 +114,19 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             # print(f"Terminating with best path of length {best_path_length}")
             break
 
-        # New Check by Shimony. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
+        
+        # XMM_full. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
         # if C* = 20, in the F direction we won't expand S with g > 9, in the B direction we won't expand S with g > 9.5 
         # if C* = 19, in the F direction we won't expand S with g > 8.5, in the B direction we won't expand S with g > 9 
-        if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
-            OPEN_D.pop()
-            moved_OPEN_to_AUXOPEN += 1
-            # print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
-            continue
+        if args.algo == "cutoff" or args.algo == "full":
+            if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
+                OPEN_D.pop()
+                moved_OPEN_to_AUXOPEN += 1
+                # print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
+                continue
 
         expansions += 1
+        g_values.append(current_state.g)
 
         # Get the current state from OPEN_D TO CLOSED_D
         _, _, current_state, f_value = OPEN_D.pop()
@@ -127,8 +135,14 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Generate successors
         successors = current_state.successor(args, snake, directionF)
+        BF_values.append(len(successors))
         for successor in successors:
+            # if (successor.head, successor.path_vertices_bitmap) in FNV_D:
+            #     # print(f"symmetric state removed: {successor.path}")
+            #     continue
+
             generated += 1
+            
             curr_time = time.time()
             h_successor = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
@@ -145,14 +159,22 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
-            # if f_value<f_successor:
-            #     print(f"f_value {f_value}")
-            OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor)) # MM:  min(2 * h_successor, f_value,f_successor)
-            # 
+
+            # XMM_light + PathMin
+            if args.algo == "light" or args.algo == "full":
+                OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
+            else: OPEN_D.push(successor, min(f_value, f_successor))
+            
+            FNV_D.add((successor.head,successor.path_vertices_bitmap))
             OPENvOPEN.insert_state(successor,directionF)
 
-    
-    # # For Plotting h
+    # Plotting BF vs g
+    # plt.plot(g_values, BF_values,marker='*',linestyle='None', color='red',markersize=8, label='BF');   
+    # plt.xlabel("g value")
+    # plt.ylabel("BF")
+    # plt.savefig("g_vs_BF"+args.log_file_name.replace("results","")+".png")
+
+    # Plotting h
     # plt.plot(expansions_list, h_MIS, label='h_MIS')
     # plt.plot(expansions_list, h_BCC, label='h_BCC')
     # plt.plot(expansions_list, max_f, label='max_f')
@@ -162,4 +184,4 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
     # print(f"total time for calculating heuristics: {1000*calc_h_time}")
-    return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point
+    return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
