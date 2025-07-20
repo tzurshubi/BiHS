@@ -136,7 +136,7 @@ def calculate_averages(avgs, log_file_name=None):
         print(line2)
         if log_file_name:
             with open(log_file_name, 'a') as f:
-                f.write(line1 + "\n")
+                f.write("\n" + line1 + "\n")
                 f.write(line2 + "\n")
 
 

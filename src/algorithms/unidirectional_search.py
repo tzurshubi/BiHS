@@ -72,9 +72,9 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         g_degree_pairs.append((current_state.g, len(successors)))
 
         for successor in successors:
-            # if (successor.head, successor.path_vertices_bitmap) in FNV:
-            #     # print(f"symmetric state removed: {successor.path}")
-            #     continue
+            if (successor.head, successor.path_vertices_bitmap) in FNV:
+                # print(f"symmetric state removed: {successor.path}")
+                continue
 
             generated += 1
             

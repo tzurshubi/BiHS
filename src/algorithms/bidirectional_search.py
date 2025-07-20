@@ -137,9 +137,9 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         successors = current_state.successor(args, snake, directionF)
         BF_values.append(len(successors))
         for successor in successors:
-            # if (successor.head, successor.path_vertices_bitmap) in FNV_D:
-            #     # print(f"symmetric state removed: {successor.path}")
-            #     continue
+            if (successor.head, successor.path_vertices_bitmap) in FNV_D:
+                # print(f"symmetric state removed: {successor.path}")
+                continue
 
             generated += 1
             
