@@ -111,10 +111,10 @@ def calculate_averages(avgs, log_file_name=None):
         avg_expansions_per_sec = round(sum(expansions) / (sum(times) / 1000)) if times else 0
         expansions_per_second.append(avg_expansions_per_sec)
     formatted_expansions_per_second = ", ".join(f"{eps}" for eps in expansions_per_second)
-    print(f"average expansions per second: ({formatted_expansions_per_second})")
-    if log_file_name:
-        with open(log_file_name, 'a') as file:
-            file.write(f"average expansions per second: ({formatted_expansions_per_second})")
+    # print(f"average expansions per second: ({formatted_expansions_per_second})")
+    # if log_file_name:
+    #     with open(log_file_name, 'a') as file:
+    #         file.write(f"average expansions per second: ({formatted_expansions_per_second})")
 
 
 # Function to display the graph

@@ -382,6 +382,7 @@ def bcc_heuristic(state, goal):
 
 
 def bcc_snake_heuristic(state, goal):
+    calc_Y_heuristic = True
     graph = state.graph
     head = state.head
 
@@ -436,7 +437,10 @@ def bcc_snake_heuristic(state, goal):
     HGP_graph = graph.subgraph(HGP).copy()
 
     # Step 4: count number of vertices in HGP, Y patterns count as 3.
-    Y = Y_heuristic(HGP_graph)
+    if calc_Y_heuristic: Y = Y_heuristic(HGP_graph)
+    else: Y = len(HGP)
+
+    # print(f"len(HGP)={len(HGP)} , Y={Y}")
 
     return Y + 2 # add 1 for neighbor of head, 1 for neighbor of goal
 

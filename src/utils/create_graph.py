@@ -319,9 +319,9 @@ def save_table_as_png(
 
 if __name__ == "__main__":
     date = "SM_Grids"
-    number_of_graphs = 1
+    number_of_graphs = 10
     graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-    dimension_of_graphs = [8,10] # dimension for cube
+    dimension_of_graphs = [8,8] # dimension for cube
     suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
     random.shuffle(suffled_blocks)
 
@@ -334,16 +334,18 @@ if __name__ == "__main__":
     if graph_type=="maze":
         blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
 
+    # First loop is for blocks
     for j in range(0,4):
+        percent_of_blocks = 20+10*j
         for i in range(0, number_of_graphs):
             # Create a grid
             if graph_type=="grid":
                 name_of_graph = (
-                    f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{(4+4*j)}per_{i}"
+                    f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{percent_of_blocks}per_{i}"
                 )
                 print(name_of_graph)
                 # num_of_blocks = int(i % (dimension_of_graphs[0] * dimension_of_graphs[1] / 2))
-                num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1])*(4+4*j)/100)
+                num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1])*percent_of_blocks/100)
                 G, blocks = create_grid_graph_w_random_blocks(dimension_of_graphs[0], dimension_of_graphs[1], num_of_blocks)
 
                 # Create grid with specified blocks
@@ -405,7 +407,7 @@ if __name__ == "__main__":
             display_graph(G, "Current Graph", "current_graph.png")
 
             # add BW coloring
-            add_binary_coloring(G)
+            # add_binary_coloring(G)
 
             # Save the graph as JSON
             save_graph_to_file(G, folder_path + name_of_graph.replace(" ", "_") + ".json")
