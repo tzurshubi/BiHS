@@ -25,13 +25,14 @@ DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
 DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]      # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [9,9]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 4           # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
+DEFAULT_SNAKE = False                # True # False
 DEFAULT_RUN_UNI = True              # True # False
 DEFAULT_RUN_BI = True               # True # False
 DEFAULT_ALGO = "full"              # "basic" # "light" # "full"
+DEFAULT_BSD = True                  # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -53,6 +54,7 @@ def parse_args():
     parser.add_argument("--run_uni", action="store_true", default=DEFAULT_RUN_UNI, help="Enable snake mode.")
     parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
     parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
+    parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
 
     return parser.parse_args()
 
@@ -265,6 +267,7 @@ if __name__ == "__main__":
     snake = args.snake
     run_uni = args.run_uni
     run_bi = args.run_bi
+    bsd = args.bsd
 
     if log:
         log_file_name = "logs"
