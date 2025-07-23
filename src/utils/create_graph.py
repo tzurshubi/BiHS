@@ -321,7 +321,9 @@ if __name__ == "__main__":
     date = "SM_Grids"
     number_of_graphs = 10
     graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-    dimension_of_graphs = [8,8] # dimension for cube
+    dimension_of_graphs = [7,9] # dimension for cube
+    percentages_of_blocks = [4,8,12,16]
+
     suffled_blocks = list(range(dimension_of_graphs[0] * dimension_of_graphs[1]))
     random.shuffle(suffled_blocks)
 
@@ -335,8 +337,7 @@ if __name__ == "__main__":
         blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
 
     # First loop is for blocks
-    for j in range(0,4):
-        percent_of_blocks = 20+10*j
+    for percent_of_blocks in percentages_of_blocks:
         for i in range(0, number_of_graphs):
             # Create a grid
             if graph_type=="grid":
