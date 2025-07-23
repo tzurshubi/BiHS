@@ -1,27 +1,30 @@
 import heapq
-
+import itertools
 
 class HeapqState:
     def __init__(self):
         self.heap = []
-        self.index = 0
+        self._counter = itertools.count()  # tie‑breaker
 
     def push(self, state, f_value):
-        # Push a new state onto the heap with the given f_value
-        heapq.heappush(self.heap, (-f_value, self.index, state, f_value))
-        self.index += 1
+        # We want: max‑f, then max‑g, then FIFO (or insertion order)
+        # => negate f and g to use Python's min‑heap,
+        #    then use a counter so states never have to compare to each other.
+        entry = (
+            -f_value,          # primary key (largest f first)
+            -state.g,          # secondary key (largest g first)
+            next(self._counter),  # tertiary key (insertion order)
+            state
+        )
+        heapq.heappush(self.heap, entry)
 
     def pop(self):
-        # Pop the state with the highest priority
-        return heapq.heappop(self.heap)
+        nf, ng, _, state = heapq.heappop(self.heap)
+        return -nf, -ng, state
 
     def top(self):
-        # Return the state with the highest priority without removing it
-        return self.heap[0]
+        nf, ng, _, state = self.heap[0]
+        return -nf, -ng, state
 
     def __len__(self):
         return len(self.heap)
-    
-    def __iter__(self):
-        # Allow iteration over the heap elements
-        return iter(self.heap)

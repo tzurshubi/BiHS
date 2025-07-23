@@ -37,7 +37,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
     while len(open_set) > 0:
         # Pop the state with the highest priority (g(N) + h(N))
-        _, _, current_state, f_value = open_set.pop()
+        f_value, g_value, current_state = open_set.pop()
         current_path_length = len(current_state.path) - 1
 
         # Increment the expansion counter

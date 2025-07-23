@@ -70,7 +70,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             lastDirectionF = not lastDirectionF
         else:
             if len(OPEN_F) > 0 and (
-                len(OPEN_B) == 0 or OPEN_F.top()[3] >= OPEN_B.top()[3]
+                len(OPEN_B) == 0 or OPEN_F.top()[0] >= OPEN_B.top()[0]
             ):
                 directionF = True
             else:
@@ -83,7 +83,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         FNV_D , FNV_D_hat = (FNV_F, FNV_B) if directionF else (FNV_B, FNV_F)
 
         # Get the best state from OPEN_D
-        _, _, current_state, f_value = OPEN_D.top()
+        f_value, g_value, current_state = OPEN_D.top()
         current_path_length = len(current_state.path) - 1
         
         # if expansions % 100000 == 0:
@@ -108,8 +108,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
-            OPEN_F.top()[3] if len(OPEN_F) > 0 else float("inf"),
-            OPEN_B.top()[3] if len(OPEN_B) > 0 else float("inf"),
+            OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
+            OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
         ):
             # print(f"Terminating with best path of length {best_path_length}")
             break
@@ -129,7 +129,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         g_values.append(current_state.g)
 
         # Get the current state from OPEN_D TO CLOSED_D
-        _, _, current_state, f_value = OPEN_D.pop()
+        f_value, g_value, current_state = OPEN_D.pop()
         OPENvOPEN.remove_state(current_state, directionF)
         CLOSED_D.add(current_state)
 
