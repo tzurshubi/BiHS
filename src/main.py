@@ -1,7 +1,7 @@
 import os
 # import pandas as pd
-import argparse
 # import networkx as nx
+import argparse
 import json
 import random
 import traceback
@@ -25,8 +25,8 @@ DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
 DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,7]      # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 4           # 4 / 8 / 12 / 16
+DEFAULT_SIZE_OF_GRAPHS = [6,6]      # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 16           # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                # True # False
 DEFAULT_RUN_UNI = True              # True # False
