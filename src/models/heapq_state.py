@@ -19,12 +19,16 @@ class HeapqState:
         heapq.heappush(self.heap, entry)
 
     def pop(self):
-        nf, ng, _, state = heapq.heappop(self.heap)
-        return -nf, -ng, state
+        # nf, ng, _, state = heapq.heappop(self.heap)
+        # return -nf, -ng, state
+        nf, _, state = heapq.heappop(self.heap)
+        return -nf, None, state
 
     def top(self):
-        nf, ng, _, state = self.heap[0]
-        return -nf, -ng, state
+        # nf, ng, _, state = self.heap[0]
+        # return -nf, -ng, state
+        nf, _, state = self.heap[0]
+        return -nf, None, state
 
     def __len__(self):
         return len(self.heap)
