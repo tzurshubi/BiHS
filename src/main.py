@@ -1,5 +1,5 @@
 import os
-import pandas as pd
+# import pandas as pd
 import argparse
 # import networkx as nx
 import json
@@ -301,7 +301,7 @@ if __name__ == "__main__":
         "[g_F,g_B]",
         "Grid with Solution",
     ]
-    results_df = pd.DataFrame(columns=columns)
+    # results_df = pd.DataFrame(columns=columns)
     results = []
 
     avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}}
