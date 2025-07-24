@@ -12,7 +12,7 @@ class HeapqState:
         #    then use a counter so states never have to compare to each other.
         entry = (
             -f_value,          # primary key (largest f first)
-            -state.g,          # secondary key (largest g first)
+            # -state.g,          # secondary key (largest g first). optional tie-breaker.
             next(self._counter),  # tertiary key (insertion order)
             state
         )

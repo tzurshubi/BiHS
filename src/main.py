@@ -334,7 +334,10 @@ if __name__ == "__main__":
 
         args.log_file_name = log_file_name
         name_of_graph=f"{date}/"+name_of_graph
-        print("\n"+name_of_graph)            
+        print("\n"+name_of_graph)
+        if log:
+            with open(log_file_name, 'w' if i==0 else 'a') as file:
+                file.write("\n"+name_of_graph)            
         
         # unidirectional
         if run_uni:
@@ -344,10 +347,10 @@ if __name__ == "__main__":
             )
             avgs["uni_st"]["expansions"].append(logs['expansions'])
             avgs["uni_st"]["time"].append(logs['time[ms]'])
+            print(f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
             if log:
                 with open(log_file_name, 'w' if i==0 else 'a') as file:
                     file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-            print(f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
             results.append(
                 {
                     "# blocks": i,
@@ -367,10 +370,10 @@ if __name__ == "__main__":
                 )
                 avgs["uni_ts"]["expansions"].append(logs['expansions'])
                 avgs["uni_ts"]["time"].append(logs['time[ms]'])
+                print(f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
                 if log:
                     with open(log_file_name, 'a') as file:
                         file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-                print(f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
                 results.append(
                     {
                         "# blocks": i,
@@ -390,11 +393,11 @@ if __name__ == "__main__":
             )
             avgs["bi"]["expansions"].append(logs['expansions'])
             avgs["bi"]["time"].append(logs['time[ms]'])
+            print(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
             if log:
                 with open(log_file_name, 'a') as file:
                     file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}\n\n")
-            print(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-            print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
             results.append(
                 {
                     "# blocks": i,
