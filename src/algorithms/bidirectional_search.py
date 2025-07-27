@@ -46,8 +46,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     OPEN_B.push(initial_state_B, initial_f_value_B)
     OPENvOPEN.insert_state(initial_state_F, True)
     OPENvOPEN.insert_state(initial_state_B, False)
-    FNV_F = {(initial_state_F.head,initial_state_F.path_vertices_bitmap)}
-    FNV_B = {(initial_state_B.head,initial_state_B.path_vertices_bitmap)}
+    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap if snake else initial_state_F.path_vertices_bitmap)}
+    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap if snake else initial_state_B.path_vertices_bitmap)}
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -101,10 +101,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = total_length
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
-                # if snake and total_length >= f_value-3:
-                    # print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
-                    # with open(args.log_file_name, 'a') as file:
-                    #     file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
+                if snake and total_length >= f_value-3:
+                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
+                    with open(args.log_file_name, 'a') as file:
+                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
 
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
@@ -137,7 +137,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         successors = current_state.successor(args, snake, directionF)
         BF_values.append(len(successors))
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_bitmap) in FNV_D:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
                 # print(f"symmetric state removed: {successor.path}")
                 continue
 
@@ -165,7 +165,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
             else: OPEN_D.push(successor, min(f_value, f_successor))
             
-            FNV_D.add((successor.head,successor.path_vertices_bitmap))
+            FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
             OPENvOPEN.insert_state(successor,directionF)
 
     # Plotting BF vs g
