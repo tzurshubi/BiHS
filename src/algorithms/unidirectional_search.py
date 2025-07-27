@@ -25,7 +25,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     open_set.push(initial_state, initial_f_value)
 
     # Basic symmetry detection - a dictionary with the key (head,nodes)
-    FNV = {(initial_state.head,initial_state.path_vertices_bitmap)}
+    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors_bitmap if snake else initial_state.path_vertices_bitmap)}
 
     # The best path found
     best_path = None
@@ -53,10 +53,10 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             if current_path_length > best_path_length:
                 best_path = current_state.path
                 best_path_length = current_path_length
-                # if snake:
-                #     print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. {best_path}. generated: {generated}")
-                #     with open(args.log_file_name, 'a') as file:
-                #         file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
+                if snake:
+                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. {best_path}. generated: {generated}")
+                    with open(args.log_file_name, 'a') as file:
+                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
 
             continue
 
@@ -72,7 +72,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         g_degree_pairs.append((current_state.g, len(successors)))
 
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_bitmap) in FNV:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
                 continue
 
@@ -95,7 +95,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             f_successor = g_successor + h_successor
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
-            FNV.add((successor.head,successor.path_vertices_bitmap))
+            FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
 
     # For Plotting
     # g_values = [pair[0] for pair in g_degree_pairs]
