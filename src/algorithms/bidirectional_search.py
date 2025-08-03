@@ -16,6 +16,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # h_BCC = []
     # max_f = []
     calc_h_time = 0
+    valid_meeting_check_time = 0
     g_values = []
     BF_values = []
 
@@ -93,8 +94,11 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
-        # Check against OPEN of the other direction
+        # Check against OPEN of the other direction, for a valid meeting point
+        curr_time = time.time()
         state = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF, best_path_length, snake)
+        valid_meeting_check_time += time.time() - curr_time
+
         if state:
             total_length = current_path_length + len(state.path) - 1
             if total_length > best_path_length:
@@ -184,4 +188,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
     # print(f"total time for calculating heuristics: {1000*calc_h_time}")
+    print(f"! bidirectional. time for valid meeting checks: {1000*valid_meeting_check_time:.2f} [ms]. time for heuristic calculations: {1000*calc_h_time:.2f} [ms]")
+    with open(args.log_file_name, 'a') as file:
+        file.write(f"\n! bidirectional. time for valid meeting checks: {1000*valid_meeting_check_time:.2f} [ms]. time for heuristic calculations: {1000*calc_h_time:.2f} [ms]")
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
