@@ -17,6 +17,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # max_f = []
     calc_h_time = 0
     valid_meeting_check_time = 0
+    valid_meeting_checks = 0
+    valid_meeting_checks_sum_g_under_f_max = 0
     g_values = []
     BF_values = []
 
@@ -96,8 +98,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
-        state = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF, best_path_length, snake)
+        state, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF, best_path_length, f_value, snake)
         valid_meeting_check_time += time.time() - curr_time
+        valid_meeting_checks += num_checks
+        valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
 
         if state:
             total_length = current_path_length + len(state.path) - 1
@@ -188,7 +192,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
     # print(f"total time for calculating heuristics: {1000*calc_h_time}")
-    print(f"! bidirectional. time for valid meeting checks: {1000*valid_meeting_check_time:.2f} [ms]. time for heuristic calculations: {1000*calc_h_time:.2f} [ms]")
+    print(f"! bidirectional. valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]")
     with open(args.log_file_name, 'a') as file:
-        file.write(f"\n! bidirectional. time for valid meeting checks: {1000*valid_meeting_check_time:.2f} [ms]. time for heuristic calculations: {1000*calc_h_time:.2f} [ms]")
+        file.write(f"\n! bidirectional. valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]")
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
