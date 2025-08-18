@@ -138,7 +138,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Get the current state from OPEN_D TO CLOSED_D
         f_value, g_value, current_state = OPEN_D.pop()
-        OPENvOPEN.remove_state(current_state, directionF)
+        # OPENvOPEN.remove_state(current_state, directionF)
         CLOSED_D.add(current_state)
 
         # Generate successors
@@ -192,7 +192,13 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.ylabel("h value")
     # plt.savefig("h_vs_expansions.png")
     # print(f"total time for calculating heuristics: {1000*calc_h_time}")
+    
     print(f"! bidirectional. valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]")
     with open(args.log_file_name, 'a') as file:
         file.write(f"\n! bidirectional. valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]")
+    
+    print(f"! bidirectional. # of states in OPENvOPEN: {OPENvOPEN.counter}.")
+    with open(args.log_file_name, 'a') as file:
+        file.write(f"\n! bidirectional. # of states in OPENvOPEN: {OPENvOPEN.counter}.")
+
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values

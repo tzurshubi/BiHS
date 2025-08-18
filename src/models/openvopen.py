@@ -7,6 +7,7 @@ class Openvopen:
         Each cell contains two lists: F and B, both of which are initially empty.
         """
         self.cells = [{'F': [], 'B': []} for _ in range(n)]
+        self.counter = 0 # Counter to track the number of states inserted
 
     def insert_state(self, state, is_f):
         """
@@ -32,6 +33,8 @@ class Openvopen:
         index = bisect_left([-s.g for s in list_to_update], -g_value)  # Use negative values for descending order
         list_to_update.insert(index, state)
 
+        self.counter += 1  # Increment the counter for each inserted state
+
     def remove_state(self, state, is_f):
         """
         Removes the specified state from the appropriate list (F or B) in the corresponding cell.
@@ -51,6 +54,7 @@ class Openvopen:
         # Remove the state by identity (not by value equality)
         try:
             list_to_update.remove(state)
+            self.counter -= 1  # Decrement the counter for each removed state
         except ValueError:
             raise ValueError("State not found in the target list.")
 
