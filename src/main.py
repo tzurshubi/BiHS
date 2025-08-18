@@ -36,7 +36,7 @@ DEFAULT_BSD = True                 # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
-if current_directory.startswith("/cs_storage/") or current_directory.startswith("/mnt/"):
+if current_directory.startswith("/cs_storage/") or current_directory.startswith("/mnt/") or current_directory.startswith("/home/"):
     base_dir = "/BiHS/"
 
 
