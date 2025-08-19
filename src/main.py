@@ -25,8 +25,8 @@ DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
 DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6]      # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 16           # 4 / 8 / 12 / 16
+DEFAULT_SIZE_OF_GRAPHS = [8,9]      # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 4           # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                # True # False
 DEFAULT_RUN_UNI = True              # True # False
@@ -36,7 +36,9 @@ DEFAULT_BSD = True                 # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
-if current_directory.startswith("/cs_storage/") or current_directory.startswith("/mnt/") or current_directory.startswith("/home/"):
+if current_directory.startswith("/cs_storage/") or current_directory.startswith("/mnt/"):
+    base_dir = "/BiHS/"
+if current_directory.startswith("/home/") and "tzur-shubi" not in current_directory:
     base_dir = "/BiHS/"
 
 
