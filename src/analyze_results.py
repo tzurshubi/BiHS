@@ -4,7 +4,7 @@ import csv
 from collections import defaultdict
 
 # Set the directory containing the txt files
-directory = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_07_28/snake"
+directory = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_08_19"
 
 # Regex patterns
 result_pattern = re.compile(r"(A\*|XMM):\s*(\d+)\s*,\s*(\d+)\s*\(expansions\s*,\s*time\[ms\]\)")
