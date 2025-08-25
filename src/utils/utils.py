@@ -123,6 +123,8 @@ def calculate_averages(avgs, log_file_name=None):
     # Summary two lines
     exp_avgs = averages_per_metric.get("expansions", [])
     time_avgs = averages_per_metric.get("time", [])
+    if exp_avgs[1]==0: exp_avgs[1]=exp_avgs[0]
+    if time_avgs[1]==0: time_avgs[1]=time_avgs[0]
     if len(exp_avgs) >= 2 and len(time_avgs) >= 2:
         first_min_exp = min(exp_avgs[0], exp_avgs[1])
         first_min_time = min(time_avgs[0], time_avgs[1])
