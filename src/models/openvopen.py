@@ -6,8 +6,8 @@ class Openvopen:
         Each of F and B is a list of n buckets (lists), indexed by g in [0..n-1].
         """
         self.n = n
-        # cells[i]['F'][g] is a list of states with head=i and g=g (unsorted bucket)
-        # cells[i]['B'][g] likewise
+        # cells[i]['F'][g] is a list of states with head=i, in forward direction, and g=g (unsorted bucket)
+        # cells[i]['B'][g] is a list of states with head=i, in backward direction, and g=g (unsorted bucket)
         self.cells = [
             {
                 'F': [[] for _ in range(n)],

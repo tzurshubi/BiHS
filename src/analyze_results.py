@@ -4,7 +4,7 @@ import csv
 from collections import defaultdict
 
 # Set the directory containing the txt files
-directory = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_08_19"
+directory = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_08_20"
 
 # Regex patterns
 result_pattern = re.compile(r"(A\*|XMM):\s*(\d+)\s*,\s*(\d+)\s*\(expansions\s*,\s*time\[ms\]\)")
@@ -17,6 +17,8 @@ block_percents = set()
 grid_sizes = set()
 
 for filename in os.listdir(directory):
+    if not "results" in filename:
+        continue
     with open(os.path.join(directory, filename), "r") as f:
         lines = f.readlines()
     
