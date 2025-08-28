@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.patches as patches
 import os, math
 import matplotlib.pyplot as plt
+import re
+import csv
 
 def ms2str(time_ms):
     """
@@ -162,3 +164,52 @@ def display_graph(graph, title="Graph", filename=None):
     else:
         plt.show()
 
+# Function to parse results file and write to CSV
+def parse_results_file(input_file, output_file):
+    """
+    Parse a results .txt file and write a structured .csv file.
+
+    Parameters
+    ----------
+    input_file : str
+        Path to the input .txt file with experiment results.
+    output_file : str
+        Path where the .csv file will be written.
+    """
+
+    # Regex patterns
+    uni_pattern = re.compile(r"! unidirectional (s-t|t-s)\. expansions: ([\d,]+), time: ([\d,]+) \[ms\]")
+    bi_pattern = re.compile(r"! bidirectional\. expansions: ([\d,]+), time: ([\d,]+) \[ms\]")
+
+    rows = []
+    grid_index = 0  # increments when we hit a new "SM_Grids/..." header
+
+    with open(input_file, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+
+            # # Detect grid header
+            # if line.startswith("SM_Grids/"):
+            #     grid_index += 1
+            #     continue
+
+            # Match unidirectional
+            m_uni = uni_pattern.search(line)
+            if m_uni:
+                direction, expansions, time = m_uni.groups()
+                direction = "s -> t" if direction == "s-t" else "t -> s"
+                rows.append([grid_index, direction, expansions, time])
+                continue
+
+            # Match bidirectional (XMM)
+            m_bi = bi_pattern.search(line)
+            if m_bi:
+                expansions, time = m_bi.groups()
+                rows.append([grid_index, "XMM", expansions, time])
+                continue
+
+    # Write to CSV
+    with open(output_file, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["grid number", "Direction", "Expansions", "Time [ms]"])
+        writer.writerows(rows)
