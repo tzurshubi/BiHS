@@ -22,13 +22,13 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 1       # 10
-DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6]      # dimension of cube
+DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
+DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [8,8]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16           # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
+DEFAULT_SNAKE = False                # True # False
 DEFAULT_RUN_UNI = True              # True # False
 DEFAULT_RUN_BI = True               # True # False
 DEFAULT_ALGO = "full"              # "basic" # "light" # "full"
@@ -422,3 +422,4 @@ if __name__ == "__main__":
         #     results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
     print()
     calculate_averages(avgs, log_file_name)
+    parse_results_file(log_file_name, log_file_name+".csv")

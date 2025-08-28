@@ -12,23 +12,23 @@ class HeapqState:
         #    then use a counter so states never have to compare to each other.
         entry = (
             -f_value,          # primary key (largest f first)
-            # -state.g,          # secondary key (largest g first). optional tie-breaker.
+            -state.g,          # secondary key (largest g first). optional tie-breaker.
             next(self._counter),  # tertiary key (insertion order)
             state
         )
         heapq.heappush(self.heap, entry)
 
     def pop(self):
-        # nf, ng, _, state = heapq.heappop(self.heap)
-        # return -nf, -ng, state
-        nf, _, state = heapq.heappop(self.heap)
-        return -nf, None, state
+        nf, ng, _, state = heapq.heappop(self.heap)
+        return -nf, -ng, state
+        # nf, _, state = heapq.heappop(self.heap)
+        # return -nf, None, state
 
     def top(self):
-        # nf, ng, _, state = self.heap[0]
-        # return -nf, -ng, state
-        nf, _, state = self.heap[0]
-        return -nf, None, state
+        nf, ng, _, state = self.heap[0]
+        return -nf, -ng, state
+        # nf, _, state = self.heap[0]
+        # return -nf, None, state
 
     def __len__(self):
         return len(self.heap)
