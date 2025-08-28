@@ -7,13 +7,14 @@ def parse_line(line):
     Parse a single line to extract metrics.
     """
     match = re.search(
-        r"expansions: ([\d,]+), time: ([\d,]+) \[ms\], memory: (\d+) \[kB\], path length: (\d+)(?:, g_F: (\d+), g_B: (\d+))?",
+        r"expansions: ([\d,]+), time: ([\d,]+) \[ms\], memory: ([\d,]+) \[kB\], path length: (\d+)(?:, g_F: (\d+), g_B: (\d+))?",
         line
     )
+
     if match:
         expansions = int(match.group(1).replace(",", ""))
         time = int(match.group(2).replace(",", ""))
-        memory = int(match.group(3))
+        memory = int(match.group(3).replace(",", ""))
         path_length = int(match.group(4))
         g_F = int(match.group(5)) if match.group(5) else None
         g_B = int(match.group(6)) if match.group(6) else None
@@ -97,14 +98,17 @@ def average_metrics(folder_path,file_name_substring=""):
             summaries[key] = {}
     min_uni = [min(a, b) for a, b in zip(summaries['unidirectional_s_t']['expansions'], summaries['unidirectional_t_s']['expansions'])]
     bi = list(summaries['bidirectional']['expansions'])
-    print(min_uni)
-    print(bi)
+    print(min_uni) # an array of the expansions for each instance - unidirectional
+    print(bi) # an array of the expansions for each instance - bidirectional
     print(f"uni - {len(min_uni)} instances. bi - {len(bi)} instances. ")
+    print()
+    for i in range(len(min_uni)):
+        print(f"{min_uni[i]} {bi[i]} {file_name_substring}")
     return summaries
 
 
 if __name__ == "__main__":
-    folder_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/SM_Grids"
+    folder_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_08_25"
     file_name_substring = '8x8'
     results = average_metrics(folder_path,file_name_substring)
 
