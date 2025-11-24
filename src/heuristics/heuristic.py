@@ -414,7 +414,7 @@ def bcc_heuristic(state, goal):
 
 
 def bcc_snake_heuristic_paper(state, goal):
-    calc_Y_heuristic = True
+    calc_Y_heuristic = True    # True # False
     info = {}
     graph = state.graph
     head = state.head
@@ -703,7 +703,6 @@ def find_component_containing_vertex(tric, vertex):
 #     else:
 #         print("TO DO")
 #     path_in_bct = nx.shortest_path(bct, source=head_block_node, target=goal_block_node)
-#     c=1
 
 
 def heuristic(state, goal, heuristic_name, snake):

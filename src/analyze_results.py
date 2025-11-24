@@ -4,7 +4,9 @@ import csv
 from collections import defaultdict
 
 # Set the directory containing the txt files
-directory = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_08_26/snakeInGrids"
+directory = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_08_29/snakeInGrids"
+file_name_must_include = ["results"]
+file_name_must_not_include = ["csv"]
 
 # Regex patterns
 result_pattern = re.compile(r"(A\*|XMM):\s*(\d+)\s*,\s*(\d+)\s*\(expansions\s*,\s*time\[ms\]\)")
@@ -17,7 +19,7 @@ block_percents = set()
 grid_sizes = set()
 
 for filename in os.listdir(directory):
-    if not "results" in filename:
+    if not (any(s in filename for s in file_name_must_include) or any(s in filename for s in file_name_must_not_include)):
         continue
     with open(os.path.join(directory, filename), "r") as f:
         lines = f.readlines()

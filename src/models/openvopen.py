@@ -1,11 +1,12 @@
 class Openvopen:
-    def __init__(self, n):
+    def __init__(self, n, start, goal):
         """
         OPENvOPEN with n cells.
         For each cell we maintain two bucketed structures: F and B.
         Each of F and B is a list of n buckets (lists), indexed by g in [0..n-1].
         """
         self.n = n
+
         # cells[i]['F'][g] is a list of states with head=i, in forward direction, and g=g (unsorted bucket)
         # cells[i]['B'][g] is a list of states with head=i, in backward direction, and g=g (unsorted bucket)
         self.cells = [
@@ -17,6 +18,8 @@ class Openvopen:
         ]
 
         self.counter = 0  # number of states inserted
+        self.start = start
+        self.goal = goal
         # Map: state -> (cell_index, 'F'/'B', g, index_in_bucket)
         # Enables O(1) removal via swap-pop.
         self._loc = {}
@@ -34,7 +37,7 @@ class Openvopen:
         O(1): Append to the bucket indexed by (cell=state.head, dir=F/B, g=state.g).
         """
         self._validate_state(state)
-        cell_index = state.head
+        cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
         target = 'F' if is_f else 'B'
         g_value = state.g
 
@@ -76,10 +79,10 @@ class Openvopen:
         self.counter -= 1
         del self._loc[state]
 
-    def find_highest_non_overlapping_state(self, state, is_f, best_path_length, f_max, snake=False):
+    def find_longest_non_overlapping_state(self, state, is_f, best_path_length, f_max, snake=False):
         """
         Scan buckets from highest g down in the opposite direction within the same head cell.
-        Keeps the same semantics as your original:
+        Features:
           - Count num_checks per opposite state inspected
           - Count num_checks_sum_g_under_f_max when state.g + opp.g < f_max
           - Early-exit with None if state.g + current_g <= best_path_length
@@ -91,16 +94,18 @@ class Openvopen:
         num_checks = 0
         num_checks_sum_g_under_f_max = 0
 
-        cell_index = state.head
+        cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
         opposite = 'B' if is_f else 'F'
         opp_struct = self.cells[cell_index][opposite]
+        solution = None
+        solution_g = -1
 
         # Iterate g from high to low
         for g_candidate in range(self.n - 1, -1, -1):
             # Early bound check (bucket-level): if even the best remaining g fails best_path_length,
             # then all later (smaller g) fail as well.
             if state.g + g_candidate <= best_path_length:
-                return None, num_checks, num_checks_sum_g_under_f_max
+                return None, -1, solution, solution_g, num_checks, num_checks_sum_g_under_f_max
 
             bucket = opp_struct[g_candidate]
             if not bucket:
@@ -114,9 +119,103 @@ class Openvopen:
 
                 # Original per-state early check (kept for parity)
                 if state.g + g_candidate <= best_path_length:
-                    return None, num_checks, num_checks_sum_g_under_f_max
+                    return None, -1, solution, solution_g, num_checks, num_checks_sum_g_under_f_max
 
                 if not state.shares_vertex_with(opposite_state, snake):
-                    return opposite_state, num_checks, num_checks_sum_g_under_f_max
+                    solution = state + opposite_state
+                    solution_g = state.g + opposite_state.g
+                    return opposite_state, opposite_state.g, solution, solution_g, num_checks, num_checks_sum_g_under_f_max 
 
-        return None, num_checks, num_checks_sum_g_under_f_max
+        return None, -1, solution, solution_g, num_checks, num_checks_sum_g_under_f_max
+
+    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, segment_key, snake=False):
+        """
+        Find all non-overlapping simple paths formed by concatenating `state`
+        with states in the opposite direction within the same head cell.
+
+        For each opposite_state in the same head cell:
+          - ensure no vertex-overlap (except the shared head, handled by concatenation)
+          - (optionally) require state.g + opp.g > best_path_length
+          - build a full simple path by concatenating the two partial paths.
+
+        Returns:
+            (full_paths, num_checks, num_checks_sum_g_under_f_max)
+
+            full_paths: list of lists of vertices, each a simple path from s to t
+                        constructed from (state, opposite_state).
+        """
+        self._validate_state(state)
+
+        num_checks = 0
+        num_checks_sum_g_under_f_max = 0
+        full_paths = []
+
+        cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
+        opposite = 'B' if is_f else 'F'
+        opp_struct = self.cells[cell_index][opposite]
+
+        # Scan all g buckets from high to low (order not essential here, but keeps style)
+        for g_candidate in range(self.n - 1, -1, -1):
+            bucket = opp_struct[g_candidate]
+            if not bucket:
+                continue
+
+            for opposite_state in bucket:
+                num_checks += 1
+                total_g = state.g + g_candidate
+
+                if total_g < f_max:
+                    num_checks_sum_g_under_f_max += 1
+
+                # If you only care about combinations that can beat the current best:
+                if total_g <= best_path_length:
+                    continue
+
+                # Check vertex overlap (other than the head, which we handle in concatenation)
+                if state.shares_vertex_with(opposite_state, snake):
+                    continue
+
+                # Build full simple path depending on direction
+                if is_f:
+                    # state: s -> ... -> head
+                    # opposite_state: t -> ... -> head
+                    full_path = state.path[:-1] + opposite_state.path[::-1]
+                else:
+                    # state: t -> ... -> head
+                    # opposite_state: s -> ... -> head
+                    full_path = opposite_state.path[:-1] + state.path[::-1]
+
+                full_paths.append(full_path)
+
+        return full_paths, num_checks, num_checks_sum_g_under_f_max
+
+    def get_states_ending_in(self, vertex, is_f):
+        """
+        Return all states whose head == vertex in the given direction (F/B),
+        in descending order of g (longest paths first).
+
+        Args:
+            vertex (int): the head vertex to look for.
+            is_f (bool): True for forward (F), False for backward (B).
+
+        Returns:
+            list[State]: all matching states, sorted by descending g.
+        """
+        if not (0 <= vertex < self.n):
+            raise ValueError(f"Vertex {vertex} out of range [0,{self.n-1}].")
+
+        direction = 'F' if is_f else 'B'
+        dir_struct = self.cells[vertex][direction]
+
+        result = []
+        # Scan g from high to low so result is in descending g
+        for g in range(self.n - 1, -1, -1):
+            bucket = dir_struct[g]
+            if bucket:
+                # You can extend directly; buckets already hold the State objects
+                result.extend(bucket)
+
+        return result
+
+    def __len__(self):
+        return self.counter

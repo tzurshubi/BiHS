@@ -99,7 +99,6 @@ class State:
         return successors
 
     
-
     def shares_vertex_with(self, other_state, snake = False):
         """
         Check if this state shares any vertex (excluding heads) with another state.
@@ -107,4 +106,108 @@ class State:
         """
         if not snake: return (self.path_vertices_bitmap & other_state.path_vertices_bitmap) != 0
         else: return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0
+
+    def __add__(self, other):
+        """
+        Concatenate two State paths when they share an endpoint (head or tail).
+        Result path goes from the non-shared endpoint of the left state to the
+        non-shared endpoint of the right state, passing through the shared endpoint.
+
+        Example with s1=[0,1,3], s2=[3,2,6], s3=[6,4,5]:
+
+            s1 + s2 -> [0,1,3,2,6]
+            s2 + s1 -> [6,2,3,1,0]
+            s2 + s3 -> [3,2,6,4,5]
+            s3 + s2 -> [5,4,6,2,3]
+        """
+        if not isinstance(other, State):
+            return NotImplemented
+
+        # Must be same graph object
+        if self.graph is not other.graph:
+            raise ValueError("Cannot add states from different graphs.")
+
+        # Handle empty-path edge cases
+        if not self.path:
+            return other
+        if not other.path:
+            return self
+
+        p = self.path
+        q = other.path
+        s0, s1 = p[0], p[-1]
+        o0, o1 = q[0], q[-1]
+
+        # Endpoints
+        self_ends = {s0, s1}
+        other_ends = {o0, o1}
+        common = list(self_ends & other_ends)
+
+        if not common:
+            raise ValueError(
+                f"Cannot concatenate: paths do not share an endpoint. "
+                f"self endpoints = ({s0}, {s1}), "
+                f"other endpoints = ({o0}, {o1})"
+            )
+
+        if len(common) > 1:
+            # Ambiguous case: both endpoints in common (e.g., cycles or identical segment).
+            # You can relax this if you want, but for now we fail loudly.
+            raise ValueError(
+                f"Ambiguous concatenation: paths share multiple endpoints {common}."
+            )
+
+        c = common[0]  # shared endpoint
+
+        # x = other endpoint of self, y = other endpoint of other
+        x = s1 if s0 == c else s0
+        y = o1 if o0 == c else o0
+
+        # Orient self from x -> c
+        if p[0] == x and p[-1] == c:
+            p_or = p
+        elif p[0] == c and p[-1] == x:
+            p_or = list(reversed(p))
+        else:
+            raise ValueError(
+                f"Path self does not have shared endpoint {c} as an endpoint, "
+                f"or endpoints changed unexpectedly."
+            )
+
+        # Orient other from c -> y
+        if q[0] == c and q[-1] == y:
+            q_or = q
+        elif q[0] == y and q[-1] == c:
+            q_or = list(reversed(q))
+        else:
+            raise ValueError(
+                f"Path other does not have shared endpoint {c} as an endpoint, "
+                f"or endpoints changed unexpectedly."
+            )
+
+        # Ensure simple path: allow overlap only at c
+        used = set(p_or)
+        for v in q_or[1:]:  # skip the shared c
+            if v in used:
+                raise ValueError(
+                    f"Concatenation would repeat vertex {v}, "
+                    "so the result would not be a simple path."
+                )
+            used.add(v)
+
+        new_path = p_or + q_or[1:]
+
+        # Decide whether new state is a "snake"
+        snake = hasattr(self, "path_vertices_and_neighbors_bitmap") or \
+                hasattr(other, "path_vertices_and_neighbors_bitmap")
+
+        return State(self.graph, new_path, snake=snake)
+
+    def __radd__(self, other):
+        """
+        Support patterns like sum([s1, s2, s3]) with start=0.
+        """
+        if other == 0:
+            return self
+        return self.__add__(other)
 
