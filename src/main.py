@@ -14,6 +14,7 @@ import tracemalloc
 from models.graph import *
 from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
+from algorithms.multidirectional_search import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -23,16 +24,18 @@ from utils.utils import *
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 10       # 10
+DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
 DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 16           # 4 / 8 / 12 / 16
+DEFAULT_SIZE_OF_GRAPHS = [5,5]      # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 30          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = True              # True # False
-DEFAULT_RUN_BI = True               # True # False
-DEFAULT_ALGO = "full"              # "basic" # "light" # "full"
-DEFAULT_BSD = True                 # True # False
+DEFAULT_SNAKE = False                # True # False
+DEFAULT_RUN_UNI = False              # True # False
+DEFAULT_RUN_BI = False              # True # False
+DEFAULT_RUN_MULTI = True           # True # False
+DEFAULT_SOLUTION_VERTICES = [15]  # for multidirectional search on cubes
+DEFAULT_ALGO = "full"               # "basic" # "light" # "full"
+DEFAULT_BSD = True                  # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -55,6 +58,8 @@ def parse_args():
     parser.add_argument("--snake", action="store_true", default=DEFAULT_SNAKE, help="Enable snake mode.")
     parser.add_argument("--run_uni", action="store_true", default=DEFAULT_RUN_UNI, help="Enable snake mode.")
     parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
+    parser.add_argument("--run_multi", action="store_true", default=DEFAULT_RUN_MULTI, help="Enable snake mode.")
+    parser.add_argument("--solution_vertices", nargs='+', type=int, default=DEFAULT_SOLUTION_VERTICES, help="Solution vertices for multidirectional search.")
     parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
     parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
 
@@ -134,7 +139,9 @@ def save_table_as_png(
     plt.close(fig)
 
 # This function is only a copy! the original is in create_graph.py
-def display_graph_with_path_and_points(graph, title="Graph", filename=None, path=None, points=None):
+def display_graph_with_path_and_points(
+    graph, title="Graph", filename=None, path=None, points=None
+):
     """
     Display a graph with optional highlighted path and points.
     
@@ -145,16 +152,43 @@ def display_graph_with_path_and_points(graph, title="Graph", filename=None, path
         path (list, optional): List of vertices to highlight as a path. Their edges will be blue.
         points (list, optional): List of vertices to highlight in red.
     """
+    cube = "cube" in filename.lower()  # Simple check to see if the graph is a cube
     plt.figure(figsize=(8, 8))
     pos = nx.spring_layout(graph)
 
-    # Default node and edge styles
-    node_colors = ["red" if node in (points or []) else "skyblue" for node in graph.nodes()]
-    edge_colors = [
-        "blue" if (u, v) in zip(path or [], (path or [])[1:]) or (v, u) in zip(path or [], (path or [])[1:]) else "gray"
-        for u, v in graph.edges()
+    # Default node colors
+    # node_colors = [
+    #     "orange" if node in (points or []) else "skyblue" for node in graph.nodes()
+    # ]
+    # node_colors = [
+    #     "skyblue" if node in (points or []) else "skyblue" for node in graph.nodes()
+    # ]
+    node_colors = [
+        "green" if node in (0, 1, 3, 7) else "orange" if node in (points or []) else "skyblue"
+        for node in graph.nodes()
     ]
-    edge_widths = [2 if (u, v) in zip(path or [], (path or [])[1:]) or (v, u) in zip(path or [], (path or [])[1:]) else 1 for u, v in graph.edges()]
+
+
+
+    # Build set of path edges
+    path_edges = set(zip(path or [], (path or [])[1:]))
+    path_edges |= {(v, u) for (u, v) in path_edges}  # undirected
+
+    # Special cube edges to make green
+    special_cube_edges = {(0, 1), (1, 3), (3, 7)}
+    special_cube_edges |= {(b, a) for (a, b) in special_cube_edges}  # both directions
+
+    edge_colors = []
+    edge_widths = []
+    for u, v in graph.edges():
+        if cube and (u, v) in special_cube_edges:
+            color, width = "green", 4  # "green" , 2
+        elif (u, v) in path_edges:
+            color, width = "red", 4  # 2
+        else:
+            color, width = "gray", 1
+        edge_colors.append(color)
+        edge_widths.append(width)
 
     # Draw the graph
     nx.draw(
@@ -171,7 +205,6 @@ def display_graph_with_path_and_points(graph, title="Graph", filename=None, path
     plt.title(title)
     if filename:
         plt.savefig(filename)
-        # print(f"Graph saved to {filename}")
     else:
         plt.show()
 
@@ -189,6 +222,7 @@ def search(
     # Load the graph
     # print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
+    G_original = G.copy()
     if args.graph_type=="cube":
         if G.has_edge(0, 1): G.remove_edge(0, 1)
         G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
@@ -217,7 +251,10 @@ def search(
         path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
         path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
+    elif search_type == "multidirectional":
+        path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = multidirectional_search(G, start, goal, args.solution_vertices, heuristic, snake, args)
 
+    # Collect logs
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
     tracemalloc.stop()
@@ -231,6 +268,7 @@ def search(
         logs["moved_OPEN_to_AUXOPEN"] = moved_OPEN_to_AUXOPEN
         logs["g_values"] = g_values
 
+    # Save the graph as PNG with the path if found
     if not meet_point is None:
         if args.graph_type=="grid":
             save_table_as_png(
@@ -242,7 +280,7 @@ def search(
                 [meet_point],
             )
         elif args.graph_type=="cube":
-            display_graph_with_path_and_points(G,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
+            display_graph_with_path_and_points(G_original,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
         meet_point_index = path.index(meet_point)
         logs["g_F"] = len(path[:meet_point_index])
         logs["g_B"] = len(path[meet_point_index + 1 :])
@@ -271,16 +309,17 @@ if __name__ == "__main__":
     snake = args.snake
     run_uni = args.run_uni
     run_bi = args.run_bi
+    run_multi = args.run_multi
     bsd = args.bsd
 
     if log:
         log_file_name = "logs"
         if graph_type=="cube":
-            log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}"
+            log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
-            log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}"
+            log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         with open(log_file_name, 'w') as file:
-            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\n-------------\n\n")
+            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\nrun_multi:{run_multi}\n-------------\n\n")
         args.log_file_name = log_file_name
 
     print("--------------------------")
@@ -292,6 +331,7 @@ if __name__ == "__main__":
     print("snake:", snake)
     print("run_uni:", run_uni)
     print("run_bi:", run_bi)
+    print("run_multi:", run_multi)
 
     # Initialize an empty DataFrame to store the results
     columns = [
@@ -411,15 +451,31 @@ if __name__ == "__main__":
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
             )
-        # except Exception as e:
-        #     print("An error occurred:")
-        #     traceback.print_exc()
-        #     break
-        # finally:
-        #     # Convert results to a DataFrame
-        #     results_df = pd.DataFrame(results)
-        #     # Save the DataFrame to an Excel file
-        #     results_df.to_excel("search_results.xlsx", index=False, engine="xlsxwriter")
+
+        # multidirectional
+        if run_multi:
+            logs, path, meet_point = search(
+                name_of_graph, start, goal, "multidirectional", heuristic, snake,args
+            )
+
+        # if graph_type == "cube":
+        #     os.system('cls' if os.name == 'nt' else 'clear')
+        #     print(f"Path: {path}")
+        #     cube_dimension = size_of_graphs[0]
+        #     # longest_coil = [path[0], 1, 3] + path[-1:0:-1]
+        #     longest_coil = [path[-1], 1, 3] + path[0:-1]
+        #     path_length = len(longest_coil)
+        #     print(f"Longest coil in {cube_dimension}D cube (Length={path_length}): {longest_coil}")
+        #     longest_coil_on_bits = node_num_to_bits_on(cube_dimension, longest_coil)
+        #     print(longest_coil_on_bits)
+        #     print("---------------------------")
+        #     for bits_on in node_num_to_bits_on(cube_dimension, longest_coil):
+        #         print(bits_on)
+        #     print("---------------------------")
+        #     print_bit_statistics(longest_coil_on_bits)
+        #     exit()
+
+            
     print()
     calculate_averages(avgs, log_file_name)
     parse_results_file(log_file_name, log_file_name+".csv")

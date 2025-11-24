@@ -381,8 +381,8 @@ if __name__ == "__main__":
     args.date = "SM_Grids"
     args.number_of_graphs = 10
     args.graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-    args.dimension_of_graphs = [5,9] # dimension for cube
-    args.percentages_of_blocks = [4,8,12,16,20]  # percentages of blocks to remove
+    args.dimension_of_graphs = [5,5] # dimension for cube
+    args.percentages_of_blocks = [30,40,50]  # percentages of blocks to remove
 
     create_graphs(args)
 

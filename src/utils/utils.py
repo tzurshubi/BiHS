@@ -37,7 +37,6 @@ def ms2str(time_ms):
     else:
         return f"{minutes:02}:{seconds:02}"
 
-
 def time2str(start_time, end_time):
     """
     Calculate elapsed time formatted as DD:HH:MM:SS, but remove days if 00 
@@ -142,6 +141,84 @@ def calculate_averages(avgs, log_file_name=None):
             with open(log_file_name, 'a') as f:
                 f.write("\n" + line1 + "\n")
                 f.write(line2 + "\n")
+
+# Coils utilities
+
+def node_num_to_bits_on(dim, numbers):
+    """
+    Convert a list of node numbers to their corresponding bit representations.
+
+    Parameters
+    ----------
+    dim : int
+        The dimension of the cube (number of bits).
+    numbers : list of int
+        List of node numbers to convert.
+
+    Returns
+    -------
+    list of list of int
+        A list where each element is a list of bit positions that are '1' in the binary representation of the corresponding node number.
+    """
+    bits_on_list = []
+    for n in numbers:
+        bits_on = [i for i, b in enumerate(f"{n:0{dim}b}"[::-1], start=1) if b == '1']
+        bits_on_list.append(bits_on)
+    return bits_on_list
+
+def print_bit_statistics(l):
+    # Find the maximum index that appears
+    max_index = max((max(sublist) for sublist in l if sublist), default=0)
+
+    for i in range(1, max_index + 1):
+        count_on = sum(1 for sublist in l if i in sublist)
+        count_off = len(l) - count_on
+        print(f"bit {i} on: {count_on} times, bit {i} off: {count_off} times")
+
+def print_bits_pattern(bit_lists):
+    for bits in bit_lists:
+        if len(bits) == 0:
+            print("X")
+            continue
+        line = " "
+        for i in range(1, max(max(sub) if sub else 0 for sub in bit_lists) + 1):
+            line += str(i) if i in bits else " "
+        print(line.rstrip())  # remove trailing spaces for neatness
+    print("X")  # bottom boundary
+
+def bits_to_moves(bit_lists):
+    # Convert list of bits turned on to list of moves (bit changes)
+    moves = []
+    for prev, curr in zip(bit_lists, bit_lists[1:]):
+        # XOR logic: the changed bit is the one that’s in one list but not the other
+        diff = set(curr) ^ set(prev)
+        if len(diff) == 1:
+            moves.append(next(iter(diff)))  # extract the single changed bit
+        else:
+            moves.append(None)  # if something’s wrong (shouldn’t happen in valid coils)
+    if len(bit_lists[-1]) > 1:
+        print("Warning: Last element has multiple bits on; cannot determine move.")
+    return moves + bit_lists[-1]
+
+def coil_dim_crossed_to_vertices(coil_str):
+    """
+    Convert a coil string into a list of vertex integers.
+    coil_str: a string where each char is a digit '0'..'6' (or higher for bigger cubes)
+    Returns: list of integer vertex values, starting with vertex 0.
+    """
+
+    vertices = [0]               # start at vertex 0
+    current = 0
+
+    for ch in coil_str:
+        d = int(ch)             # dimension to flip
+        bit = 1 << d            # value of that bit
+
+        # flip the bit
+        current ^= bit          # XOR toggles the bit
+        vertices.append(current)
+
+    return vertices
 
 
 # Function to display the graph

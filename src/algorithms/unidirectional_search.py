@@ -42,8 +42,8 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Increment the expansion counter
         expansions += 1
-        # if expansions % 10000 == 0:
-        #     # print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+        if expansions % 1000 == 0:
+            print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
         #     with open(args.log_file_name, 'a') as file:
         #         file.write(f"\nExpansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
 

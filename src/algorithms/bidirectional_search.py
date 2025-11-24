@@ -98,7 +98,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
-        state, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_highest_non_overlapping_state(current_state,directionF, best_path_length, f_value, snake)
+        state, num_checks, num_checks_sum_g_under_f_max, _ = OPENvOPEN.find_longest_non_overlapping_state(current_state,directionF, best_path_length, f_value, snake)
         valid_meeting_check_time += time.time() - curr_time
         valid_meeting_checks += num_checks
         valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
