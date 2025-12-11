@@ -23,19 +23,20 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
-DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [5,5]      # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 30          # 4 / 8 / 12 / 16
+DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = False                # True # False
-DEFAULT_RUN_UNI = False              # True # False
-DEFAULT_RUN_BI = False              # True # False
-DEFAULT_RUN_MULTI = True           # True # False
-DEFAULT_SOLUTION_VERTICES = [15]  # for multidirectional search on cubes
+DEFAULT_SNAKE = True                # True # False
+DEFAULT_RUN_UNI = True             # True # False
+DEFAULT_RUN_BI = True               # True # False
+DEFAULT_RUN_MULTI = False           # True # False
+DEFAULT_SOLUTION_VERTICES = []    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "full"               # "basic" # "light" # "full"
 DEFAULT_BSD = True                  # True # False
+DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -62,6 +63,8 @@ def parse_args():
     parser.add_argument("--solution_vertices", nargs='+', type=int, default=DEFAULT_SOLUTION_VERTICES, help="Solution vertices for multidirectional search.")
     parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
     parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
+    parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
+
 
     return parser.parse_args()
 
@@ -225,7 +228,24 @@ def search(
     G_original = G.copy()
     if args.graph_type=="cube":
         if G.has_edge(0, 1): G.remove_edge(0, 1)
-        G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
+        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
+        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
+        #G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7)) | set(G.neighbors(15))) - {0, 31})
+
+        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
+        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
+
+        # Compute the end vertex to keep: 0 and last vertex
+        keepers = {0, 2**cube_first_dims - 1}
+
+        # Union of all neighbors of these vertices
+        neighbors = set()
+        for v in verts:
+            neighbors |= set(G.neighbors(v))
+
+        # Remove all except keepers
+        G.remove_nodes_from(neighbors - keepers)
+
     blocks = []
     logs = {}
 
@@ -241,6 +261,7 @@ def search(
             start += 1
 
     meet_point = None
+    meet_points = None
     g_values = []
     tracemalloc.start()
     start_time = time.time()
@@ -252,7 +273,7 @@ def search(
     elif search_type == "bidirectional":
         path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
-        path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = multidirectional_search(G, start, goal, args.solution_vertices, heuristic, snake, args)
+        path, expansions, generated, meet_points = multidirectional_search(G, start, goal, args.solution_vertices, heuristic, snake, args)
 
     # Collect logs
     end_time = time.time()
@@ -269,7 +290,8 @@ def search(
         logs["g_values"] = g_values
 
     # Save the graph as PNG with the path if found
-    if not meet_point is None:
+    meet_points = meet_points if meet_points else [meet_point]
+    if not meet_points is None and not meet_points[0] is None:
         if args.graph_type=="grid":
             save_table_as_png(
                 args.size_of_graphs[0],
@@ -277,11 +299,11 @@ def search(
                 blocks,
                 current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
                 path,
-                [meet_point],
+                meet_points,
             )
         elif args.graph_type=="cube":
             display_graph_with_path_and_points(G_original,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
-        meet_point_index = path.index(meet_point)
+        meet_point_index = path.index(meet_points[0])
         logs["g_F"] = len(path[:meet_point_index])
         logs["g_B"] = len(path[meet_point_index + 1 :])
 
@@ -311,6 +333,7 @@ if __name__ == "__main__":
     run_bi = args.run_bi
     run_multi = args.run_multi
     bsd = args.bsd
+    cube_first_dims = args.cube_first_dims
 
     if log:
         log_file_name = "logs"
@@ -332,6 +355,7 @@ if __name__ == "__main__":
     print("run_uni:", run_uni)
     print("run_bi:", run_bi)
     print("run_multi:", run_multi)
+    print("cube_first_dims:", cube_first_dims)
 
     # Initialize an empty DataFrame to store the results
     columns = [
@@ -346,7 +370,7 @@ if __name__ == "__main__":
     # results_df = pd.DataFrame(columns=columns)
     results = []
 
-    avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}}
+    avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
     for i in list(range(0, number_of_graphs)):
     # for i in range(number_of_graphs, number_of_graphs+1):
         # try:
@@ -366,8 +390,8 @@ if __name__ == "__main__":
         elif graph_type=="cube":
             # if i<3: continue
             name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
-            start = 7
-            goal = 0  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            start = 2**cube_first_dims - 1 # 7 # 15 # 31
+            goal = 0
             # log_file_name = "results_"+name_of_graph+"_"+heuristic[:3]
         elif graph_type=="manual":
             name_of_graph = f"paper_graph_{i}"
@@ -454,9 +478,15 @@ if __name__ == "__main__":
 
         # multidirectional
         if run_multi:
+            if graph_type=="cube":
+                args.solution_vertices = [2**args.size_of_graphs[0]-1]
+            elif meet_point: args.solution_vertices = [meet_point]
             logs, path, meet_point = search(
                 name_of_graph, start, goal, "multidirectional", heuristic, snake,args
             )
+            print(f"! multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            avgs["multi"]["expansions"].append(logs['expansions'])
+            avgs["multi"]["time"].append(logs['time[ms]'])
 
         # if graph_type == "cube":
         #     os.system('cls' if os.name == 'nt' else 'clear')

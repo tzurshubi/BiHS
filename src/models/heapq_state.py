@@ -165,6 +165,14 @@ class HeapqState:
         return -nf, -ng, state
 
     def __len__(self):
-        # Number of alive paths, not raw heap size
+        # Clean stale entries so len() reflects only alive states
+        self._clean_top()
         return len(self._alive)
+
+    
+    def is_empty(self):
+        """Return True if no alive states remain in the heap."""
+        self._clean_top()
+        return len(self._alive) == 0
+
 

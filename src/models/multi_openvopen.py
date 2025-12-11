@@ -31,7 +31,7 @@ class MultiOpenvopen:
         self.start = start
         self.goal = goal
         self.solution_vertices = solution_vertices
-        self.openvopen = Openvopen(n, start, goal)
+        self.openvopen = Openvopen(graph, start, goal)
         self.segments = segments
         for segment_key, segment in self.segments.items():
             segment["paths"] = [[] for _ in range(n)] # paths indexed by length (bucketed by g)
@@ -76,13 +76,12 @@ class MultiOpenvopen:
         self._segments[segment_id] = new_entries
         return removed
 
-    def add_paths_to_segment(self, segment_key, seg_paths):
+    def     add_paths_to_segment(self, segment_key, seg_paths):
         """
         Add multiple simple paths (lists of vertices) to a segment.
         Creates State objects internally.
         """
-        for path in seg_paths:
-            path_state = State(self.graph, path, self.snake)
+        for path_state in seg_paths:
             self.segments[segment_key]["paths"][path_state.g].append(path_state)
             self.counter += 1
             
@@ -94,10 +93,9 @@ class MultiOpenvopen:
         longest_path_added = None
         longest_path_added_len = -1
         for vu_path in vu_paths:
-            vu_path_state = State(self.graph, vu_path, self.snake)
-
-            v = vu_path[0]
-            u = vu_path[-1]
+            v = vu_path.path[0]
+            u = vu_path.path[-1]
+            uv_path = State.from_reversed(vu_path)
 
             # For each sv_path in OPENvOPEN that doesn’t overlap with vu_path:
                 # Add su_path = sv_path*vu_path to OPENvOPEN
@@ -105,8 +103,8 @@ class MultiOpenvopen:
             s_v_paths = self.openvopen.get_states_ending_in(v, is_f=True)
             if v == self.start: s_v_paths = [State(self.graph, [], self.snake)]
             for s_v_path in s_v_paths:
-                if not vu_path_state.shares_vertex_with(s_v_path, self.snake):
-                    new_su_path = s_v_path + vu_path_state
+                if not uv_path.shares_vertex_with(s_v_path, self.snake):
+                    new_su_path = s_v_path + vu_path
                     self.openvopen.insert_state(new_su_path,is_f=True)
                     _, _, st_path, st_path_len, _, _,  = self.openvopen.find_longest_non_overlapping_state(new_su_path,is_f=True, best_path_length=longest_path_added_len, f_max=float('inf'), snake=self.snake)
                     if st_path_len > longest_path_added_len:
@@ -119,8 +117,8 @@ class MultiOpenvopen:
             t_u_paths = self.openvopen.get_states_ending_in(u, is_f=False)
             if u == self.goal: t_u_paths = [State(self.graph, [], self.snake)]
             for t_u_path in t_u_paths:
-                if not vu_path_state.shares_vertex_with(t_u_path, self.snake):
-                    new_vt_path = vu_path_state + t_u_path
+                if not vu_path.shares_vertex_with(t_u_path, self.snake):
+                    new_vt_path = vu_path + t_u_path
                     self.openvopen.insert_state(new_vt_path,is_f=False)
                     _, _, st_path, st_path_len, _, _,  = self.openvopen.find_longest_non_overlapping_state(new_vt_path,is_f=False, best_path_length=longest_path_added_len, f_max=float('inf'), snake=self.snake)
                     if st_path_len > longest_path_added_len:

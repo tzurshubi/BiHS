@@ -32,11 +32,11 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # Initialize custom priority queues for forward and backward searches
     OPEN_F = HeapqState()
     OPEN_B = HeapqState()
-    OPENvOPEN = Openvopen(max(graph.nodes)+1)
+    OPENvOPEN = Openvopen(graph, start, goal)
 
     # Initial states
-    initial_state_F = State(graph, [start], snake) if isinstance(start, int) else State(graph, start, snake)
-    initial_state_B = State(graph, [goal], snake) if isinstance(goal, int) else State(graph, goal, snake)
+    initial_state_F = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
+    initial_state_B = State(graph, [goal], [], snake) if isinstance(goal, int) else State(graph, goal, [], snake)
 
     # Initial f_values
     initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake)
@@ -89,16 +89,19 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         f_value, g_value, current_state = OPEN_D.top()
         current_path_length = len(current_state.path) - 1
         
-        # if expansions % 100000 == 0:
-        #     print(
-        #         f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-        #     )
-        #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
-        #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
+        if expansions % 10000 == 0:
+            print(
+                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
+            )
+            with open(args.log_file_name, 'a') as file:
+                file.write(f"\nExpansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+
+            # print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
+            # print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
-        state, num_checks, num_checks_sum_g_under_f_max, _ = OPENvOPEN.find_longest_non_overlapping_state(current_state,directionF, best_path_length, f_value, snake)
+        state, _, _, _, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_longest_non_overlapping_state(current_state, directionF, best_path_length, f_value, snake)
         valid_meeting_check_time += time.time() - curr_time
         valid_meeting_checks += num_checks
         valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
@@ -193,9 +196,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.savefig("h_vs_expansions.png")
     # print(f"total time for calculating heuristics: {1000*calc_h_time}")
     
-    bidirectional_stats = f"valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]. # of states in OPENvOPEN: {OPENvOPEN.counter}."
-    print(f"[Bidirectional Stats] {bidirectional_stats}")
-    with open(args.log_file_name, 'a') as file:
-        file.write(f"\n[Bidirectional Stats] {bidirectional_stats}\n")
+    # Statistics logging
+    # bidirectional_stats = f"valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]. # of states in OPENvOPEN: {OPENvOPEN.counter}."
+    # print(f"[Bidirectional Stats] {bidirectional_stats}")
+    # with open(args.log_file_name, 'a') as file:
+    #     file.write(f"\n[Bidirectional Stats] {bidirectional_stats}\n")
 
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values

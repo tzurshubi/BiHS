@@ -1,20 +1,23 @@
+from models.state import State
+
 class Openvopen:
-    def __init__(self, n, start, goal):
+    def __init__(self, graph, start, goal):
         """
         OPENvOPEN with n cells.
         For each cell we maintain two bucketed structures: F and B.
         Each of F and B is a list of n buckets (lists), indexed by g in [0..n-1].
         """
-        self.n = n
+        self.n = max(graph.nodes) + 1
+        self.graph = graph
 
         # cells[i]['F'][g] is a list of states with head=i, in forward direction, and g=g (unsorted bucket)
         # cells[i]['B'][g] is a list of states with head=i, in backward direction, and g=g (unsorted bucket)
         self.cells = [
             {
-                'F': [[] for _ in range(n)],
-                'B': [[] for _ in range(n)],
+                'F': [[] for _ in range(self.n)],
+                'B': [[] for _ in range(self.n)],
             }
-            for _ in range(n)
+            for _ in range(self.n)
         ]
 
         self.counter = 0  # number of states inserted
@@ -79,6 +82,13 @@ class Openvopen:
         self.counter -= 1
         del self._loc[state]
 
+    def is_path_st(self, s):
+        """
+        Check if a given path (list of vertices) exists in OPENvOPEN as a full s-t path.
+        """
+        return (self.start == s.path[0] and self.goal == s.path[-1]) or \
+                (self.goal == s.path[0] and self.start == s.path[-1])
+
     def find_longest_non_overlapping_state(self, state, is_f, best_path_length, f_max, snake=False):
         """
         Scan buckets from highest g down in the opposite direction within the same head cell.
@@ -93,6 +103,9 @@ class Openvopen:
 
         num_checks = 0
         num_checks_sum_g_under_f_max = 0
+
+        if self.is_path_st(state):
+            return None, -1, state, state.g, num_checks, num_checks_sum_g_under_f_max
 
         cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
         opposite = 'B' if is_f else 'F'
@@ -180,12 +193,14 @@ class Openvopen:
                     # state: s -> ... -> head
                     # opposite_state: t -> ... -> head
                     full_path = state.path[:-1] + opposite_state.path[::-1]
+                    full_path_state = State(self.graph, full_path, [state.path[-1]], snake)
                 else:
                     # state: t -> ... -> head
                     # opposite_state: s -> ... -> head
                     full_path = opposite_state.path[:-1] + state.path[::-1]
+                    full_path_state = State(self.graph, full_path, [state.path[-1]], snake)
 
-                full_paths.append(full_path)
+                full_paths.append(full_path_state)
 
         return full_paths, num_checks, num_checks_sum_g_under_f_max
 
