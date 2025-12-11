@@ -1,18 +1,53 @@
 import math
 
 class State:
-    def __init__(self, graph, path, snake = False, max_dim_crossed = None):
+    def __init__(self, graph, path, meet_points = [], snake = False, max_dim_crossed = None):
         self.graph = graph  # graph is a NetworkX graph
         self.path = path  # path is a list of vertices representing the path
         self.path_vertices_bitmap = self.compute_path_vertices_bitmap()
         self.g = len(path) - 1
         self.head = path[-1] if path else None
+        self.meet_points = meet_points
         if snake: 
             self.illegal, self.path_vertices_and_neighbors_bitmap = self.compute_path_vertices_and_neighbors_bitmap()
+            # self.illegal, self.path_vertices_and_neighbors_bitmap_head_first = self.compute_path_vertices_and_neighbors_bitmap(head_last = False)
             if max_dim_crossed: self.max_dim_crossed = max_dim_crossed
             elif self.path==[7]: self.max_dim_crossed = 2
+            elif self.path==[15]: self.max_dim_crossed = 3
+            elif self.path==[31]: self.max_dim_crossed = 4
+            elif self.path==[63]: self.max_dim_crossed = 5
+            elif self.path==[127]: self.max_dim_crossed = 6
+            elif self.path==[255]: self.max_dim_crossed = 7
             else: self.max_dim_crossed = self.compute_max_dim_crossed()
 
+    @classmethod
+    def from_reversed(cls, state):
+        """
+        Create a new State whose path is the reverse of the given state's path.
+        All other metadata (graph, snake mode, max_dim_crossed, meet_points)
+        is recomputed normally.
+        """
+        if not isinstance(state, State):
+            raise TypeError("from_reversed() expects a State instance.")
+
+        new_path = list(reversed(state.path))
+
+        # Recompute max_dim_crossed only if snake=True
+        if hasattr(state, "max_dim_crossed"):
+            return cls(
+                state.graph,
+                new_path,
+                meet_points=list(state.meet_points),
+                snake=True,
+                max_dim_crossed=state.max_dim_crossed
+            )
+        else:
+            return cls(
+                state.graph,
+                new_path,
+                meet_points=list(state.meet_points),
+                snake=False
+            )
 
     def compute_path_vertices_bitmap(self):
         """Compute the bitmap for the vertices in the path, excluding the head."""
@@ -32,7 +67,7 @@ class State:
                 max_dim = max(max_dim, int(math.log2(diff)))
         return max_dim
 
-    def compute_path_vertices_and_neighbors_bitmap(self):
+    def compute_path_vertices_and_neighbors_bitmap(self, head_last = True):
         """
         Compute the bitmap for the vertices in the path, excluding the head and its neighbors.
         This includes setting bits for all the vertices in the path and their neighbors.
@@ -40,7 +75,7 @@ class State:
         bitmap = 0
         illegal = set(self.path)
         # Iterate over the vertices in the path, excluding the head (last vertex in the path)
-        head = self.path[-1]
+        head = self.path[-1] if head_last else self.path[0]
         for vertex in self.path[:-1]:
             # Set the bit for the vertex itself
             bitmap |= 1 << vertex
@@ -91,14 +126,13 @@ class State:
                         if dimension_crossed <= self.max_dim_crossed + 1 or not directionF:
                             # Append the new state with updated max_dim_crossed
                             new_max_dim_crossed = max(self.max_dim_crossed, dimension_crossed)
-                            successor_state = State(self.graph, new_path, snake, max_dim_crossed=new_max_dim_crossed)
+                            successor_state = State(self.graph, new_path, self.meet_points, snake, max_dim_crossed=new_max_dim_crossed)
                             successors.append(successor_state)
                     else:
-                        successors.append(State(self.graph, new_path, snake, max_dim_crossed=None))
+                        successors.append(State(self.graph, new_path, self.meet_points, snake, max_dim_crossed=None))
 
         return successors
 
-    
     def shares_vertex_with(self, other_state, snake = False):
         """
         Check if this state shares any vertex (excluding heads) with another state.
@@ -201,7 +235,7 @@ class State:
         snake = hasattr(self, "path_vertices_and_neighbors_bitmap") or \
                 hasattr(other, "path_vertices_and_neighbors_bitmap")
 
-        return State(self.graph, new_path, snake=snake)
+        return State(self.graph, new_path, self.meet_points + other.meet_points + [c], snake=snake)
 
     def __radd__(self, other):
         """

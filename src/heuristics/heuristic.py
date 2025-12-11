@@ -430,6 +430,7 @@ def bcc_snake_heuristic_paper(state, goal):
         Qn = (Qn - goal.illegal)|{goal.head}
         goal = goal.head
     Qn_subgraph = graph.subgraph(Qn|{head}).copy()
+    # Sanity Check: reachable = nx.has_path(Qn_subgraph, head, goal)
     Qn_subgraph.add_edge(head, goal)
     # reachable_nodes = nx.single_source_shortest_path_length(Qn_subgraph, head)
     # Rn = set(reachable_nodes.keys()) & Qn
@@ -708,7 +709,7 @@ def find_component_containing_vertex(tric, vertex):
 def heuristic(state, goal, heuristic_name, snake):
     if not isinstance(goal,int):
         if not snake: goal = max(goal)
-        else: goal = State(state.graph,goal, snake)
+        else: goal = State(state.graph, goal, [], snake)
 
     if heuristic_name == "heuristic0":
         return heuristic0(state)

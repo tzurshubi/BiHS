@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
 
     # Initial state
-    initial_state = State(G, start, True)
+    initial_state = State(G, start, None, True)
 
     # Initial f_value
     initial_f_value = initial_state.g + heuristic(initial_state, goal, heuristic_name, True)
