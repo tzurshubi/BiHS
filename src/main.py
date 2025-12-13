@@ -31,7 +31,7 @@ DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
 DEFAULT_RUN_UNI = True             # True # False
-DEFAULT_RUN_BI = True               # True # False
+DEFAULT_RUN_BI = False               # True # False
 DEFAULT_RUN_MULTI = False           # True # False
 DEFAULT_SOLUTION_VERTICES = []    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "full"               # "basic" # "light" # "full"
@@ -274,6 +274,10 @@ def search(
         path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
         path, expansions, generated, meet_points = multidirectional_search(G, start, goal, args.solution_vertices, heuristic, snake, args)
+
+    if not isinstance(path,list):
+        path_state = path
+        path = path_state.materialize_path()
 
     # Collect logs
     end_time = time.time()

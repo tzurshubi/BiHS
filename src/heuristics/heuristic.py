@@ -421,17 +421,27 @@ def bcc_snake_heuristic_paper(state, goal):
 
     if goal == head: 
         return 0, info
-    if goal in state.illegal: 
+    # this line means: if goal in state.illegal:
+    if (state.illegal >> goal) & 1: 
         return -1, info
 
-    # Step 1: Compute Rn - the vertices in Qn that are reachable from state.head
-    Qn = set(graph.nodes) - state.illegal
-    if isinstance(goal,State):
-        Qn = (Qn - goal.illegal)|{goal.head}
+    # Step 1: Compute Rn - vertices reachable from state.head
+    if isinstance(state.illegal, int):
+        Qn = {v for v in graph.nodes if not (state.illegal & (1 << v))}
+    else:
+        Qn = set(graph.nodes) - state.illegal
+
+    if isinstance(goal, State):
+        if isinstance(goal.illegal, int):
+            Qn = {v for v in Qn if not (goal.illegal & (1 << v))}
+        else:
+            Qn = Qn - goal.illegal
+        Qn.add(goal.head)
         goal = goal.head
-    Qn_subgraph = graph.subgraph(Qn|{head}).copy()
-    # Sanity Check: reachable = nx.has_path(Qn_subgraph, head, goal)
+
+    Qn_subgraph = graph.subgraph(Qn | {head}).copy()
     Qn_subgraph.add_edge(head, goal)
+
     # reachable_nodes = nx.single_source_shortest_path_length(Qn_subgraph, head)
     # Rn = set(reachable_nodes.keys()) & Qn
 

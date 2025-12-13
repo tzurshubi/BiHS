@@ -38,25 +38,26 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     while len(open_set) > 0:
         # Pop the state with the highest priority (g(N) + h(N))
         f_value, g_value, current_state = open_set.pop()
-        current_path_length = len(current_state.path) - 1
+        current_path_length = g_value
 
         # Increment the expansion counter
         expansions += 1
         if expansions % 10000 == 0:
-            print(f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+            time_elapsed = time2str(args.start_time,time.time())
+            print(f"{time_elapsed} Expansion #{expansions}: f={f_value}, g={current_state.g}")
             with open(args.log_file_name, 'a') as file:
-                file.write(f"\nExpansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+                file.write(f"\n{time_elapsed} Expansion #{expansions}: f={f_value}, g={current_state.g}")
 
 
         # Check if the current state is the goal state
         if current_state.head == goal:
             if current_path_length > best_path_length:
-                best_path = current_state.path
+                best_path = current_state
                 best_path_length = current_path_length
                 if snake:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. {best_path}. generated: {generated}")
+                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. generated: {generated}")
                     with open(args.log_file_name, 'a') as file:
-                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}. {best_path}\n")
+                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}.\n")
 
             continue
 
@@ -82,7 +83,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             if successor.head == goal:
                 h_successor = 0
                 if current_path_length > best_path_length:
-                    best_path = successor.path
+                    best_path = successor
                     best_path_length = current_path_length
                     if f_value <= best_path_length:
                         break
@@ -115,4 +116,4 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # plt.scatter(g_values, degrees, color='red', marker='*', alpha=0.6, label='Raw data')
     # plt.savefig("avg_std_BF_vs_g_"+args.log_file_name.replace("results_","")+".png")
 
-    return best_path, expansions, generated
+    return best_path if snake else best_path.path, expansions, generated
