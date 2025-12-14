@@ -284,7 +284,7 @@ def main() -> None:
     else:
         DEFAULT_TARGET = None
 
-    DEFAULT_TIME = 120
+    DEFAULT_TIME = None
     DEFAULT_NODES = None
     DEFAULT_DEPTH = None
     DEFAULT_LOG_EVERY = 1_000_000
