@@ -163,7 +163,7 @@ class Openvopen:
         num_checks_sum_g_under_f_max = 0
         full_paths = []
 
-        cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
+        cell_index = state.head # if state.head not in [self.start, self.goal] else state.path[0]
         opposite = 'B' if is_f else 'F'
         opp_struct = self.cells[cell_index][opposite]
 
