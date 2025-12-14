@@ -6,6 +6,7 @@ class State:
         'head',
         'parent',
         'g',
+        'h',
         'meet_points',
         'path',  # in snake mode: None
         'path_vertices_bitmap',  # visited vertices excluding head

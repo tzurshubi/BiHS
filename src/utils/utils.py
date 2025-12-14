@@ -129,18 +129,23 @@ def calculate_averages(avgs, log_file_name=None):
     if len(exp_avgs) >= 2 and len(time_avgs) >= 2:
         first_min_exp = min(exp_avgs[0], exp_avgs[1])
         first_min_time = min(time_avgs[0], time_avgs[1])
+        mid_exp = exp_avgs[2] if len(exp_avgs) >=3 else 0
+        mid_time = time_avgs[2] if len(time_avgs) >=3 else 0
         last_exp = exp_avgs[-1]
         last_time = time_avgs[-1]
 
         line1 = f"A*: {first_min_exp} , {first_min_time} (expansions , time[ms])"
-        line2 = f"XMM: {last_exp} , {last_time} (expansions , time[ms])"
+        line2 = f"XMM: {mid_exp} , {mid_time} (expansions , time[ms])"
+        line3 = f"MDS1: {last_exp} , {last_time} (expansions , time[ms])"
         print()
         print(line1)
         print(line2)
+        print(line3)
         if log_file_name:
             with open(log_file_name, 'a') as f:
                 f.write("\n" + line1 + "\n")
                 f.write(line2 + "\n")
+                f.write(line3 + "\n")
 
 # Coils utilities
 

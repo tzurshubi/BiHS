@@ -15,6 +15,7 @@ from models.graph import *
 from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
 from algorithms.multidirectional_search import *
+from algorithms.multidirectional_search1 import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -23,17 +24,17 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
-DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
+DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [5,5]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = True             # True # False
+DEFAULT_SNAKE = False                # True # False
+DEFAULT_RUN_UNI = False             # True # False
 DEFAULT_RUN_BI = False               # True # False
-DEFAULT_RUN_MULTI = False           # True # False
-DEFAULT_SOLUTION_VERTICES = []    # [] # for multidirectional search on cubes
+DEFAULT_RUN_MULTI = True           # True # False
+DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "full"               # "basic" # "light" # "full"
 DEFAULT_BSD = True                  # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
@@ -273,7 +274,7 @@ def search(
     elif search_type == "bidirectional":
         path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
-        path, expansions, generated, meet_points = multidirectional_search(G, start, goal, args.solution_vertices, heuristic, snake, args)
+        path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
 
     if not isinstance(path,list):
         path_state = path
@@ -484,7 +485,7 @@ if __name__ == "__main__":
         if run_multi:
             if graph_type=="cube":
                 args.solution_vertices = [2**args.size_of_graphs[0]-1]
-            elif meet_point: args.solution_vertices = [meet_point]
+            # elif meet_point: args.solution_vertices = [meet_point]
             logs, path, meet_point = search(
                 name_of_graph, start, goal, "multidirectional", heuristic, snake,args
             )
