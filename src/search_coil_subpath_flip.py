@@ -85,6 +85,23 @@ def rotate_to_min_repr(cycle: List[int]) -> Tuple[int, ...]:
     return best
 
 
+def set_coil_and_target(dim: int) -> Tuple[List[int], Optional[int]]:
+    if dim == 4:
+        return [0, 1, 3, 7, 6, 4, 0], 8
+    elif dim == 5:
+        return [0, 1, 3, 7, 15, 13, 12, 4, 0], 14
+    elif dim == 6:
+        return [0, 1, 3, 7, 6, 14, 12, 13, 29, 31, 27, 26, 18, 16, 0], 26
+    elif dim == 7:
+        return [0, 1, 3, 7, 15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0], 48
+    elif dim == 8:
+        return [0, 1, 3, 7, 15, 13, 12, 28, 30, 26, 27, 25, 57, 56, 40, 104, 72, 73, 75, 107, 111, 110, 46, 38, 36, 52, 116, 124, 125, 93, 95, 87, 119, 55, 51, 50, 114, 98, 66, 70, 68, 69, 101, 97, 113, 81, 80, 16, 0], 96
+    elif dim == 9:
+        return [0, 1, 3, 7, 6, 14, 12, 13, 29, 31, 27, 26, 18, 50, 54, 62, 60, 56, 57, 49, 53, 37, 101, 69, 68, 196, 132, 133, 149, 151, 150, 158, 156, 220, 92, 94, 86, 87, 119, 115, 123, 122, 250, 254, 255, 191, 187, 179, 163, 167, 231, 230, 226, 98, 66, 74, 202, 200, 136, 137, 139, 143, 207, 205, 237, 173, 172, 174, 170, 42, 43, 47, 111, 110, 108, 104, 105, 73, 89, 217, 219, 211, 195, 193, 225, 241, 245, 244, 116, 112, 80, 208, 144, 176, 160, 32, 0], None
+    else:
+        raise ValueError("Please define coil and target for this dimension.")
+
+
 # ---------------------------
 # Coil validity
 # ---------------------------
@@ -258,34 +275,6 @@ def dfs_search(start_cycle: List[int], cfg: SearchConfig, log) -> SearchResult:
 def main() -> None:
     DEFAULT_D = 6
 
-    if DEFAULT_D == 4:
-        DEFAULT_COIL = [0, 1, 3, 7, 6, 4, 0]
-    elif DEFAULT_D == 5:
-        DEFAULT_COIL = [0, 1, 3, 7, 15, 13, 12, 4, 0]
-    elif DEFAULT_D == 6:
-        DEFAULT_COIL = [0, 1, 3, 7, 6, 14, 12, 13, 29, 31, 27, 26, 18, 16, 0]
-    elif DEFAULT_D == 7:
-        DEFAULT_COIL = [0, 1, 3, 7, 15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
-    elif DEFAULT_D == 8:
-        DEFAULT_COIL = [0, 1, 3, 7, 15, 13, 12, 28, 30, 26, 27, 25, 57, 56, 40, 104, 72, 73, 75, 107, 111, 110, 46, 38, 36, 52, 116, 124, 125, 93, 95, 87, 119, 55, 51, 50, 114, 98, 66, 70, 68, 69, 101, 97, 113, 81, 80, 16, 0]
-    elif DEFAULT_D == 9:
-        DEFAULT_COIL = [0, 1, 3, 7, 6, 14, 12, 13, 29, 31, 27, 26, 18, 50, 54, 62, 60, 56, 57, 49, 53, 37, 101, 69, 68, 196, 132, 133, 149, 151, 150, 158, 156, 220, 92, 94, 86, 87, 119, 115, 123, 122, 250, 254, 255, 191, 187, 179, 163, 167, 231, 230, 226, 98, 66, 74, 202, 200, 136, 137, 139, 143, 207, 205, 237, 173, 172, 174, 170, 42, 43, 47, 111, 110, 108, 104, 105, 73, 89, 217, 219, 211, 195, 193, 225, 241, 245, 244, 116, 112, 80, 208, 144, 176, 160, 32, 0]
-    else:
-        raise ValueError("Please define DEFAULT_COIL for this DEFAULT_D.")
-
-    if DEFAULT_D == 4:
-        DEFAULT_TARGET = 8
-    elif DEFAULT_D == 5:
-        DEFAULT_TARGET = 14
-    elif DEFAULT_D == 6:
-        DEFAULT_TARGET = 26
-    elif DEFAULT_D == 7:
-        DEFAULT_TARGET = 48
-    elif DEFAULT_D == 8:
-        DEFAULT_TARGET = 96
-    else:
-        DEFAULT_TARGET = None
-
     DEFAULT_TIME = None
     DEFAULT_NODES = None
     DEFAULT_DEPTH = None
@@ -298,12 +287,12 @@ def main() -> None:
         default=DEFAULT_D,
         help="Base dimension d (input coil is in Q_d; search runs in Q_(d+1)).",
     )
-    ap.add_argument(
-        "--target",
-        type=int,
-        default=DEFAULT_TARGET,
-        help="Target cycle size |V| to reach in Q_(d+1). If reached or exceeded, search stops.",
-    )
+    # ap.add_argument(
+    #     "--target",
+    #     type=int,
+    #     default=DEFAULT_TARGET,
+    #     help="Target cycle size |V| to reach in Q_(d+1). If reached or exceeded, search stops.",
+    # )
     ap.add_argument(
         "--time",
         type=float,
@@ -341,21 +330,21 @@ def main() -> None:
              "If the list repeats the first vertex at the end, it will be trimmed automatically.",
     )
     args = ap.parse_args()
+    d = args.d
+    coil, target = set_coil_and_target(d)
 
     # logger for main prints (elapsed since program start)
-    filename = f"results_search_coil_subpath_flip_{DEFAULT_D+1}d"
+    filename = f"coil_subpath_flip_{d+1}d"
     logfile = open(filename, "w")
     t0_main = time.time()
     log = make_logger(t0_main, logfile)
 
-    dim = args.d
-
    # internal format
-    start = DEFAULT_COIL[:-1]
+    start = coil[:-1]
 
     cfg = SearchConfig(
-        dim=dim,
-        target_len=args.target,
+        dim=d,
+        target_len=target,
         time_limit_sec=args.time,
         node_limit=args.nodes,
         depth_limit=args.depth,
@@ -363,16 +352,16 @@ def main() -> None:
         log_every=args.log_every,
     )
 
-    log(f"Start: |V|={len(start)} (edges={len(start)})  dim=Q_{dim}")
+    log(f"Start: |V|={len(start)} (edges={len(start)})  dim=Q_{d}")
     res = dfs_search(start, cfg, log)
 
     log("Done.")
     log(f"Expanded nodes: {res.expanded_nodes}")
     log(f"Best |V| found: {res.best_len} (edges={res.best_len})")
 
-    if args.target is not None:
+    if target is not None:
         status = "!" if res.found_target else "Did NOT"
-        log(f"{status} Reached target {args.target}")
+        log(f"{status} Reached target {target}")
 
     best_cycle = res.best_cycle[:] + [res.best_cycle[0]]
     log(f"Best coil found (cycle list): {best_cycle}")
