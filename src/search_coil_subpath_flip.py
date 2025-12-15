@@ -9,7 +9,11 @@ Action A (3 edges -> 5 edges):
 Action B (2 edges -> 4 edges):
 (v1,v2),(v2,v3)          => replace (v1,v2,v3) with (v1, v1', v2', v3', v3)
 
-where v' = v xor (1<<i), for some dimension i in {0..d} when working in Q_{d+1}.
+Action C (3 edges -> 5 edges, reversed middle order):
+For 3 consecutive edges traversing dimensions d1,d2,d3,
+replace (v1,v2,v3,v4) with a subpath from v1 that traverses: i, then d3, then d2, then d1, then i again.
+
+where v' = v xor (1<<i), for some dimension i.
 
 We search over sequences of such actions while maintaining the coil-in-the-box constraint
 (induced cycle).
@@ -149,9 +153,14 @@ def applicable_actions(cycle: List[int], dim: int) -> List[Action]:
         v3 = cycle[(a + 2) % n]
         v4 = cycle[(a + 3) % n]
 
+        d1 = v1 ^ v2
+        d2 = v2 ^ v3
+        d3 = v3 ^ v4
+
         for bit in range(dim):
             m = 1 << bit
 
+            # Action A
             v1p, v2p, v3p, v4p = v1 ^ m, v2 ^ m, v3 ^ m, v4 ^ m
             if (
                 v1p not in cycle_set and v2p not in cycle_set and
@@ -165,6 +174,7 @@ def applicable_actions(cycle: List[int], dim: int) -> List[Action]:
             ):
                 actions.append(("A", a, bit))
 
+            # Action B
             v1p, v2p, v3p = v1 ^ m, v2 ^ m, v3 ^ m
             if (
                 v1p not in cycle_set and v2p not in cycle_set and v3p not in cycle_set and
@@ -175,6 +185,22 @@ def applicable_actions(cycle: List[int], dim: int) -> List[Action]:
                 hamming_dist_is_1(v3p, v3)
             ):
                 actions.append(("B", a, bit))
+
+            # Action C (reverse d1,d2,d3 order in the middle)
+            w1 = v1 ^ m
+            w2 = w1 ^ d3
+            w3 = w2 ^ d2
+            w4 = w3 ^ d1
+            if (
+                w1 not in cycle_set and w2 not in cycle_set and w3 not in cycle_set and w4 not in cycle_set and
+                len({w1, w2, w3, w4}) == 4 and
+                hamming_dist_is_1(v1, w1) and
+                hamming_dist_is_1(w1, w2) and
+                hamming_dist_is_1(w2, w3) and
+                hamming_dist_is_1(w3, w4) and
+                hamming_dist_is_1(w4, v4)
+            ):
+                actions.append(("C", a, bit))
 
     return actions
 
@@ -197,6 +223,25 @@ def apply_action(cycle: List[int], action: Action) -> List[int]:
         v1 = cycle[a]
         idx = new_cycle.index(v1)
         return new_cycle[:idx+1] + [v1 ^ m, cycle[(a+1)%n]^m, cycle[(a+2)%n]^m] + new_cycle[idx+1:]
+
+    if kind == "C":
+        v1 = cycle[a]
+        v2 = cycle[(a + 1) % n]
+        v3 = cycle[(a + 2) % n]
+        v4 = cycle[(a + 3) % n]
+        d1 = v1 ^ v2
+        d2 = v2 ^ v3
+        d3 = v3 ^ v4
+
+        w1 = v1 ^ m
+        w2 = w1 ^ d3
+        w3 = w2 ^ d2
+        w4 = w3 ^ d1
+
+        remove = {(a + 1) % n, (a + 2) % n}
+        new_cycle = [cycle[i] for i in range(n) if i not in remove]
+        idx = new_cycle.index(v1)
+        return new_cycle[:idx+1] + [w1, w2, w3, w4] + new_cycle[idx+1:]
 
     raise ValueError
 
