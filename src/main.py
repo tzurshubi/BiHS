@@ -31,8 +31,8 @@ DEFAULT_SIZE_OF_GRAPHS = [5,5]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                # True # False
-DEFAULT_RUN_UNI = False             # True # False
-DEFAULT_RUN_BI = False               # True # False
+DEFAULT_RUN_UNI = True             # True # False
+DEFAULT_RUN_BI = True               # True # False
 DEFAULT_RUN_MULTI = True           # True # False
 DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "full"               # "basic" # "light" # "full"
@@ -226,6 +226,7 @@ def search(
     # Load the graph
     # print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
+    args.graph_image_path = current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png"
     G_original = G.copy()
     if args.graph_type=="cube":
         if G.has_edge(0, 1): G.remove_edge(0, 1)
@@ -302,12 +303,12 @@ def search(
                 args.size_of_graphs[0],
                 args.size_of_graphs[1],
                 blocks,
-                current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",
+                args.graph_image_path,
                 path,
                 meet_points,
             )
         elif args.graph_type=="cube":
-            display_graph_with_path_and_points(G_original,"",current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png",path,[meet_point])
+            display_graph_with_path_and_points(G_original,"",args.graph_image_path,path,[meet_point])
         meet_point_index = path.index(meet_points[0])
         logs["g_F"] = len(path[:meet_point_index])
         logs["g_B"] = len(path[meet_point_index + 1 :])
@@ -485,7 +486,7 @@ if __name__ == "__main__":
         if run_multi:
             if graph_type=="cube":
                 args.solution_vertices = [2**args.size_of_graphs[0]-1]
-            # elif meet_point: args.solution_vertices = [meet_point]
+            elif meet_point: args.solution_vertices = [meet_point]
             logs, path, meet_point = search(
                 name_of_graph, start, goal, "multidirectional", heuristic, snake,args
             )
