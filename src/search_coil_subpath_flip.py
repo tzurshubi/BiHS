@@ -379,7 +379,7 @@ def main() -> None:
     coil, target = set_coil_and_target(d)
 
     # logger for main prints (elapsed since program start)
-    filename = f"coil_subpath_flip_{d}d"
+    filename = f"actionC_coil_subpath_flip_{d}d"
     logfile = open(filename, "w")
     t0_main = time.time()
     log = make_logger(t0_main, logfile)
