@@ -14,6 +14,8 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
       - U is the length in edges (|S|-1),
       - S is the best path as a list of vertices.
     """
+    log = args.log
+    mov_path = args.graph_image_path.replace(".png", "_mov.mp4") if args.graph_image_path else None
     if isinstance(v, List):
         if len(v) != 1:
             raise ValueError("multidirectional_search1 only supports a single solution vertex v.")
@@ -98,8 +100,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
         # Should not happen, but safe
         if N is None:
             break
-
-        print(f"Expanding {N.path} from OPEN_{i}{D} with f={fN}, g={N.g}, path length={len(N.path)-1}.")
+        if log: print(f"Expanding {N.path} from OPEN_{i}{D} with f={fN}, g={N.g}, path length={len(N.path)-1}.")
 
         # -----------------------------------------
         # Meeting checks
@@ -136,7 +137,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
                 if U_candidate > U:
                     U = U_candidate
                     S = full
-                    print(f"---({expansions}) Found new best path of length {U}: {S} ---")
+                    if log: print(f"---({expansions}) Found new best path of length {U}: {S} ---")
                     c=1
         
 
@@ -156,7 +157,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
             if (D == "F" and N.g > (fN / 2.0) - 1.0) or (D == "B" and N.g > ((fN - 1.0) / 2.0)):
                 # Remove it from OPEN but keep it available for meeting checks in future iterations.
                 OPEN.pop()
-                print(f"Skipping expansion of {N.path} from OPEN_{i}{D} due to XMM_full g > f_max/2 condition.")
+                if log: print(f"Skipping expansion of {N.path} from OPEN_{i}{D} due to XMM_full g > f_max/2 condition.")
                 # expansions += 1
                 continue
 
@@ -178,7 +179,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
         else:
             h_target = v
 
-        print(f"Generated {len(successors)} successors for {'0F' if i==0 and D=='F' else '0B' if i==0 and D=='B' else '1F' if i==1 and D=='F' else '1B'}: {[st.path for st in successors]}")
+        if log: print(f"Generated {len(successors)} successors for {'0F' if i==0 and D=='F' else '0B' if i==0 and D=='B' else '1F' if i==1 and D=='F' else '1B'}: {[st.path for st in successors]}")
         for Np in successors:
             generated += 1
             # If expanding from OPEN_0B or OPEN_1F, insert successors
