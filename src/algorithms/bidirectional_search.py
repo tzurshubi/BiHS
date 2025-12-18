@@ -94,12 +94,6 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         # Get the best state from OPEN_D
         f_value, g_value, current_state = OPEN_D.top()
         current_path_length = current_state.g
-        
-        # Logging progress
-        if expansions and expansions % 1_000 == 0:
-            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}")
-        #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
-        #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
@@ -136,6 +130,12 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 moved_OPEN_to_AUXOPEN += 1
                 # logger(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
                 continue
+
+        # Logging progress
+        if expansions and expansions % 10_000 == 0:
+            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}")
+        #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
+        #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         expansions += 1
         g_values.append(current_state.g)
