@@ -4,12 +4,11 @@ class State:
     __slots__ = [
         'graph',
         'head',
-        'tailtip',
         'parent',
         'g',
         'h',
         'meet_points',
-        'path',  # in snake mode: None
+        'path',  # now ALWAYS stored (also in snake mode)
         'path_vertices_bitmap',  # visited vertices excluding head
         'path_vertices_and_neighbors_bitmap',  # body vertices + their neighbors, excluding head
         'max_dim_crossed',
@@ -23,49 +22,41 @@ class State:
         self.meet_points = list(meet_points) if meet_points else []
         self.parent = parent
         self.snake = snake
+        self.path = list(path) if path is not None else None  # always keep path list
         self.traversed_buffer_dimension = False
 
+        if not self.path:
+            raise ValueError("State requires a non-empty path (at least [start]).")
+
+        self.g = len(self.path) - 1
+        self.head = self.path[-1]
+        self.h = 0  # if you rely on default h existing
+
         if not snake:
-            # ---- normal mode: keep full path ----
-            self.path = path
-            self.g = len(path) - 1
-            self.head = path[-1] if path else None
-            self.tailtip = path[0] if path else None
-            self.path_vertices_bitmap = self._compute_path_vertices_bitmap_from_path(path)
+            # ---- normal mode ----
+            self.path_vertices_bitmap = self._compute_path_vertices_bitmap_from_path(self.path)
             self.path_vertices_and_neighbors_bitmap = 0
             self.illegal = set()
             self.max_dim_crossed = None
             return
 
-        # ---- snake mode: do NOT keep full path list ----
-        # We allow initialization from a list ONCE, then discard it (path=None).
-        if not path:
-            raise ValueError("snake State requires a non-empty path (at least [start]).")
-
-        self.g = len(path) - 1
-        self.head = path[-1]
-        self.tailtip = path[0]
-        self.path = None  # critical memory save
-
-        # Build initial bitmaps from the given list (one-time cost).
-        self.path_vertices_bitmap = self._compute_path_vertices_bitmap_from_path(path)
-        illegal_bitmap, pvan_bitmap = self._compute_pvan_from_path(path)
+        # ---- snake mode: keep path, but also keep bitmaps ----
+        self.path_vertices_bitmap = self._compute_path_vertices_bitmap_from_path(self.path)
+        illegal_bitmap, pvan_bitmap = self._compute_pvan_from_path(self.path)
         self.path_vertices_and_neighbors_bitmap = pvan_bitmap
         self.illegal = illegal_bitmap  # int bitmap in snake mode
 
-        # max_dim_crossed: keep your old logic, but it needs the list only here
         if max_dim_crossed is not None:
             self.max_dim_crossed = max_dim_crossed
         else:
-            # preserve your “single-vertex shortcuts” if you want
-            if path == [7]:   self.max_dim_crossed = 2
-            elif path == [15]:  self.max_dim_crossed = 3
-            elif path == [31]:  self.max_dim_crossed = 4
-            elif path == [63]:  self.max_dim_crossed = 5
-            elif path == [127]: self.max_dim_crossed = 6
-            elif path == [255]: self.max_dim_crossed = 7
+            if self.path == [7]:     self.max_dim_crossed = 2
+            elif self.path == [15]:  self.max_dim_crossed = 3
+            elif self.path == [31]:  self.max_dim_crossed = 4
+            elif self.path == [63]:  self.max_dim_crossed = 5
+            elif self.path == [127]: self.max_dim_crossed = 6
+            elif self.path == [255]: self.max_dim_crossed = 7
             else:
-                self.max_dim_crossed = self._compute_max_dim_crossed_from_path(path)
+                self.max_dim_crossed = self._compute_max_dim_crossed_from_path(self.path)
 
     # ----------------------------
     # Construction helpers
@@ -76,14 +67,10 @@ class State:
         if not isinstance(state, State):
             raise TypeError("from_reversed() expects a State instance.")
 
-        # If snake mode has no stored path, we must materialize (rare operation).
-        p = state.materialize_path()
-        new_path = list(reversed(p))
-
-        snake = hasattr(state, "path_vertices_and_neighbors_bitmap") and state.path_vertices_and_neighbors_bitmap is not None
-        if snake and state.max_dim_crossed is not None:
+        new_path = list(reversed(state.path))
+        if state.snake and state.max_dim_crossed is not None:
             return cls(state.graph, new_path, meet_points=list(state.meet_points), snake=True, max_dim_crossed=state.max_dim_crossed)
-        return cls(state.graph, new_path, meet_points=list(state.meet_points), snake=snake)
+        return cls(state.graph, new_path, meet_points=list(state.meet_points), snake=state.snake)
 
     @classmethod
     def snake_from_fields(
@@ -97,50 +84,55 @@ class State:
         meet_points=None,
         parent=None,
         max_dim_crossed=None,
+        traversed_buffer_dimension: bool = False,
     ):
         """
-        Fast constructor for snake states without allocating a path list.
+        Constructor for snake states.
+        Now ALSO stores a full path list.
         """
+        if parent is None:
+            # fallback: you can still build a 1-vertex path
+            path = [head]
+        else:
+            # build full path list
+            path = parent.path + [head]
+
         obj = cls.__new__(cls)
         obj.graph = graph
         obj.head = head
         obj.g = g
+        obj.h = 0
         obj.parent = parent
         obj.meet_points = list(meet_points) if meet_points else []
-        obj.path = None
+        obj.snake = True
+
+        obj.path = path  # IMPORTANT: store path again
         obj.path_vertices_bitmap = path_vertices_bitmap
         obj.path_vertices_and_neighbors_bitmap = path_vertices_and_neighbors_bitmap
         obj.illegal = illegal_bitmap
         obj.max_dim_crossed = max_dim_crossed
+        obj.traversed_buffer_dimension = traversed_buffer_dimension
         return obj
 
     # ----------------------------
-    # Bitmap computation (one-time from list)
+    # Bitmap computation
     # ----------------------------
 
     @staticmethod
     def _compute_path_vertices_bitmap_from_path(path):
         bitmap = 0
-        # exclude head
         for v in path[:-1]:
             bitmap |= 1 << v
         return bitmap
 
     def _compute_pvan_from_path(self, path):
-        """
-        Returns (illegal_bitmap, pvan_bitmap) for snake constraints.
-        pvan_bitmap: body vertices + their neighbors, excluding head.
-        illegal_bitmap: same + head bit set (so illegal includes head).
-        """
         head = path[-1]
         pvan = 0
         illegal = 0
 
-        # illegal includes all path vertices
         for v in path:
             illegal |= 1 << v
 
-        # for each body vertex, add itself + its neighbors (excluding head in pvan)
         for v in path[:-1]:
             pvan |= 1 << v
             for nb in self.graph.neighbors(v):
@@ -148,7 +140,6 @@ class State:
                 if nb != head:
                     pvan |= 1 << nb
 
-        # ensure illegal includes head (already does), pvan excludes head by construction
         return illegal, pvan
 
     @staticmethod
@@ -161,101 +152,59 @@ class State:
         return max_dim
 
     # ----------------------------
-    # Path materialization (only when needed)
+    # Path helpers (now trivial)
     # ----------------------------
 
     def materialize_path(self):
-        """
-        Reconstruct the path by following parent pointers.
-        Works for snake mode (path=None) and normal mode.
-        """
-        if self.path is not None:
-            return list(self.path)
-
-        # snake mode: walk back through parents
-        nodes = []
-        cur = self
-        while cur is not None:
-            nodes.append(cur.head)
-            cur = cur.parent
-        nodes.reverse()
-        return nodes
-
-    def illegal_set(self):
-        """
-        Only if you really need a Python set (expensive).
-        """
-        if isinstance(self.illegal, set):
-            return set(self.illegal)
-        bm = int(self.illegal)
-        out = set()
-        i = 0
-        while bm:
-            if bm & 1:
-                out.add(i)
-            bm >>= 1
-            i += 1
-        return out
-
-    # ----------------------------
-    # Convenience methods
-    # ----------------------------
+        # path is always stored now
+        return list(self.path)
 
     def pi(self):
-        # avoid accidental huge allocations during search
-        return set(self.materialize_path())
+        return set(self.path)
 
     def tail(self):
-        p = self.materialize_path()
-        return p[:-1] if len(p) > 1 else []
+        return self.path[:-1] if len(self.path) > 1 else []
 
     # ----------------------------
-    # Successors (NO path allocation in snake mode)
+    # Successors
     # ----------------------------
 
-    def successor(self, args, snake=False, directionF=True):
+    def successor(self, args, snake=False, directionF=True, ignore_max_dim_crossed=False):
         successors = []
         head = self.head
-        tailtip = self.tailtip
         if head is None:
             return successors
 
         if not snake:
-            # original behavior: allocates list
             for nb in self.graph.neighbors(head):
                 if not (self.path_vertices_bitmap & (1 << nb)):
-                    new_path = self.materialize_path() + [nb]
+                    new_path = self.path + [nb]
                     successors.append(State(self.graph, new_path, self.meet_points, snake=False))
             return successors
 
-        # snake mode: purely bitmap-based, no list allocations
+        # snake mode: bitmap legality checks, but now also stores path in successor
         for nb in self.graph.neighbors(head):
             if self.path_vertices_and_neighbors_bitmap & (1 << nb):
                 continue
 
             if args.graph_type == "cube":
                 dim = int(math.log2(head ^ nb))
-                if dim > self.max_dim_crossed + 1 and directionF:
+                if dim > self.max_dim_crossed + 1 and directionF and not ignore_max_dim_crossed:
                     continue
                 new_max_dim_crossed = max(self.max_dim_crossed, dim)
             else:
                 new_max_dim_crossed = self.max_dim_crossed
 
-            # body bitmap for new state excludes new head, so we add old head to body
             new_pvb = self.path_vertices_bitmap | (1 << head)
 
-            # update pvan incrementally:
-            # start from old pvan, then add old head and all its neighbors except the new head
             new_pvan = self.path_vertices_and_neighbors_bitmap | (1 << head)
-            new_illegal = self.illegal | (1 << nb) | (1 << head)  # ensure bits exist
+            new_illegal = self.illegal | (1 << nb) | (1 << head)
 
             for nn in self.graph.neighbors(head):
                 new_illegal |= 1 << nn
                 if nn != nb:
                     new_pvan |= 1 << nn
 
-            # also keep illegal containing head + all neighbors/body/head
-            # (pvan excludes new head by definition, which we already maintained)
             succ = State.snake_from_fields(
                 graph=self.graph,
                 head=nb,
@@ -266,10 +215,8 @@ class State:
                 meet_points=self.meet_points,
                 parent=self,
                 max_dim_crossed=new_max_dim_crossed,
+                traversed_buffer_dimension=self.traversed_buffer_dimension,
             )
-            succ.snake = True
-            succ.tailtip = tailtip
-            succ.traversed_buffer_dimension = self.traversed_buffer_dimension
             successors.append(succ)
 
         return successors
@@ -279,18 +226,14 @@ class State:
             return (self.path_vertices_bitmap & other_state.path_vertices_bitmap) != 0
         return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0
 
-    # ----------------------------
-    # Concatenation: forces materialization (rare operation)
-    # ----------------------------
-
     def __add__(self, other):
         if not isinstance(other, State):
             return NotImplemented
         if self.graph is not other.graph:
             raise ValueError("Cannot add states from different graphs.")
 
-        p = self.materialize_path()
-        q = other.materialize_path()
+        p = self.path
+        q = other.path
 
         if not p:
             return other
@@ -300,32 +243,33 @@ class State:
         s0, s1 = p[0], p[-1]
         o0, o1 = q[0], q[-1]
 
+        # exactly one shared endpoint
         common = list({s0, s1} & {o0, o1})
-        if not common:
-            raise ValueError(f"Cannot concatenate: paths do not share an endpoint. self=({s0},{s1}) other=({o0},{o1})")
-        if len(common) > 1:
-            raise ValueError(f"Ambiguous concatenation: paths share multiple endpoints {common}.")
+        if len(common) != 1:
+            raise ValueError(
+                f"Cannot concatenate paths: endpoints mismatch. "
+                f"self=({s0},{s1}), other=({o0},{o1})"
+            )
 
         c = common[0]
-        x = s1 if s0 == c else s0
-        y = o1 if o0 == c else o0
 
-        # orient p from x -> c
-        if p[0] == x and p[-1] == c:
+        # orient self: x -> c
+        if p[-1] == c:
             p_or = p
-        elif p[0] == c and p[-1] == x:
+        elif p[0] == c:
             p_or = list(reversed(p))
         else:
-            raise ValueError("Unexpected endpoint orientation for self.")
+            raise RuntimeError("Unexpected orientation for self path.")
 
-        # orient q from c -> y
-        if q[0] == c and q[-1] == y:
+        # orient other: c -> y
+        if q[0] == c:
             q_or = q
-        elif q[0] == y and q[-1] == c:
+        elif q[-1] == c:
             q_or = list(reversed(q))
         else:
-            raise ValueError("Unexpected endpoint orientation for other.")
+            raise RuntimeError("Unexpected orientation for other path.")
 
+        # ensure no vertex repetition
         used = set(p_or)
         for v in q_or[1:]:
             if v in used:
@@ -334,9 +278,14 @@ class State:
 
         new_path = p_or + q_or[1:]
 
-        # if either operand was snake-ish, result will be snake-ish
-        snakeish = (self.path is None) or (other.path is None)
-        return State(self.graph, new_path, self.meet_points + other.meet_points + [c], snake=snakeish)
+        snakeish = self.snake or other.snake
+        return State(
+            graph=self.graph,
+            path=new_path,
+            meet_points=self.meet_points + other.meet_points + [c],
+            snake=snakeish,
+        )
+
 
     def __radd__(self, other):
         if other == 0:
