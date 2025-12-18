@@ -115,7 +115,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
             OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
         ):
-            logger(f"Upper Bound Terminatation - best path length: {best_path_length}")
+            logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
             break
 
         # Skip states that traverse the buffer dimension in cube graphs
