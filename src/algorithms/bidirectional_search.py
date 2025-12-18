@@ -15,6 +15,9 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # h_MIS = []
     # h_BCC = []
     # max_f = []
+    logger = args.logger 
+    cube = args.graph_type == "cube"
+    buffer_dim = args.cube_buffer_dimension if cube else None
     calc_h_time = 0
     valid_meeting_check_time = 0
     valid_meeting_checks = 0
@@ -68,7 +71,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     while len(OPEN_F) > 0 or len(OPEN_B) > 0:
         # Determine which direction to expand
         directionF = None # True - Forward, False - Backward 
-        if alternate:
+        if cube and args.symmetrical_generation_in_other_frontier: 
+            directionF = True
+            if len(OPEN_F) == 0: break
+        elif alternate:
             directionF = False if lastDirectionF else True
             lastDirectionF = not lastDirectionF
         else:
@@ -89,15 +95,11 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         f_value, g_value, current_state = OPEN_D.top()
         current_path_length = len(current_state.path) - 1
         
-        if expansions % 10000 == 0:
-            print(
-                f"Expansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}"
-            )
-            with open(args.log_file_name, 'a') as file:
-                file.write(f"\nExpansion #{expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
-
-            # print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
-            # print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
+        # Logging progress
+        if expansions and expansions % 1_000_000 == 0:
+            logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+        #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
+        #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
@@ -105,7 +107,6 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         valid_meeting_check_time += time.time() - curr_time
         valid_meeting_checks += num_checks
         valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
-
         if state:
             total_length = current_path_length + len(state.path) - 1
             if total_length > best_path_length:
@@ -113,27 +114,27 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.path[:-1] + state.path[::-1]
                 best_path_meet_point = current_state.head
                 if snake and total_length >= f_value-3:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
-                    with open(args.log_file_name, 'a') as file:
-                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {total_length}. {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}\n")
-
+                    logger(f"Expansion {expansions}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
+                    
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
             OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
             OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
         ):
-            # print(f"Terminating with best path of length {best_path_length}")
+            logger(f"Upper Bound Terminatation - best path length: {best_path_length}")
             break
 
-        
-        # XMM_full. if g > f_max/2 don't expant it, but keep it in OPENvOPEN for checking collision of search from the other side
-        # if C* = 20, in the F direction we won't expand S with g > 9, in the B direction we won't expand S with g > 9.5 
-        # if C* = 19, in the F direction we won't expand S with g > 8.5, in the B direction we won't expand S with g > 9 
+        # Skip states that traverse the buffer dimension in cube graphs
+        if current_state.traversed_buffer_dimension:
+            OPEN_D.pop()
+            continue
+
+        # XMM_full: g cutoff. if g > f_max/2 don't expand it, but keep it in OPENvOPEN for checking collision with the other side
         if args.algo == "cutoff" or args.algo == "full":
             if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
                 OPEN_D.pop()
                 moved_OPEN_to_AUXOPEN += 1
-                # print(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
+                # logger(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
                 continue
 
         expansions += 1
@@ -142,42 +143,49 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         # Get the current state from OPEN_D TO CLOSED_D
         f_value, g_value, current_state = OPEN_D.pop()
         # OPENvOPEN.remove_state(current_state, directionF)
-        CLOSED_D.add(current_state)
+        # CLOSED_D.add(current_state)
 
         # Generate successors
         successors = current_state.successor(args, snake, directionF)
         BF_values.append(len(successors))
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
-                # print(f"symmetric state removed: {successor.path}")
+                # logger(f"symmetric state removed: {successor.path}")
                 continue
 
+            # Check if successor traverses the buffer dimension in cube graphs
+            if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
+                successor.traversed_buffer_dimension = True
+            
             generated += 1
             
+            # Calculate g, h, f values for successor
             curr_time = time.time()
             h_successor = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
             )
             calc_h_time += time.time() - curr_time
-
-            # # For Plotting h
-            # h_BCC.append(h_value)
-            # h_mis = heuristic(successor, goal if direction == "F" else start, "mis_heuristic")
-            # h_MIS.append(h_mis+0.1)
-            # mis_smaller_flag.append(-1 if h_value<h_mis else 0 if h_value==h_mis else 1)
-            # max_f.append(f_value)
-            # expansions_list.append(expansions)
-
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
+
+            # The state symmetric to successor should be inserted to OPEN_D_hat
+            if cube and args.symmetrical_generation_in_other_frontier: 
+                successor_symmetric = symmetric_state_transform(successor, args.dim_flips_F_B_symmetry, args.dim_swaps_F_B_symmetry)
 
             # XMM_light + PathMin
             if args.algo == "light" or args.algo == "full":
                 OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
-            else: OPEN_D.push(successor, min(f_value, f_successor))
+                if cube and args.symmetrical_generation_in_other_frontier: 
+                    OPEN_D_hat.push(successor_symmetric, min(2 * h_successor, f_value, f_successor))
+            else: 
+                OPEN_D.push(successor, min(f_value, f_successor))
+                if cube and args.symmetrical_generation_in_other_frontier: 
+                    OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
             OPENvOPEN.insert_state(successor,directionF)
+            if cube and args.symmetrical_generation_in_other_frontier: 
+                OPENvOPEN.insert_state(successor_symmetric, not directionF)
 
     # Plotting BF vs g
     # plt.plot(g_values, BF_values,marker='*',linestyle='None', color='red',markersize=8, label='BF');   

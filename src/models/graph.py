@@ -1,7 +1,7 @@
 import networkx as nx
 import json
 
-print("models/graph")
+# print("models/graph")
 
 # def load_graph_from_file(file_path):
 #     G = nx.Graph()

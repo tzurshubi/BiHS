@@ -16,6 +16,7 @@ from algorithms.unidirectional_search import *
 from algorithms.bidirectional_search import *
 from algorithms.multidirectional_search import *
 from algorithms.multidirectional_search1 import *
+from algorithms.tbt_search import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -24,20 +25,22 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "SM_Grids"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
-DEFAULT_GRAPH_TYPE = "grid"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [5,5]      # dimension of cube
+DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = False                # True # False
-DEFAULT_RUN_UNI = True             # True # False
+DEFAULT_SNAKE = True                # True # False
+DEFAULT_RUN_UNI = False             # True # False
 DEFAULT_RUN_BI = True               # True # False
-DEFAULT_RUN_MULTI = True           # True # False
+DEFAULT_RUN_MULTI = False           # True # False
 DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
-DEFAULT_ALGO = "full"               # "basic" # "light" # "full"
+DEFAULT_ALGO = "basic"               # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                  # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_BUFFER_DIMENSION = 3   # 3 # 4 # 5 # 6 # 7
+DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER = False                  # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -65,7 +68,8 @@ def parse_args():
     parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
     parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
-
+    parser.add_argument("--cube_buffer_dimension", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
+    parser.add_argument("--symmetrical_generation_in_other_frontier", type=str, default=DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER, help="Symmetrical generation in other frontier.")
 
     return parser.parse_args()
 
@@ -228,7 +232,7 @@ def search(
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     args.graph_image_path = current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png"
     G_original = G.copy()
-    if args.graph_type=="cube":
+    if args.graph_type=="cube" and cube_first_dims:
         if G.has_edge(0, 1): G.remove_edge(0, 1)
         # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
         # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
@@ -247,6 +251,10 @@ def search(
 
         # Remove all except keepers
         G.remove_nodes_from(neighbors - keepers)
+
+        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
+        args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
+        args.dim_flips_F_B_symmetry = list(range(cube_first_dims))
 
     blocks = []
     logs = {}
@@ -268,14 +276,23 @@ def search(
     tracemalloc.start()
     start_time = time.time()
     args.start_time = start_time
+    args.logger.set_t0(start_time)
+
 
     # Run heuristic search to find LSP in the graph
     if search_type == "unidirectional":
+        print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
+        print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
+        print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
+        # print("\n\nRunning TBT search as multidirectional!")
+        # time.sleep(1)
+        # path, expansions, generated, meet_points = tbt_search(G, size_of_graphs[0], 1, heuristic, snake, args)
+        
 
     if not isinstance(path,list):
         path_state = path
@@ -340,6 +357,8 @@ if __name__ == "__main__":
     run_multi = args.run_multi
     bsd = args.bsd
     cube_first_dims = args.cube_first_dims
+    cube_buffer_dimension = args.cube_buffer_dimension
+    symmetrical_generation_in_other_frontier = args.symmetrical_generation_in_other_frontier
 
     if log:
         log_file_name = "logs"
@@ -350,18 +369,20 @@ if __name__ == "__main__":
         with open(log_file_name, 'w') as file:
             file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\nrun_multi:{run_multi}\n-------------\n\n")
         args.log_file_name = log_file_name
-
-    print("--------------------------")
-    print("date:", date)
-    print("number_of_graphs:", number_of_graphs)
-    print("graph_type:", graph_type)
-    print("size_of_graphs:", size_of_graphs)
-    print("heuristic:", heuristic)
-    print("snake:", snake)
-    print("run_uni:", run_uni)
-    print("run_bi:", run_bi)
-    print("run_multi:", run_multi)
-    print("cube_first_dims:", cube_first_dims)
+        args.logger = make_logger(open(log_file_name, "w"))
+    
+        args.logger("--------------------------")
+        args.logger(f"date: {date}")
+        args.logger(f"number_of_graphs: {number_of_graphs}")
+        args.logger(f"graph_type: {graph_type}")
+        args.logger(f"size_of_graphs: {size_of_graphs}")
+        args.logger(f"heuristic: {heuristic}")
+        args.logger(f"snake: {snake}")
+        args.logger(f"run_uni: {run_uni}")
+        args.logger(f"run_bi: {run_bi}")
+        args.logger(f"run_multi: {run_multi}")
+        args.logger(f"cube_first_dims: {cube_first_dims}")
+        args.logger(f"cube_buffer_dimension: {cube_buffer_dimension}")
 
     # Initialize an empty DataFrame to store the results
     columns = [
@@ -404,12 +425,9 @@ if __name__ == "__main__":
             start = "s"  # 0 # "s"
             goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
-        args.log_file_name = log_file_name
         name_of_graph=f"{date}/"+name_of_graph
-        print("\n"+name_of_graph)
-        if log:
-            with open(log_file_name, 'w' if i==0 else 'a') as file:
-                file.write("\n"+name_of_graph)            
+        args.logger("\n---------- "+name_of_graph+" ----------")
+           
         
         # unidirectional
         if run_uni:
@@ -419,10 +437,7 @@ if __name__ == "__main__":
             )
             avgs["uni_st"]["expansions"].append(logs['expansions'])
             avgs["uni_st"]["time"].append(logs['time[ms]'])
-            print(f"! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-            if log:
-                with open(log_file_name, 'w' if i==0 else 'a') as file:
-                    file.write(f"\n! unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+            args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
             results.append(
                 {
                     "# blocks": i,
@@ -442,10 +457,7 @@ if __name__ == "__main__":
                 )
                 avgs["uni_ts"]["expansions"].append(logs['expansions'])
                 avgs["uni_ts"]["time"].append(logs['time[ms]'])
-                print(f"! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-                if log:
-                    with open(log_file_name, 'a') as file:
-                        file.write(f"\n! unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
                 results.append(
                     {
                         "# blocks": i,
@@ -465,11 +477,8 @@ if __name__ == "__main__":
             )
             avgs["bi"]["expansions"].append(logs['expansions'])
             avgs["bi"]["time"].append(logs['time[ms]'])
-            print(f"! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-            print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
-            if log:
-                with open(log_file_name, 'a') as file:
-                    file.write(f"\n! bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}\n\n")
+            args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            # print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
             results.append(
                 {
                     "# blocks": i,
@@ -490,7 +499,19 @@ if __name__ == "__main__":
             logs, path, meet_point = search(
                 name_of_graph, start, goal, "multidirectional", heuristic, snake,args
             )
-            print(f"! multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            results.append(
+                {
+                    "# blocks": i,
+                    "Search type": "multidirectional",          
+                    "# expansions": logs["expansions"],
+                    "Time [ms]": logs["time[ms]"],
+                    "Memory [kB]": logs["memory[kB]"],
+                    "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                }
+            )
+
             avgs["multi"]["expansions"].append(logs['expansions'])
             avgs["multi"]["time"].append(logs['time[ms]'])
 
@@ -515,3 +536,4 @@ if __name__ == "__main__":
     print()
     calculate_averages(avgs, log_file_name)
     parse_results_file(log_file_name, log_file_name+".csv")
+    args.logger.close()

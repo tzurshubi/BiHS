@@ -48,12 +48,12 @@ def fmt_elapsed(seconds: float) -> str:
 
 
 def make_logger(t0: float, logfile):
-    def log(msg: str) -> None:
+    def logger(msg: str) -> None:
         line = f"[{fmt_elapsed(time.time() - t0)}] {msg}"
         print(line)
         logfile.write(line + "\n")
         logfile.flush()
-    return log
+    return logger
 
 
 # ---------------------------
