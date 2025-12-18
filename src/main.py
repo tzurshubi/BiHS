@@ -281,13 +281,13 @@ def search(
 
     # Run heuristic search to find LSP in the graph
     if search_type == "unidirectional":
-        print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
+        # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
-        print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
+        # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
-        print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
+        # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
         # print("\n\nRunning TBT search as multidirectional!")
         # time.sleep(1)
