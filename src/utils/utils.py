@@ -1,3 +1,4 @@
+import time
 import networkx as nx
 import json
 import random
@@ -7,6 +8,8 @@ import os, math
 import matplotlib.pyplot as plt
 import re
 import csv
+from models.state import State
+
 
 def ms2str(time_ms):
     """
@@ -147,7 +150,65 @@ def calculate_averages(avgs, log_file_name=None):
                 f.write(line2 + "\n")
                 f.write(line3 + "\n")
 
-# Coils utilities
+
+# ---------------------------
+# Logging utilities
+# ---------------------------
+
+def fmt_elapsed(seconds: float) -> str:
+    """
+    Format elapsed time as DD:HH:MM:SS.mmm
+    """
+    total_ms = int(seconds * 1000)
+
+    ms = total_ms % 1000
+    s = total_ms // 1000
+
+    days = s // 86400
+    s %= 86400
+    hours = s // 3600
+    s %= 3600
+    minutes = s // 60
+    s %= 60
+
+    return f"{days:02d}:{hours:02d}:{minutes:02d}:{s:02d}:{ms:03d}"
+
+
+def make_logger(logfile, t0: float | None = None):
+    _t0 = t0
+    _closed = False
+
+    def log(msg: str) -> None:
+        if _closed:
+            return
+        if _t0 is not None:
+            line = f"[{fmt_elapsed(time.time() - _t0)}] {msg}"
+        else:
+            line = msg
+        print(line)
+        logfile.write(line + "\n")
+        logfile.flush()
+
+    def set_t0(t: float | None = None) -> None:
+        nonlocal _t0
+        _t0 = time.time() if t is None else t
+
+    def close() -> None:
+        nonlocal _closed
+        if not _closed:
+            logfile.flush()
+            logfile.close()
+            _closed = True
+
+    log.set_t0 = set_t0
+    log.close = close
+
+    return log
+
+
+# ---------------------------
+# Coil utilities
+# ---------------------------
 
 def node_num_to_bits_on(dim, numbers):
     """
@@ -225,6 +286,100 @@ def coil_dim_crossed_to_vertices(coil_str):
 
     return vertices
 
+def swap_dims_vertex(v: int, i: int, j: int) -> int:
+    """Swap bits i and j in vertex id v (hypercube coordinate permutation)."""
+    if i == j:
+        return v
+    bi = (v >> i) & 1
+    bj = (v >> j) & 1
+    if bi == bj:
+        return v
+    # toggle both bits
+    return v ^ ((1 << i) | (1 << j))
+
+def flip_dims_vertex(v: int, dims: list[int]) -> int:
+    """Flip (toggle) bits in `dims` of vertex id v."""
+    mask = 0
+    for d in dims:
+        mask |= 1 << d
+    return v ^ mask
+
+def symmetric_state_transform(
+    s: State,
+    flip_dims: list[int],
+    dim_swaps: list[tuple[int, int]],
+) -> State:
+    """
+    Apply BOTH transformations to every vertex in s.path:
+      1) flip all dimensions in flip_dims (toggle those bits)
+      2) swap dimensions according to dim_swaps (sequentially, in order)
+
+    Also applies the same transform to meet_points.
+    """
+    if s is None or not s.path:
+        raise ValueError("symmetric_state_transform expects a State with a non-empty path.")
+
+    # Build flip mask once
+    flip_mask = 0
+    for d in flip_dims:
+        flip_mask |= 1 << d
+
+    def transform_vertex(v: int) -> int:
+        # First flip bits
+        v ^= flip_mask
+        # Then apply swaps in order
+        for a, b in dim_swaps:
+            v = swap_dims_vertex(v, a, b)
+        return v
+
+    new_path = [transform_vertex(v) for v in s.path]
+    new_meet_points = [transform_vertex(v) for v in (s.meet_points or [])]
+
+    s2 = State(
+        graph=s.graph,
+        path=new_path,
+        meet_points=new_meet_points,
+        snake=s.snake,
+    )
+
+    # Preserve fields you rely on
+    s2.traversed_buffer_dimension = getattr(s, "traversed_buffer_dimension", False)
+
+    # Recompute max_dim_crossed for consistency
+    if getattr(s2, "snake", False):
+        s2.max_dim_crossed = State._compute_max_dim_crossed_from_path(s2.path)
+
+    return s2
+
+def has_bridge_edge_across_dim(a: State, b: State, dim: int) -> bool:
+    """
+    Fast check: is there exactly ONE hypercube edge between state a's head and state b's head
+    that traverses dimension `dim`?
+
+    Interprets “one edge between them” as: their heads are adjacent in Q_n and
+    differ exactly in bit `dim` (i.e., b.head == a.head xor (1<<dim)).
+
+    Works in snake and non-snake, O(1).
+    """
+    if a.head is None or b.head is None:
+        return False
+
+    diff = a.head ^ b.head
+    # adjacent in hypercube <=> diff is a power of two
+    # and traverses dimension dim <=> diff == (1<<dim)
+    return diff == (1 << dim)
+
+def print_with_timestamp(message: str):
+    """
+    Print a message prefixed with the current timestamp.
+
+    Args:
+        message (str): The message to print.
+    """
+    from datetime import datetime
+
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{current_time}] {message}")
 
 # Function to display the graph
 def display_graph(graph, title="Graph", filename=None):

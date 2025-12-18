@@ -100,7 +100,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
         # Should not happen, but safe
         if N is None:
             break
-        if log: print(f"Expanding {N.path} from OPEN_{i}{D} with f={fN}, g={N.g}, path length={len(N.path)-1}.")
+        # if log: print(f"Expanding {N.path} from OPEN_{i}{D} with f={fN}, g={N.g}, path length={len(N.path)-1}.")
 
         # -----------------------------------------
         # Meeting checks
@@ -157,7 +157,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
             if (D == "F" and N.g > (fN / 2.0) - 1.0) or (D == "B" and N.g > ((fN - 1.0) / 2.0)):
                 # Remove it from OPEN but keep it available for meeting checks in future iterations.
                 OPEN.pop()
-                if log: print(f"Skipping expansion of {N.path} from OPEN_{i}{D} due to XMM_full g > f_max/2 condition.")
+                # if log: print(f"Skipping expansion of {N.path} from OPEN_{i}{D} due to XMM_full g > f_max/2 condition.")
                 # expansions += 1
                 continue
 
@@ -179,7 +179,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
         else:
             h_target = v
 
-        if log: print(f"Generated {len(successors)} successors for {'0F' if i==0 and D=='F' else '0B' if i==0 and D=='B' else '1F' if i==1 and D=='F' else '1B'}: {[st.path for st in successors]}")
+        # if log: print(f"Generated {len(successors)} successors for {'0F' if i==0 and D=='F' else '0B' if i==0 and D=='B' else '1F' if i==1 and D=='F' else '1B'}: {[st.path for st in successors]}")
         for Np in successors:
             generated += 1
             # If expanding from OPEN_0B or OPEN_1F, insert successors

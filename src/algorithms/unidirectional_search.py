@@ -8,6 +8,8 @@ from collections import defaultdict
 
 
 def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
+    logger = args.logger
+
     # For Plotting
     g_degree_pairs = []  # Store (g, degree) for each expanded state
 
@@ -42,23 +44,16 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 10000 == 0:
-            time_elapsed = time2str(args.start_time,time.time())
-            print(f"{time_elapsed} Expansion #{expansions}: f={f_value}, g={current_state.g}")
-            with open(args.log_file_name, 'a') as file:
-                file.write(f"\n{time_elapsed} Expansion #{expansions}: f={f_value}, g={current_state.g}")
-
-
+        if expansions % 1_000_000 == 0:
+            logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+            
         # Check if the current state is the goal state
         if current_state.head == goal:
             if current_path_length > best_path_length:
                 best_path = current_state
                 best_path_length = current_path_length
                 if snake:
-                    print(f"[{time2str(args.start_time,time.time())} expansion {expansions}, {time_ms(args.start_time,time.time())}] Found path of length {best_path_length}. generated: {generated}")
-                    with open(args.log_file_name, 'a') as file:
-                        file.write(f"[{time2str(args.start_time,time.time())} expansion {expansions}] Found path of length {best_path_length}.\n")
-
+                    logger(f"Expansion {expansions}: Found path of length {best_path_length}: {best_path.path}. f_max={f_value}, generated={generated}")
             continue
 
         # Finish if the f_value is smaller than the best path length found so far
