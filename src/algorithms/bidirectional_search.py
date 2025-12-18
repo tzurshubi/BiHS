@@ -93,10 +93,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Get the best state from OPEN_D
         f_value, g_value, current_state = OPEN_D.top()
-        current_path_length = len(current_state.path) - 1
+        current_path_length = current_state.g
         
         # Logging progress
-        if expansions and expansions % 1_000_000 == 0:
+        if expansions and expansions % 100_000 == 0:
             logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
@@ -108,13 +108,13 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         valid_meeting_checks += num_checks
         valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
         if state:
-            total_length = current_path_length + len(state.path) - 1
+            total_length = current_path_length + state.g
             if total_length > best_path_length:
                 best_path_length = total_length
-                best_path = current_state.path[:-1] + state.path[::-1]
+                best_path = current_state.materialize_path()[:-1] + state.materialize_path()[::-1]
                 best_path_meet_point = current_state.head
                 if snake and total_length >= f_value-3:
-                    logger(f"Expansion {expansions}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={len(state.path) - 1}, f_max={f_value}, generated={generated}")
+                    logger(f"Expansion {expansions}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={generated}")
                     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(

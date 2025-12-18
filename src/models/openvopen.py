@@ -40,7 +40,7 @@ class Openvopen:
         O(1): Append to the bucket indexed by (cell=state.head, dir=F/B, g=state.g).
         """
         self._validate_state(state)
-        cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
+        cell_index = state.head # if state.head not in [self.start, self.goal] else state.path[0]
         target = 'F' if is_f else 'B'
         g_value = state.g
 
@@ -86,8 +86,8 @@ class Openvopen:
         """
         Check if a given path (list of vertices) exists in OPENvOPEN as a full s-t path.
         """
-        return (self.start == s.path[0] and self.goal == s.path[-1]) or \
-                (self.goal == s.path[0] and self.start == s.path[-1])
+        return (self.start == s.tailtip and self.goal == s.head) or \
+                (self.goal == s.tailtip and self.start == s.head)
 
     def find_longest_non_overlapping_state(self, state, is_f, best_path_length, f_max, snake=False):
         """
@@ -107,7 +107,7 @@ class Openvopen:
         if self.is_path_st(state):
             return None, -1, state, state.g, num_checks, num_checks_sum_g_under_f_max
 
-        cell_index = state.head if state.head not in [self.start, self.goal] else state.path[0]
+        cell_index = state.head # if state.head not in [self.start, self.goal] else state.path[0]
         opposite = 'B' if is_f else 'F'
         opp_struct = self.cells[cell_index][opposite]
         solution = None

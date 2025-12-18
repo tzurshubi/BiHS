@@ -1,11 +1,23 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+cube_first_dims: 6
+cube_buffer_dimension: 3
 
-cubes/6d_cube[00:01 expansion 1158] Found path of length 18. [0, 8, 10, 26, 18, 22, 20, 28, 60, 56, 48, 49, 53, 37, 45, 41, 43, 59, 63]. g_F=10, g_B=8, f_max=18
-
-! Bidirectional. expansions: 1,158, time: 1,850 [ms], memory: 501 [kB], path length: 18 [edges], g_F: 10, g_B: 8, generated: 2786, moved_OPEN_to_AUXOPEN:52
-
-average expansions: (0, 0, 1158, 0)
-average time: (0, 0, 1850, 0)
+---------- cubes/6d_cube ----------
+[00:00:00:00:588] Expansion 345: Found path of length 20: [63, 59, 57, 25, 24, 26, 10, 42, 46, 44, 45, 37, 53, 21, 20, 22, 54, 50, 48, 32, 0]. g_F=10, g_B=10, f_max=20, generated=887
+[00:00:00:00:588] Upper Bound Terminatation - best path length: 20
+[00:00:00:00:694] ! Bidirectional. expansions: 345, time: 591 [ms], path length: 20 [edges], g_F: 10, g_B: 10, generated: 887, MM: 0, MMPER: -1.0%
+average expansions: (0, 0, 345, 0)
+average time: (0, 0, 591, 0)
 
 A*: 0 , 0 (expansions , time[ms])
-XMM: 1158 , 1850 (expansions , time[ms])
+XMM: 345 , 591 (expansions , time[ms])
 MDS1: 0 , 0 (expansions , time[ms])
