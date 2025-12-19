@@ -28,7 +28,7 @@ DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
 DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]      # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
@@ -38,7 +38,7 @@ DEFAULT_RUN_MULTI = False           # True # False
 DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"               # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                  # True # False
-DEFAULT_CUBE_FIRST_DIMENSIONS = 8   # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = 3   # 3 # 4 # 5 # 6 # 7
 DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER = False                  # True # False
 
@@ -366,8 +366,8 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
-        with open(log_file_name, 'w') as file:
-            file.write(f"-------------\ndate: {date}\nnumber_of_graphs:{number_of_graphs}\ngraph_type:{graph_type}\nsize_of_graphs:{size_of_graphs}\nheuristic:{heuristic}\nsnake:{snake}\nrun_uni:{run_uni}\nrun_bi:{run_bi}\nrun_multi:{run_multi}\n-------------\n\n")
+        if cube_buffer_dimension:
+            log_file_name += f"_buffDim{cube_buffer_dimension}"
         args.log_file_name = log_file_name
         args.logger = make_logger(open(log_file_name, "w"))
     

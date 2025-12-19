@@ -1,0 +1,28 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+cube_first_dims: 6
+cube_buffer_dimension: 3
+
+---------- cubes/6d_cube ----------
+[00:00:00:00:074] Expansion 16: Found path of length 6: [63, 59, 43, 41, 40, 32, 0]. g_F=4, g_B=2, f_max=25, generated=55
+[00:00:00:00:093] Expansion 22: Found path of length 10: [0, 4, 20, 21, 53, 37, 45, 41, 43, 59, 63]. g_F=6, g_B=4, f_max=25, generated=73
+[00:00:00:00:174] Expansion 50: Found path of length 12: [63, 59, 43, 41, 45, 44, 46, 38, 54, 22, 20, 4, 0]. g_F=6, g_B=6, f_max=23, generated=151
+[00:00:00:00:181] Expansion 54: Found path of length 14: [63, 59, 57, 25, 24, 26, 10, 42, 34, 38, 54, 22, 20, 4, 0]. g_F=7, g_B=7, f_max=23, generated=158
+[00:00:00:00:490] Expansion 231: Found path of length 16: [63, 59, 43, 42, 46, 44, 45, 37, 53, 21, 20, 22, 54, 50, 48, 32, 0]. g_F=7, g_B=9, f_max=21, generated=609
+[00:00:00:00:662] Expansion 345: Found path of length 20: [63, 59, 57, 25, 24, 26, 10, 42, 46, 44, 45, 37, 53, 21, 20, 22, 54, 50, 48, 32, 0]. g_F=10, g_B=10, f_max=20, generated=887
+[00:00:00:00:662] Upper Bound Terminatation - best path length: 20. best path: [63, 59, 57, 25, 24, 26, 10, 42, 46, 44, 45, 37, 53, 21, 20, 22, 54, 50, 48, 32, 0]
+[00:00:00:00:799] ! Bidirectional. expansions: 345, time: 664 [ms], path length: 20 [edges], g_F: 10, g_B: 10, generated: 887, MM: 0, MMPER: -1.0%
+average expansions: (0, 0, 345, 0)
+average time: (0, 0, 664, 0)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 345 , 664 (expansions , time[ms])
+MDS1: 0 , 0 (expansions , time[ms])
