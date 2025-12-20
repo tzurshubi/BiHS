@@ -28,7 +28,7 @@ DEFAULT_LOG = True                  # True # False
 DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
 DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [8,8]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
@@ -38,7 +38,7 @@ DEFAULT_RUN_MULTI = False           # True # False
 DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"               # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                  # True # False
-DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_FIRST_DIMENSIONS = 8   # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = 3   # 3 # 4 # 5 # 6 # 7
 DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER = False                  # True # False
 
