@@ -366,7 +366,7 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
-        if cube_buffer_dimension:
+        if cube_buffer_dimension is not None and graph_type=="cube":
             log_file_name += f"_buffDim{cube_buffer_dimension}"
         args.log_file_name = log_file_name
         args.logger = make_logger(open(log_file_name, "w"))
