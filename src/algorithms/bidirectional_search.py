@@ -156,6 +156,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             # Check if successor traverses the buffer dimension in cube graphs
             if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
                 successor.traversed_buffer_dimension = True
+                if not directionF: continue  # do not add backward states that traversed buffer dimension to OPEN_B
             
             generated += 1
             
