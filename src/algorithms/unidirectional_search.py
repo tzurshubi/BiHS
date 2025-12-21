@@ -9,6 +9,8 @@ from collections import defaultdict
 
 def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger
+    cube = args.graph_type == "cube"
+    buffer_dim = args.cube_buffer_dimension if cube else None
 
     # For Plotting
     g_degree_pairs = []  # Store (g, degree) for each expanded state
@@ -44,7 +46,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 1_000_000 == 0:
+        if expansions % 10_000 == 0:
             logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
             
         # Check if the current state is the goal state
@@ -53,7 +55,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state
                 best_path_length = current_path_length
                 if snake:
-                    logger(f"Expansion {expansions}: Found path of length {best_path_length}: {best_path.path}. f_max={f_value}, generated={generated}")
+                    logger(f"Expansion {expansions}: Found path of length {best_path_length}: {best_path.materialize_path()}. f_max={f_value}, generated={generated}")
             continue
 
         # Finish if the f_value is smaller than the best path length found so far
@@ -71,6 +73,11 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
                 continue
+
+            # Check if successor traverses the buffer dimension in cube graphs
+            if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
+                if successor.traversed_buffer_dimension: continue  # already traversed buffer dimension
+                successor.traversed_buffer_dimension = True
 
             generated += 1
             
@@ -92,23 +99,5 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
             FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
-
-    # For Plotting
-    # g_values = [pair[0] for pair in g_degree_pairs]
-    # degrees = [pair[1] for pair in g_degree_pairs]
-    # g_bins = defaultdict(list)
-    # for g, degree in g_degree_pairs:
-    #     g_bins[g].append(degree)
-    # sorted_g = sorted(g_bins.keys())
-    # avg_degrees = [np.mean(g_bins[g]) for g in sorted_g]
-    # std_devs = [np.std(g_bins[g]) for g in sorted_g]
-    # plt.figure(figsize=(10, 6))
-    # plt.errorbar(sorted_g, avg_degrees, yerr=std_devs, fmt='o-', capsize=5)
-    # plt.xlabel("g value (path cost from start)")
-    # plt.ylabel("Average degree ± std (number of successors)")
-    # plt.title("Average Degree vs. g value with Standard Deviation")
-    # plt.grid(True)
-    # plt.scatter(g_values, degrees, color='red', marker='*', alpha=0.6, label='Raw data')
-    # plt.savefig("avg_std_BF_vs_g_"+args.log_file_name.replace("results_","")+".png")
 
     return best_path if snake else best_path.path, expansions, generated
