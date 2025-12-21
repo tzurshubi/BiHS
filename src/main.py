@@ -385,6 +385,7 @@ if __name__ == "__main__":
         args.logger(f"run_multi: {run_multi}")
         args.logger(f"cube_first_dims: {cube_first_dims}")
         args.logger(f"cube_buffer_dimension: {cube_buffer_dimension}")
+        args.logger(f"symmetrical_generation_in_other_frontier: {symmetrical_generation_in_other_frontier}")
 
     # Initialize an empty DataFrame to store the results
     columns = [
