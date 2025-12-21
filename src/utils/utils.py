@@ -316,9 +316,10 @@ def symmetric_state_transform(
 
     Also applies the same transform to meet_points.
     """
-    if s is None or not s.path:
-        raise ValueError("symmetric_state_transform expects a State with a non-empty path.")
+    # if s is None or not s.path:
+    #     raise ValueError("symmetric_state_transform expects a State with a non-empty path.")
 
+    s_path = s.materialize_path()
     # Build flip mask once
     flip_mask = 0
     for d in flip_dims:
@@ -332,7 +333,7 @@ def symmetric_state_transform(
             v = swap_dims_vertex(v, a, b)
         return v
 
-    new_path = [transform_vertex(v) for v in s.path]
+    new_path = [transform_vertex(v) for v in s_path]
     new_meet_points = [transform_vertex(v) for v in (s.meet_points or [])]
 
     s2 = State(
@@ -347,7 +348,7 @@ def symmetric_state_transform(
 
     # Recompute max_dim_crossed for consistency
     if getattr(s2, "snake", False):
-        s2.max_dim_crossed = State._compute_max_dim_crossed_from_path(s2.path)
+        s2.max_dim_crossed = State._compute_max_dim_crossed_from_path(new_path)
 
     return s2
 
