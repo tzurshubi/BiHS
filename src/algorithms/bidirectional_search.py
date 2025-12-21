@@ -132,7 +132,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 continue
 
         # Logging progress
-        if expansions and expansions % 10_000 == 0:
+        if expansions and expansions % 20_000 == 0:
             logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}")
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")

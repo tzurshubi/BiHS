@@ -32,15 +32,15 @@ DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = True             # True # False
-DEFAULT_RUN_BI = False               # True # False
+DEFAULT_RUN_UNI = False             # True # False
+DEFAULT_RUN_BI = True               # True # False
 DEFAULT_RUN_MULTI = False           # True # False
 DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"               # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                  # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = 3   # 3 # 4 # 5 # 6 # 7
-DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER = False                  # True # False
+DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER = True                  # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -368,6 +368,8 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         if cube_buffer_dimension is not None and graph_type=="cube":
             log_file_name += f"_buffDim{cube_buffer_dimension}"
+        if symmetrical_generation_in_other_frontier and graph_type=="cube" and run_bi:
+            log_file_name += f"_symGen"
         args.log_file_name = log_file_name
         args.logger = make_logger(open(log_file_name, "w"))
     
