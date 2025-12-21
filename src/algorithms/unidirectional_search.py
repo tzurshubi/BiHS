@@ -47,7 +47,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         # Increment the expansion counter
         expansions += 1
         if expansions % 10_000 == 0:
-            logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, len={len(current_state.path)}")
+            logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, g={g_value}")
             
         # Check if the current state is the goal state
         if current_state.head == goal:
@@ -100,4 +100,4 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             open_set.push(successor, min(f_successor, f_value))
             FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
 
-    return best_path if snake else best_path.path, expansions, generated
+    return best_path.path, expansions, generated
