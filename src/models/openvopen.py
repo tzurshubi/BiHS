@@ -141,7 +141,7 @@ class Openvopen:
 
         return None, -1, solution, solution_g, num_checks, num_checks_sum_g_under_f_max
 
-    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, segment_key, snake=False):
+    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, snake=False):
         """
         Find all non-overlapping simple paths formed by concatenating `state`
         with states in the opposite direction within the same head cell.
@@ -163,7 +163,7 @@ class Openvopen:
         num_checks_sum_g_under_f_max = 0
         full_paths = []
 
-        cell_index = state.head # if state.head not in [self.start, self.goal] else state.path[0]
+        cell_index = state.head # if state.head not in [self.start, self.goal] else state.materialize_path()[0]
         opposite = 'B' if is_f else 'F'
         opp_struct = self.cells[cell_index][opposite]
 
@@ -181,8 +181,8 @@ class Openvopen:
                     num_checks_sum_g_under_f_max += 1
 
                 # If you only care about combinations that can beat the current best:
-                if total_g <= best_path_length:
-                    continue
+                # if total_g <= best_path_length:
+                #     continue
 
                 # Check vertex overlap (other than the head, which we handle in concatenation)
                 if state.shares_vertex_with(opposite_state, snake):
@@ -192,13 +192,13 @@ class Openvopen:
                 if is_f:
                     # state: s -> ... -> head
                     # opposite_state: t -> ... -> head
-                    full_path = state.path[:-1] + opposite_state.path[::-1]
-                    full_path_state = State(self.graph, full_path, [state.path[-1]], snake)
+                    full_path = state.materialize_path()[:-1] + opposite_state.materialize_path()[::-1]
+                    full_path_state = State(self.graph, full_path, [state.materialize_path()[-1]], snake)
                 else:
                     # state: t -> ... -> head
                     # opposite_state: s -> ... -> head
-                    full_path = opposite_state.path[:-1] + state.path[::-1]
-                    full_path_state = State(self.graph, full_path, [state.path[-1]], snake)
+                    full_path = opposite_state.materialize_path()[:-1] + state.materialize_path()[::-1]
+                    full_path_state = State(self.graph, full_path, [state.materialize_path()[-1]], snake)
 
                 full_paths.append(full_path_state)
 

@@ -1,0 +1,26 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [5, 5]
+heuristic: bcc_heuristic
+snake: True
+run_uni: False
+run_bi: False
+run_multi: True
+cube_first_dims: None
+cube_buffer_dimension: 2
+backward_sym_generation: False
+
+---------- cubes/5d_cube ----------
+[00:00:00:00:060] Expansion 15: Found path of length 10: [0, 16, 18, 22, 23, 31, 15, 14, 10, 8, 0]. g_F=3, g_B=5, f_max=17, generated=52
+[00:00:00:00:226] Expansion 70: Found path of length 12: [0, 16, 24, 28, 12, 14, 15, 31, 23, 21, 5, 1, 0]. g_F=2, g_B=7, f_max=16, generated=193
+[00:00:00:00:243] Expansion 72: Found path of length 14: [0, 16, 24, 26, 10, 14, 6, 22, 23, 31, 29, 13, 5, 1, 0]. g_F=4, g_B=9, f_max=16, generated=197
+[00:00:00:00:252] Upper Bound Terminatation - best path length: 14. best path: [0, 16, 24, 26, 10, 14, 6, 22, 23, 31, 29, 13, 5, 1, 0]
+[00:00:00:00:254] ! Multidirectional. expansions: 72, time: 253 [ms], path length: 14 [edges], generated: 197
+average expansions: (0, 0, 0, 72)
+average time: (0, 0, 0, 253)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 0 , 0 (expansions , time[ms])
+MDS1: 72 , 253 (expansions , time[ms])

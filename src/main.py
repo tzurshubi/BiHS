@@ -17,6 +17,7 @@ from algorithms.bidirectional_search import *
 from algorithms.multidirectional_search import *
 from algorithms.multidirectional_search1 import *
 from algorithms.tbt_search import *
+from algorithms.bidirectional_search_sym_coils import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -24,23 +25,24 @@ from utils.utils import *
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
-DEFAULT_LOG = True                  # True # False
-DEFAULT_DATE = "cubes"              # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 1        # 10
-DEFAULT_GRAPH_TYPE = "cube"         # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]      # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 16          # 4 / 8 / 12 / 16
-DEFAULT_HEURISTIC = "bcc_heuristic" # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                # True # False
-DEFAULT_RUN_UNI = False             # True # False
-DEFAULT_RUN_BI = True               # True # False
-DEFAULT_RUN_MULTI = False           # True # False
-DEFAULT_SOLUTION_VERTICES = [7]    # [] # for multidirectional search on cubes
-DEFAULT_ALGO = "basic"               # "basic" # "light" # "cutoff" # "full"
-DEFAULT_BSD = True                  # True # False
-DEFAULT_CUBE_FIRST_DIMENSIONS = 7   # 3 # 4 # 5 # 6 # 7
-DEFAULT_CUBE_BUFFER_DIMENSION = 3   # 3 # 4 # 5 # 6 # 7
-DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER = True                  # True # False
+DEFAULT_LOG = True                     # True # False
+DEFAULT_DATE = "cubes"                 # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 1           # 10
+DEFAULT_GRAPH_TYPE = "cube"            # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [7,7]         # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 16             # 4 / 8 / 12 / 16
+DEFAULT_HEURISTIC = "heuristic0"       # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
+DEFAULT_SNAKE = True                   # True # False
+DEFAULT_RUN_UNI = False                # True # False
+DEFAULT_RUN_BI = True                  # True # False
+DEFAULT_RUN_MULTI = False              # True # False
+DEFAULT_SOLUTION_VERTICES = [127]        # [] # for multidirectional search on cubes
+DEFAULT_ALGO = "basic"                 # "basic" # "light" # "cutoff" # "full"
+DEFAULT_BSD = True                     # True # False
+DEFAULT_CUBE_FIRST_DIMENSIONS = 4      # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_BUFFER_DIMENSION = None   # None # 3 # 4 # 5 # 6 # 7
+DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
+DEFAULT_SYM_COILS = True               # True # False
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -68,9 +70,9 @@ def parse_args():
     parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
     parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
-    parser.add_argument("--cube_buffer_dimension", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
-    parser.add_argument("--symmetrical_generation_in_other_frontier", type=str, default=DEFAULT_SYMMETRICAL_GENERATION_IN_OTHER_FRONTIER, help="Symmetrical generation in other frontier.")
-
+    parser.add_argument("--cube_buffer_dim", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
+    parser.add_argument("--backward_sym_generation", type=str, default=DEFAULT_BACKWARD_SYM_GENERATION, help="Symmetrical generation in other frontier.")
+    parser.add_argument("--sym_coils", type=str, default=DEFAULT_SYM_COILS, help="Find symmetrical coils.")
     return parser.parse_args()
 
 
@@ -232,7 +234,7 @@ def search(
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     args.graph_image_path = current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png"
     G_original = G.copy()
-    if args.graph_type=="cube" and cube_first_dims:
+    if args.graph_type=="cube" and cube_first_dims and not args.sym_coils:
         if G.has_edge(0, 1): G.remove_edge(0, 1)
         # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
         # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
@@ -255,7 +257,28 @@ def search(
         # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
         args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
         args.dim_flips_F_B_symmetry = list(range(cube_first_dims))
+    if args.graph_type=="cube" and cube_first_dims and args.sym_coils:
+        if G.has_edge(0, 1): G.remove_edge(0, 1)
 
+        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
+        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
+
+        # Compute the end vertex to keep: 0 and last vertex
+        keepers = {0, 2**cube_first_dims - 1}
+        keepers_list = list(keepers)
+
+        # Union of all neighbors of these vertices
+        neighbors = set()
+        for v in verts:
+            neighbors |= set(G.neighbors(v))
+
+        # Remove all except keepers
+        G.remove_nodes_from(neighbors - keepers)
+
+        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
+        args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
+        args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
+        args.cube_first_dims_path = [keepers_list[0]]+verts
     blocks = []
     logs = {}
 
@@ -285,18 +308,22 @@ def search(
         path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
-        path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
+        if not args.sym_coils:
+            path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
+        else: # if args.sym_coils:
+            path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
-        path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
+        # path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
         # print("\n\nRunning TBT search as multidirectional!")
         # time.sleep(1)
-        # path, expansions, generated, meet_points = tbt_search(G, size_of_graphs[0], 1, heuristic, snake, args)
+        path, expansions, generated = tbt_search(G, start, goal, heuristic, snake, args)
         
 
-    if not isinstance(path,list):
+    if path and not isinstance(path,list):
         path_state = path
         path = path_state.materialize_path()
+    if not path: args.logger("No path found.")
 
     # Collect logs
     end_time = time.time()
@@ -355,10 +382,13 @@ if __name__ == "__main__":
     run_uni = args.run_uni
     run_bi = args.run_bi
     run_multi = args.run_multi
+    solution_vertices = args.solution_vertices
+    algo = args.algo
     bsd = args.bsd
     cube_first_dims = args.cube_first_dims
-    cube_buffer_dimension = args.cube_buffer_dimension
-    symmetrical_generation_in_other_frontier = args.symmetrical_generation_in_other_frontier
+    cube_buffer_dim = args.cube_buffer_dim
+    backward_sym_generation = args.backward_sym_generation
+    sym_coils = args.sym_coils
 
     if log:
         log_file_name = "logs"
@@ -366,10 +396,14 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
-        if cube_buffer_dimension is not None and graph_type=="cube":
-            log_file_name += f"_buffDim{cube_buffer_dimension}"
-        if symmetrical_generation_in_other_frontier and graph_type=="cube" and run_bi:
+        if cube_buffer_dim is not None and graph_type=="cube":
+            log_file_name += f"_buffDim{cube_buffer_dim}"
+        if backward_sym_generation and graph_type=="cube" and run_bi:
             log_file_name += f"_symGen"
+        if sym_coils and graph_type=="cube" and run_bi:
+            log_file_name += f"_symCoils"
+        if solution_vertices is not None and len(solution_vertices)>0:
+            log_file_name += "_solVert"+"_".join([str(v) for v in solution_vertices])
         args.log_file_name = log_file_name
         args.logger = make_logger(open(log_file_name, "w"))
     
@@ -384,8 +418,8 @@ if __name__ == "__main__":
         args.logger(f"run_bi: {run_bi}")
         args.logger(f"run_multi: {run_multi}")
         args.logger(f"cube_first_dims: {cube_first_dims}")
-        args.logger(f"cube_buffer_dimension: {cube_buffer_dimension}")
-        args.logger(f"symmetrical_generation_in_other_frontier: {symmetrical_generation_in_other_frontier}")
+        args.logger(f"cube_buffer_dim: {cube_buffer_dim}")
+        args.logger(f"backward_sym_generation: {backward_sym_generation}")
 
     # Initialize an empty DataFrame to store the results
     columns = [
@@ -420,9 +454,11 @@ if __name__ == "__main__":
         elif graph_type=="cube":
             # if i<3: continue
             name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
-            start = 2**cube_first_dims - 1 # 7 # 15 # 31
+            start = 2**cube_first_dims-1 if cube_first_dims is not None else 2**size_of_graphs[0]-1 # 7 # 15 # 31
             goal = 0
-            # log_file_name = "results_"+name_of_graph+"_"+heuristic[:3]
+            if args.sym_coils:
+                start = 2**cube_first_dims-1 if cube_first_dims is not None else 0 # 7 # 15 # 31
+                goal = args.solution_vertices[0]
         elif graph_type=="manual":
             name_of_graph = f"paper_graph_{i}"
             start = "s"  # 0 # "s"
@@ -476,13 +512,14 @@ if __name__ == "__main__":
         # bidirectional
         if run_bi:
             logs, path, meet_point = search(
-                name_of_graph, start, goal, "bidirectional", heuristic, snake,args
+                name_of_graph, start, goal, "bidirectional", heuristic, snake, args
             )
             avgs["bi"]["expansions"].append(logs['expansions'])
             avgs["bi"]["time"].append(logs['time[ms]'])
-            args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
             # print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
-            results.append(
+            if not args.sym_coils: 
+                args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                results.append(
                 {
                     "# blocks": i,
                     "Search type": "bidirectional",
@@ -490,6 +527,19 @@ if __name__ == "__main__":
                     "Time [ms]": logs["time[ms]"],
                     "Memory [kB]": logs["memory[kB]"],
                     "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                }
+            )
+            else:
+                if path:    args.logger(f"! Bidirectional Symmetrical Coils. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}, memory: {logs['memory[kB]']:,} [kB]") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                else:       args.logger(f"! Bidirectional Symmetrical Coils. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}, memory: {logs['memory[kB]']:,} [kB]") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                results.append(
+                {
+                    "# blocks": i,
+                    "Search type": "bidirectional symmetrical coils",
+                    "# expansions": logs["expansions"],
+                    "Time [ms]": logs["time[ms]"],
+                    "Memory [kB]": logs["memory[kB]"],
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
             )
@@ -510,7 +560,7 @@ if __name__ == "__main__":
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
                     "Memory [kB]": logs["memory[kB]"],
-                    "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                    # "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
             )
