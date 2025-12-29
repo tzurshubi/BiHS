@@ -10,7 +10,7 @@ from collections import defaultdict
 def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger
     cube = args.graph_type == "cube"
-    buffer_dim = args.cube_buffer_dimension if cube else None
+    buffer_dim = args.cube_buffer_dime if cube else None
 
     # For Plotting
     g_degree_pairs = []  # Store (g, degree) for each expanded state

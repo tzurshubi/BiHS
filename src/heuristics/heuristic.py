@@ -231,7 +231,7 @@ def bct_is_heuristic(state, goal, snake=True):
 # Return the total number of vertices in the graph
 # This is the most basic heuristic which is also admissible in this case
 def heuristic0(state):
-    return len(state.graph.nodes)
+    return state.num_graph_vertices
 
 
 def dfs_reachable(graph, start, visited):

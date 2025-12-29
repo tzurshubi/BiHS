@@ -17,7 +17,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # max_f = []
     logger = args.logger 
     cube = args.graph_type == "cube"
-    buffer_dim = args.cube_buffer_dimension if cube else None
+    buffer_dim = args.cube_buffer_dim if cube else None
     calc_h_time = 0
     valid_meeting_check_time = 0
     valid_meeting_checks = 0
@@ -71,7 +71,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     while len(OPEN_F) > 0 or len(OPEN_B) > 0:
         # Determine which direction to expand
         directionF = None # True - Forward, False - Backward 
-        if cube and args.symmetrical_generation_in_other_frontier: 
+        if cube and args.backward_sym_generation: 
             directionF = True
             if len(OPEN_F) == 0: break
         elif alternate:
@@ -170,22 +170,22 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             f_successor = g_successor + h_successor
 
             # The state symmetric to successor should be inserted to OPEN_D_hat
-            if cube and args.symmetrical_generation_in_other_frontier: 
+            if cube and args.backward_sym_generation: 
                 successor_symmetric = symmetric_state_transform(successor, args.dim_flips_F_B_symmetry, args.dim_swaps_F_B_symmetry)
 
             # XMM_light + PathMin
             if args.algo == "light" or args.algo == "full":
                 OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
-                if cube and args.symmetrical_generation_in_other_frontier: 
+                if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(2 * h_successor, f_value, f_successor))
             else: 
                 OPEN_D.push(successor, min(f_value, f_successor))
-                if cube and args.symmetrical_generation_in_other_frontier: 
+                if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
             OPENvOPEN.insert_state(successor,directionF)
-            if cube and args.symmetrical_generation_in_other_frontier: 
+            if cube and args.backward_sym_generation: 
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)
 
     # Plotting BF vs g

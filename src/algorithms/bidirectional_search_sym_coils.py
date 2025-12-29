@@ -1,3 +1,4 @@
+from os import stat
 import matplotlib.pyplot as plt
 import heapq, time
 from heuristics.heuristic import heuristic
@@ -8,20 +9,25 @@ from utils.utils import *
 
 
 
-def tbt_search(graph, start, goal, heuristic_name, snake, args):
+def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     cube = args.graph_type == "cube"
-    d = args.size_of_graphs[0] if cube else None
+    if not cube or not args.sym_coils:
+        logger("Error: bidirectional_search_sym_coils is only for cube graphs.")
+        raise ValueError("bidirectional_search_sym_coils is only for cube graphs.")
     buffer_dim = args.cube_buffer_dim if cube else None
-    backward_sym_generation = args.backward_sym_generation
-    st_states = []
+    c_star = longest_sym_coil_lengths[args.size_of_graphs[0]]
+    half_coil_upper_bound = (c_star / 2) - args.cube_first_dims
+    g_cutoff_F, g_cutoff_B = half_coil_upper_bound // 2, (half_coil_upper_bound + 1) // 2
     calc_h_time = 0
-
+    valid_meeting_check_time = 0
+    valid_meeting_checks = 0
+    valid_meeting_checks_sum_g_under_f_max = 0
     g_values = []
     BF_values = []
 
     # Options
-    alternate = False # False
+    alternate = True # False
     lastDirectionF = False
 
     # Initialize meeting point of the two searches
@@ -33,8 +39,12 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     OPENvOPEN = Openvopen(graph, start, goal)
 
     # Initial states
-    initial_state_F = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
-    initial_state_B = State(graph, [goal], [], snake) if isinstance(goal, int) else State(graph, goal, [], snake)
+    graph_F, graph_B = graph.copy(), graph.copy()
+    graph_F.remove_nodes_from([0] + list(graph.neighbors(0)))
+    graph_F.remove_nodes_from([goal] + list(graph.neighbors(goal)))
+    graph_B.remove_nodes_from([0] + list(graph.neighbors(0)) + [start] + list(graph.neighbors(start)))
+    initial_state_F = State(graph_F, [start], [], snake) if isinstance(start, int) else State(graph_F, start, [], snake)
+    initial_state_B = State(graph_B, [goal], [], snake) if isinstance(goal, int) else State(graph_B, goal, [], snake)
 
     # Initial f_values
     initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake)
@@ -45,8 +55,6 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     # Push initial states with priority based on f_value
     OPEN_F.push(initial_state_F, initial_f_value_F)
     OPEN_B.push(initial_state_B, initial_f_value_B)
-    OPENvOPEN.insert_state(initial_state_F, True)
-    OPENvOPEN.insert_state(initial_state_B, False)
     FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap if snake else initial_state_F.path_vertices_bitmap)}
     FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap if snake else initial_state_B.path_vertices_bitmap)}
 
@@ -66,11 +74,12 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     while len(OPEN_F) > 0 or len(OPEN_B) > 0:
         # Determine which direction to expand
         directionF = None # True - Forward, False - Backward 
-        if cube and backward_sym_generation: 
+        if cube and args.backward_sym_generation: 
             directionF = True
             if len(OPEN_F) == 0: break
         elif alternate:
-            directionF = False if lastDirectionF else True
+            directionF = False if lastDirectionF        and len(OPEN_B) else True
+            directionF = True  if not lastDirectionF    and len(OPEN_F) else False
             lastDirectionF = not lastDirectionF
         else:
             if len(OPEN_F) > 0 and (
@@ -85,37 +94,33 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
         OPEN_D, OPEN_D_hat = (OPEN_F, OPEN_B) if directionF else (OPEN_B, OPEN_F)
         CLOSED_D, CLOSED_D_hat = (CLOSED_F, CLOSED_B) if directionF else (CLOSED_B, CLOSED_F)
         FNV_D , FNV_D_hat = (FNV_F, FNV_B) if directionF else (FNV_B, FNV_F)
+        g_cutoff = g_cutoff_F if directionF else g_cutoff_B
 
         # Get the best state from OPEN_D
         f_value, g_value, current_state = OPEN_D.top()
         current_path_length = current_state.g
 
-        # Debug:
-        if current_state.materialize_path() == [0,1,3,19,18]:
-            pass
-        if current_state.materialize_path() == [31,29,21,20,22,18]:
-            pass
-
         # Check against OPEN of the other direction, for a valid meeting point
-        curr_time = time.time()
-        current_st_states, _, _ = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, best_path_length, f_value, snake)
-        for current_st_state in current_st_states:
-            for complementary_st_state in st_states:
-                valid_coil, p1, p2 = check_2_st_paths_form_coil(current_st_state, complementary_st_state, d)
-                if valid_coil:
-                    total_length = current_st_state.g + complementary_st_state.g
-                    if total_length > best_path_length:
-                        best_path_length = total_length
-                        best_path = p1[::-1] + p2[1:]
-                        # print(f"p1: {p1}")
-                        # print(f"p2: {p2}")
-                        # print(f"New best path of length {best_path_length}: {best_path}")
-                        if snake:
-                            logger(f"Expansion {expansions}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={current_st_state.g}, f_max={f_value}, generated={generated}")
-            st_states.append(current_st_state)
+        if current_state.g >= g_cutoff:
+            curr_time = time.time()
+            states, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, best_path_length, f_value, snake)
+            valid_meeting_check_time += time.time() - curr_time
+            valid_meeting_checks += num_checks
+            valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
+            for state in states:
+                half_coil_to_check = args.cube_first_dims_path + state.path
+                is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+                if is_sym_coil:
+                    logger("SYM_COIL_FOUND")
+                    logger(f"Expansion {expansions}: Found symmetric coil of length {len(sym_coil)-1}: {sym_coil}. generated={generated}")
+                    return sym_coil, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
+
 
         # Termination Condition: check if U is the largest it will ever be
-        if best_path_length >= longest_coil_lengths.get(d, float('-inf')):
+        if best_path_length >= min(
+            OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
+            OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
+        ):
             logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
             break
 
@@ -123,18 +128,16 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
         if current_state.traversed_buffer_dimension:
             OPEN_D.pop()
             continue
-
-        # XMM_full: g cutoff. if g > f_max/2 don't expand it, but keep it in OPENvOPEN for checking collision with the other side
-        if args.algo == "cutoff" or args.algo == "full":
-            if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
-                OPEN_D.pop()
-                moved_OPEN_to_AUXOPEN += 1
-                # logger(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
-                continue
+        
+        # Symmetric coil pruning: do not expand states with g > half_coil_upper_bound
+        if (D=='F' and current_state.g > g_cutoff_F) or (D=='B' and current_state.g > g_cutoff_B): 
+            # logger(f"Not expanding state {current_state.path} because state.g = {current_state.g} > half_coil_upper_bound = {half_coil_upper_bound}")
+            OPEN_D.pop()
+            continue
 
         # Logging progress
-        if expansions and expansions % 100 == 0:
-            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}, st_paths={len(st_states)}, best_path_length={best_path_length}, generated={generated}")
+        if expansions and expansions % 100_000 == 0:
+            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}, path={current_state.path}, OPEN_F={len(OPEN_F)}, OPEN_B={len(OPEN_B)}, best_path_length={best_path_length}, generated={generated}.")
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
@@ -143,8 +146,6 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
 
         # Get the current state from OPEN_D TO CLOSED_D
         f_value, g_value, current_state = OPEN_D.pop()
-        # OPENvOPEN.remove_state(current_state, directionF)
-        # CLOSED_D.add(current_state)
 
         # Generate successors
         successors = current_state.successor(args, snake, directionF)
@@ -154,18 +155,10 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
                 # logger(f"symmetric state removed: {successor.path}")
                 continue
 
-            # Debug:
-            if successor.materialize_path() == [0,1,3,19,18]:
-                pass
-            if successor.materialize_path() == [31,29,21,20,22,18]:
-                pass
-
             # Check if successor traverses the buffer dimension in cube graphs
-            if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
+            if buffer_dim is not None and has_bridge_edge_across_dim(current_state, successor, buffer_dim):
                 successor.traversed_buffer_dimension = True
-                if not directionF: 
-                    OPENvOPEN.insert_state(successor,directionF)
-                    continue  # do not add backward states that traversed buffer dimension to OPEN_B
+                if not directionF: continue  # do not add backward states that traversed buffer dimension to OPEN_B
             
             generated += 1
             
@@ -179,28 +172,29 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
             f_successor = g_successor + h_successor
 
             # The state symmetric to successor should be inserted to OPEN_D_hat
-            if cube and backward_sym_generation: 
+            if cube and args.backward_sym_generation: 
                 successor_symmetric = symmetric_state_transform(successor, args.dim_flips_F_B_symmetry, args.dim_swaps_F_B_symmetry)
 
             # XMM_light + PathMin
             if args.algo == "light" or args.algo == "full":
                 OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
-                if cube and backward_sym_generation: 
+                if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(2 * h_successor, f_value, f_successor))
             else: 
                 OPEN_D.push(successor, min(f_value, f_successor))
-                if cube and backward_sym_generation: 
+                if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
-            OPENvOPEN.insert_state(successor,directionF)
-            if cube and backward_sym_generation: 
+            if successor.g == g_cutoff: 
+                OPENvOPEN.insert_state(successor,directionF)
+            if cube and args.backward_sym_generation: 
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)
     
-    # for st_state in st_states:
-    #     print(st_state.path[::-1])
-    #     if st_state.path[::-1] == [0,1,3,19,18,22,20,21,29,31]:
-    #         pass
-    #     if st_state.path[::-1] == [0,8,10,14,15,31]:
-    #         pass
-    return best_path, expansions, generated
+    # Statistics logging
+    # bidirectional_stats = f"valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]. # of states in OPENvOPEN: {OPENvOPEN.counter}."
+    # print(f"[Bidirectional Stats] {bidirectional_stats}")
+    # with open(args.log_file_name, 'a') as file:
+    #     file.write(f"\n[Bidirectional Stats] {bidirectional_stats}\n")
+
+    return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
