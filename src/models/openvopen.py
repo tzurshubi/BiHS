@@ -193,14 +193,15 @@ class Openvopen:
                     # state: s -> ... -> head
                     # opposite_state: t -> ... -> head
                     full_path = state.materialize_path()[:-1] + opposite_state.materialize_path()[::-1]
-                    full_path_state = State(self.graph, full_path, [state.materialize_path()[-1]], snake)
+                    # full_path_state = State(self.graph, full_path, [state.materialize_path()[-1]], snake)
                 else:
                     # state: t -> ... -> head
                     # opposite_state: s -> ... -> head
                     full_path = opposite_state.materialize_path()[:-1] + state.materialize_path()[::-1]
-                    full_path_state = State(self.graph, full_path, [state.materialize_path()[-1]], snake)
+                    # full_path_state = State(self.graph, full_path, [state.materialize_path()[-1]], snake)
 
-                full_paths.append(full_path_state)
+                # full_paths.append(full_path_state)
+                full_paths.append(full_path)
 
         return full_paths, num_checks, num_checks_sum_g_under_f_max
 

@@ -101,14 +101,14 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
         current_path_length = current_state.g
 
         # Check against OPEN of the other direction, for a valid meeting point
-        if current_state.g >= g_cutoff:
+        if current_state.g == g_cutoff:
             curr_time = time.time()
-            states, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, best_path_length, f_value, snake)
+            paths, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, best_path_length, f_value, snake)
             valid_meeting_check_time += time.time() - curr_time
             valid_meeting_checks += num_checks
             valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
-            for state in states:
-                half_coil_to_check = args.cube_first_dims_path + state.path
+            for path in paths:
+                half_coil_to_check = args.cube_first_dims_path + path
                 is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
                 if is_sym_coil:
                     logger("SYM_COIL_FOUND")
