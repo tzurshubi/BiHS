@@ -1,21 +1,7 @@
 #!/usr/bin/env python3
-"""
-Scan a folder of result logs (ignore *.csv) and report:
-
-- total number of files scanned
-- how many contain "no path found" (case-insensitive)
-- stats (count/min/median/mean/max) for expansions and time_ms parsed from summary lines like:
-  "... expansions: 2,980,571, time: 1,388,207 [ms] ..."
-
-Usage:
-  python scan_results.py /path/to/folder
-  python scan_results.py /path/to/folder --details
-"""
-
 from __future__ import annotations
 
 import argparse
-import os
 import re
 import statistics
 from dataclasses import dataclass
@@ -30,6 +16,11 @@ SUMMARY_RE = re.compile(
 
 NO_PATH_RE = re.compile(r"\bno\s+path\s+found\b", re.IGNORECASE)
 
+PATHS_FOUND_RE = re.compile(
+    r"Total\s+number\s+of\s+paths\s+with\s+g\s*==\s*g_cutoff\([^)]*\)\s*found:\s*([\d,]+)",
+    re.IGNORECASE,
+)
+
 
 def parse_int_commas(s: str) -> int:
     return int(s.replace(",", "").strip())
@@ -41,14 +32,14 @@ class FileResult:
     has_no_path_found: bool
     expansions: Optional[int]
     time_ms: Optional[int]
+    paths_found: Optional[int]
     summary_line: Optional[str]
 
 
 def scan_file(p: Path) -> FileResult:
-    # We parse "no path found" anywhere in the file,
-    # and parse expansions/time from the LAST matching summary line (if any).
     has_no_path = False
-    last_match: Optional[Tuple[int, int, str]] = None
+    last_summary: Optional[Tuple[int, int, str]] = None
+    last_paths_found: Optional[int] = None
 
     try:
         with p.open("r", encoding="utf-8", errors="replace") as f:
@@ -60,32 +51,39 @@ def scan_file(p: Path) -> FileResult:
                 if m:
                     exp = parse_int_commas(m.group(1))
                     tms = parse_int_commas(m.group(2))
-                    last_match = (exp, tms, line.rstrip("\n"))
+                    last_summary = (exp, tms, line.rstrip("\n"))
+
+                pm = PATHS_FOUND_RE.search(line)
+                if pm:
+                    last_paths_found = parse_int_commas(pm.group(1))
+
     except Exception as e:
-        # If a file is unreadable, treat as scanned but with missing stats.
         return FileResult(
             path=p,
             has_no_path_found=False,
             expansions=None,
             time_ms=None,
+            paths_found=None,
             summary_line=f"ERROR reading file: {e}",
         )
 
-    if last_match is None:
+    if last_summary is None:
         return FileResult(
             path=p,
             has_no_path_found=has_no_path,
             expansions=None,
             time_ms=None,
+            paths_found=last_paths_found,
             summary_line=None,
         )
 
-    exp, tms, sline = last_match
+    exp, tms, sline = last_summary
     return FileResult(
         path=p,
         has_no_path_found=has_no_path,
         expansions=exp,
         time_ms=tms,
+        paths_found=last_paths_found,
         summary_line=sline,
     )
 
@@ -114,13 +112,7 @@ def fmt_s(ms: Optional[float]) -> str:
 
 def describe(values: List[int]) -> dict:
     if not values:
-        return {
-            "count": 0,
-            "min": None,
-            "median": None,
-            "mean": None,
-            "max": None,
-        }
+        return {"count": 0, "min": None, "median": None, "mean": None, "max": None}
     return {
         "count": len(values),
         "min": min(values),
@@ -131,7 +123,7 @@ def describe(values: List[int]) -> dict:
 
 
 def main() -> int:
-    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_12_30"
+    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_01"
 
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -143,18 +135,14 @@ def main() -> int:
     ap.add_argument("--details", action="store_true", help="Print per-file parsed summary")
     args = ap.parse_args()
 
-
     root = Path(args.folder).expanduser().resolve()
     if not root.exists() or not root.is_dir():
         print(f"ERROR: not a folder: {root}")
         return 2
 
-    # Collect all non-csv files (non-recursive). Change to rglob("*") if you want recursive.
     files: List[Path] = []
     for entry in sorted(root.iterdir()):
-        if entry.is_file():
-            if entry.suffix.lower() == ".csv":
-                continue
+        if entry.is_file() and entry.suffix.lower() != ".csv":
             files.append(entry)
 
     results: List[FileResult] = [scan_file(p) for p in files]
@@ -164,13 +152,18 @@ def main() -> int:
 
     exp_values = [r.expansions for r in results if r.expansions is not None]
     time_values = [r.time_ms for r in results if r.time_ms is not None]
+    paths_values = [r.paths_found for r in results if r.paths_found is not None]
 
     exp_stats = describe(exp_values)
     time_stats = describe(time_values)
+    paths_stats = describe(paths_values)
 
-    # Basic counts about stats extraction
     parsed_count = sum(1 for r in results if r.expansions is not None and r.time_ms is not None)
     missing_count = total_files - parsed_count
+
+    paths_parsed_count = sum(1 for r in results if r.paths_found is not None)
+    paths_missing_count = total_files - paths_parsed_count
+    total_paths_found = sum(paths_values) if paths_values else 0
 
     print("=== Scan summary ===")
     print(f"Folder: {root}")
@@ -178,6 +171,8 @@ def main() -> int:
     print(f'Files containing "no path found": {no_path_files}')
     print(f"Files with parsed expansions+time: {parsed_count}")
     print(f"Files missing parsed expansions+time: {missing_count}")
+    print(f"Files with parsed paths_found: {paths_parsed_count}")
+    print(f"Files missing paths_found: {paths_missing_count}")
     print()
 
     print("=== Expansions stats (parsed from summary lines) ===")
@@ -196,20 +191,29 @@ def main() -> int:
     print(f"max   : {fmt_ms(time_stats['max'])} ({fmt_s(time_stats['max'])})")
     print()
 
+    print("=== Paths found stats (from 'Total number of paths ... found: N') ===")
+    print(f"count : {paths_stats['count']}")
+    print(f"min   : {fmt_int(paths_stats['min'])}")
+    print(f"median: {fmt_int(paths_stats['median'])}")
+    print(f"mean  : {fmt_int(paths_stats['mean'])}")
+    print(f"max   : {fmt_int(paths_stats['max'])}")
+    print(f"sum   : {fmt_int(total_paths_found)}")
+    print()
+
     if args.details:
         print("=== Per-file details ===")
         for r in results:
             exp_s = fmt_int(r.expansions) if r.expansions is not None else "NA"
             t_s = fmt_ms(r.time_ms) if r.time_ms is not None else "NA"
+            pf_s = fmt_int(r.paths_found) if r.paths_found is not None else "NA"
             tag = "NO_PATH" if r.has_no_path_found else "OK"
-            print(f"- {r.path.name}  [{tag}]  expansions={exp_s}  time={t_s}")
+            print(f"- {r.path.name}  [{tag}]  expansions={exp_s}  time={t_s}  paths_found={pf_s}")
             if r.summary_line:
                 print(f"  summary: {r.summary_line}")
             elif r.expansions is None or r.time_ms is None:
                 print("  summary: (no matching 'expansions: ..., time: ... [ms]' line found)")
         print()
 
-    # Optional: show top 5 slowest / highest expansions (only if parsed)
     if parsed_count:
         parsed = [r for r in results if r.time_ms is not None and r.expansions is not None]
         slowest = sorted(parsed, key=lambda x: x.time_ms, reverse=True)[:5]
