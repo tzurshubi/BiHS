@@ -30,7 +30,7 @@ longest_sym_coil_lengths = {
     4: 8,
     5: 14,
     6: 26,
-    7: 48,   # 46 for finding, 48 for proving
+    7: 46,   # 46 for finding, 48 for proving
     8: 96,   # 94 for finding, 96 for proving
     9: 186,  # 186 for finding, 192 for proving
     10: 384, # upper bound
