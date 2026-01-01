@@ -7,13 +7,12 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 
 
-def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
+def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger
     cube = args.graph_type == "cube"
     buffer_dim = args.cube_buffer_dim if cube else None
-
-    # For Plotting
-    g_degree_pairs = []  # Store (g, degree) for each expanded state
+    c_star = longest_sym_coil_lengths[args.size_of_graphs[0]]
+    half_coil_upper_bound = (c_star / 2) - args.cube_first_dims
 
     # Initialize custom priority queue
     open_set = HeapqState()
@@ -46,17 +45,23 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Increment the expansion counter
         expansions += 1
-        if expansions % 10_000 == 0:
-            logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, g={g_value}")
+
+        # Debug
+        # p = current_state.materialize_path()
+        # prefix_to_check = [127, 119, 103, 99, 107, 75, 73, 77, 69, 68, 100, 116, 124, 120, 121]
+        # if p[:len(prefix_to_check)]==prefix_to_check:
+        if expansions % 100_000 == 0:
+            logger(f"Expansion {expansions}: state {current_state.materialize_path()}, f={f_value}, g={g_value}")
             
         # Check if the current state is the goal state
-        if current_state.head == goal:
-            if current_path_length > best_path_length:
-                best_path = current_state
-                best_path_length = current_path_length
-                if snake:
-                    logger(f"Expansion {expansions}: Found path of length {best_path_length}: {best_path.materialize_path()}. f_max={f_value}, generated={generated}")
-            continue
+        if current_state.head == goal and current_state.g == half_coil_upper_bound:
+            path = current_state.materialize_path()
+            half_coil_to_check = args.cube_first_dims_path + path
+            is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+            if is_sym_coil:
+                logger("SYM_COIL_FOUND")
+                logger(f"Expansion {expansions}: Found symmetric coil of length {len(sym_coil)-1}: {sym_coil}. generated={generated}")
+                return sym_coil, expansions, generated
 
         # Finish if the f_value is smaller than the best path length found so far
         if f_value <= best_path_length:
@@ -65,9 +70,6 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Generate successors
         successors = current_state.successor(args, snake, True)
-
-        # For Plotting
-        g_degree_pairs.append((current_state.g, len(successors)))
 
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV:

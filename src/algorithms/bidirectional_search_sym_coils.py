@@ -137,7 +137,7 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
 
         # Logging progress
         if expansions and expansions % 100_000 == 0:
-            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}, path={current_state.path}, OPEN_F={len(OPEN_F)}, OPEN_B={len(OPEN_B)}, best_path_length={best_path_length}, generated={generated}.")
+            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}, path={current_state.materialize_path()}, OPEN_F={len(OPEN_F)}, OPEN_B={len(OPEN_B)}, best_path_length={best_path_length}, generated={generated}.")
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
