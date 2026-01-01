@@ -113,16 +113,16 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
                 if is_sym_coil:
                     logger("SYM_COIL_FOUND")
                     logger(f"Expansion {expansions}: Found symmetric coil of length {len(sym_coil)-1}: {sym_coil}. generated={generated}")
-                    return sym_coil, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
+                    # return sym_coil, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
 
 
         # Termination Condition: check if U is the largest it will ever be
-        if best_path_length >= min(
-            OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
-            OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
-        ):
-            logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
-            break
+        # if best_path_length >= min(
+        #     OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
+        #     OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
+        # ):
+        #     logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
+        #     break
 
         # Skip states that traverse the buffer dimension in cube graphs
         if current_state.traversed_buffer_dimension:
@@ -196,5 +196,5 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
     # print(f"[Bidirectional Stats] {bidirectional_stats}")
     # with open(args.log_file_name, 'a') as file:
     #     file.write(f"\n[Bidirectional Stats] {bidirectional_stats}\n")
-
+    logger(f"Total number of paths with g == g_cutoff({g_cutoff_F}/{g_cutoff_B}) found: {OPENvOPEN.counter}")
     return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
