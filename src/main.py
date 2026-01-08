@@ -34,8 +34,8 @@ DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = True                   # True # False
+DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = [25]        # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
@@ -541,7 +541,8 @@ if __name__ == "__main__":
             )
             avgs["uni_st"]["expansions"].append(logs['expansions'])
             avgs["uni_st"]["time"].append(logs['time[ms]'])
-            args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+            if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+            else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], generated: {logs['generated']}")
             results.append(
                 {
                     "# blocks": i,

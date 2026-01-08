@@ -81,7 +81,7 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
-            if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
+            if buffer_dim is not None and has_bridge_edge_across_dim(current_state, successor, buffer_dim):
                 if successor.traversed_buffer_dimension: continue  # already traversed buffer dimension
                 successor.traversed_buffer_dimension = True
 
