@@ -30,6 +30,7 @@ def parse_int_commas(s: str) -> int:
 class FileResult:
     path: Path
     has_no_path_found: bool
+    has_sym_coil_found: bool  # <--- NEW FIELD
     expansions: Optional[int]
     time_ms: Optional[int]
     paths_found: Optional[int]
@@ -38,6 +39,7 @@ class FileResult:
 
 def scan_file(p: Path) -> FileResult:
     has_no_path = False
+    has_sym_coil = False      # <--- NEW TRACKER
     last_summary: Optional[Tuple[int, int, str]] = None
     last_paths_found: Optional[int] = None
 
@@ -46,6 +48,10 @@ def scan_file(p: Path) -> FileResult:
             for line in f:
                 if not has_no_path and NO_PATH_RE.search(line):
                     has_no_path = True
+                
+                # <--- NEW CHECK
+                if not has_sym_coil and "SYM_COIL_FOUND" in line:
+                    has_sym_coil = True
 
                 m = SUMMARY_RE.search(line)
                 if m:
@@ -61,6 +67,7 @@ def scan_file(p: Path) -> FileResult:
         return FileResult(
             path=p,
             has_no_path_found=False,
+            has_sym_coil_found=False,
             expansions=None,
             time_ms=None,
             paths_found=None,
@@ -71,6 +78,7 @@ def scan_file(p: Path) -> FileResult:
         return FileResult(
             path=p,
             has_no_path_found=has_no_path,
+            has_sym_coil_found=has_sym_coil,
             expansions=None,
             time_ms=None,
             paths_found=last_paths_found,
@@ -81,6 +89,7 @@ def scan_file(p: Path) -> FileResult:
     return FileResult(
         path=p,
         has_no_path_found=has_no_path,
+        has_sym_coil_found=has_sym_coil,
         expansions=exp,
         time_ms=tms,
         paths_found=last_paths_found,
@@ -123,7 +132,7 @@ def describe(values: List[int]) -> dict:
 
 
 def main() -> int:
-    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2025_12_30"
+    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_02/7d"
 
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -149,6 +158,7 @@ def main() -> int:
 
     total_files = len(results)
     no_path_files = sum(1 for r in results if r.has_no_path_found)
+    sym_coil_files = sum(1 for r in results if r.has_sym_coil_found) # <--- COUNTING
 
     exp_values = [r.expansions for r in results if r.expansions is not None]
     time_values = [r.time_ms for r in results if r.time_ms is not None]
@@ -169,6 +179,7 @@ def main() -> int:
     print(f"Folder: {root}")
     print(f"Files scanned (excluding *.csv): {total_files}")
     print(f'Files containing "no path found": {no_path_files}')
+    print(f'Files containing "SYM_COIL_FOUND": {sym_coil_files}') # <--- PRINTING
     print(f"Files with parsed expansions+time: {parsed_count}")
     print(f"Files missing parsed expansions+time: {missing_count}")
     print(f"Files with parsed paths_found: {paths_parsed_count}")
@@ -206,8 +217,15 @@ def main() -> int:
             exp_s = fmt_int(r.expansions) if r.expansions is not None else "NA"
             t_s = fmt_ms(r.time_ms) if r.time_ms is not None else "NA"
             pf_s = fmt_int(r.paths_found) if r.paths_found is not None else "NA"
-            tag = "NO_PATH" if r.has_no_path_found else "OK"
-            print(f"- {r.path.name}  [{tag}]  expansions={exp_s}  time={t_s}  paths_found={pf_s}")
+            
+            # Update tags to include COIL
+            tags = []
+            if r.has_no_path_found: tags.append("NO_PATH")
+            if r.has_sym_coil_found: tags.append("COIL")
+            if not tags: tags.append("OK")
+            tag_str = ",".join(tags)
+            
+            print(f"- {r.path.name}  [{tag_str}]  expansions={exp_s}  time={t_s}  paths_found={pf_s}")
             if r.summary_line:
                 print(f"  summary: {r.summary_line}")
             elif r.expansions is None or r.time_ms is None:
@@ -228,6 +246,19 @@ def main() -> int:
         for r in biggest:
             print(f"- {r.path.name}: expansions={fmt_int(r.expansions)}  time={fmt_ms(r.time_ms)}")
         print()
+
+        print("=== Bottom 5 by time (ms) ===")
+        fastest = sorted(parsed, key=lambda x: x.time_ms)[:5]
+        for r in fastest:
+            print(f"- {r.path.name}: {fmt_ms(r.time_ms)}  expansions={fmt_int(r.expansions)}")
+        print()
+
+        print("=== Bottom 5 by expansions ===")
+        smallest = sorted(parsed, key=lambda x: x.expansions)[:5]
+        for r in smallest:
+            print(f"- {r.path.name}: expansions={fmt_int(r.expansions)}  time={fmt_ms(r.time_ms)}")
+        print()
+
 
     return 0
 

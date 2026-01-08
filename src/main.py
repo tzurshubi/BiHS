@@ -30,18 +30,18 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_UNI = False                 # True # False
+DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [81]        # [] # for multidirectional search on cubes
+DEFAULT_SOLUTION_VERTICES = [25]        # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
-DEFAULT_BSD = False                     # True # False
-DEFAULT_CUBE_FIRST_DIMENSIONS = 8       # 3 # 4 # 5 # 6 # 7
-DEFAULT_CUBE_BUFFER_DIMENSION = 6       # None # 3 # 4 # 5 # 6 # 7
+DEFAULT_BSD = True                     # True # False
+DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_BUFFER_DIMENSION = None       # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COILS = True                # True # False
 
@@ -229,9 +229,7 @@ def search(
     snake,
     args
 ):
-    # print(f"*SEARCH* Graph Name: {name_of_graph}, Graph Size: {args.size_of_graphs}, Start: {start}, Goal: {goal}, Search Type: {search_type}, Heuristic: {heuristic}")
     # Load the graph
-    # print("tzsh:"+current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     args.graph_image_path = current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png"
     
@@ -340,8 +338,6 @@ def search(
         args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
         args.cube_first_dims_path = verts
     
-   
-    
     blocks = []
     logs = {}
 
@@ -358,7 +354,6 @@ def search(
 
     meet_point = None
     meet_points = None
-    g_values = []
     tracemalloc.start()
     start_time = time.time()
     args.start_time = start_time
@@ -369,21 +364,21 @@ def search(
     if search_type == "unidirectional":
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coils:
-            path, expansions, generated = unidirectional_search(G, start, goal, heuristic, snake, args)
+            path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coils:
-            path, expansions, generated = unidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
+            path, stats = unidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coils:
-            path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search(G, start, goal, heuristic, snake, args)
+            path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coils:
-            path, expansions, generated, moved_OPEN_to_AUXOPEN, meet_point, g_values = bidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
+            path, stats, meet_point = bidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         # path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
         # print("\n\nRunning TBT search as multidirectional!")
         # time.sleep(1)
-        path, expansions, generated = tbt_search(G, start, goal, heuristic, snake, args)
+        path, stats = tbt_search(G, start, goal, heuristic, snake, args)
         
 
     if path and not isinstance(path,list):
@@ -395,15 +390,15 @@ def search(
     end_time = time.time()
     memory_snapshot = tracemalloc.take_snapshot()
     tracemalloc.stop()
-    logs["memory[kB]"] = math.floor(
-        sum(stat.size for stat in memory_snapshot.statistics("lineno")) / 1024
-    )
+    logs["memory[kB]"] = math.floor(sum(stat.size for stat in memory_snapshot.statistics("lineno")) / 1024)
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
-    logs["expansions"] = expansions
-    logs["generated"] = generated
-    if search_type == "bidirectional":
-        logs["moved_OPEN_to_AUXOPEN"] = moved_OPEN_to_AUXOPEN
-        logs["g_values"] = g_values
+    logs.update(stats)
+
+
+    excluded = {"g_values", "BF_values"}
+    filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
+    args.logger(f"LOGS: {filtered_logs}")
+
 
     # Save the graph as PNG with the path if found
     meet_points = meet_points if meet_points else [meet_point]
@@ -468,6 +463,10 @@ if __name__ == "__main__":
             log_file_name += f"_symGen"
         if sym_coils and graph_type=="cube" and run_bi:
             log_file_name += f"_symCoils"
+        if args.bsd:
+            log_file_name += "_BSD"
+        if args.cube_first_dims is not None:
+            log_file_name += f"_{cube_first_dims}DDS"
         if solution_vertices is not None and len(solution_vertices)>0:
             log_file_name += "_solVert"+"_".join([str(v) for v in solution_vertices])
         args.log_file_name = log_file_name

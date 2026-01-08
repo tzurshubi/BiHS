@@ -9,6 +9,7 @@ from utils.utils import *
 
 
 def tbt_search(graph, start, goal, heuristic_name, snake, args):
+    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0}
     logger = args.logger 
     cube = args.graph_type == "cube"
     d = args.size_of_graphs[0] if cube else None
@@ -55,9 +56,9 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     best_path_length = -1   # U in the pseudocode
 
     # Expansion counter, generated counter
-    expansions = 0
-    generated = 0
-    moved_OPEN_to_AUXOPEN = 0
+    stats["expansions"] = 0
+    stats["generated"] = 0
+    stats["moved_OPEN_to_AUXOPEN"] = 0
 
     # Closed sets for forward and backward searches
     CLOSED_F = set()
@@ -111,7 +112,7 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
                         # print(f"p2: {p2}")
                         # print(f"New best path of length {best_path_length}: {best_path}")
                         if snake:
-                            logger(f"Expansion {expansions}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={current_st_state.g}, f_max={f_value}, generated={generated}")
+                            logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={current_st_state.g}, f_max={f_value}, generated={stats['generated']}")
             st_states.append(current_st_state)
 
         # Termination Condition: check if U is the largest it will ever be
@@ -133,12 +134,12 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
                 continue
 
         # Logging progress
-        if expansions and expansions % 100 == 0:
-            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}, st_paths={len(st_states)}, best_path_length={best_path_length}, generated={generated}")
+        if stats["expansions"] and stats["expansions"] % 100 == 0:
+            logger(f"Expansion {stats['expansions']}: f={f_value}, g={current_state.g}, st_paths={len(st_states)}, best_path_length={best_path_length}, generated={stats['generated']}")
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
-        expansions += 1
+        stats["expansions"] += 1
         g_values.append(current_state.g)
 
         # Get the current state from OPEN_D TO CLOSED_D
@@ -152,6 +153,7 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
+                stats["symmetric_states_removed"] += 1
                 continue
 
             # Debug:
@@ -166,9 +168,9 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
                 if not directionF: 
                     OPENvOPEN.insert_state(successor,directionF)
                     continue  # do not add backward states that traversed buffer dimension to OPEN_B
-            
-            generated += 1
-            
+
+            stats["generated"] += 1
+
             # Calculate g, h, f values for successor
             curr_time = time.time()
             h_successor = heuristic(
@@ -203,4 +205,4 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     #         pass
     #     if st_state.path[::-1] == [0,8,10,14,15,31]:
     #         pass
-    return best_path, expansions, generated
+    return best_path, stats

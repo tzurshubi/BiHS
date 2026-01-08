@@ -15,15 +15,10 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # h_MIS = []
     # h_BCC = []
     # max_f = []
+    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0, "valid_meeting_checks": 0, "valid_meeting_checks_sum_g_under_f_max": 0, "valid_meeting_check_time": 0, "calc_h_time": 0, "moved_OPEN_to_AUXOPEN": 0, "g_values": [], "BF_values": []}
     logger = args.logger 
     cube = args.graph_type == "cube"
     buffer_dim = args.cube_buffer_dim if cube else None
-    calc_h_time = 0
-    valid_meeting_check_time = 0
-    valid_meeting_checks = 0
-    valid_meeting_checks_sum_g_under_f_max = 0
-    g_values = []
-    BF_values = []
 
     # Options
     alternate = False # False
@@ -60,9 +55,9 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     best_path_length = -1   # U in the pseudocode
 
     # Expansion counter, generated counter
-    expansions = 0
-    generated = 0
-    moved_OPEN_to_AUXOPEN = 0
+    stats["expansions"] = 0
+    stats["generated"] = 0
+    stats["moved_OPEN_to_AUXOPEN"] = 0
 
     # Closed sets for forward and backward searches
     CLOSED_F = set()
@@ -98,9 +93,9 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
         state, _, _, _, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_longest_non_overlapping_state(current_state, directionF, best_path_length, f_value, snake)
-        valid_meeting_check_time += time.time() - curr_time
-        valid_meeting_checks += num_checks
-        valid_meeting_checks_sum_g_under_f_max += num_checks_sum_g_under_f_max
+        stats["valid_meeting_check_time"] += time.time() - curr_time
+        stats["valid_meeting_checks"] += num_checks
+        stats["valid_meeting_checks_sum_g_under_f_max"] += num_checks_sum_g_under_f_max
         if state:
             total_length = current_path_length + state.g
             if total_length > best_path_length:
@@ -108,7 +103,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.materialize_path()[:-1] + state.materialize_path()[::-1]
                 best_path_meet_point = current_state.head
                 if snake:
-                    logger(f"Expansion {expansions}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={generated}")
+                    logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={stats['generated']}")
                     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
@@ -127,18 +122,18 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         if args.algo == "cutoff" or args.algo == "full":
             if (D=='F' and current_state.g > f_value/2 - 1) or (D=='B' and current_state.g > (f_value - 1)/2): 
                 OPEN_D.pop()
-                moved_OPEN_to_AUXOPEN += 1
+                stats["moved_OPEN_to_AUXOPEN"] += 1
                 # logger(f"Not expanding state {current_state.path} because state.g = {current_state.g}")
                 continue
 
         # Logging progress
-        if expansions and expansions % 20_000 == 0:
-            logger(f"Expansion {expansions}: f={f_value}, g={current_state.g}")
+        if stats["expansions"] and stats["expansions"] % 20_000 == 0:
+            logger(f"Expansion {stats['expansions']}: f={f_value}, g={current_state.g}")
         #     print(f"closed_F: {len(closed_set_F)}. closed_B: {len(closed_set_B)}")
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
-        expansions += 1
-        g_values.append(current_state.g)
+        stats["expansions"] += 1
+        stats["g_values"].append(current_state.g)
 
         # Get the current state from OPEN_D TO CLOSED_D
         f_value, g_value, current_state = OPEN_D.pop()
@@ -147,25 +142,26 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
         # Generate successors
         successors = current_state.successor(args, snake, directionF)
-        BF_values.append(len(successors))
+        stats["BF_values"].append(len(successors))
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
+                stats["symmetric_states_removed"] += 1
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
             if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
                 successor.traversed_buffer_dimension = True
                 if not directionF: continue  # do not add backward states that traversed buffer dimension to OPEN_B
-            
-            generated += 1
-            
+
+            stats["generated"] += 1
+
             # Calculate g, h, f values for successor
             curr_time = time.time()
             h_successor = heuristic(
                 successor, goal if directionF else start, heuristic_name, snake
             )
-            calc_h_time += time.time() - curr_time
+            stats["calc_h_time"] += time.time() - curr_time
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
 
@@ -211,4 +207,4 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     # with open(args.log_file_name, 'a') as file:
     #     file.write(f"\n[Bidirectional Stats] {bidirectional_stats}\n")
 
-    return best_path, expansions, generated, moved_OPEN_to_AUXOPEN, best_path_meet_point, g_values
+    return best_path, stats, best_path_meet_point

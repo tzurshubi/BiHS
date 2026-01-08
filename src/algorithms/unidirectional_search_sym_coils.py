@@ -8,6 +8,7 @@ from collections import defaultdict
 
 
 def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, args):
+    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0}
     logger = args.logger
     cube = args.graph_type == "cube"
     buffer_dim = args.cube_buffer_dim if cube else None
@@ -28,15 +29,15 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
     open_set.push(initial_state, initial_f_value)
 
     # Basic symmetry detection - a dictionary with the key (head,nodes)
-    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors_bitmap if snake else initial_state.path_vertices_bitmap)}
+    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors_bitmap)}
 
     # The best path found
     best_path = None
     best_path_length = -1
 
     # Expansion counter, generated counter
-    expansions = 0
-    generated = 0
+    stats["expansions"] = 0
+    stats["generated"] = 0
 
     while len(open_set) > 0:
         # Pop the state with the highest priority (g(N) + h(N))
@@ -44,15 +45,15 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
         current_path_length = g_value
 
         # Increment the expansion counter
-        expansions += 1
+        stats["expansions"] += 1
 
         # Debug
         # p = current_state.materialize_path()
         # prefix_to_check = [127, 119, 103, 99, 107, 75, 73, 77, 69, 68, 100, 116, 124, 120, 121]
         # if p[:len(prefix_to_check)]==prefix_to_check:
-        if expansions % 100_000 == 0:
-            logger(f"Expansion {expansions}: state {current_state.materialize_path()}, f={f_value}, g={g_value}")
-            
+        if stats["expansions"] % 100_000 == 0:
+            logger(f"Expansion {stats['expansions']}: state {current_state.materialize_path()}, f={f_value}, g={g_value}")
+
         # Check if the current state is the goal state
         if current_state.head == goal and current_state.g == half_coil_upper_bound:
             path = current_state.materialize_path()
@@ -60,8 +61,8 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
             is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
             if is_sym_coil:
                 logger("SYM_COIL_FOUND")
-                logger(f"Expansion {expansions}: Found symmetric coil of length {len(sym_coil)-1}: {sym_coil}. generated={generated}")
-                return sym_coil, expansions, generated
+                logger(f"Expansion {stats['expansions']}: Found symmetric coil of length {len(sym_coil)-1}: {sym_coil}. generated={stats['generated']}")
+                return sym_coil, stats
 
         # Finish if the f_value is smaller than the best path length found so far
         if f_value <= best_path_length:
@@ -72,8 +73,11 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
         successors = current_state.successor(args, snake, True)
 
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
+                # [0, 1, 3, 7, 6, 14, 12, 13, 29, 21, 20]
+                stats["symmetric_states_removed"] += 1
+                logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
@@ -81,7 +85,7 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
                 if successor.traversed_buffer_dimension: continue  # already traversed buffer dimension
                 successor.traversed_buffer_dimension = True
 
-            generated += 1
+            stats["generated"] += 1
             
             # Check if successor reached the goal
             if successor.head == goal:
@@ -100,6 +104,6 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
             f_successor = g_successor + h_successor
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
-            FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
+            FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
 
-    return best_path.path, expansions, generated
+    return best_path.path, stats
