@@ -8,6 +8,7 @@ from collections import defaultdict
 
 
 def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
+    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0}
     logger = args.logger
     cube = args.graph_type == "cube"
     buffer_dim = args.cube_buffer_dim if cube else None
@@ -36,8 +37,8 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     best_path_length = -1
 
     # Expansion counter, generated counter
-    expansions = 0
-    generated = 0
+    stats["expansions"] = 0
+    stats["generated"] = 0
 
     while len(open_set) > 0:
         # Pop the state with the highest priority (g(N) + h(N))
@@ -45,9 +46,9 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         current_path_length = g_value
 
         # Increment the expansion counter
-        expansions += 1
-        if expansions % 10_000 == 0:
-            logger(f"Expansion {expansions}: state {current_state.path}, f={f_value}, g={g_value}")
+        stats["expansions"] += 1
+        if stats["expansions"] % 10_000 == 0:
+            logger(f"Expansion {stats['expansions']}: state {current_state.path}, f={f_value}, g={g_value}")
             
         # Check if the current state is the goal state
         if current_state.head == goal:
@@ -55,7 +56,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state
                 best_path_length = current_path_length
                 if snake:
-                    logger(f"Expansion {expansions}: Found path of length {best_path_length}: {best_path.materialize_path()}. f_max={f_value}, generated={generated}")
+                    logger(f"Expansion {stats['expansions']}: Found path of length {best_path_length}: {best_path.materialize_path()}. f_max={f_value}, generated={stats['generated']}")
             continue
 
         # Finish if the f_value is smaller than the best path length found so far
@@ -72,6 +73,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
+                stats["symmetric_states_removed"] += 1
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
@@ -79,7 +81,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 if successor.traversed_buffer_dimension: continue  # already traversed buffer dimension
                 successor.traversed_buffer_dimension = True
 
-            generated += 1
+            stats["generated"] += 1
             
             # Check if successor reached the goal
             if successor.head == goal:
@@ -100,4 +102,4 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             open_set.push(successor, min(f_successor, f_value))
             FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
 
-    return best_path.path, expansions, generated
+    return best_path.path, stats
