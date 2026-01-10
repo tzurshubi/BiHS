@@ -39,7 +39,7 @@ DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = [25]        # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
-DEFAULT_BSD = False                     # True # False
+DEFAULT_BSD = True                     # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 6       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None       # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
@@ -457,11 +457,11 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
-        if cube_buffer_dim is not None and graph_type=="cube":
+        if cube_buffer_dim is not None:
             log_file_name += f"_buffDim{cube_buffer_dim}"
-        if backward_sym_generation and graph_type=="cube" and run_bi:
+        if backward_sym_generation:
             log_file_name += f"_symGen"
-        if sym_coils and graph_type=="cube" and run_bi:
+        if sym_coils:
             log_file_name += f"_symCoils"
         if args.bsd:
             log_file_name += "_BSD"
@@ -482,9 +482,13 @@ if __name__ == "__main__":
         args.logger(f"run_uni: {run_uni}")
         args.logger(f"run_bi: {run_bi}")
         args.logger(f"run_multi: {run_multi}")
+        args.logger(f"solution_vertices: {solution_vertices}")
+        args.logger(f"algo: {algo}")
+        args.logger(f"bsd: {bsd}")
         args.logger(f"cube_first_dims: {cube_first_dims}")
         args.logger(f"cube_buffer_dim: {cube_buffer_dim}")
         args.logger(f"backward_sym_generation: {backward_sym_generation}")
+        args.logger(f"sym_coils: {sym_coils}")
 
     # Initialize an empty DataFrame to store the results
     columns = [
