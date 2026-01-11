@@ -282,7 +282,7 @@ class State:
         return successors
 
     def shares_vertex_with(self, other_state, snake=False):
-        # Note: If STORE_PATH=False, we rely on bitmaps which is fine.
+        # We rely on bitmaps
         if not snake:
             return (self.path_vertices_bitmap & other_state.path_vertices_bitmap) != 0
         return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0

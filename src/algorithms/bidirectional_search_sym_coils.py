@@ -5,6 +5,7 @@ from heuristics.heuristic import heuristic
 from models.state import State
 from models.openvopen import Openvopen
 from models.heapq_state import HeapqState
+from models.openvopen_prefixSet import Openvopen_prefixSet
 from utils.utils import *
 
 
@@ -33,7 +34,7 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
     # Initialize custom priority queues for forward and backward searches
     OPEN_F = HeapqState()
     OPEN_B = HeapqState()
-    OPENvOPEN = Openvopen(graph, start, goal)
+    OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
 
     # Initial states
     graph_F, graph_B = graph.copy(), graph.copy()

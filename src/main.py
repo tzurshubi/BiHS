@@ -34,16 +34,17 @@ DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_UNI = False                 # True # False
+DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = [25]        # [] # for multidirectional search on cubes
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                     # True # False
-DEFAULT_CUBE_FIRST_DIMENSIONS = 6       # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None       # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COILS = True                # True # False
+DEFAULT_PREFIX_SET = 2              # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -74,6 +75,7 @@ def parse_args():
     parser.add_argument("--cube_buffer_dim", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
     parser.add_argument("--backward_sym_generation", type=str, default=DEFAULT_BACKWARD_SYM_GENERATION, help="Symmetrical generation in other frontier.")
     parser.add_argument("--sym_coils", type=str, default=DEFAULT_SYM_COILS, help="Find symmetrical coils.")
+    parser.add_argument("--prefix_set", type=int, default=DEFAULT_PREFIX_SET, help="Comparing sets of states with same prefix of length k-3.")
     return parser.parse_args()
 
 
@@ -450,6 +452,7 @@ if __name__ == "__main__":
     cube_buffer_dim = args.cube_buffer_dim
     backward_sym_generation = args.backward_sym_generation
     sym_coils = args.sym_coils
+    prefix_set = args.prefix_set
 
     if log:
         log_file_name = "logs"
