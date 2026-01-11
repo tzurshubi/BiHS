@@ -77,7 +77,7 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
                 # print(f"symmetric state removed: {successor.path}")
                 # [0, 1, 3, 7, 6, 14, 12, 13, 29, 21, 20]
                 stats["symmetric_states_removed"] += 1
-                logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
+                # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
