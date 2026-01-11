@@ -470,6 +470,8 @@ if __name__ == "__main__":
             log_file_name += "_BSD"
         if args.cube_first_dims is not None:
             log_file_name += f"_{cube_first_dims}DDS"
+        if prefix_set is not None:
+            log_file_name += f"_prefix{prefix_set}"
         if solution_vertices is not None and len(solution_vertices)>0:
             log_file_name += "_solVert"+"_".join([str(v) for v in solution_vertices])
         args.log_file_name = log_file_name
