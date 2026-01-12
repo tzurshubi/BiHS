@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-
+import os
+os.system("clear")
 import argparse
 import re
 import statistics
@@ -21,6 +22,11 @@ PATHS_FOUND_RE = re.compile(
     re.IGNORECASE,
 )
 
+VALID_MEETING_CHECKS_RE = re.compile(
+    r"valid_meeting_checks'\s*:\s*([\d,]+)",
+    re.IGNORECASE,
+)
+
 
 def parse_int_commas(s: str) -> int:
     return int(s.replace(",", "").strip())
@@ -30,11 +36,13 @@ def parse_int_commas(s: str) -> int:
 class FileResult:
     path: Path
     has_no_path_found: bool
-    has_sym_coil_found: bool  # <--- NEW FIELD
+    has_sym_coil_found: bool
     expansions: Optional[int]
     time_ms: Optional[int]
     paths_found: Optional[int]
+    valid_meeting_checks: Optional[int]
     summary_line: Optional[str]
+    
 
 
 def scan_file(p: Path) -> FileResult:
@@ -42,6 +50,8 @@ def scan_file(p: Path) -> FileResult:
     has_sym_coil = False      # <--- NEW TRACKER
     last_summary: Optional[Tuple[int, int, str]] = None
     last_paths_found: Optional[int] = None
+    last_valid_meeting_checks: Optional[int] = None
+
 
     try:
         with p.open("r", encoding="utf-8", errors="replace") as f:
@@ -63,6 +73,11 @@ def scan_file(p: Path) -> FileResult:
                 if pm:
                     last_paths_found = parse_int_commas(pm.group(1))
 
+                vm = VALID_MEETING_CHECKS_RE.search(line)
+                if vm:
+                    last_valid_meeting_checks = parse_int_commas(vm.group(1))
+
+
     except Exception as e:
         return FileResult(
             path=p,
@@ -71,6 +86,7 @@ def scan_file(p: Path) -> FileResult:
             expansions=None,
             time_ms=None,
             paths_found=None,
+            valid_meeting_checks=last_valid_meeting_checks,
             summary_line=f"ERROR reading file: {e}",
         )
 
@@ -82,6 +98,7 @@ def scan_file(p: Path) -> FileResult:
             expansions=None,
             time_ms=None,
             paths_found=last_paths_found,
+            valid_meeting_checks=last_valid_meeting_checks,
             summary_line=None,
         )
 
@@ -93,6 +110,7 @@ def scan_file(p: Path) -> FileResult:
         expansions=exp,
         time_ms=tms,
         paths_found=last_paths_found,
+        valid_meeting_checks=last_valid_meeting_checks,
         summary_line=sline,
     )
 
@@ -132,7 +150,7 @@ def describe(values: List[int]) -> dict:
 
 
 def main() -> int:
-    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_12/symCoils_BSD_4DDS_prefix2"
+    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_12/symCoils_BSD_4DDS_prefix3"
 
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -175,6 +193,11 @@ def main() -> int:
     paths_missing_count = total_files - paths_parsed_count
     total_paths_found = sum(paths_values) if paths_values else 0
 
+    vmc_values = [r.valid_meeting_checks for r in results if r.valid_meeting_checks is not None]
+    vmc_stats = describe(vmc_values)
+    total_vmc = sum(vmc_values) if vmc_values else 0
+
+
     print("=== Scan summary ===")
     print(f"Folder: {root}")
     print(f"Files scanned (excluding *.csv): {total_files}")
@@ -209,6 +232,15 @@ def main() -> int:
     print(f"mean  : {fmt_int(paths_stats['mean'])}")
     print(f"max   : {fmt_int(paths_stats['max'])}")
     print(f"sum   : {fmt_int(total_paths_found)}")
+    print()
+
+    print("=== Valid meeting checks stats ===")
+    print(f"count : {vmc_stats['count']}")
+    print(f"min   : {fmt_int(vmc_stats['min'])}")
+    print(f"median: {fmt_int(vmc_stats['median'])}")
+    print(f"mean  : {fmt_int(vmc_stats['mean'])}")
+    print(f"max   : {fmt_int(vmc_stats['max'])}")
+    print(f"sum   : {fmt_int(total_vmc)}")
     print()
 
     if args.details:
