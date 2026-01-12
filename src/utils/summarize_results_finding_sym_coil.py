@@ -132,7 +132,7 @@ def describe(values: List[int]) -> dict:
 
 
 def main() -> int:
-    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_10/Uni_noBSD_4DDS"
+    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_12/symCoils_BSD_4DDS_prefix3"
 
     ap = argparse.ArgumentParser()
     ap.add_argument(

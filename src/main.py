@@ -44,7 +44,7 @@ DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None       # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COILS = True                # True # False
-DEFAULT_PREFIX_SET = 2              # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
+DEFAULT_PREFIX_SET = 1              # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 
 base_dir = "/"
 current_directory = os.getcwd()
