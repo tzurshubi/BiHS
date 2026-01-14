@@ -11,8 +11,9 @@ from utils.utils import *
 
 
 def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, args):
-    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0, 
-             "valid_meeting_checks": 0, "valid_meeting_checks_sum_g_under_f_max": 0, 
+    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0,
+             "valid_meeting_checks": 0, "state_vs_state_meeting_checks": 0, "state_vs_prefix_meeting_checks": 0, 
+             "num_of_prefix_sets": {'F': 0, 'B': 0}, "prefix_set_mean_size": {'F': 0, 'B': 0},
              "valid_meeting_check_time": 0, "calc_h_time": 0, "moved_OPEN_to_AUXOPEN": 0, "g_values": [], "BF_values": []}
     logger = args.logger 
     cube = args.graph_type == "cube"
@@ -96,10 +97,9 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
         # Check against OPEN of the other direction, for a valid meeting point
         if current_state.g == g_cutoff:
             curr_time = time.time()
-            paths, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, best_path_length, f_value, snake)
+            paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, best_path_length, f_value, snake, stats)
             stats["valid_meeting_check_time"] += time.time() - curr_time
-            stats["valid_meeting_checks"] += num_checks
-            stats["valid_meeting_checks_sum_g_under_f_max"] += num_checks_sum_g_under_f_max
+            
             for path in paths:
                 half_coil_to_check = args.cube_first_dims_path + path
                 is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
@@ -135,13 +135,13 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
         #     print(f"open_F: {len(open_set_F)}. open_B: {len(open_set_B)}")
 
         stats["expansions"] += 1
-        stats["g_values"].append(current_state.g)
 
         # Get the current state from OPEN_D TO CLOSED_D
         f_value, g_value, current_state = OPEN_D.pop()
 
         # Generate successors
         successors = current_state.successor(args, snake, directionF)
+        stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
@@ -182,7 +182,7 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
             if successor.g == g_cutoff: 
-                OPENvOPEN.insert_state(successor,directionF)
+                OPENvOPEN.insert_state(successor, directionF)
             if cube and args.backward_sym_generation: 
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)
     

@@ -22,6 +22,7 @@ class Openvopen_prefixSet:
         ]
 
         self.counter = 0  # number of states inserted
+        self.num_states = {'F': 0, 'B': 0}
         self.start = start
         self.goal = goal
         # Map: state -> (cell_index, 'F'/'B', g, index_in_bucket)
@@ -36,26 +37,35 @@ class Openvopen_prefixSet:
         if not (0 <= state.g < self.n):
             raise ValueError(f"State g {state.g} out of range [0,{self.n-1}].")
 
-    def insert_state(self, state, is_f):
-        """
-        O(1): Append to the bucket indexed by (cell=state.head, dir=F/B, g=state.g).
-        """
+    def insert_state(self, state, is_f, stats=None):
         self._validate_state(state)
-        cell_index = state.head # if state.head not in [self.start, self.goal] else state.path[0]
+        cell_index = state.head
         target = 'F' if is_f else 'B'
         g_value = state.g
-        prefix = State._compute_path_vertices_bitmap_from_path(state.materialize_path()[:-self.length_prefix_set])
+        prefix = State._compute_path_vertices_bitmap_from_path(
+            state.materialize_path()[:-self.length_prefix_set]
+        )
 
-        if prefix not in self.cells[cell_index][target]:
-            pass
-            self.cells[cell_index][target][prefix] = [[] for _ in range(self.n)]
-        else:
-            pass
-        bucket = self.cells[cell_index][target][prefix][g_value]
+        cell_dir = self.cells[cell_index][target]
+
+        is_new_prefix = prefix not in cell_dir
+        if is_new_prefix:
+            cell_dir[prefix] = [[] for _ in range(self.n)]
+            if stats is not None:
+                stats["num_of_prefix_sets"][target] += 1
+
+        bucket = cell_dir[prefix][g_value]
         bucket.append(state)
         idx = len(bucket) - 1
         self._loc[state] = (cell_index, target, prefix, g_value, idx)
+
+        self.num_states[target] += 1
         self.counter += 1
+
+        if stats is not None:
+            k = stats["num_of_prefix_sets"][target]
+            stats["prefix_set_mean_size"][target] = (self.num_states[target] / k) if k else 0.0
+
 
     def remove_state(self, state, is_f):
         """
@@ -86,6 +96,7 @@ class Openvopen_prefixSet:
             self._loc[moved] = (cell_index, target_recorded, g_value, idx)
 
         bucket.pop()
+        self.num_states[target_recorded] -= 1
         self.counter -= 1
         del self._loc[state]
 
@@ -148,7 +159,7 @@ class Openvopen_prefixSet:
 
         return None, -1, solution, solution_g, num_checks, num_checks_sum_g_under_f_max
 
-    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, snake=False):
+    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, snake=False, stats=None):
         """
         Find all non-overlapping simple paths formed by concatenating `state`
         with states in the opposite direction within the same head cell.
@@ -166,8 +177,6 @@ class Openvopen_prefixSet:
         """
         self._validate_state(state)
 
-        num_checks = 0
-        num_checks_sum_g_under_f_max = 0
         full_paths = []
 
         cell_index = state.head # if state.head not in [self.start, self.goal] else state.materialize_path()[0]
@@ -178,6 +187,8 @@ class Openvopen_prefixSet:
         for prefix in opp_struct:
             if prefix & state.path_vertices_and_neighbors_bitmap != 0:
                 # Prefix shares vertex with state; skip
+                stats["state_vs_prefix_meeting_checks"] += 1
+                stats["valid_meeting_checks"] += 1
                 continue
             # Scan all g buckets from high to low (order not essential here, but keeps style)
             for g_candidate in range(self.n - 1, -1, -1):
@@ -186,11 +197,12 @@ class Openvopen_prefixSet:
                     continue
 
                 for opposite_state in bucket:
-                    num_checks += 1
+                    stats["state_vs_state_meeting_checks"] += 1
+                    stats["valid_meeting_checks"] += 1
                     total_g = state.g + g_candidate
 
-                    if total_g < f_max:
-                        num_checks_sum_g_under_f_max += 1
+                    # if total_g < f_max:
+                    #     num_checks_sum_g_under_f_max += 1
 
                     # If you only care about combinations that can beat the current best:
                     # if total_g <= best_path_length:
@@ -215,7 +227,7 @@ class Openvopen_prefixSet:
                     # full_paths.append(full_path_state)
                     full_paths.append(full_path)
 
-        return full_paths, num_checks, num_checks_sum_g_under_f_max
+        return full_paths
 
     def get_states_ending_in(self, vertex, is_f):
         """

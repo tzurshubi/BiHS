@@ -292,6 +292,36 @@ def main() -> int:
         print()
 
 
+        print("=== 10 files closest to the mean (expansions + time) ===")
+        mean_exp = exp_stats["mean"]
+        mean_time = time_stats["mean"]
+
+        # Use standard deviation to normalize (avoid time dominating expansions)
+        exp_sd = statistics.pstdev(exp_values) if len(exp_values) >= 2 else 1.0
+        time_sd = statistics.pstdev(time_values) if len(time_values) >= 2 else 1.0
+
+        def dist_to_mean(r: FileResult) -> float:
+            # normalized Euclidean distance in (expansions, time_ms)
+            de = (r.expansions - mean_exp) / exp_sd
+            dt = (r.time_ms - mean_time) / time_sd
+            return (de * de + dt * dt) ** 0.5
+
+        closest10 = sorted(parsed, key=dist_to_mean)[:10]
+
+        print(f"mean expansions = {fmt_int(mean_exp)}")
+        print(f"mean time       = {fmt_ms(mean_time)} ({fmt_s(mean_time)})")
+        for r in closest10:
+            d = dist_to_mean(r)
+            print(
+                f"- {r.path.name}: "
+                f"expansions={fmt_int(r.expansions)}  "
+                f"time={fmt_ms(r.time_ms)}  "
+                f"dist={d:.3f}"
+            )
+        print()
+
+
+
     return 0
 
 

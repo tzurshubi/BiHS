@@ -35,7 +35,7 @@ class Openvopen:
         if not (0 <= state.g < self.n):
             raise ValueError(f"State g {state.g} out of range [0,{self.n-1}].")
 
-    def insert_state(self, state, is_f):
+    def insert_state(self, state, is_f, stats=None):
         """
         O(1): Append to the bucket indexed by (cell=state.head, dir=F/B, g=state.g).
         """
@@ -141,7 +141,7 @@ class Openvopen:
 
         return None, -1, solution, solution_g, num_checks, num_checks_sum_g_under_f_max
 
-    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, snake=False):
+    def find_all_non_overlapping_paths(self, state, is_f, best_path_length, f_max, snake=False, stats=None):
         """
         Find all non-overlapping simple paths formed by concatenating `state`
         with states in the opposite direction within the same head cell.
@@ -158,9 +158,7 @@ class Openvopen:
                         constructed from (state, opposite_state).
         """
         self._validate_state(state)
-
-        num_checks = 0
-        num_checks_sum_g_under_f_max = 0
+        
         full_paths = []
 
         cell_index = state.head # if state.head not in [self.start, self.goal] else state.materialize_path()[0]
@@ -174,11 +172,11 @@ class Openvopen:
                 continue
 
             for opposite_state in bucket:
-                num_checks += 1
+                stats["valid_meeting_checks"] += 1
                 total_g = state.g + g_candidate
 
-                if total_g < f_max:
-                    num_checks_sum_g_under_f_max += 1
+                # if total_g < f_max:
+                #     num_checks_sum_g_under_f_max += 1
 
                 # If you only care about combinations that can beat the current best:
                 # if total_g <= best_path_length:
@@ -203,7 +201,7 @@ class Openvopen:
                 # full_paths.append(full_path_state)
                 full_paths.append(full_path)
 
-        return full_paths, num_checks, num_checks_sum_g_under_f_max
+        return full_paths
 
     def get_states_ending_in(self, vertex, is_f):
         """
