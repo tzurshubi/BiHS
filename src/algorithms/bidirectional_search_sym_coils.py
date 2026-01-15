@@ -182,10 +182,10 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
             if successor.g == g_cutoff: 
-                OPENvOPEN.insert_state(successor, directionF)
+                OPENvOPEN.insert_state(successor, directionF, stats)
             if cube and args.backward_sym_generation: 
-                OPENvOPEN.insert_state(successor_symmetric, not directionF)
-    
+                OPENvOPEN.insert_state(successor_symmetric, not directionF, stats)
+
     # Statistics logging
     # bidirectional_stats = f"valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]. # of states in OPENvOPEN: {OPENvOPEN.counter}."
     # print(f"[Bidirectional Stats] {bidirectional_stats}")
