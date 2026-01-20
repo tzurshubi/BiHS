@@ -173,6 +173,7 @@ class Openvopen:
 
             for opposite_state in bucket:
                 stats["valid_meeting_checks"] += 1
+                stats["state_vs_state_meeting_checks"] += 1
                 total_g = state.g + g_candidate
 
                 # if total_g < f_max:

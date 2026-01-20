@@ -19,6 +19,8 @@ from algorithms.multidirectional_search1 import *
 from algorithms.tbt_search import *
 from algorithms.bidirectional_search_sym_coils import *
 from algorithms.unidirectional_search_sym_coils import *
+from algorithms.bidirectional_dfbnb_sym_coils import *
+from algorithms.bidirectional_gradual_sym_coils import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -44,7 +46,7 @@ DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COILS = True                # True # False
-DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
+DEFAULT_PREFIX_SET = 4               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -374,7 +376,10 @@ def search(
         if not args.sym_coils:
             path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coils:
-            path, stats, meet_point = bidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
+            # path, stats, meet_point = bidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
+            # path, stats = bidirectional_dfbnb_sym_coils(G, start, goal, heuristic, snake, args)
+            path, stats = bidirectional_gradual_sym_coils(G, start, goal, heuristic, snake, args)
+
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         # path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
@@ -390,9 +395,6 @@ def search(
 
     # Collect logs
     end_time = time.time()
-    memory_snapshot = tracemalloc.take_snapshot()
-    tracemalloc.stop()
-    logs["memory[kB]"] = math.floor(sum(stat.size for stat in memory_snapshot.statistics("lineno")) / 1024)
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
     logs.update(stats)
 
@@ -494,6 +496,8 @@ if __name__ == "__main__":
         args.logger(f"cube_buffer_dim: {cube_buffer_dim}")
         args.logger(f"backward_sym_generation: {backward_sym_generation}")
         args.logger(f"sym_coils: {sym_coils}")
+        args.logger(f"prefix_set: {prefix_set}")
+
 
     # Initialize an empty DataFrame to store the results
     columns = [
@@ -550,15 +554,14 @@ if __name__ == "__main__":
             )
             avgs["uni_st"]["expansions"].append(logs['expansions'])
             avgs["uni_st"]["time"].append(logs['time[ms]'])
-            if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-            else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], generated: {logs['generated']}")
+            if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+            else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}")
             results.append(
                 {
                     "# blocks": i,
                     "Search type": "unidirectional s-t",
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
-                    "Memory [kB]": logs["memory[kB]"],
                     "[g_F,g_B]": "[N/A,N/A]",
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
@@ -571,14 +574,13 @@ if __name__ == "__main__":
                 )
                 avgs["uni_ts"]["expansions"].append(logs['expansions'])
                 avgs["uni_ts"]["time"].append(logs['time[ms]'])
-                args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], memory: {logs['memory[kB]']:,} [kB], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
                 results.append(
                     {
                         "# blocks": i,
                         "Search type": "unidirectional t-s",
                         "# expansions": logs["expansions"],
                         "Time [ms]": logs["time[ms]"],
-                        "Memory [kB]": logs["memory[kB]"],
                         "[g_F,g_B]": "[N/A,N/A]",
                         "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                     }
@@ -600,21 +602,19 @@ if __name__ == "__main__":
                     "Search type": "bidirectional",
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
-                    "Memory [kB]": logs["memory[kB]"],
                     "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
             )
             else:
-                if path:    args.logger(f"! Bidirectional Symmetrical Coils. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}, memory: {logs['memory[kB]']:,} [kB]") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-                else:       args.logger(f"! Bidirectional Symmetrical Coils. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}, memory: {logs['memory[kB]']:,} [kB]") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                if path:    args.logger(f"! Bidirectional Symmetrical Coils. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                else:       args.logger(f"! Bidirectional Symmetrical Coils. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                 results.append(
                 {
                     "# blocks": i,
                     "Search type": "bidirectional symmetrical coils",
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
-                    "Memory [kB]": logs["memory[kB]"],
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
             )
@@ -634,7 +634,6 @@ if __name__ == "__main__":
                     "Search type": "multidirectional",          
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
-                    "Memory [kB]": logs["memory[kB]"],
                     # "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }

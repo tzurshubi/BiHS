@@ -70,7 +70,7 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
             break
 
         # Generate successors
-        successors = current_state.successor(args, snake, True)
+        successors = current_state.generate_successors(args, snake, True)
 
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV:

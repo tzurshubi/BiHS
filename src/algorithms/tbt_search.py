@@ -148,7 +148,7 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
         # CLOSED_D.add(current_state)
 
         # Generate successors
-        successors = current_state.successor(args, snake, directionF)
+        successors = current_state.generate_successors(args, snake, directionF)
         BF_values.append(len(successors))
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:

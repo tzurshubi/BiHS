@@ -4,7 +4,7 @@ import json
 import random
 import numpy as np
 import matplotlib.patches as patches
-import os, math
+import os, math, psutil
 import matplotlib.pyplot as plt
 import re
 import csv
@@ -181,6 +181,12 @@ def calculate_averages(avgs, log_file_name=None):
 # Logging utilities
 # ---------------------------
 
+def memory_used_mb() -> float:
+    process = psutil.Process(os.getpid())
+    mem_bytes = process.memory_info().rss   # Resident Set Size
+    mem_mb = mem_bytes / (1024 ** 2)
+    return mem_mb
+
 def fmt_elapsed(seconds: float) -> str:
     """
     Format elapsed time as DD:HH:MM:SS.mmm
@@ -199,6 +205,12 @@ def fmt_elapsed(seconds: float) -> str:
 
     return f"{days:02d}:{hours:02d}:{minutes:02d}:{s:02d}:{ms:03d}"
 
+_INT_RE = re.compile(r"\b\d+\b")
+
+def format_numbers(s: str) -> str:
+    def repl(m):
+        return f"{int(m.group()):,}"
+    return _INT_RE.sub(repl, s)
 
 def make_logger(logfile, t0: float | None = None):
     _t0 = t0
@@ -207,13 +219,18 @@ def make_logger(logfile, t0: float | None = None):
     def log(msg: str) -> None:
         if _closed:
             return
+
+        msg = format_numbers(msg)   # <<< NEW LINE
+
         if _t0 is not None:
             line = f"[{fmt_elapsed(time.time() - _t0)}] {msg}"
         else:
             line = msg
+
         print(line)
         logfile.write(line + "\n")
         logfile.flush()
+
 
     def set_t0(t: float | None = None) -> None:
         nonlocal _t0

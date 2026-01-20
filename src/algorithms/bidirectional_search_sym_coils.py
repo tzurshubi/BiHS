@@ -140,7 +140,7 @@ def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, ar
         f_value, g_value, current_state = OPEN_D.pop()
 
         # Generate successors
-        successors = current_state.successor(args, snake, directionF)
+        successors = current_state.generate_successors(args, snake, directionF)
         stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
         for successor in successors:

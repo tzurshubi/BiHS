@@ -126,7 +126,7 @@ if __name__ == "__main__":
             break
 
         # Generate successors
-        successors = current_state.successor(True)
+        successors = current_state.generate_successors(True)
         for successor in successors:
             # Calculate the heuristic value
             h_value = heuristic(successor, goal, heuristic_name, True)

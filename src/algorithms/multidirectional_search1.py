@@ -167,7 +167,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
 
         # Expand successors Γ_{i,D}(N)
         directionF = (D == "F")
-        successors = N.successor(args, snake, directionF)
+        successors = N.generate_successors(args, snake, directionF)
 
         # Determine the target for heuristic based on which OPEN we are expanding
         if i == 0 and D == "F":

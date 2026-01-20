@@ -65,7 +65,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             break
 
         # Generate successors
-        successors = current_state.successor(args, snake, True)
+        successors = current_state.generate_successors(args, snake, True)
 
         # For Plotting
         g_degree_pairs.append((current_state.g, len(successors)))

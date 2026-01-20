@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Tuple
 
+DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_12/symCoils_BSD_4DDS"
+
 
 SUMMARY_RE = re.compile(
     r"expansions:\s*([\d,]+)\s*,\s*time:\s*([\d,]+)\s*\[ms\]",
@@ -150,8 +152,6 @@ def describe(values: List[int]) -> dict:
 
 
 def main() -> int:
-    DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_12/symCoils_BSD_4DDS_prefix3"
-
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "folder",

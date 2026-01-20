@@ -246,7 +246,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                 if additional_frontier: additional_frontier["CLOSED"].add(current_state)
 
                 # Generate successors
-                successors = current_state.successor(args, snake, directionF)
+                successors = current_state.generate_successors(args, snake, directionF)
                 # print(f"Generated {len(successors)} successors: {[s.path for s in successors]}")
                 for successor in successors:
                     # Handle symmetric states removal

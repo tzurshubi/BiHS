@@ -6,6 +6,7 @@ class State:
     __slots__ = [
         'graph',
         'num_graph_vertices',
+        'max_vertex',
         'head',
         'tailtip',
         'parent',
@@ -19,15 +20,20 @@ class State:
         'snake',
         'illegal',  # in snake mode: int bitmap; in non-snake: set
         'traversed_buffer_dimension',
+        'successors',
+        'can_reach_vertices',
     ]
 
     def __init__(self, graph, path, meet_points=None, snake=False, max_dim_crossed=None, parent=None):
         self.graph = graph
         self.num_graph_vertices = len(graph.nodes)
+        self.max_vertex = max(graph.nodes)
         self.meet_points = list(meet_points) if meet_points else []
         self.parent = parent
         self.snake = snake
         self.traversed_buffer_dimension = False
+        self.successors = []
+        self.can_reach_vertices = 0  # int bitmap, initially all 0
         
         # --- 1. Identify Head and Tail ---
         if not path:
@@ -223,9 +229,9 @@ class State:
         return p[:-1] if len(p) > 1 else []
 
     # ----------------------------
-    # Successors (Optimized)
+    # Generating Successors
     # ----------------------------
-    def successor(self, args, snake=False, directionF=True):
+    def generate_successors(self, args, snake=False, directionF=True):
         successors = []
         head = self.head
 
@@ -278,14 +284,15 @@ class State:
                     max_dim_crossed=None, 
                     parent=self
                 ))
-
+        self.successors = successors
         return successors
 
     def shares_vertex_with(self, other_state, snake=False):
         # We rely on bitmaps
         if not snake:
             return (self.path_vertices_bitmap & other_state.path_vertices_bitmap) != 0
-        return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0
+        else:
+            return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0
 
     # ----------------------------
     # Concatenation
@@ -347,3 +354,45 @@ class State:
         if other == 0:
             return self
         return self.__add__(other)
+    
+
+    # ----------------------------
+    # Reachability Bitmap
+    # ----------------------------
+    def set_can_reach(self, vertex: int):
+        """
+        Mark a vertex as reachable by this state AND all its ancestors
+        (parent, parent's parent, etc.).
+        """
+        if not (0 <= vertex < self.max_vertex):
+            raise ValueError(
+                f"Vertex {vertex} out of range [0, {self.max_vertex - 1}]"
+            )
+
+        mask = 1 << vertex
+        cur = self
+        while cur is not None:
+            cur.can_reach_vertices |= mask
+            cur = cur.parent
+
+    def can_reach(self, vertex: int) -> bool:
+        return (self.can_reach_vertices >> vertex) & 1 == 1
+    
+    def num_reachable(self) -> int:
+        return self.can_reach_vertices.bit_count()
+    
+    def merge_can_reach(self, other: "State"):
+        self.can_reach_vertices |= other.can_reach_vertices
+
+    def shares_reachable_vertex_with(self, other: "State") -> bool:
+        """
+        Return True if there exists a vertex that both states can reach.
+        """
+        if not isinstance(other, State):
+            raise TypeError("Expected a State instance")
+
+        return (self.can_reach_vertices & other.can_reach_vertices) != 0
+
+
+
+
