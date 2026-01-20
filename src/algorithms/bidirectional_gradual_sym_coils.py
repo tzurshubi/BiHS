@@ -110,7 +110,8 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
 
         # Logging progress
         if stats["expansions"] and stats["expansions"] % 10_000 == 0:
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}")
+            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}")
+            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][D][current_state.g] += 1
