@@ -8,6 +8,7 @@ from models.state import State
 from models.openvopen import Openvopen
 from models.heapq_state import HeapqState
 from models.openvopen_prefixSet import Openvopen_prefixSet
+from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
 def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, args):
@@ -54,7 +55,8 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     graph_B.remove_nodes_from([0] + list(graph.neighbors(0)) + [start] + list(graph.neighbors(start)))
     initial_state_F = State(graph_F, [start], [], snake) if isinstance(start, int) else State(graph_F, start, [], snake)
     initial_state_B = State(graph_B, [goal], [], snake) if isinstance(goal, int) else State(graph_B, goal, [], snake)
-    OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
+    # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
+    OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_illegalVerts(graph, start, goal, args.prefix_set)
 
     # Push initial states with priority based on f_value
     stack_F = deque()
@@ -99,13 +101,13 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
             OPENvOPEN.insert_state(current_state, directionF)
 
             # Check for symmetric coil
-            # paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, None, None, snake, stats)
-            # for path in paths:
-            #     half_coil_to_check = args.cube_first_dims_path + path
-            #     is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
-            #     if is_sym_coil:
-            #         logger(f"SYM_COIL_FOUND! {sym_coil}")
-            #         best_path = sym_coil
+            paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, None, None, snake, stats)
+            for path in paths:
+                half_coil_to_check = args.cube_first_dims_path + path
+                is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+                if is_sym_coil:
+                    logger(f"SYM_COIL_FOUND! {sym_coil}")
+                    best_path = sym_coil
 
             continue
 
@@ -113,9 +115,9 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coils: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
-        if stats["expansions"] and stats["expansions"] % 50_000 == 0:
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}")
-            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}")
+        if stats["expansions"] and stats["expansions"] % 1_000 == 0:
+            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}")
+            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][D][current_state.g] += 1
@@ -142,22 +144,15 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     logger(f"Number of paths with g_upper_cutoff({g_upper_cutoff_F}/{g_upper_cutoff_B}): {stats['all_paths_with_g_upper_cutoff']} (F:{stats['paths_with_g_upper_cutoff']['F']}, B:{stats['paths_with_g_upper_cutoff']['B']})")
     logger(f"Number of paths with g_lower_cutoff({g_lower_cutoff}): {stats['all_paths_with_g_lower_cutoff']} (F:{stats['paths_with_g_lower_cutoff']['F']}, B:{stats['paths_with_g_lower_cutoff']['B']})")
     
-    # Push all pairs of states with g_lower_cutoff into queue
-    # checks_queue = deque()
-    # for state_F in states_g_lower_cutoff_F:
-    #     for state_B in states_g_lower_cutoff_B:
-    #         checks_queue.append((state_F, state_B))
-    # logger(f"Total of {len(checks_queue)} state pairs with g_lower_cutoff({g_lower_cutoff}) are initialy in the checks queue.")
-    
+    # Print stats
     excluded = {"g_values", "BF_values"}
     filtered_stats = {k: v for k, v in stats.items() if k not in excluded}
     args.logger(f"Stats: {filtered_stats}")
 
-    logger(f"Starting checks...")
-    sym_coil_found, sym_coil = OPENvOPEN.check_all_valid_paths_if_sym_coil(snake, args, stats)
-
-    if sym_coil_found:
-        best_path = sym_coil
+    # logger(f"Starting checks...")
+    # sym_coil_found, sym_coil = OPENvOPEN.check_all_valid_paths_if_sym_coil(snake, args, stats)
+    # if sym_coil_found:
+    #     best_path = sym_coil
 
     ############################################
     # Checking for valid meeting points
