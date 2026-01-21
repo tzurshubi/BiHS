@@ -97,12 +97,16 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
             stats["paths_with_g_upper_cutoff"][D] += 1
             current_state.parent.set_can_reach(current_state.head)
             OPENvOPEN.insert_state(current_state, directionF)
-            paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, None, None, snake, stats)
-            for path in paths:
-                half_coil_to_check = args.cube_first_dims_path + path
-                is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
-                if is_sym_coil:
-                    logger(f"SYM_COIL_FOUND! {sym_coil}")
+
+            # Check for symmetric coil
+            # paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, None, None, snake, stats)
+            # for path in paths:
+            #     half_coil_to_check = args.cube_first_dims_path + path
+            #     is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+            #     if is_sym_coil:
+            #         logger(f"SYM_COIL_FOUND! {sym_coil}")
+            #         best_path = sym_coil
+
             continue
 
         # Symmetric coil pruning: do not expand states with g > half_coil_upper_bound
@@ -137,6 +141,8 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     stats['all_paths_with_g_lower_cutoff'] = stats['paths_with_g_lower_cutoff']['F'] + stats['paths_with_g_lower_cutoff']['B']
     logger(f"Number of paths with g_upper_cutoff({g_upper_cutoff_F}/{g_upper_cutoff_B}): {stats['all_paths_with_g_upper_cutoff']} (F:{stats['paths_with_g_upper_cutoff']['F']}, B:{stats['paths_with_g_upper_cutoff']['B']})")
     logger(f"Number of paths with g_lower_cutoff({g_lower_cutoff}): {stats['all_paths_with_g_lower_cutoff']} (F:{stats['paths_with_g_lower_cutoff']['F']}, B:{stats['paths_with_g_lower_cutoff']['B']})")
+    logger(f"Starting checks...")
+
 
     # Push all pairs of states with g_lower_cutoff into queue
     # checks_queue = deque()
@@ -148,6 +154,13 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     excluded = {"g_values", "BF_values"}
     filtered_stats = {k: v for k, v in stats.items() if k not in excluded}
     args.logger(f"Stats: {filtered_stats}")
+    paths = OPENvOPEN.find_all_valid_paths(snake, stats)
+    for path in paths:
+        half_coil_to_check = args.cube_first_dims_path + path
+        is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+        if is_sym_coil:
+            logger(f"SYM_COIL_FOUND! {sym_coil}")
+            best_path = sym_coil
 
 
     ############################################

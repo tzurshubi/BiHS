@@ -229,6 +229,69 @@ class Openvopen_prefixSet:
 
         return full_paths
 
+    def find_all_valid_paths(self, snake, stats=None):
+        """
+        Find all valid s-t paths by combining states in F and B within the same head cell.
+        First compares prefixes to skip incompatible pairs early.
+        Returns a list of full simple paths (lists of vertices).
+        """
+        full_paths = []
+
+        for cell_index in range(self.n):
+            f_struct = self.cells[cell_index]['F']  # dict: prefix -> [buckets by g]
+            b_struct = self.cells[cell_index]['B']  # dict: prefix -> [buckets by g]
+
+            if not f_struct or not b_struct:
+                continue
+
+            for f_prefix, f_buckets in f_struct.items():
+                for b_prefix, b_buckets in b_struct.items():
+                    # Count prefix vs prefix check
+                    if stats is not None:
+                        stats["prefix_vs_prefix_meeting_checks"] += 1
+                        stats["valid_meeting_checks"] += 1
+
+                    # Early prune: prefixes share some vertex
+                    if (f_prefix & b_prefix) != 0:
+                        continue
+
+                    # Prefixes are compatible. Now scan all g buckets.
+                    for f_g in range(self.n - 1, -1, -1):
+                        f_bucket = f_buckets[f_g]
+                        if not f_bucket:
+                            continue
+
+                        for b_g in range(self.n - 1, -1, -1):
+                            b_bucket = b_buckets[b_g]
+                            if not b_bucket:
+                                continue
+
+                            for f_state in f_bucket:
+                                for b_state in b_bucket:
+                                    if stats is not None:
+                                        stats["state_vs_state_meeting_checks"] += 1
+                                        stats["valid_meeting_checks"] += 1
+
+                                    # Check vertex overlap (beyond the shared head)
+                                    if f_state.shares_vertex_with(b_state, snake):
+                                        continue
+
+                                    # Build full simple path:
+                                    #  f_state : s -> ... -> head
+                                    #  b_state : t -> ... -> head
+                                    p_f = f_state.materialize_path()
+                                    p_b = b_state.materialize_path()
+                                    full_path = p_f[:-1] + p_b[::-1]
+
+                                    # Optional: enforce that this is truly s-t
+                                    # if full_path[0] != self.start or full_path[-1] != self.goal:
+                                    #     continue
+
+                                    full_paths.append(full_path)
+
+        return full_paths
+
+
     def get_states_ending_in(self, vertex, is_f):
         """
         Return all states whose head == vertex in the given direction (F/B),
