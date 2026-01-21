@@ -113,7 +113,7 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coils: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
-        if stats["expansions"] and stats["expansions"] % 10_000 == 0:
+        if stats["expansions"] and stats["expansions"] % 50_000 == 0:
             logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}")
             # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}")
 
@@ -141,9 +141,7 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     stats['all_paths_with_g_lower_cutoff'] = stats['paths_with_g_lower_cutoff']['F'] + stats['paths_with_g_lower_cutoff']['B']
     logger(f"Number of paths with g_upper_cutoff({g_upper_cutoff_F}/{g_upper_cutoff_B}): {stats['all_paths_with_g_upper_cutoff']} (F:{stats['paths_with_g_upper_cutoff']['F']}, B:{stats['paths_with_g_upper_cutoff']['B']})")
     logger(f"Number of paths with g_lower_cutoff({g_lower_cutoff}): {stats['all_paths_with_g_lower_cutoff']} (F:{stats['paths_with_g_lower_cutoff']['F']}, B:{stats['paths_with_g_lower_cutoff']['B']})")
-    logger(f"Starting checks...")
-
-
+    
     # Push all pairs of states with g_lower_cutoff into queue
     # checks_queue = deque()
     # for state_F in states_g_lower_cutoff_F:
@@ -154,14 +152,12 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     excluded = {"g_values", "BF_values"}
     filtered_stats = {k: v for k, v in stats.items() if k not in excluded}
     args.logger(f"Stats: {filtered_stats}")
-    paths = OPENvOPEN.find_all_valid_paths(snake, stats)
-    for path in paths:
-        half_coil_to_check = args.cube_first_dims_path + path
-        is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
-        if is_sym_coil:
-            logger(f"SYM_COIL_FOUND! {sym_coil}")
-            best_path = sym_coil
 
+    logger(f"Starting checks...")
+    sym_coil_found, sym_coil = OPENvOPEN.check_all_valid_paths_if_sym_coil(snake, args, stats)
+
+    if sym_coil_found:
+        best_path = sym_coil
 
     ############################################
     # Checking for valid meeting points

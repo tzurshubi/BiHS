@@ -32,7 +32,7 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
@@ -46,7 +46,7 @@ DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COILS = True                # True # False
-DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
+DEFAULT_PREFIX_SET = 2               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 
 base_dir = "/"
 current_directory = os.getcwd()

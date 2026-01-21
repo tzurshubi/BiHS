@@ -1,4 +1,5 @@
 from models.state import State
+from utils.utils import is_half_of_symmetric_double_coil
 
 class Openvopen_prefixSet:
     def __init__(self, graph, start, goal, length_prefix_set):
@@ -229,13 +230,13 @@ class Openvopen_prefixSet:
 
         return full_paths
 
-    def find_all_valid_paths(self, snake, stats=None):
+    def check_all_valid_paths_if_sym_coil(self, snake, args, stats=None):
         """
         Find all valid s-t paths by combining states in F and B within the same head cell.
         First compares prefixes to skip incompatible pairs early.
         Returns a list of full simple paths (lists of vertices).
         """
-        full_paths = []
+        best_path = None
 
         for cell_index in range(self.n):
             f_struct = self.cells[cell_index]['F']  # dict: prefix -> [buckets by g]
@@ -287,9 +288,14 @@ class Openvopen_prefixSet:
                                     # if full_path[0] != self.start or full_path[-1] != self.goal:
                                     #     continue
 
-                                    full_paths.append(full_path)
+                                    # Check if full_path is a symmetric coil if needed
+                                    half_coil_to_check = args.cube_first_dims_path + full_path
+                                    is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+                                    if is_sym_coil:
+                                        args.logger(f"SYM_COIL_FOUND! {sym_coil}")
+                                        return True, sym_coil
 
-        return full_paths
+        return False, None
 
 
     def get_states_ending_in(self, vertex, is_f):
