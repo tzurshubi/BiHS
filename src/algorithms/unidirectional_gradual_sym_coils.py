@@ -64,26 +64,30 @@ def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, 
     # Main Search Loop
     ############################################
 
-    directionF = True                               # True - Forward, False - Backward
+    known_half_coil = [15, 31, 63, 127, 119, 103, 99, 107, 75, 73, 77, 69, 68, 100, 116, 124, 120, 121, 113, 81]
     while len(stack) > 0:
         # Pop a state from the stack
         current_state = stack.pop()
+        # path = current_state.materialize_path()
+        # if path==known_half_coil[:len(path)]:
+        #     logger(f"Part of known half coil reached: {path}")
+        #     pass
 
         # Symmetric coil pruning: do not expand states with g > half_coil_upper_bound
         if current_state.g > g_upper_cutoff: raise ValueError("In bidirectional_gradual_sym_coils: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
         if stats["expansions"] and stats["expansions"] % 100_000 == 0:
-            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}") # , memory [MB]: {memory_used_mb():.2f}
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack={len(stack)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
+            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}") # , memory [MB]: {memory_used_mb():.2f} # \n --- Stats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }
+            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack={len(stack)}, generated={stats["generated"]}.")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][current_state.g] += 1
 
         # Generate successors
-        successors = current_state.generate_successors(args, snake, directionF)
-        stats["g_values"].append(current_state.g)
-        stats["BF_values"].append(len(successors))
+        successors = current_state.generate_successors(args, snake, True)
+        # stats["g_values"].append(current_state.g)
+        # stats["BF_values"].append(len(successors))
         for successor in successors:
             stats["generated"] += 1
             # If successor is short and reaches the goal or its neighbors, skip it
