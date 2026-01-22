@@ -1,11 +1,11 @@
 import math
 
 STORE_PATH = False  # Set to False to save memory in snake mode
+STORE_SUCCESSORS = False  # Set to True to cache successors in each state
 
 class State:
     __slots__ = [
         'graph',
-        'num_graph_vertices',
         'max_vertex',
         'head',
         'tailtip',
@@ -26,7 +26,6 @@ class State:
 
     def __init__(self, graph, path, meet_points=None, snake=False, max_dim_crossed=None, parent=None):
         self.graph = graph
-        self.num_graph_vertices = len(graph.nodes)
         self.max_vertex = max(graph.nodes)
         self.meet_points = list(meet_points) if meet_points else []
         self.parent = parent
@@ -284,7 +283,8 @@ class State:
                     max_dim_crossed=None, 
                     parent=self
                 ))
-        self.successors = successors
+        if STORE_SUCCESSORS:
+            self.successors = successors
         return successors
 
     def shares_vertex_with(self, other_state, snake=False):

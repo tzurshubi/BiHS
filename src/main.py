@@ -19,6 +19,7 @@ from algorithms.multidirectional_search1 import *
 from algorithms.tbt_search import *
 from algorithms.bidirectional_search_sym_coils import *
 from algorithms.unidirectional_search_sym_coils import *
+from algorithms.unidirectional_gradual_sym_coils import *
 from algorithms.bidirectional_dfbnb_sym_coils import *
 from algorithms.bidirectional_gradual_sym_coils import *
 from utils.utils import *
@@ -32,12 +33,12 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = True                   # True # False
+DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = [60]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoils
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
@@ -370,7 +371,8 @@ def search(
         if not args.sym_coils:
             path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coils:
-            path, stats = unidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
+            # path, stats = unidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
+            path, stats = unidirectional_gradual_sym_coils(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coils:
