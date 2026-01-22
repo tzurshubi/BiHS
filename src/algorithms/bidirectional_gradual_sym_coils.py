@@ -56,15 +56,15 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     initial_state_F = State(graph_F, [start], [], snake) if isinstance(start, int) else State(graph_F, start, [], snake)
     initial_state_B = State(graph_B, [goal], [], snake) if isinstance(goal, int) else State(graph_B, goal, [], snake)
     # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
-    OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_illegalVerts(graph, start, goal, args.prefix_set)
+    # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_illegalVerts(graph, start, goal, args.prefix_set)
 
     # Push initial states with priority based on f_value
     stack_F = deque()
     stack_B = deque()
     stack_F.append(initial_state_F)
     stack_B.append(initial_state_B)
-    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
-    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap)}
+    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
+    # FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap)}
     states_g_lower_cutoff_F = []
     states_g_lower_cutoff_B = []
 
@@ -82,7 +82,7 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         # Set general variables
         D, D_hat = ('F', 'B') if directionF else ('B', 'F')
         stack_D, stack_D_hat = (stack_F, stack_B) if directionF else (stack_B, stack_F)
-        FNV_D , FNV_D_hat = (FNV_F, FNV_B) if directionF else (FNV_B, FNV_F)
+        # FNV_D , FNV_D_hat = (FNV_F, FNV_B) if directionF else (FNV_B, FNV_F)
         states_g_lower_cutoff_D , states_g_lower_cutoff_D_hat = (states_g_lower_cutoff_F, states_g_lower_cutoff_B) if directionF else (states_g_lower_cutoff_B, states_g_lower_cutoff_F)
         g_upper_cutoff_D, g_upper_cutoff_D_hat = (g_upper_cutoff_F, g_upper_cutoff_B) if directionF else (g_upper_cutoff_B, g_upper_cutoff_F)
 
@@ -98,16 +98,16 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         if current_state.g == g_upper_cutoff_D:
             stats["paths_with_g_upper_cutoff"][D] += 1
             current_state.parent.set_can_reach(current_state.head)
-            OPENvOPEN.insert_state(current_state, directionF)
+            # OPENvOPEN.insert_state(current_state, directionF)
 
             # Check for symmetric coil
-            paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, None, None, snake, stats)
-            for path in paths:
-                half_coil_to_check = args.cube_first_dims_path + path
-                is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
-                if is_sym_coil:
-                    logger(f"SYM_COIL_FOUND! {sym_coil}")
-                    best_path = sym_coil
+            # paths = OPENvOPEN.find_all_non_overlapping_paths(current_state, directionF, None, None, snake, stats)
+            # for path in paths:
+            #     half_coil_to_check = args.cube_first_dims_path + path
+            #     is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+            #     if is_sym_coil:
+            #         logger(f"SYM_COIL_FOUND! {sym_coil}")
+            #         best_path = sym_coil
 
             continue
 
@@ -115,9 +115,9 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coils: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
-        if stats["expansions"] and stats["expansions"] % 1_000 == 0:
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}")
-            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}")
+        if stats["expansions"] and stats["expansions"] % 50_000 == 0:
+            # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}") # , memory [MB]: {memory_used_mb():.2f}
+            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][D][current_state.g] += 1
@@ -127,17 +127,17 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
-                stats["symmetric_states_removed"] += 1
-                # logger(f"symmetric state removed: {successor.path}")
-                # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
-                continue
+            # if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
+            #     stats["symmetric_states_removed"] += 1
+            #     # logger(f"symmetric state removed: {successor.path}")
+            #     # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
+            #     continue
 
             stats["generated"][D] += 1
 
             # Insert successor into the stack and FNV set
             stack_D.append(successor)
-            FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
+            # FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
 
     stats['all_paths_with_g_upper_cutoff'] = stats['paths_with_g_upper_cutoff']['F'] + stats['paths_with_g_upper_cutoff']['B']
     stats['all_paths_with_g_lower_cutoff'] = stats['paths_with_g_lower_cutoff']['F'] + stats['paths_with_g_lower_cutoff']['B']
@@ -149,7 +149,7 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
     filtered_stats = {k: v for k, v in stats.items() if k not in excluded}
     args.logger(f"Stats: {filtered_stats}")
 
-    # logger(f"Starting checks...")
+    logger(f"Starting checks...")
     # sym_coil_found, sym_coil = OPENvOPEN.check_all_valid_paths_if_sym_coil(snake, args, stats)
     # if sym_coil_found:
     #     best_path = sym_coil
@@ -190,14 +190,16 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
         else:
             for succ_F in state_F.successors:
                 for succ_B in state_B.successors:
-                    check_states(succ_F, succ_B)
+                    for succ_of_succ_F in succ_F.successors:
+                        for succ_of_succ_B in succ_B.successors:
+                            check_states(succ_of_succ_F, succ_of_succ_B)
             # Expand the state with the smaller g value
             # if state_F.g < state_B.g:
             #     for succ in state_F.successors: check_states(succ, state_B)
             # else:
             #     for succ in state_B.successors: check_states(state_F, succ)
 
-    # Checks
+    # # Checks
     # logger(f"Starting checks. memory [MB]: {memory_used_mb():.2f}")
     # check_states(initial_state_F, initial_state_B)
 
