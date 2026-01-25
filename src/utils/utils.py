@@ -409,7 +409,7 @@ def bits_to_moves(bit_lists):
         if len(diff) == 1:
             moves.append(next(iter(diff)))  # extract the single changed bit
         else:
-            moves.append(None)  # if something’s wrong (shouldn’t happen in valid coils)
+            moves.append(None)  # if something’s wrong (shouldn’t happen in valid coil)
     if len(bit_lists[-1]) > 1:
         print("Warning: Last element has multiple bits on; cannot determine move.")
     return moves + bit_lists[-1]

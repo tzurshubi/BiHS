@@ -20,7 +20,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     open_set = HeapqState()
 
     # Initial state
-    initial_state = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
+    initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
     # Initial f_value
     initial_h_value = heuristic(initial_state, goal, heuristic_name, snake)

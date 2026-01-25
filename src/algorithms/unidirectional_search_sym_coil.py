@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 
 
-def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, args):
+def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, args):
     stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0}
     logger = args.logger
     cube = args.graph_type == "cube"
@@ -19,7 +19,7 @@ def unidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, a
     open_set = HeapqState()
 
     # Initial state
-    initial_state = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
+    initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
     # Initial f_value
     initial_h_value = heuristic(initial_state, goal, heuristic_name, snake)

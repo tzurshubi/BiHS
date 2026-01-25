@@ -11,12 +11,12 @@ from models.openvopen_prefixSet import Openvopen_prefixSet
 from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, args):
+def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     cube = args.graph_type == "cube"
-    if not cube or not args.sym_coils:
-        logger("Error: bidirectional_search_sym_coils is only for cube graphs.")
-        raise ValueError("bidirectional_search_sym_coils is only for cube graphs.")
+    if not cube or not args.sym_coil:
+        logger("Error: bidirectional_search_sym_coil is only for cube graphs.")
+        raise ValueError("bidirectional_search_sym_coil is only for cube graphs.")
     buffer_dim = args.cube_buffer_dim if cube else None
     c_star = longest_sym_coil_lengths[args.size_of_graphs[0]]
     half_coil_upper_bound = (c_star / 2) - args.cube_first_dims
@@ -112,7 +112,7 @@ def bidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, a
             continue
 
         # Symmetric coil pruning: do not expand states with g > half_coil_upper_bound
-        if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coils: current_state.g cannot be larger than g_upper_cutoff")
+        if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coil: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
         if stats["expansions"] and stats["expansions"] % 50_000 == 0:

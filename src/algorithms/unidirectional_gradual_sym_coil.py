@@ -11,12 +11,12 @@ from models.openvopen_prefixSet import Openvopen_prefixSet
 from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, args):
+def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     cube = args.graph_type == "cube"
-    if not cube or not args.sym_coils:
-        logger("Error: unidirectional_search_sym_coils is only for cube graphs.")
-        raise ValueError("unidirectional_search_sym_coils is only for cube graphs.")
+    if not cube or not args.sym_coil:
+        logger("Error: unidirectional_search_sym_coil is only for cube graphs.")
+        raise ValueError("unidirectional_search_sym_coil is only for cube graphs.")
     buffer_dim = args.cube_buffer_dim if cube else None
     c_star = longest_sym_coil_lengths[args.size_of_graphs[0]]
     half_coil_upper_bound = (c_star / 2) - args.cube_first_dims
@@ -41,7 +41,8 @@ def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, 
         "moved_OPEN_to_AUXOPEN": 0,
         "g_values": [],
         "BF_values": [],
-        "must_checks": 0
+        "must_checks": 0,
+        "sym_coil_checks": 0
     }
     goal_neighbors_bitmap = 0
     goal_and_neighbors_bitmap = 1 << goal
@@ -50,7 +51,7 @@ def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, 
         goal_and_neighbors_bitmap |= 1 << goal_neighbor
     
     # Initial states
-    initial_state = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
+    initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
     # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
     # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_illegalVerts(graph, start, goal, args.prefix_set)
 
@@ -64,7 +65,7 @@ def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, 
     # Main Search Loop
     ############################################
 
-    known_half_coil = [15, 31, 63, 127, 119, 103, 99, 107, 75, 73, 77, 69, 68, 100, 116, 124, 120, 121, 113, 81]
+    # known_half_coil = [15, 31, 63, 127, 119, 103, 99, 107, 75, 73, 77, 69, 68, 100, 116, 124, 120, 121, 113, 81]
     while len(stack) > 0:
         # Pop a state from the stack
         current_state = stack.pop()
@@ -74,7 +75,7 @@ def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, 
         #     pass
 
         # Symmetric coil pruning: do not expand states with g > half_coil_upper_bound
-        if current_state.g > g_upper_cutoff: raise ValueError("In bidirectional_gradual_sym_coils: current_state.g cannot be larger than g_upper_cutoff")
+        if current_state.g > g_upper_cutoff: raise ValueError("In bidirectional_gradual_sym_coil: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
         if stats["expansions"] and stats["expansions"] % 100_000 == 0:
@@ -105,6 +106,7 @@ def unidirectional_gradual_sym_coils(graph, start, goal, heuristic_name, snake, 
                 path = current_state.materialize_path()
                 half_coil_to_check = args.cube_first_dims_path + path
                 is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+                stats["sym_coil_checks"] += 1
                 if is_sym_coil:
                     logger(f"SYM_COIL_FOUND! {sym_coil}")
                     return sym_coil, stats

@@ -22,9 +22,11 @@ class State:
         'traversed_buffer_dimension',
         'successors',
         'can_reach_vertices',
+        'args',
     ]
 
-    def __init__(self, graph, path, meet_points=None, snake=False, max_dim_crossed=None, parent=None):
+    def __init__(self, graph, path, meet_points=None, snake=False, args=None, max_dim_crossed=None, parent=None):
+        if args is None: raise ValueError("args parameter is required for State initialization.")
         self.graph = graph
         self.max_vertex = max(graph.nodes)
         self.meet_points = list(meet_points) if meet_points else []
@@ -33,6 +35,7 @@ class State:
         self.traversed_buffer_dimension = False
         self.successors = []
         self.can_reach_vertices = 0  # int bitmap, initially all 0
+        self.args = args
         
         # --- 1. Identify Head and Tail ---
         if not path:
@@ -61,7 +64,10 @@ class State:
             self.path_vertices_bitmap = self._compute_path_vertices_bitmap_from_path(path)
             
             if snake:
+                # 3a. PVAN & Illegal
                 self.illegal, self.path_vertices_and_neighbors_bitmap = self.compute_path_vertices_and_neighbors_bitmap(path)
+                
+                # 3b. Max Dim Crossed
                 if max_dim_crossed is not None:
                     self.max_dim_crossed = max_dim_crossed
                 else:
@@ -90,27 +96,22 @@ class State:
                 # Parent PVAN covers (ParentBody + Neighbors). 
                 # We must add ParentHead (now Body) and its Neighbors.
                 # We must exclude CurrentHead.
-                
                 pvan = parent.path_vertices_and_neighbors_bitmap
                 pvan |= (1 << parent.head) # Add parent head to body
-                
-                # Add neighbors of parent head
-                # (Optimization: If graph structure allows, use a precomputed bitmap for neighbors)
                 for nb in self.graph.neighbors(parent.head):
-                    pvan |= (1 << nb)
-                
-                # Exclude the current head
-                pvan &= ~(1 << self.head)
+                    pvan |= (1 << nb) # Add neighbors of parent head
+                pvan &= ~(1 << self.head) # Exclude the current head
                 self.path_vertices_and_neighbors_bitmap = pvan
 
-                # 3c. Illegal (All Path Vertices + All Neighbors)
-                # Parent Illegal covers (ParentPath + Neighbors).
-                # We just need to add CurrentHead and Neighbors(CurrentHead).
-                ill = parent.illegal
-                ill |= (1 << self.head)
-                for nb in self.graph.neighbors(self.head):
-                    ill |= (1 << nb)
-                self.illegal = ill
+                # 3c. Illegal (pvan  + symmetric path if applicable)
+                ill = pvan
+                if self.args.sym_coil:
+                    sym_path_head = self.args.vertex_symmetric_to_start ^ (self.args.start ^ self.head)
+                    ill |= (1 << sym_path_head)
+                    if sym_path_head in self.graph:
+                        for nb in self.graph.neighbors(sym_path_head):
+                            ill |= (1 << nb)
+                    self.illegal = ill
             else:
                 self.path_vertices_and_neighbors_bitmap = 0
                 self.illegal = set()
@@ -161,24 +162,30 @@ class State:
         Returns: (illegal_bitmap, pvan_bitmap)
         """
         pvan = 0
-        illegal = 0
         head = path[-1]
-        
-        # Illegal includes all path vertices
-        for v in path:
-            illegal |= 1 << v
+        dimensions = [(path[j] - path[j+1]).bit_length() - 1 for j in range(len(path) - 1)]
+            
 
-        # PVAN includes body vertices + neighbors, excludes head
+        # PVAN, illegal: include body vertices + neighbors, excludes head
         for v in path[:-1]:
             pvan |= 1 << v
             for nb in self.graph.neighbors(v):
-                illegal |= 1 << nb # Update illegal with neighbors
                 if nb != head:
                     pvan |= 1 << nb
-        
-        # Ensure head neighbors are in illegal (head is already in illegal)
-        for nb in self.graph.neighbors(head):
-            illegal |= 1 << nb
+
+        illegal = pvan
+        # If symCoilGoal is provided, add the symmetric path's vertices and their neighbors to illegal
+        if self.args.sym_coil:
+            v = self.args.goal
+            T_path = []
+            for d in dimensions:
+                v ^= (1 << d)
+                T_path.append(v)
+
+            for x in T_path:
+                illegal |= 1 << x
+                for x_neighbor in self.graph.neighbors(x):
+                    illegal |= 1 << x_neighbor
 
         return illegal, pvan
 
@@ -237,6 +244,7 @@ class State:
         # Pre-calculate masks/values to avoid repetitive attribute lookups
         p_bitmap = self.path_vertices_bitmap
         pvan_bitmap = self.path_vertices_and_neighbors_bitmap if snake else 0
+        illegal_bitmap = self.illegal
         
         # Iterate neighbors
         for neighbor in self.graph.neighbors(head):
@@ -244,7 +252,7 @@ class State:
             
             # Fast Validity Check
             if snake:
-                if pvan_bitmap & neighbor_mask:
+                if (illegal_bitmap | pvan_bitmap) & neighbor_mask:
                     continue
             else:
                 if p_bitmap & neighbor_mask:
@@ -268,7 +276,8 @@ class State:
                         self.graph, 
                         new_path, 
                         self.meet_points, 
-                        snake, 
+                        snake,
+                        self.args,
                         new_max, 
                         parent=self
                     )
@@ -279,7 +288,8 @@ class State:
                     self.graph, 
                     new_path, 
                     meet_points=self.meet_points, 
-                    snake=snake, 
+                    snake=snake,
+                    args=self.args,
                     max_dim_crossed=None, 
                     parent=self
                 ))

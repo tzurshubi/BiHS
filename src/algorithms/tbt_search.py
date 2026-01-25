@@ -34,8 +34,8 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     OPENvOPEN = Openvopen(graph, start, goal)
 
     # Initial states
-    initial_state_F = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
-    initial_state_B = State(graph, [goal], [], snake) if isinstance(goal, int) else State(graph, goal, [], snake)
+    initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
+    initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
 
     # Initial f_values
     initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake)

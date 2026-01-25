@@ -17,11 +17,11 @@ from algorithms.bidirectional_search import *
 from algorithms.multidirectional_search import *
 from algorithms.multidirectional_search1 import *
 from algorithms.tbt_search import *
-from algorithms.bidirectional_search_sym_coils import *
-from algorithms.unidirectional_search_sym_coils import *
-from algorithms.unidirectional_gradual_sym_coils import *
-from algorithms.bidirectional_dfbnb_sym_coils import *
-from algorithms.bidirectional_gradual_sym_coils import *
+from algorithms.bidirectional_search_sym_coil import *
+from algorithms.unidirectional_search_sym_coil import *
+from algorithms.unidirectional_gradual_sym_coil import *
+from algorithms.bidirectional_dfbnb_sym_coil import *
+from algorithms.bidirectional_gradual_sym_coil import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -40,13 +40,13 @@ DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [81]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoils
+DEFAULT_SOLUTION_VERTICES = [64]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
-DEFAULT_SYM_COILS = True                # True # False
+DEFAULT_SYM_COIL = True                # True # False
 DEFAULT_PREFIX_SET = 4               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 
 base_dir = "/"
@@ -77,7 +77,7 @@ def parse_args():
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
     parser.add_argument("--cube_buffer_dim", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
     parser.add_argument("--backward_sym_generation", type=str, default=DEFAULT_BACKWARD_SYM_GENERATION, help="Symmetrical generation in other frontier.")
-    parser.add_argument("--sym_coils", type=str, default=DEFAULT_SYM_COILS, help="Find symmetrical coils.")
+    parser.add_argument("--sym_coil", type=str, default=DEFAULT_SYM_COIL, help="Find symmetrical coil.")
     parser.add_argument("--prefix_set", type=int, default=DEFAULT_PREFIX_SET, help="Comparing sets of states with same prefix of length k-3.")
     return parser.parse_args()
 
@@ -240,52 +240,7 @@ def search(
     
     # Remove nodes and edges from the graph
     G_original = G.copy()
-    if args.graph_type=="cube" and cube_first_dims and not args.sym_coils:
-        if G.has_edge(0, 1): G.remove_edge(0, 1)
-        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
-        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
-        #G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7)) | set(G.neighbors(15))) - {0, 31})
-
-        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
-        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
-
-        # Compute the end vertex to keep: 0 and last vertex
-        keepers = {0, 2**cube_first_dims - 1}
-
-        # Union of all neighbors of these vertices
-        neighbors = set()
-        for v in verts:
-            neighbors |= set(G.neighbors(v))
-
-        # Remove all except keepers
-        G.remove_nodes_from(neighbors - keepers)
-
-        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
-        args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
-        args.dim_flips_F_B_symmetry = list(range(cube_first_dims))
-    if args.graph_type=="cube" and cube_first_dims and args.sym_coils and search_type=="bidirectional":
-        if G.has_edge(0, 1): G.remove_edge(0, 1)
-
-        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
-        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
-
-        # Compute the end vertex to keep: 0 and last vertex
-        keepers = {0, 2**cube_first_dims - 1}
-        keepers_list = list(keepers)
-
-        # Union of all neighbors of these vertices
-        neighbors = set()
-        for v in verts:
-            neighbors |= set(G.neighbors(v))
-
-        # Remove all except keepers
-        G.remove_nodes_from(neighbors - keepers)
-
-        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
-        args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
-        args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
-        args.cube_first_dims_path = [keepers_list[0]]+verts
-    if args.graph_type=="cube" and cube_first_dims and args.sym_coils and search_type=="unidirectional":
+    if args.graph_type=="cube" and cube_first_dims and args.sym_coil and search_type=="unidirectional":
         if G.has_edge(0, 1): G.remove_edge(0, 1)
 
         # ----------------------------
@@ -309,11 +264,14 @@ def search(
         keepers = {t}
 
         # Path vertices: v0=t, v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
+        # T_path vertices: v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
         T_path = []
         v = t
+        vertex_symmetric_to_start = t
         for i in range(d):
             v ^= (1 << i)
             T_path.append(v)
+            vertex_symmetric_to_start = v
 
         T_set = set(T_path)
 
@@ -342,6 +300,52 @@ def search(
         args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
         args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
         args.cube_first_dims_path = verts
+        args.vertex_symmetric_to_start = vertex_symmetric_to_start
+    if args.graph_type=="cube" and cube_first_dims and not args.sym_coil:
+        if G.has_edge(0, 1): G.remove_edge(0, 1)
+        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
+        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
+        #G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7)) | set(G.neighbors(15))) - {0, 31})
+
+        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
+        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
+
+        # Compute the end vertex to keep: 0 and last vertex
+        keepers = {0, 2**cube_first_dims - 1}
+
+        # Union of all neighbors of these vertices
+        neighbors = set()
+        for v in verts:
+            neighbors |= set(G.neighbors(v))
+
+        # Remove all except keepers
+        G.remove_nodes_from(neighbors - keepers)
+
+        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
+        args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
+        args.dim_flips_F_B_symmetry = list(range(cube_first_dims))
+    if args.graph_type=="cube" and cube_first_dims and args.sym_coil and search_type=="bidirectional":
+        if G.has_edge(0, 1): G.remove_edge(0, 1)
+
+        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
+        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
+
+        # Compute the end vertex to keep: 0 and last vertex
+        keepers = {0, 2**cube_first_dims - 1}
+        keepers_list = list(keepers)
+
+        # Union of all neighbors of these vertices
+        neighbors = set()
+        for v in verts:
+            neighbors |= set(G.neighbors(v))
+
+        # Remove all except keepers
+        G.remove_nodes_from(neighbors - keepers)
+
+        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
+        args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
+        args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
+        args.cube_first_dims_path = [keepers_list[0]]+verts
     
     blocks = []
     logs = {}
@@ -349,13 +353,13 @@ def search(
     for node in range(args.size_of_graphs[0] * args.size_of_graphs[1]):
         if node not in G:
             blocks.append(node)
-
-    if isinstance(goal,int):
-        while goal not in G:
-            goal -= 1
-    if isinstance(start,int):
-        while start not in G:
-            start += 1
+    if args.graph_type=="grid":
+        if isinstance(goal,int):
+            while goal not in G:
+                goal -= 1
+        if isinstance(start,int):
+            while start not in G:
+                start += 1
 
     meet_point = None
     meet_points = None
@@ -363,24 +367,25 @@ def search(
     start_time = time.time()
     args.start_time = start_time
     args.logger.set_t0(start_time)
-
+    args.start = start
+    args.goal = goal
 
     # Run heuristic search to find LSP in the graph
     if search_type == "unidirectional":
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
-        if not args.sym_coils:
+        if not args.sym_coil:
             path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
-        else: # if args.sym_coils:
-            # path, stats = unidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
-            path, stats = unidirectional_gradual_sym_coils(G, start, goal, heuristic, snake, args)
+        else: # if args.sym_coil:
+            # path, stats = unidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
+            path, stats = unidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
-        if not args.sym_coils:
+        if not args.sym_coil:
             path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
-        else: # if args.sym_coils:
-            # path, stats, meet_point = bidirectional_search_sym_coils(G, start, goal, heuristic, snake, args)
-            # path, stats = bidirectional_dfbnb_sym_coils(G, start, goal, heuristic, snake, args)
-            path, stats = bidirectional_gradual_sym_coils(G, start, goal, heuristic, snake, args)
+        else: # if args.sym_coil:
+            # path, stats, meet_point = bidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
+            # path, stats = bidirectional_dfbnb_sym_coil(G, start, goal, heuristic, snake, args)
+            path, stats = bidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
 
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
@@ -455,7 +460,7 @@ if __name__ == "__main__":
     cube_first_dims = args.cube_first_dims
     cube_buffer_dim = args.cube_buffer_dim
     backward_sym_generation = args.backward_sym_generation
-    sym_coils = args.sym_coils
+    sym_coil = args.sym_coil
     prefix_set = args.prefix_set
 
     if log:
@@ -468,8 +473,8 @@ if __name__ == "__main__":
             log_file_name += f"_buffDim{cube_buffer_dim}"
         if backward_sym_generation:
             log_file_name += f"_symGen"
-        if sym_coils:
-            log_file_name += f"_symCoils"
+        if sym_coil:
+            log_file_name += f"_symcoil"
         if args.bsd:
             log_file_name += "_BSD"
         if args.cube_first_dims is not None:
@@ -497,7 +502,7 @@ if __name__ == "__main__":
         args.logger(f"cube_first_dims: {cube_first_dims}")
         args.logger(f"cube_buffer_dim: {cube_buffer_dim}")
         args.logger(f"backward_sym_generation: {backward_sym_generation}")
-        args.logger(f"sym_coils: {sym_coils}")
+        args.logger(f"sym_coil: {sym_coil}")
         args.logger(f"prefix_set: {prefix_set}")
 
 
@@ -536,7 +541,7 @@ if __name__ == "__main__":
             name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
             start = 2**cube_first_dims-1 if cube_first_dims is not None else 2**size_of_graphs[0]-1 # 7 # 15 # 31
             goal = 0
-            if args.sym_coils:
+            if args.sym_coil:
                 start = 2**cube_first_dims-1 if cube_first_dims is not None else 0 # 7 # 15 # 31
                 goal = args.solution_vertices[0]
         elif graph_type=="manual":
@@ -596,7 +601,7 @@ if __name__ == "__main__":
             avgs["bi"]["expansions"].append(logs['expansions'])
             avgs["bi"]["time"].append(logs['time[ms]'])
             # print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
-            if not args.sym_coils: 
+            if not args.sym_coil: 
                 args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                 results.append(
                 {
@@ -609,12 +614,12 @@ if __name__ == "__main__":
                 }
             )
             else:
-                if path:    args.logger(f"! Bidirectional Symmetrical Coils. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-                else:       args.logger(f"! Bidirectional Symmetrical Coils. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                if path:    args.logger(f"! Bidirectional Symmetrical Coil. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                else:       args.logger(f"! Bidirectional Symmetrical Coil. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                 results.append(
                 {
                     "# blocks": i,
-                    "Search type": "bidirectional symmetrical coils",
+                    "Search type": "bidirectional symmetrical coil",
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed

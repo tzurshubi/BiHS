@@ -10,16 +10,16 @@ from utils.utils import *
 
 
 
-def bidirectional_search_sym_coils(graph, start, goal, heuristic_name, snake, args):
+def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, args):
     stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0,
              "valid_meeting_checks": 0, "state_vs_state_meeting_checks": 0, "state_vs_prefix_meeting_checks": 0, 
              "num_of_prefix_sets": {'F': 0, 'B': 0}, "prefix_set_mean_size": {'F': 0, 'B': 0},
              "valid_meeting_check_time": 0, "calc_h_time": 0, "moved_OPEN_to_AUXOPEN": 0, "g_values": [], "BF_values": []}
     logger = args.logger 
     cube = args.graph_type == "cube"
-    if not cube or not args.sym_coils:
-        logger("Error: bidirectional_search_sym_coils is only for cube graphs.")
-        raise ValueError("bidirectional_search_sym_coils is only for cube graphs.")
+    if not cube or not args.sym_coil:
+        logger("Error: bidirectional_search_sym_coil is only for cube graphs.")
+        raise ValueError("bidirectional_search_sym_coil is only for cube graphs.")
     buffer_dim = args.cube_buffer_dim if cube else None
     c_star = longest_sym_coil_lengths[args.size_of_graphs[0]]
     half_coil_upper_bound = (c_star / 2) - args.cube_first_dims
