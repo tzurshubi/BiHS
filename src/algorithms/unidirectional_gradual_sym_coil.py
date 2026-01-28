@@ -80,7 +80,7 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
         # Logging progress
         if stats["expansions"] and stats["expansions"] % 100_000 == 0:
             # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}") # , memory [MB]: {memory_used_mb():.2f} # \n --- Stats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack={len(stack)}, generated={stats["generated"]}.")
+            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack={len(stack)}, generated={stats["generated"]}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][current_state.g] += 1
@@ -91,25 +91,28 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
         # stats["BF_values"].append(len(successors))
         for successor in successors:
             stats["generated"] += 1
-            # If successor is short and reaches the goal or its neighbors, skip it
-            if successor.g < g_upper_cutoff - 1 and (1 << successor.head) & goal_and_neighbors_bitmap != 0:
-                continue
-            # If successor has g equal to g_upper_cutoff - 1 but doesn't reach goal neighbors, skip it
-            if successor.g == g_upper_cutoff - 1 and (1 << successor.head) & goal_neighbors_bitmap != 0:
-                continue
+
+            # # If successor is short and reaches the goal or its neighbors, skip it
+            # if successor.g < g_upper_cutoff - 1 and (1 << successor.head) & goal_and_neighbors_bitmap != 0:
+            #     continue
+            # # If successor has g equal to g_upper_cutoff - 1 but doesn't reach goal neighbors, skip it
+            # if successor.g == g_upper_cutoff - 1 and (1 << successor.head) & goal_neighbors_bitmap != 0:
+            #     continue
+            
             # If successor has g equal to g_upper_cutoff but doesn't reach the goal, skip it
             if successor.g == g_upper_cutoff:
                 stats["paths_with_g_upper_cutoff"] += 1
-                if successor.head != goal:
-                    continue
-                # Check for symmetric coil
-                path = current_state.materialize_path()
-                half_coil_to_check = args.cube_first_dims_path + path
-                is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
-                stats["sym_coil_checks"] += 1
-                if is_sym_coil:
-                    logger(f"SYM_COIL_FOUND! {sym_coil}")
-                    return sym_coil, stats
+                # if successor.head != goal:
+                #     continue
+                # # Check for symmetric coil
+                # path = current_state.materialize_path()
+                # half_coil_to_check = args.cube_first_dims_path + path
+                # is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
+                # stats["sym_coil_checks"] += 1
+                # if is_sym_coil:
+                #     logger(f"SYM_COIL_FOUND! {sym_coil}")
+                #     return sym_coil, stats
+                
                 continue
 
             # if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
