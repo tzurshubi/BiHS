@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Tuple
 
-DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_12/symCoils_BSD_4DDS"
+DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_01_27/sym_coil_7d_uni"
 
 
 SUMMARY_RE = re.compile(

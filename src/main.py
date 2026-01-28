@@ -37,10 +37,10 @@ DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_UNI = False                 # True # False
+DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [64]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
+DEFAULT_SOLUTION_VERTICES = [60]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -240,113 +240,95 @@ def search(
     
     # Remove nodes and edges from the graph
     G_original = G.copy()
-    if args.graph_type=="cube" and cube_first_dims and args.sym_coil and search_type=="unidirectional":
-        if G.has_edge(0, 1): G.remove_edge(0, 1)
+    if args.graph_type=="cube" and cube_first_dims:
+        if args.sym_coil:
+            if G.has_edge(0, 1): G.remove_edge(0, 1)
 
-        # ----------------------------
-        # Remove N(S) except keepers
-        # ----------------------------
-        verts = [(2**k - 1) for k in range(0, cube_first_dims)]
-        verts_set = set(verts)
-        keepers = {2**cube_first_dims - 1}
+            # ----------------------------
+            # Remove S path ([0,1,3,...]) and N(S) except keepers
+            # ----------------------------
 
-        neighbors = set()
-        for v in verts:
-            neighbors |= set(G.neighbors(v))
+            # Compute the vertices: 1, 3, 7, ... (2^(cube_first_dims-1) - 1) - those will be removed along with their neighbors
+            # Keep the last one: 2^cube_first_dims - 1 (for ex: 15)
+            verts = [(2**k - 1) for k in range(0, cube_first_dims)]
+            verts_set = set(verts)
+            keepers = {2**cube_first_dims - 1}
 
-        G.remove_nodes_from((neighbors | verts_set) - keepers)
+            neighbors = set()
+            for v in verts:
+                neighbors |= set(G.neighbors(v))
 
-        # ----------------------------
-        # Remove T path (t -> traverse dims 0..d-1 once, in order) and N(T) except keepers
-        # ----------------------------
-        t = int(args.solution_vertices[0])
-        d = int(cube_first_dims)
-        keepers = {t}
+            G.remove_nodes_from((neighbors | verts_set) - keepers)
 
-        # Path vertices: v0=t, v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
-        # T_path vertices: v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
-        T_path = []
-        v = t
-        vertex_symmetric_to_start = t
-        for i in range(d):
-            v ^= (1 << i)
-            T_path.append(v)
-            vertex_symmetric_to_start = v
+            # ----------------------------
+            # Remove T path (t -> traverse dims 0..d-1 once, in order) and N(T) except keepers
+            # ----------------------------
+            t = int(args.solution_vertices[0])
+            d = int(cube_first_dims)
+            keepers = {t}
 
-        T_set = set(T_path)
+            # Path vertices: v0=t, v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
+            # T_path vertices: v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
+            T_path = []
+            v = t
+            vertex_symmetric_to_start = t
+            for i in range(d):
+                v ^= (1 << i)
+                T_path.append(v)
+                vertex_symmetric_to_start = v
 
-        # N(T): union of neighbors of all vertices in the path (in the current G)
-        N_T = set()
-        for x in T_set:
-            if G.has_node(x):
-                N_T |= set(G.neighbors(x))
+            T_set = set(T_path)
 
-        # Remove T ∪ N(T)
-        G.remove_nodes_from((T_set | N_T) - keepers)
+            # N(T): union of neighbors of all vertices in the path (in the current G)
+            N_T = set()
+            for x in T_set:
+                if G.has_node(x):
+                    N_T |= set(G.neighbors(x))
 
-        # ----------------------------
-        # If buffer dimension is defined: keep only vertices with BD bit = 1
-        # ----------------------------
-        if args.cube_buffer_dim is not None:
-            bd = int(args.cube_buffer_dim)
-            mask = 1 << bd
+            # Remove T ∪ N(T)
+            G.remove_nodes_from((T_set | N_T) - keepers)
 
-            # collect first, then remove (safe while iterating)
-            to_remove = [v for v in G.nodes() if (int(v) & mask) == 0]
-            G.remove_nodes_from(to_remove)
+            # ----------------------------
+            # If buffer dimension is defined: keep only vertices with BD bit = 1
+            # ----------------------------
+            if args.cube_buffer_dim is not None:
+                bd = int(args.cube_buffer_dim)
+                mask = 1 << bd
+
+                # collect first, then remove (safe while iterating)
+                to_remove = [v for v in G.nodes() if (int(v) & mask) == 0]
+                G.remove_nodes_from(to_remove)
 
 
-        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
-        args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
-        args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
-        args.cube_first_dims_path = verts
-        args.vertex_symmetric_to_start = vertex_symmetric_to_start
-    if args.graph_type=="cube" and cube_first_dims and not args.sym_coil:
-        if G.has_edge(0, 1): G.remove_edge(0, 1)
-        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
-        # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
-        #G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7)) | set(G.neighbors(15))) - {0, 31})
+            # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
+            args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
+            args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
+            args.cube_first_dims_path = verts
+            args.vertex_symmetric_to_start = vertex_symmetric_to_start
+        else:
+            if G.has_edge(0, 1): G.remove_edge(0, 1)
+            # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3))) - {0, 7})
+            # G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7))) - {0, 15})
+            #G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7)) | set(G.neighbors(15))) - {0, 31})
 
-        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
-        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
+            # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
+            verts = [(2**k - 1) for k in range(1, cube_first_dims)]
 
-        # Compute the end vertex to keep: 0 and last vertex
-        keepers = {0, 2**cube_first_dims - 1}
+            # Compute the end vertex to keep: 0 and last vertex
+            keepers = {0, 2**cube_first_dims - 1}
 
-        # Union of all neighbors of these vertices
-        neighbors = set()
-        for v in verts:
-            neighbors |= set(G.neighbors(v))
+            # Union of all neighbors of these vertices
+            neighbors = set()
+            for v in verts:
+                neighbors |= set(G.neighbors(v))
 
-        # Remove all except keepers
-        G.remove_nodes_from(neighbors - keepers)
+            # Remove all except keepers
+            G.remove_nodes_from(neighbors - keepers)
 
-        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
-        args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
-        args.dim_flips_F_B_symmetry = list(range(cube_first_dims))
-    if args.graph_type=="cube" and cube_first_dims and args.sym_coil and search_type=="bidirectional":
-        if G.has_edge(0, 1): G.remove_edge(0, 1)
-
-        # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
-        verts = [(2**k - 1) for k in range(1, cube_first_dims)]
-
-        # Compute the end vertex to keep: 0 and last vertex
-        keepers = {0, 2**cube_first_dims - 1}
-        keepers_list = list(keepers)
-
-        # Union of all neighbors of these vertices
-        neighbors = set()
-        for v in verts:
-            neighbors |= set(G.neighbors(v))
-
-        # Remove all except keepers
-        G.remove_nodes_from(neighbors - keepers)
-
-        # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
-        args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
-        args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
-        args.cube_first_dims_path = [keepers_list[0]]+verts
-    
+            # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
+            args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
+            args.dim_flips_F_B_symmetry = list(range(cube_first_dims))
+        
     blocks = []
     logs = {}
 

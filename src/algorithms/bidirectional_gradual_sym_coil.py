@@ -50,11 +50,10 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
     
     # Initial states
     graph_F, graph_B = graph.copy(), graph.copy()
-    graph_F.remove_nodes_from([0] + list(graph.neighbors(0)))
     graph_F.remove_nodes_from([goal] + list(graph.neighbors(goal)))
-    graph_B.remove_nodes_from([0] + list(graph.neighbors(0)) + [start] + list(graph.neighbors(start)))
-    initial_state_F = State(graph_F, [start], [], snake) if isinstance(start, int) else State(graph_F, start, [], snake)
-    initial_state_B = State(graph_B, [goal], [], snake) if isinstance(goal, int) else State(graph_B, goal, [], snake)
+    graph_B.remove_nodes_from([start] + list(graph.neighbors(start)))
+    initial_state_F = State(graph_F, [start], [], snake, args) if isinstance(start, int) else State(graph_F, start, [], snake, args)
+    initial_state_B = State(graph_B, [goal], [], snake, args) if isinstance(goal, int) else State(graph_B, goal, [], snake, args)
     # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
     # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_illegalVerts(graph, start, goal, args.prefix_set)
 
@@ -97,7 +96,7 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
         # Check if g is equal to g_upper_cutoff
         if current_state.g == g_upper_cutoff_D:
             stats["paths_with_g_upper_cutoff"][D] += 1
-            current_state.parent.set_can_reach(current_state.head)
+            # current_state.parent.set_can_reach(current_state.head)
             # OPENvOPEN.insert_state(current_state, directionF)
 
             # Check for symmetric coil
@@ -115,9 +114,9 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
         if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coil: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
-        if stats["expansions"] and stats["expansions"] % 50_000 == 0:
+        if stats["expansions"] and stats["expansions"] % 100_000 == 0:
             # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}") # , memory [MB]: {memory_used_mb():.2f}
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
+            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}, memory [MB]: {memory_used_mb():.2f}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][D][current_state.g] += 1
