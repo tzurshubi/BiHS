@@ -1,0 +1,33 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: [34]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: 4
+
+---------- cubes/7d_cube ----------
+[00:00:00:01:740] Number of paths with g_upper_cutoff(10.0/10.0): 10,015 (F:1,173, B:8,842)
+[00:00:00:01:740] Number of paths with g_lower_cutoff(2): 28 (F:7, B:21)
+[00:00:00:01:742] Stats: {'expansions': 15,685, 'generated': {'F': 2,345, 'B': 23,353}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 0, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 0, 'num_of_prefix_sets': {'F': {0: 1, 1: 2, 2: 7, 3: 14, 4: 33, 5: 37, 6: 90, 7: 139, 8: 341, 9: 509, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 1, 1: 4, 2: 21, 3: 62, 4: 186, 5: 450, 6: 1,158, 7: 2,154, 8: 4,490, 9: 5,986, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 1,173, 'B': 8,842}, 'paths_with_g_lower_cutoff': {'F': 7, 'B': 21}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0, 'all_paths_with_g_upper_cutoff': 10,015, 'all_paths_with_g_lower_cutoff': 28}
+[00:00:00:01:742] Starting checks...
+[00:00:00:01:743] No path found.
+[00:00:00:01:744] LOGS: {'time[ms]': 1,743, 'expansions': 15,685, 'generated': {'F': 2,345, 'B': 23,353}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 0, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 0, 'num_of_prefix_sets': {'F': {0: 1, 1: 2, 2: 7, 3: 14, 4: 33, 5: 37, 6: 90, 7: 139, 8: 341, 9: 509, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 1, 1: 4, 2: 21, 3: 62, 4: 186, 5: 450, 6: 1,158, 7: 2,154, 8: 4,490, 9: 5,986, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 1,173, 'B': 8,842}, 'paths_with_g_lower_cutoff': {'F': 7, 'B': 21}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0, 'all_paths_with_g_upper_cutoff': 10,015, 'all_paths_with_g_lower_cutoff': 28}
+[00:00:00:01:744] ! Bidirectional Symmetrical Coil. No path found. expansions: 15,685, time: 1,743 [ms], generated: {'F': 2,345, 'B': 23,353}
+average expansions: (0, 0, 15685, 0)
+average time: (0, 0, 1743, 0)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 15685 , 1743 (expansions , time[ms])
+MDS1: 0 , 0 (expansions , time[ms])

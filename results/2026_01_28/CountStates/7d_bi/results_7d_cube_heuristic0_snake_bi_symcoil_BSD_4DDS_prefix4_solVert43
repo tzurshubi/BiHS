@@ -1,0 +1,35 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: [43]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: 4
+
+---------- cubes/7d_cube ----------
+[00:00:00:20:716] Expansion 100,000: g=9, stack_F=0, stack_B=18, generated={'F': 101,783, 'B': 218,152}.
+Stats: {'expansions': 100,000, 'generated': {'F': 101,783, 'B': 218,152}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 0, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 0, 'num_of_prefix_sets': {'F': {0: 1, 1: 3, 2: 6, 3: 22, 4: 60, 5: 148, 6: 523, 7: 1,848, 8: 6,820, 9: 21,309, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 1, 1: 2, 2: 6, 3: 21, 4: 83, 5: 327, 6: 1,257, 7: 4,424, 8: 15,343, 9: 47,796, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 71,044, 'B': 148,874}, 'paths_with_g_lower_cutoff': {'F': 6, 'B': 6}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0}
+[00:00:00:33:554] Number of paths with g_upper_cutoff(10.0/10.0): 354,468 (F:71,044, B:283,424)
+[00:00:00:33:554] Number of paths with g_lower_cutoff(2): 16 (F:6, B:10)
+[00:00:00:33:555] Stats: {'expansions': 161,975, 'generated': {'F': 101,783, 'B': 414,658}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 0, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 0, 'num_of_prefix_sets': {'F': {0: 1, 1: 3, 2: 6, 3: 22, 4: 60, 5: 148, 6: 523, 7: 1,848, 8: 6,820, 9: 21,309, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 1, 1: 2, 2: 10, 3: 40, 4: 158, 5: 618, 6: 2,376, 7: 8,330, 8: 28,942, 9: 90,758, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 71,044, 'B': 283,424}, 'paths_with_g_lower_cutoff': {'F': 6, 'B': 10}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0, 'all_paths_with_g_upper_cutoff': 354,468, 'all_paths_with_g_lower_cutoff': 16}
+[00:00:00:33:555] Starting checks...
+[00:00:00:33:556] No path found.
+[00:00:00:33:558] LOGS: {'time[ms]': 33,556, 'expansions': 161,975, 'generated': {'F': 101,783, 'B': 414,658}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 0, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 0, 'num_of_prefix_sets': {'F': {0: 1, 1: 3, 2: 6, 3: 22, 4: 60, 5: 148, 6: 523, 7: 1,848, 8: 6,820, 9: 21,309, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 1, 1: 2, 2: 10, 3: 40, 4: 158, 5: 618, 6: 2,376, 7: 8,330, 8: 28,942, 9: 90,758, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 71,044, 'B': 283,424}, 'paths_with_g_lower_cutoff': {'F': 6, 'B': 10}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0, 'all_paths_with_g_upper_cutoff': 354,468, 'all_paths_with_g_lower_cutoff': 16}
+[00:00:00:33:558] ! Bidirectional Symmetrical Coil. No path found. expansions: 161,975, time: 33,556 [ms], generated: {'F': 101,783, 'B': 414,658}
+average expansions: (0, 0, 161975, 0)
+average time: (0, 0, 33556, 0)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 161975 , 33556 (expansions , time[ms])
+MDS1: 0 , 0 (expansions , time[ms])
