@@ -230,6 +230,16 @@ def bct_is_heuristic(state, goal, snake=True):
 
 # Return the total number of vertices in the graph
 # This is the most basic heuristic which is also admissible in this case
+def f2f_reachable_heuristic(state_F, state_B, args=None):
+    g = args.graph.copy()
+    to_remove = [v for v in g.nodes if ((state_F.illegal >> v) & 1) or ((state_B.illegal >> v) & 1)]
+    g.remove_nodes_from(to_remove)
+    if state_F.head not in g or state_B.head not in g:
+        print(f"Error in f2f_reachable_heuristic: head of F or B is not in the union graph after removing illegal vertices. state_F.head: {state_F.head}, state_B.head: {state_B.head}, g.nodes: {g.nodes}")
+        return 0
+    connected_component = nx.node_connected_component(g, state_F.head)
+    return len(connected_component) if state_B.head in connected_component else 0
+
 def heuristic0(state):
     return state.num_graph_vertices
 
@@ -554,169 +564,9 @@ def find_component_containing_vertex(tric, vertex):
     return None
 
 
-# def mis_heuristic(state,goal):
-#     graph = state.graph.copy()  # Clone the graph to avoid modifying the original
-#     tail_nodes = state.tail()  # Nodes to be removed
-#     graph.remove_nodes_from(tail_nodes)  # Remove tail nodes
-
-#     head = state.head
-
-#     # Find all bi-connected components and articulation points
-#     BCCs = list(nx.biconnected_components(graph))
-#     articulation_points = set(nx.articulation_points(graph))
-
-#     # Special case: the whole graph is one biconnected component
-#     if len(BCCs) == 1:
-#         bcc_vertices = BCCs[0]
-#         bcc_subgraph = graph.subgraph(bcc_vertices).copy()
-
-#         # Compute SPQR-based heuristic directly
-#         return get_max_nodes_spqr_recursive(bcc_subgraph, head, goal, return_nodes=False) - 1
-
-#     # Create a mapping from nodes to BCCs
-#     node_to_bcc = {}
-#     for i, component_i in enumerate(BCCs):
-#         for node in component_i:
-#             if node not in node_to_bcc:
-#                 node_to_bcc[node] = []
-#             node_to_bcc[node].append(i)
-
-#     # Find the BCCs containing head and goal
-#     head_bccs = node_to_bcc.get(head, [])
-#     goal_bccs = node_to_bcc.get(goal, [])
-
-#     # Check if head and goal are in the same BCC
-#     common_bcc = None
-#     for bcc_index in head_bccs:
-#         if bcc_index in goal_bccs:
-#             common_bcc = bcc_index
-#             break
-
-#     if common_bcc is not None:
-#         # Head and goal are in the same BCC
-#         bcc_vertices = BCCs[common_bcc]
-#         bcc_subgraph = graph.subgraph(bcc_vertices).copy()
-
-#         # Compute SPQR-based heuristic directly
-#         return get_max_nodes_spqr_recursive(bcc_subgraph, head, goal, return_nodes=False) - 1
-        
-#     # Otherwise, proceed to find separate BCCs for head and goal
-#     head_bcc = head_bccs[0] if head_bccs else None
-#     goal_bcc = goal_bccs[0] if goal_bccs else None
-
-#     if head_bcc is None or goal_bcc is None:
-#         return 0
-
-#     # Create the BCT (Block-Cut Tree)
-#     bct = nx.Graph()
-#     for i, component_i in enumerate(BCCs):
-#         bct.add_node(i, vertices=component_i)  # Store vertices in BCC
-#     for i, component_i in enumerate(BCCs):
-#         for node in component_i:
-#             if node in articulation_points:
-#                 for j, component_j in enumerate(BCCs):
-#                     if j > i and node in component_j:
-#                         bct.add_edge(i, j, articulation_point=node)
-
-#     # Find the path in the BCT from the BCC containing the head to the BCC containing the goal
-#     try:
-#         BCT_brach = nx.shortest_path(bct, head_bcc, goal_bcc)
-#     except nx.NetworkXNoPath:
-#         return 0
-
-#     # Special case: head is a cut-point, so the first BCC in the BCT_brach might be redundant
-#     if head == bct[BCT_brach[0]][BCT_brach[1]]["articulation_point"]:
-#         BCT_brach = BCT_brach[1:]
-
-#     # Handle the case where bcc_path contains only one node
-#     if len(BCT_brach) == 1:
-#         single_bcc_index = BCT_brach[0]
-#         bcc_vertices = bct.nodes[single_bcc_index]["vertices"]
-#         bcc_subgraph = graph.subgraph(bcc_vertices).copy()
-
-#         # Compute SPQR-based heuristic directly
-#         return get_max_nodes_spqr_recursive(bcc_subgraph, head, goal, return_nodes=False) - 1
-
-#     # Compute the SPQR-based MIS heuristic for each BCC in the path
-#     total_heuristic = 0
-
-#     for i in range(len(BCT_brach)):
-#         bcc_index = BCT_brach[i]
-#         bcc_vertices = bct.nodes[bcc_index]["vertices"]
-#         bcc_subgraph = graph.subgraph(bcc_vertices).copy()
-
-#         # Determine entry and exit points for the BCC
-#         if i == 0:
-#             # First BCC: entry is head, exit is the articulation point connecting to the next BCC
-#             in_node = head
-#             out_node = bct[bcc_index][BCT_brach[i + 1]]["articulation_point"]
-#         elif i == len(BCT_brach) - 1:
-#             # Last BCC: entry is the articulation point connecting to the previous BCC, exit is goal
-#             in_node = bct[bcc_index][BCT_brach[i - 1]]["articulation_point"]
-#             out_node = goal
-#         else:
-#             # Intermediate BCC: entry and exit are the articulation points connecting to adjacent BCCs
-#             in_node = bct[bcc_index][BCT_brach[i - 1]]["articulation_point"]
-#             out_node = bct[bcc_index][BCT_brach[i + 1]]["articulation_point"]
-
-#         # Compute SPQR-based heuristic
-#         spqr_nodes_count = get_max_nodes_spqr_recursive(bcc_subgraph, in_node, out_node, return_nodes=False)
-
-#         # Add the heuristic value from the SPQR tree of this BCC
-#         total_heuristic += spqr_nodes_count - 1
-
-#     # Combine results from all BCCs to form the h_MIS value
-#     return total_heuristic
-
-
-# def mis_snake_heuristic(state, goal, snake):
-#     graph = state.graph
-#     head = state.head
-#     path = state.path
-
-#     # Step 1: Compute Qn - the set of all legal vertices for the state
-#     Qn = set(graph.nodes) - state.illegal
-
-#     # Step 2: Compute Rn - the vertices in Qn that are reachable from state.head
-#     reachable_nodes = nx.single_source_shortest_path_length(graph, head)
-#     Rn = set(reachable_nodes.keys()) & Qn
-
-#     # Step 3: Construct BCT from the graph induced by Rn U {state.head}
-#     induced_subgraph = nx.induced_subgraph(graph,Rn | {head})
-#     # induced_subgraph = nx.induced_subgraph(graph,Rn.add(head))
-#     biconnected_components = list(nx.biconnected_components(induced_subgraph))
-#     cut_points = set(nx.articulation_points(induced_subgraph))
-
-#     # Create the block-cut-point tree
-#     bct = nx.Graph()
-#     for i, block in enumerate(biconnected_components):
-#         bct.add_node(f"B{i}", vertices=block)  # Add each block as a node
-#         for vertex in block:
-#             if vertex in cut_points:
-#                 bct.add_edge(f"B{i}", vertex)  # Connect blocks to cut-points
-
-#     # Step 4: Find the branch in the BCT from the block containing head to the block containing goal
-#     block_of_head = next(b for b in biconnected_components if head in b)
-#     block_of_goal = next(b for b in biconnected_components if goal in b)
-
-#     head_block_node = [node for node, data in bct.nodes(data=True) if data.get("vertices") == block_of_head][0]
-#     goal_block_node = [node for node, data in bct.nodes(data=True) if data.get("vertices") == block_of_goal][0]
-
-#     if head_block_node == goal_block_node:
-#         print("head and goal are in the same BCC")
-#         bcc_subgraph = graph.subgraph(block_of_head).copy()
-#         bcc_subgraph_size = len(bcc_subgraph)
-#         # Compute SPQR-based heuristic directly
-#         if snake:
-#             return get_max_nodes_spqr_snake(bcc_subgraph, head, goal,y_filter=True, return_pairs=False) - 1
-#         else:
-#             return get_max_nodes_spqr_recursive(bcc_subgraph, head, goal, return_nodes=False) - 1
-#     else:
-#         print("TO DO")
-#     path_in_bct = nx.shortest_path(bct, source=head_block_node, target=goal_block_node)
-
-
-def heuristic(state, goal, heuristic_name, snake):
+def heuristic(state, goal, heuristic_name, snake, args=None):
+    if isinstance(goal, State) and isinstance(state, State): #F2F heuristic
+        return f2f_reachable_heuristic(state, goal, args)
     if not isinstance(goal,int):
         if not snake: goal = max(goal)
         else: goal = State(state.graph, goal, [], snake)

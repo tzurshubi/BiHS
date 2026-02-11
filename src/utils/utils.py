@@ -30,7 +30,7 @@ longest_sym_coil_lengths = {
     4: 8,
     5: 14,
     6: 28,  # 24 for finding, 28 for proving
-    7: 48,   # 46 for finding, 48 for proving
+    7: 44,   # 46 for finding, 48 for proving
     8: 96,   # 94 for finding, 96 for proving
     9: 186,  # 186 for finding, 192 for proving
     10: 384, # upper bound
@@ -707,6 +707,11 @@ def is_half_of_symmetric_double_coil(path: List[int], d: int) -> Tuple[bool, Opt
     coil.append(coil[0])  # close the cycle
     return True, coil
 
+def list_to_bitmask(l):
+    mask = 0
+    for v in l:
+        mask |= 1 << v
+    return mask
 
 # ---------------------------
 # Graph utilities

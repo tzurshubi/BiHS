@@ -1,7 +1,7 @@
 import math
 
 STORE_PATH = False  # Set to False to save memory in snake mode
-STORE_SUCCESSORS = False  # Set to True to cache successors in each state
+STORE_SUCCESSORS = True  # Set to True to cache successors in each state
 
 class State:
     __slots__ = [
@@ -14,11 +14,11 @@ class State:
         'h',
         'meet_points',
         'path',  # List if STORE_PATH=True or parent is None, else None
-        'path_vertices_bitmap',  # visited vertices excluding head
-        'path_vertices_and_neighbors_bitmap',  # body vertices + their neighbors, excluding head
+        'path_vertices',  # visited vertices excluding head. bitmask.
+        'path_vertices_and_neighbors',  # body vertices + their neighbors, excluding head. bitmask.
+        'illegal',  # all illegal vertices. bitmask.
         'max_dim_crossed',
         'snake',
-        'illegal',  # in snake mode: int bitmap; in non-snake: set
         'traversed_buffer_dimension',
         'successors',
         'can_reach_vertices',
@@ -37,37 +37,20 @@ class State:
         self.can_reach_vertices = 0  # int bitmap, initially all 0
         self.args = args
         
-        # --- 1. Identify Head and Tail ---
         if not path:
             raise ValueError("Path cannot be empty.")
-            
-        # If parent exists, 'path' might be the full path OR just [new_head] (optimization)
         self.head = path[-1]
         
-        # --- 2. Initialize Metrics (g, tailtip) ---
         if parent is None:
-            # Root Node (Start of search)
             self.g = len(path) - 1
             self.tailtip = path[0]
-            # Force storage for root nodes so history isn't lost
-            self.path = path 
-        else:
-            # Successor Node
-            self.g = parent.g + 1
-            self.tailtip = parent.tailtip
-            # Conditional Storage
-            self.path = path if STORE_PATH else None
-
-        # --- 3. Compute Bitmaps & Constraints ---
-        if parent is None:
-            # === FULL COMPUTATION (From scratch) ===
-            self.path_vertices_bitmap = self._compute_path_vertices_bitmap_from_path(path)
+            self.path = path
+            self.path_vertices = self._compute_path_vertices_from_path(path)
             
             if snake:
-                # 3a. PVAN & Illegal
-                self.illegal, self.path_vertices_and_neighbors_bitmap = self.compute_path_vertices_and_neighbors_bitmap(path)
+                self.illegal, self.path_vertices_and_neighbors = self.compute_path_vertices_and_neighbors(path)
+                self.update_graph_with_illegal_vertices()
                 
-                # 3b. Max Dim Crossed
                 if max_dim_crossed is not None:
                     self.max_dim_crossed = max_dim_crossed
                 else:
@@ -76,44 +59,45 @@ class State:
                     else:
                         self.max_dim_crossed = self._compute_max_dim_crossed_from_path(path)
             else:
-                self.path_vertices_and_neighbors_bitmap = 0
+                self.path_vertices_and_neighbors = 0
                 self.illegal = set()
                 self.max_dim_crossed = max_dim_crossed
-
-        else:
-            # === INCREMENTAL UPDATE (Optimization) ===
-            # Update visited bitmap: Parent's bitmap + Parent's Head (which was previously excluded)
-            self.path_vertices_bitmap = parent.path_vertices_bitmap | (1 << parent.head)
+        # if parent is not None
+        else: 
+            self.g = parent.g + 1
+            self.tailtip = parent.tailtip
+            self.path = path if STORE_PATH else None
+            self.path_vertices = parent.path_vertices | (1 << parent.head)
 
             if snake:
-                # 3a. Max Dim Crossed
                 if max_dim_crossed is not None:
                     self.max_dim_crossed = max_dim_crossed
                 else:
                     self.max_dim_crossed = parent.max_dim_crossed
 
-                # 3b. PVAN (Body + Neighbors, Exclude Head)
-                # Parent PVAN covers (ParentBody + Neighbors). 
-                # We must add ParentHead (now Body) and its Neighbors.
-                # We must exclude CurrentHead.
-                pvan = parent.path_vertices_and_neighbors_bitmap
+                # Illegal, PVAN
+                self.illegal = parent.illegal
+                pvan = parent.path_vertices_and_neighbors
                 pvan |= (1 << parent.head) # Add parent head to body
                 for nb in self.graph.neighbors(parent.head):
                     pvan |= (1 << nb) # Add neighbors of parent head
                 pvan &= ~(1 << self.head) # Exclude the current head
-                self.path_vertices_and_neighbors_bitmap = pvan
+                self.path_vertices_and_neighbors = pvan
+                self.illegal |= pvan
 
-                # 3c. Illegal (pvan  + symmetric path if applicable)
-                ill = pvan
+                # Illegal from symmetric path if sym_coil
+                illegal_from_sym = 0
                 if self.args.sym_coil:
                     sym_path_head = self.args.vertex_symmetric_to_start ^ (self.args.start ^ self.head)
-                    ill |= (1 << sym_path_head)
+                    illegal_from_sym |= (1 << sym_path_head)
+                    # self.graph.remove_nodes_from([sym_path_head])
                     if sym_path_head in self.graph:
                         for nb in self.graph.neighbors(sym_path_head):
-                            ill |= (1 << nb)
-                    self.illegal = ill
+                            # self.graph.remove_nodes_from([nb])
+                            illegal_from_sym |= (1 << nb)
+                    self.illegal |= illegal_from_sym
             else:
-                self.path_vertices_and_neighbors_bitmap = 0
+                self.path_vertices_and_neighbors = 0
                 self.illegal = set()
                 self.max_dim_crossed = max_dim_crossed
 
@@ -131,7 +115,7 @@ class State:
         p = state.materialize_path()
         new_path = list(reversed(p))
 
-        snake = hasattr(state, "path_vertices_and_neighbors_bitmap") and state.path_vertices_and_neighbors_bitmap is not None
+        snake = hasattr(state, "path_vertices_and_neighbors") and state.path_vertices_and_neighbors is not None
         # Creates a new ROOT state (parent=None), so full path is stored automatically
         if snake and state.max_dim_crossed is not None:
             return cls(state.graph, new_path, meet_points=list(state.meet_points), snake=True, max_dim_crossed=state.max_dim_crossed)
@@ -142,7 +126,7 @@ class State:
     # ----------------------------
 
     @staticmethod
-    def _compute_path_vertices_bitmap_from_path(path):
+    def _compute_path_vertices_from_path(path):
         bitmap = 0
         for v in path[:-1]: # exclude head
             bitmap |= 1 << v
@@ -156,7 +140,7 @@ class State:
                 max_dim = max(max_dim, int(math.log2(diff)))
         return max_dim
 
-    def compute_path_vertices_and_neighbors_bitmap(self, path):
+    def compute_path_vertices_and_neighbors(self, path):
         """
         Full computation for root nodes.
         Returns: (illegal_bitmap, pvan_bitmap)
@@ -242,12 +226,13 @@ class State:
         head = self.head
 
         # Pre-calculate masks/values to avoid repetitive attribute lookups
-        p_bitmap = self.path_vertices_bitmap
-        pvan_bitmap = self.path_vertices_and_neighbors_bitmap if snake else 0
+        p_bitmap = self.path_vertices
+        pvan_bitmap = self.path_vertices_and_neighbors if snake else 0
         illegal_bitmap = self.illegal
         
         # Iterate neighbors
-        for neighbor in self.graph.neighbors(head):
+        neighbors = list(self.graph.neighbors(head))
+        for neighbor in neighbors:
             neighbor_mask = 1 << neighbor
             
             # Fast Validity Check
@@ -295,19 +280,27 @@ class State:
                 ))
         if STORE_SUCCESSORS:
             self.successors = successors
+        # Set illegal bitmask
+        for succ in successors:
+            if snake:
+                succ.illegal |= succ.path_vertices_and_neighbors
+            else:
+                succ.illegal |= succ.path_vertices
         return successors
 
     def shares_vertex_with(self, other_state, snake=False):
         # We rely on bitmaps
         if not snake:
-            return (self.path_vertices_bitmap & other_state.path_vertices_bitmap) != 0
+            return (self.path_vertices & other_state.path_vertices) != 0
         else:
-            return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0
+            return (self.path_vertices_and_neighbors & other_state.path_vertices) != 0
         
     def violate_constraint(self, other_state, snake=False):
         # We rely on bitmaps
         # We check against the other's illegal bitmap, which already includes the other's path and neighbors (if snake) and symmetric path (if sym_coil).
-        return (self.path_vertices_bitmap & other_state.illegal) != 0
+        state_F = self # for debugging clarity
+        state_B = other_state # for debugging clarity
+        return (self.path_vertices & other_state.illegal) != 0 or (other_state.path_vertices & self.illegal) != 0
 
 
     # ----------------------------
@@ -409,6 +402,14 @@ class State:
 
         return (self.can_reach_vertices & other.can_reach_vertices) != 0
 
-
+    def update_graph_with_illegal_vertices(self):
+        """
+        Update the state's graph by removing illegal vertices. This is used in snake mode to enforce constraints.
+        """
+        if isinstance(self.illegal, set):
+            self.graph = self.graph.subgraph(v for v in self.graph.nodes if v not in self.illegal).copy()
+        else:
+            illegal_bitmap = int(self.illegal)
+            self.graph = self.graph.subgraph(v for v in self.graph.nodes if (illegal_bitmap >> v) & 1 == 0).copy()
 
 

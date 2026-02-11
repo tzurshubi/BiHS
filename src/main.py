@@ -36,12 +36,12 @@ DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
-DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
+DEFAULT_HEURISTIC = "reachable_heuristic"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [22]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
+DEFAULT_SOLUTION_VERTICES = [80]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -241,6 +241,7 @@ def search(
     
     # Remove nodes and edges from the graph
     G_original = G.copy()
+    args.graph = G.copy()
     if args.graph_type=="cube" and cube_first_dims:
         if args.sym_coil:
             if G.has_edge(0, 1): G.remove_edge(0, 1)
@@ -387,7 +388,7 @@ def search(
     # Collect logs
     end_time = time.time()
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
-    logs.update(stats)
+    if stats: logs.update(stats)
 
 
     excluded = {"g_values", "BF_values"}

@@ -21,8 +21,11 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
     c_star = longest_sym_coil_lengths[args.size_of_graphs[0]]
     half_coil_upper_bound = (c_star / 2) - args.cube_first_dims
     g_upper_cutoff_F, g_upper_cutoff_B = half_coil_upper_bound // 2, (half_coil_upper_bound + 1) // 2
-    g_lower_cutoff = 2
     best_path = None
+    shortest_path_length_start_goal = nx.shortest_path_length(graph, source=start, target=goal)
+    if (shortest_path_length_start_goal % 2) != (half_coil_upper_bound % 2):
+        logger(f"start and goal are at odd distance {shortest_path_length_start_goal} in a cube of dimension {args.size_of_graphs[0]}, so no symmetric coil of length {c_star} exists.")
+        return None, None
     stats = {
         "expansions": 0,
         "generated": {'F': 0, 'B': 0},
@@ -32,10 +35,11 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
         "state_vs_state_meeting_checks": 0,
         "state_vs_prefix_meeting_checks": 0,
         "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_prefix_sets": {
+        "num_of_states_per_g": {
             'F': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
             'B': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))}
         },
+        "violations_per_g": {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
         "prefix_set_mean_size": {'F': 0, 'B': 0},
         "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
         "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
@@ -54,8 +58,15 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
     graph_B.remove_nodes_from([start] + list(graph.neighbors(start)))
     initial_state_F = State(graph_F, [start], [], snake, args) if isinstance(start, int) else State(graph_F, start, [], snake, args)
     initial_state_B = State(graph_B, [goal], [], snake, args) if isinstance(goal, int) else State(graph_B, goal, [], snake, args)
-    # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_prefixSet(graph, start, goal, args.prefix_set)
-    # OPENvOPEN = Openvopen(graph, start, goal) if args.prefix_set is None else Openvopen_illegalVerts(graph, start, goal, args.prefix_set)
+    
+    # we compute a bitmask of the illegal vertices, which we removed from the graph earlier. 
+    # This is used in heuristic
+    illegal = 0
+    for v in range(2**args.size_of_graphs[0]):
+        if v not in graph:
+            illegal |= (1 << v)
+    initial_state_F.illegal = illegal
+    initial_state_B.illegal = illegal
 
     # Push initial states with priority based on f_value
     stack_F = deque()
@@ -83,16 +94,18 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
         if g == g_upper_cutoff: stats["state_vs_state_meeting_checks"] += 1
         elif g < g_upper_cutoff: stats["prefix_vs_prefix_meeting_checks"] += 1
         else: stats["state_vs_prefix_meeting_checks"] += 1
-        if stats["valid_meeting_checks"] % 1_000_000 == 0:
+        if stats["valid_meeting_checks"] % 100_000 == 0:
             logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
             # logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
         
         # Checks
         if state_F.violate_constraint(state_B):
+            stats["violations_per_g"][g] += 1
             return False, None
 
         if g == g_upper_cutoff:
             if state_F.head != state_B.head:
+                stats["violations_per_g"][g] += 1
                 return False, None
             stats["must_checks"] += 1
             half_coil_to_check = args.cube_first_dims_path + state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
@@ -101,11 +114,24 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
                 logger(f"SYM_COIL_FOUND! {sym_coil}")
             return is_sym_coil, sym_coil
         else:
+            if state_F.head == state_B.head or graph.has_edge(state_F.head, state_B.head):
+                stats["violations_per_g"][g] += 1
+                return False, None
+            if state_F.illegal & (1 << state_B.head) or state_B.illegal & (1 << state_F.head):
+                stats["violations_per_g"][g] += 1
+                return False, None
+            if args.heuristic is not None and args.heuristic != "heuristic0":
+                h = heuristic(state_F, state_B, args.heuristic, snake, args)
+                if h == 0:
+                    stats["violations_per_g"][g] += 1
+                    return False, None
             stats["expansions"] += 2
             state_F_successors = state_F.generate_successors(args, snake, True)
             state_B_successors = state_B.generate_successors(args, snake, False)
             stats["generated"]['F'] += len(state_F_successors)
             stats["generated"]['B'] += len(state_B_successors)
+            stats["num_of_states_per_g"]['F'][g+1] += len(state_F_successors)
+            stats["num_of_states_per_g"]['B'][g+1] += len(state_B_successors)
             for succ_F in state_F_successors:
                 for succ_B in state_B_successors:
                     exp_n_check_states(succ_F, succ_B)

@@ -170,7 +170,8 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
         elif g < g_upper_cutoff: stats["prefix_vs_prefix_meeting_checks"] += 1
         else: stats["state_vs_prefix_meeting_checks"] += 1
         if stats["valid_meeting_checks"] % 5_000_000 == 0:
-            logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
+            logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
+            # logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
         
         # Checks
         if g < g_upper_cutoff and not state_F.shares_reachable_vertex_with(state_B):
@@ -199,8 +200,9 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
             #     for succ in state_B.successors: check_states(state_F, succ)
 
     # Checks
+    logger(f"Starting checks...")
     # logger(f"Starting checks. memory [MB]: {memory_used_mb():.2f}")
-    # check_states(initial_state_F, initial_state_B)
+    check_states(initial_state_F, initial_state_B)
 
     # largest_g_checked = 0
     # while len(checks_queue) > 0:
