@@ -1,0 +1,38 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: reachable_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: [126]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:19:681] Valid meeting checks so far: 10,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,000
+[00:00:00:39:854] Valid meeting checks so far: 20,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,000
+[00:00:01:00:068] Valid meeting checks so far: 30,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,000
+[00:00:01:20:577] Valid meeting checks so far: 40,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,000
+[00:00:01:40:313] Valid meeting checks so far: 50,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 50,000
+[00:00:02:00:103] Valid meeting checks so far: 60,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 60,000
+[00:00:02:20:262] Valid meeting checks so far: 70,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 70,000
+[00:00:02:40:431] Valid meeting checks so far: 80,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 80,000
+[00:00:03:01:384] Valid meeting checks so far: 90,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 90,000
+[00:00:03:13:072] No path found.
+[00:00:03:13:074] LOGS: {'time[ms]': 193,072, 'expansions': 37,022, 'generated': {'F': 0, 'B': 0}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 95,813, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 95,813, 'num_of_states_per_g': {'F': {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 8, 2: 156, 3: 1,282, 4: 7,682, 5: 18,155, 6: 19,606, 7: 9,287, 8: 1,438, 9: 1,177, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0, 'g_upper_cutoff': {'F': 10.0, 'B': 10.0}}
+[00:00:03:13:074] ! Bidirectional Symmetrical Coil. No path found. expansions: 37,22, time: 193,72 [ms], generated: {'F': 0, 'B': 0}
+average expansions: (0, 0, 37022, 0)
+average time: (0, 0, 193072, 0)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 37022 , 193072 (expansions , time[ms])
+MDS1: 0 , 0 (expansions , time[ms])

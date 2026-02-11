@@ -118,7 +118,7 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
             if state_F.head == state_B.head:
                 stats["violations_per_g"][state_F.g] += 1
                 return False, None
-            if graph.has_edge(state_F.head, state_B.head) and state_F.g != g_upper_cutoff_F - 1 and state_B.g != g_upper_cutoff_B - 1:
+            if graph.has_edge(state_F.head, state_B.head): # ADD THIS WHEN EXPANDING ONE FRONTIER AT A TIME:  and state_F.g != g_upper_cutoff_F - 1 and state_B.g != g_upper_cutoff_B - 1:
                 stats["violations_per_g"][state_F.g] += 1
                 return False, None
             if state_F.illegal & (1 << state_B.head) or state_B.illegal & (1 << state_F.head):
@@ -129,25 +129,31 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
                 if h == 0:
                     stats["violations_per_g"][state_F.g] += 1
                     return False, None
-            stats["expansions"] += 1
-            # stats["generated"]['F'] += len(state_F_successors)
-            # stats["generated"]['B'] += len(state_B_successors)
-            # stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-            # stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
-            shorter_state = state_F if state_F.g < state_B.g else state_B
-            shorter_state_successors = shorter_state.generate_successors(args, snake, shorter_state is state_F)
-            for succ in shorter_state_successors:
-                is_sym_coil, sym_coil = exp_n_check_states(succ if shorter_state is state_F else state_F, state_B if shorter_state is state_F else succ)
-                if is_sym_coil:
-                    return True, sym_coil
+            
+            # Expand both frontiers together
+            stats["expansions"] += 2
+            state_F_successors = state_F.generate_successors(args, snake, True)
+            state_B_successors = state_B.generate_successors(args, snake, False)
+            stats["generated"]['F'] += len(state_F_successors)
+            stats["generated"]['B'] += len(state_B_successors)
+            stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
+            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
+            for succ_F in state_F_successors:
+                for succ_B in state_B_successors:
+                    is_sym_coil, sym_coil = exp_n_check_states(succ_F, succ_B)
+                    if is_sym_coil:
+                        return True, sym_coil
+                    
+            # Expand one frontier (shorter one)
+            # stats["expansions"] += 1
+            # shorter_state = state_F if state_F.g < state_B.g else state_B
+            # shorter_state_successors = shorter_state.generate_successors(args, snake, shorter_state is state_F)
+            # for succ in shorter_state_successors:
+            #     is_sym_coil, sym_coil = exp_n_check_states(succ if shorter_state is state_F else state_F, state_B if shorter_state is state_F else succ)
+            #     if is_sym_coil:
+            #         return True, sym_coil
             
             return False, None
-            # state_F_successors = state_F.generate_successors(args, snake, True)
-            # state_B_successors = state_B.generate_successors(args, snake, False)
-            # for succ_F in state_F_successors:
-            #     for succ_B in state_B_successors:
-            #         exp_n_check_states(succ_F, succ_B)
-
 
     best_path_found, best_path = exp_n_check_states(initial_state_F, initial_state_B)
     

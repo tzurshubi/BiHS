@@ -1,0 +1,48 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: reachable_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: [75]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:16:856] Valid meeting checks so far: 10,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,000
+[00:00:00:33:868] Valid meeting checks so far: 20,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,000
+[00:00:00:50:712] Valid meeting checks so far: 30,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,000
+[00:00:01:07:227] Valid meeting checks so far: 40,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,000
+[00:00:01:24:491] Valid meeting checks so far: 50,000, state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 50,000
+[00:00:01:40:302] Valid meeting checks so far: 60,000, state_vs_state: 118, state_vs_prefix: 65, prefix_vs_prefix: 59,817
+[00:00:01:56:234] Valid meeting checks so far: 70,000, state_vs_state: 118, state_vs_prefix: 65, prefix_vs_prefix: 69,817
+[00:00:02:13:401] Valid meeting checks so far: 80,000, state_vs_state: 118, state_vs_prefix: 65, prefix_vs_prefix: 79,817
+[00:00:02:30:842] Valid meeting checks so far: 90,000, state_vs_state: 118, state_vs_prefix: 65, prefix_vs_prefix: 89,817
+[00:00:02:47:682] Valid meeting checks so far: 100,000, state_vs_state: 118, state_vs_prefix: 65, prefix_vs_prefix: 99,817
+[00:00:03:05:543] Valid meeting checks so far: 110,000, state_vs_state: 118, state_vs_prefix: 65, prefix_vs_prefix: 109,817
+[00:00:03:23:238] Valid meeting checks so far: 120,000, state_vs_state: 149, state_vs_prefix: 90, prefix_vs_prefix: 119,761
+[00:00:03:41:483] Valid meeting checks so far: 130,000, state_vs_state: 163, state_vs_prefix: 108, prefix_vs_prefix: 129,729
+[00:00:04:00:425] Valid meeting checks so far: 140,000, state_vs_state: 165, state_vs_prefix: 112, prefix_vs_prefix: 139,723
+[00:00:04:19:012] Valid meeting checks so far: 150,000, state_vs_state: 167, state_vs_prefix: 114, prefix_vs_prefix: 149,719
+[00:00:04:37:650] Valid meeting checks so far: 160,000, state_vs_state: 168, state_vs_prefix: 116, prefix_vs_prefix: 159,716
+[00:00:04:56:519] Valid meeting checks so far: 170,000, state_vs_state: 169, state_vs_prefix: 118, prefix_vs_prefix: 169,713
+[00:00:05:14:933] Valid meeting checks so far: 180,000, state_vs_state: 184, state_vs_prefix: 135, prefix_vs_prefix: 179,681
+[00:00:05:33:432] Valid meeting checks so far: 190,000, state_vs_state: 188, state_vs_prefix: 147, prefix_vs_prefix: 189,665
+[00:00:05:40:730] No path found.
+[00:00:05:40:732] LOGS: {'time[ms]': 340,730, 'expansions': 62,480, 'generated': {'F': 0, 'B': 0}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 193,999, 'state_vs_state_meeting_checks': 188, 'state_vs_prefix_meeting_checks': 147, 'prefix_vs_prefix_meeting_checks': 193,664, 'num_of_states_per_g': {'F': {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 2, 2: 35, 3: 844, 4: 8,755, 5: 31,104, 6: 48,006, 7: 32,439, 8: 5,082, 9: 5,064, 10: 112, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 76, 'g_upper_cutoff': {'F': 10.0, 'B': 10.0}}
+[00:00:05:40:732] ! Bidirectional Symmetrical Coil. No path found. expansions: 62,480, time: 340,730 [ms], generated: {'F': 0, 'B': 0}
+average expansions: (0, 0, 62480, 0)
+average time: (0, 0, 340730, 0)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 62480 , 340730 (expansions , time[ms])
+MDS1: 0 , 0 (expansions , time[ms])
