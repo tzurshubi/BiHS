@@ -303,6 +303,12 @@ class State:
             return (self.path_vertices_bitmap & other_state.path_vertices_bitmap) != 0
         else:
             return (self.path_vertices_and_neighbors_bitmap & other_state.path_vertices_bitmap) != 0
+        
+    def violate_constraint(self, other_state, snake=False):
+        # We rely on bitmaps
+        # We check against the other's illegal bitmap, which already includes the other's path and neighbors (if snake) and symmetric path (if sym_coil).
+        return (self.path_vertices_bitmap & other_state.illegal) != 0
+
 
     # ----------------------------
     # Concatenation

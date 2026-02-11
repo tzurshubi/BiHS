@@ -114,9 +114,9 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
         if current_state.g > g_upper_cutoff_D: raise ValueError("In bidirectional_gradual_sym_coil: current_state.g cannot be larger than g_upper_cutoff")
 
         # Logging progress
-        if stats["expansions"] and stats["expansions"] % 1_000_000 == 0:
+        if stats["expansions"] and stats["expansions"] % 100_000 == 0:
             # logger(f"Expansion {stats["expansions"]}: g={current_state.g}, path={current_state.materialize_path()}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}") # , memory [MB]: {memory_used_mb():.2f}
-            logger(f"Expansion {stats["expansions"]}: g={current_state.g}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats["generated"]}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
+            logger(f"Expansion {stats['expansions']}: g={current_state.g}, stack_F={len(stack_F)}, stack_B={len(stack_B)}, generated={stats['generated']}.\nStats: { {k: v for k, v in stats.items() if k not in {'g_values', 'BF_values'}} }")
 
         stats["expansions"] += 1
         stats["num_of_prefix_sets"][D][current_state.g] += 1
@@ -198,7 +198,7 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
             # else:
             #     for succ in state_B.successors: check_states(state_F, succ)
 
-    # # Checks
+    # Checks
     # logger(f"Starting checks. memory [MB]: {memory_used_mb():.2f}")
     # check_states(initial_state_F, initial_state_B)
 

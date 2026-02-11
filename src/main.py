@@ -22,6 +22,7 @@ from algorithms.unidirectional_search_sym_coil import *
 from algorithms.unidirectional_gradual_sym_coil import *
 from algorithms.bidirectional_dfbnb_sym_coil import *
 from algorithms.bidirectional_gradual_sym_coil import *
+from algorithms.bidirectional_simultaneous_exp_n_check_sym_coil import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -33,14 +34,14 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [60]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
+DEFAULT_SOLUTION_VERTICES = [22]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -367,7 +368,8 @@ def search(
         else: # if args.sym_coil:
             # path, stats, meet_point = bidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_dfbnb_sym_coil(G, start, goal, heuristic, snake, args)
-            path, stats = bidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
+            # path, stats = bidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
+            path, stats = bidirectional_simultaneous_exp_n_check_sym_coil(G, start, goal, heuristic, snake, args)
 
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
