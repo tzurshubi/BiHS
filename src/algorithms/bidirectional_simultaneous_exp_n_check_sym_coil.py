@@ -126,7 +126,7 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
                 return False, None
             if args.heuristic is not None and args.heuristic != "heuristic0":
                 h = heuristic(state_F, state_B, args.heuristic, snake, args)
-                if h == 0:
+                if h == 0: # h < abs(g_upper_cutoff_F - state_F.g - (g_upper_cutoff_B - state_B.g)):
                     stats["violations_per_g"][state_F.g] += 1
                     return False, None
             
