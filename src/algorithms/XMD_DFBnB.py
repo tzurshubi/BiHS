@@ -44,7 +44,7 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
 
     stats = {
         "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
+        "generated": {'F': 0, 'B': 0, 'VF': 0, 'VB': 0},
         "symmetric_states_removed": 0,
         "dominated_states_removed": 0,
         "valid_meeting_checks": 0,
@@ -53,7 +53,9 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
         "prefix_vs_prefix_meeting_checks": 0,
         "num_of_states_per_g": {
             'F': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
-            'B': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))}
+            'B': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
+            'VF': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
+            'VB': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
         },
         "violations_per_g": {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
         "prefix_set_mean_size": {'F': 0, 'B': 0},
@@ -97,33 +99,34 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
 
     def exp_n_check_states(state_F, state_B, state_VF, state_VB):
         # Errors (relevant only if the two frontier advance together, and state_F.g == state_B.g at all times, which is not necessarily the case)
-        # if state_F.g != state_B.g or g_upper_cutoff_F != g_upper_cutoff_B:
-        #     raise ValueError("In check_states: state_F.g must be equal to state_B.g, and g_upper_cutoff_F must be equal to g_upper_cutoff_B")
-        # g = state_F.g # == state_B.g
-        # g_upper_cutoff = g_upper_cutoff_F  # == g_upper_cutoff_B
+        g = state_F.g
+        if state_B.g != g or state_VF.g != g or state_VB.g != g:
+            raise ValueError("In check_states: all states must have the same g value")
+        if g > g_upper_cutoff:
+            raise ValueError("In check_states: g cannot be greater than g_upper_cutoff")
 
         # Logs
         stats["valid_meeting_checks"] += 1
-        if state_F.g == g_upper_cutoff and state_B.g == g_upper_cutoff: stats["state_vs_state_meeting_checks"] += 1
-        elif state_F.g < g_upper_cutoff and state_B.g < g_upper_cutoff: stats["prefix_vs_prefix_meeting_checks"] += 1
+        if g == g_upper_cutoff and state_B.g == g_upper_cutoff: stats["state_vs_state_meeting_checks"] += 1
+        elif g < g_upper_cutoff and state_B.g < g_upper_cutoff: stats["prefix_vs_prefix_meeting_checks"] += 1
         else: stats["state_vs_prefix_meeting_checks"] += 1
         if stats["valid_meeting_checks"] % 10_000 == 0:
             logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
             # logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
         
         # Checks
-        if state_F.violate_constraint(state_B) or \
-            state_F.violate_constraint(state_VF) or \
-                state_F.violate_constraint(state_VB) or \
-                    state_B.violate_constraint(state_VF) or \
-                        state_B.violate_constraint(state_VB) or \
-                            state_VF.violate_constraint(state_VB):
-            stats["violations_per_g"][state_F.g] += 1
-            return False, None
+        # if state_F.violate_constraint(state_B) or \
+        #     state_F.violate_constraint(state_VF) or \
+        #         state_F.violate_constraint(state_VB) or \
+        #             state_B.violate_constraint(state_VF) or \
+        #                 state_B.violate_constraint(state_VB) or \
+        #                     state_VF.violate_constraint(state_VB):
+        #     stats["violations_per_g"][g] += 1
+        #     return False, None
 
-        if state_F.g == g_upper_cutoff and state_B.g == g_upper_cutoff:
-            if state_F.head != state_B.head:
-                stats["violations_per_g"][state_F.g] += 1
+        if g == g_upper_cutoff:
+            if state_F.head != state_VB.head or state_VF.head != state_B.head:
+                stats["violations_per_g"][g] += 1
                 return False, None
             stats["must_checks"] += 1
             half_coil_to_check = args.cube_first_dims_path + state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
@@ -132,34 +135,48 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
                 logger(f"SYM_COIL_FOUND! {sym_coil}")
             return is_sym_coil, sym_coil
         else:
-            if state_F.head == state_B.head:
-                stats["violations_per_g"][state_F.g] += 1
+            if state_F.head == state_B.head or state_F.head == state_VF.head or state_F.head == state_VB.head or \
+                state_B.head == state_VF.head or state_B.head == state_VB.head or \
+                     (state_VF.head == state_VB.head and g > 0):
+                stats["violations_per_g"][g] += 1
                 return False, None
-            if graph.has_edge(state_F.head, state_B.head): # ADD THIS WHEN EXPANDING ONE FRONTIER AT A TIME:  and state_F.g != g_upper_cutoff_F - 1 and state_B.g != g_upper_cutoff_B - 1:
-                stats["violations_per_g"][state_F.g] += 1
+            if graph.has_edge(state_F.head, state_B.head) or graph.has_edge(state_F.head, state_VF.head) or \
+                graph.has_edge(state_F.head, state_VB.head) or graph.has_edge(state_B.head, state_VF.head) or \
+                    graph.has_edge(state_B.head, state_VB.head) or graph.has_edge(state_VF.head, state_VB.head): # ADD THIS WHEN EXPANDING ONE FRONTIER AT A TIME:  and state_F.g != g_upper_cutoff_F - 1 and state_B.g != g_upper_cutoff_B - 1:
+                stats["violations_per_g"][g] += 1
                 return False, None
-            if state_F.illegal & (1 << state_B.head) or state_B.illegal & (1 << state_F.head):
-                stats["violations_per_g"][state_F.g] += 1
+            if state_F.illegal & (1 << state_B.head) or state_F.illegal & (1 << state_VF.head) or \
+                state_F.illegal & (1 << state_VB.head) or state_B.illegal & (1 << state_VF.head) or \
+                    state_B.illegal & (1 << state_VB.head) or state_VF.illegal & (1 << state_VB.head):
+                stats["violations_per_g"][g] += 1
                 return False, None
             if args.heuristic is not None and args.heuristic != "heuristic0":
                 h = heuristic(state_F, state_B, args.heuristic, snake, args)
                 if h == 0: # h < abs(g_upper_cutoff_F - state_F.g - (g_upper_cutoff_B - state_B.g)):
-                    stats["violations_per_g"][state_F.g] += 1
+                    stats["violations_per_g"][g] += 1
                     return False, None
             
-            # Expand both frontiers together
-            stats["expansions"] += 2
+            # Expand all 4 frontiers together
+            stats["expansions"] += 4
             state_F_successors = state_F.generate_successors(args, snake, True)
             state_B_successors = state_B.generate_successors(args, snake, False)
+            state_VF_successors = state_VF.generate_successors(args, snake, True)
+            state_VB_successors = state_VB.generate_successors(args, snake, False)
             stats["generated"]['F'] += len(state_F_successors)
             stats["generated"]['B'] += len(state_B_successors)
-            stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
+            stats["generated"]['VF'] += len(state_VF_successors)
+            stats["generated"]['VB'] += len(state_VB_successors)
+            stats["num_of_states_per_g"]['F'][g+1] += len(state_F_successors)
+            stats["num_of_states_per_g"]['B'][g+1] += len(state_B_successors)
+            stats["num_of_states_per_g"]['VF'][g+1] += len(state_VF_successors)
+            stats["num_of_states_per_g"]['VB'][g+1] += len(state_VB_successors)
             for succ_F in state_F_successors:
                 for succ_B in state_B_successors:
-                    is_sym_coil, sym_coil = exp_n_check_states(succ_F, succ_B)
-                    if is_sym_coil:
-                        return True, sym_coil
+                    for succ_VF in state_VF_successors:
+                        for succ_VB in state_VB_successors:
+                            is_sym_coil, sym_coil = exp_n_check_states(succ_F, succ_B, succ_VF, succ_VB)
+                            if is_sym_coil:
+                                return True, sym_coil
                     
             # Expand one frontier (shorter one)
             # stats["expansions"] += 1

@@ -295,13 +295,13 @@ class State:
         else:
             return (self.path_vertices_and_neighbors & other_state.path_vertices) != 0
         
-    def violate_constraint(self, other_state, snake=False):
+    def violate_constraint(self, other_state, snake=True):
         # We rely on bitmaps
         # We check against the other's illegal bitmap, which already includes the other's path and neighbors (if snake) and symmetric path (if sym_coil).
         state_F = self # for debugging clarity
         state_B = other_state # for debugging clarity
         return (self.path_vertices & other_state.illegal) != 0 or (other_state.path_vertices & self.illegal) != 0
-
+    
 
     # ----------------------------
     # Concatenation
