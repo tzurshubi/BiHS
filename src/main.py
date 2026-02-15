@@ -23,6 +23,7 @@ from algorithms.unidirectional_gradual_sym_coil import *
 from algorithms.bidirectional_dfbnb_sym_coil import *
 from algorithms.bidirectional_gradual_sym_coil import *
 from algorithms.XDFBnB import *
+from algorithms.XDFBnB_qp import *
 from algorithms.XMD_DFBnB import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
@@ -40,8 +41,8 @@ DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
-DEFAULT_RUN_MULTI = True               # True # False
+DEFAULT_RUN_BI = True                   # True # False
+DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = [68, 113]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
@@ -258,8 +259,8 @@ def search(
             keepers = {2**cube_first_dims - 1}
 
             neighbors = set()
-            for v in verts:
-                neighbors |= set(G.neighbors(v))
+            for qp in verts:
+                neighbors |= set(G.neighbors(qp))
 
             G.remove_nodes_from((neighbors | verts_set) - keepers)
 
@@ -273,12 +274,12 @@ def search(
             # Path vertices: v0=t, v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
             # T_path vertices: v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
             T_path = []
-            v = t
+            qp = t
             vertex_symmetric_to_start = t
             for i in range(d):
-                v ^= (1 << i)
-                T_path.append(v)
-                vertex_symmetric_to_start = v
+                qp ^= (1 << i)
+                T_path.append(qp)
+                vertex_symmetric_to_start = qp
 
             T_set = set(T_path)
 
@@ -305,15 +306,17 @@ def search(
             # ----------------------------
             # If solution_vertices has more than 1 vertex, then sol_verts=[goal, v1, v2, ...] and we also remove the vertices symmetric to the other sol_verts in the same way as we did
             # ----------------------------
-            if args.solution_vertices is not None and len(args.solution_vertices) > 1:
-                v = int(args.solution_vertices[1])
-                sym_to_v = symmetric_vertex(v, goal)
-                # remove sym_to_v and its neighbors
-                if G.has_node(sym_to_v):
-                    neighbors = set(G.neighbors(sym_to_v))
-                    G.remove_nodes_from(neighbors | {sym_to_v})
+            if args.solution_vertices is not None and len(args.solution_vertices) >= 2:
+                qp = int(args.solution_vertices[1])
+                sym_to_qp = symmetric_vertex(qp, goal)
+                # remove sym_to_qp and its neighbors
+                if not G.has_node(qp):
+                    args.logger(f"Solution vertex {qp} is not in the graph after previous removals.", error=True)
+                if G.has_node(sym_to_qp):
+                    neighbors = set(G.neighbors(sym_to_qp))
+                    G.remove_nodes_from(neighbors | {sym_to_qp})
                 else: 
-                    args.logger(f"Symmetric vertex {sym_to_v} of solution vertex {v} is not in the graph after previous removals.", error=True)
+                    args.logger(f"Symmetric vertex {sym_to_qp} of solution vertex {qp} is not in the graph after previous removals.", error=True)
 
             # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
             args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
@@ -334,8 +337,8 @@ def search(
 
             # Union of all neighbors of these vertices
             neighbors = set()
-            for v in verts:
-                neighbors |= set(G.neighbors(v))
+            for qp in verts:
+                neighbors |= set(G.neighbors(qp))
 
             # Remove all except keepers
             G.remove_nodes_from(neighbors - keepers)
@@ -384,7 +387,10 @@ def search(
             # path, stats, meet_point = bidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_dfbnb_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
-            path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
+            if len(args.solution_vertices)>=2:
+                path, stats = XDFBnB_qp(G, start, goal, heuristic, snake, args)
+            else:
+                path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
 
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")

@@ -101,9 +101,9 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
         # Errors (relevant only if the two frontier advance together, and state_F.g == state_B.g at all times, which is not necessarily the case)
         g = state_F.g
         if state_B.g != g or state_VF.g != g or state_VB.g != g:
-            raise ValueError("In check_states: all states must have the same g value")
+            logger("In check_states: all states must have the same g value", error=True)
         if g > g_upper_cutoff:
-            raise ValueError("In check_states: g cannot be greater than g_upper_cutoff")
+            logger("In check_states: g cannot be greater than g_upper_cutoff", error=True)
 
         # Logs
         stats["valid_meeting_checks"] += 1
