@@ -11,7 +11,7 @@ from models.openvopen_prefixSet import Openvopen_prefixSet
 from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristic_name, snake, args):
+def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     cube = args.graph_type == "cube"
     if not cube or not args.sym_coil:
@@ -69,7 +69,7 @@ def bidirectional_simultaneous_exp_n_check_sym_coil(graph, start, goal, heuristi
     initial_state_F.illegal = illegal
     initial_state_B.illegal = illegal
 
-    # Push initial states with priority based on f_value
+    # Push initial states into stacks
     stack_F = deque()
     stack_B = deque()
     stack_F.append(initial_state_F)

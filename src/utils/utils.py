@@ -713,6 +713,57 @@ def list_to_bitmask(l):
         mask |= 1 << v
     return mask
 
+def symmetric_vertex(v: int, mp: int) -> int:
+    """
+    Return the vertex in a hypercube that is symmetric to `v`
+    under the automorphism that maps the all-zero vertex (0 = 00...0)
+    to the fixed vertex `mp`.
+
+    Mathematical background
+    -----------------------
+    A d-dimensional hypercube Q_d can be represented as the set of
+    all d-bit integers {0, 1, ..., 2^d - 1}. Two vertices are adjacent
+    if and only if their bit representations differ in exactly one bit.
+
+    The map
+
+        s(x) = x XOR mp
+
+    (bitwise exclusive-or with a fixed mask `mp`) is an automorphism
+    of the hypercube. That means:
+
+    - It preserves adjacency (edges remain edges).
+    - It is distance-preserving (Hamming distance is unchanged).
+    - It is an involution: s(s(x)) = x.
+    - It maps 0 to mp: s(0) = mp.
+
+    Therefore, this transformation defines a symmetry of the cube
+    that sends the origin to `mp`.
+
+    Parameters
+    ----------
+    v : int
+        A vertex of the hypercube, represented as an integer.
+    mp : int
+        The vertex that the origin (0) should map to under the symmetry.
+
+    Returns
+    -------
+    int
+        The vertex symmetric to `v` under the transformation x ↦ x XOR mp.
+
+    Example
+    -------
+    In a 5D cube:
+        mp = 0b10110
+        v  = 0b00101
+
+        symmetric_vertex(v, mp)
+        -> 0b10011
+    """
+    return v ^ mp
+
+
 # ---------------------------
 # Graph utilities
 # ---------------------------

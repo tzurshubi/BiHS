@@ -22,7 +22,8 @@ from algorithms.unidirectional_search_sym_coil import *
 from algorithms.unidirectional_gradual_sym_coil import *
 from algorithms.bidirectional_dfbnb_sym_coil import *
 from algorithms.bidirectional_gradual_sym_coil import *
-from algorithms.bidirectional_simultaneous_exp_n_check_sym_coil import *
+from algorithms.XDFBnB import *
+from algorithms.XMD_DFBnB import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -34,14 +35,14 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
-DEFAULT_HEURISTIC = "reachable_heuristic"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
+DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [105]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
+DEFAULT_SOLUTION_VERTICES = [119, 85]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -247,7 +248,7 @@ def search(
             if G.has_edge(0, 1): G.remove_edge(0, 1)
 
             # ----------------------------
-            # Remove S path ([0,1,3,...]) and N(S) except keepers
+            # Remove IP (initial path) ([0,1,3,...]) and N(IP) except keepers
             # ----------------------------
 
             # Compute the vertices: 1, 3, 7, ... (2^(cube_first_dims-1) - 1) - those will be removed along with their neighbors
@@ -301,6 +302,18 @@ def search(
                 to_remove = [v for v in G.nodes() if (int(v) & mask) == 0]
                 G.remove_nodes_from(to_remove)
 
+            # ----------------------------
+            # If solution_vertices has more than 1 vertex, then sol_verts=[goal, v1, v2, ...] and we also remove the vertices symmetric to the other sol_verts in the same way as we did
+            # ----------------------------
+            if args.solution_vertices is not None and len(args.solution_vertices) > 1:
+                v = int(args.solution_vertices[1])
+                sym_to_v = symmetric_vertex(v, goal)
+                # remove sym_to_v and its neighbors
+                if G.has_node(sym_to_v):
+                    neighbors = set(G.neighbors(sym_to_v))
+                    G.remove_nodes_from(neighbors | {sym_to_v})
+                else: raise ValueError(f"Symmetric vertex {sym_to_v} of solution vertex {v} is not in the graph after previous removals, cannot remove it. Check if the solution vertices are valid and if the previous removals are correct.")
+
 
             # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
             args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
@@ -334,9 +347,10 @@ def search(
     blocks = []
     logs = {}
 
-    for node in range(args.size_of_graphs[0] * args.size_of_graphs[1]):
-        if node not in G:
-            blocks.append(node)
+    if args.graph_type=="grid" or args.graph_type=="maze":
+        for node in range(args.size_of_graphs[0] * args.size_of_graphs[1]):
+            if node not in G:
+                blocks.append(node)
     if args.graph_type=="grid":
         if isinstance(goal,int):
             while goal not in G:
@@ -370,15 +384,17 @@ def search(
             # path, stats, meet_point = bidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_dfbnb_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
-            path, stats = bidirectional_simultaneous_exp_n_check_sym_coil(G, start, goal, heuristic, snake, args)
+            path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
 
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         # path, expansions, generated, meet_points = multidirectional_search1(G, start, goal, args.solution_vertices, heuristic, snake, args)
         # print("\n\nRunning TBT search as multidirectional!")
         # time.sleep(1)
-        path, stats = tbt_search(G, start, goal, heuristic, snake, args)
-        
+        if not args.sym_coil:
+            path, stats = tbt_search(G, start, goal, heuristic, snake, args)
+        else:
+            path, stats = XMD_DFBnB(G, start, goal, heuristic, snake, args)       
 
     if path and not isinstance(path,list):
         path_state = path
@@ -613,9 +629,6 @@ if __name__ == "__main__":
 
         # multidirectional
         if run_multi:
-            if graph_type=="cube":
-                args.solution_vertices = [2**args.size_of_graphs[0]-1]
-            elif meet_point: args.solution_vertices = [meet_point]
             logs, path, meet_point = search(
                 name_of_graph, start, goal, "multidirectional", heuristic, snake,args
             )
