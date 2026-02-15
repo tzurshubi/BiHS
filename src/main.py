@@ -35,14 +35,14 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "heuristic0"        # "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = True                   # True # False
-DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [119, 85]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
+DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_MULTI = True               # True # False
+DEFAULT_SOLUTION_VERTICES = [177, 232]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -632,13 +632,15 @@ if __name__ == "__main__":
             logs, path, meet_point = search(
                 name_of_graph, start, goal, "multidirectional", heuristic, snake,args
             )
-            args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+            path_length = len(path)-1 if path else "N/A"
+            args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {path_length} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
             results.append(
                 {
                     "# blocks": i,
                     "Search type": "multidirectional",          
                     "# expansions": logs["expansions"],
                     "Time [ms]": logs["time[ms]"],
+                    "Path length": path_length,
                     # "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
                     "Grid with Solution": "file_path_here",  # Update with actual file path if needed
                 }
@@ -667,5 +669,5 @@ if __name__ == "__main__":
             
     print()
     calculate_averages(avgs, log_file_name)
-    parse_results_file(log_file_name, log_file_name+".csv")
+    # parse_results_file(log_file_name, log_file_name+".csv")
     args.logger.close()

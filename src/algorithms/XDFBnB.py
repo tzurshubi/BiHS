@@ -99,7 +99,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
             logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
             # logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
         
-        # Checks
+        # Checks - NO NEED TO CHECK VIOLATIONS BECAUSE WE CHECK THEM DURING EXPANSION, AND WE ONLY EXPAND VALID STATES, SO ANY MEETING OF TWO VALID STATES MUST BE VALID.
         # if state_F.violate_constraint(state_B):
         #     stats["violations_per_g"][state_F.g] += 1
         #     return False, None

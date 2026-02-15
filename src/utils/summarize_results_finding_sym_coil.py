@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Tuple
 
-DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_02_15/sym_coil_7d_prove_no_48_XDFBNB_noHeuristic"
+DEFAULT_FOLDER = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_02_15/sym_coil_7d_prove_no_48_XDFBNB_noHeuristic_noViolationChecks"
 
 
 SUMMARY_RE = re.compile(
