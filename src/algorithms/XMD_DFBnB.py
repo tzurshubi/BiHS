@@ -110,7 +110,7 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
         if g == g_upper_cutoff and state_B.g == g_upper_cutoff: stats["state_vs_state_meeting_checks"] += 1
         elif g < g_upper_cutoff and state_B.g < g_upper_cutoff: stats["prefix_vs_prefix_meeting_checks"] += 1
         else: stats["state_vs_prefix_meeting_checks"] += 1
-        if stats["valid_meeting_checks"] % 10_000 == 0:
+        if stats["valid_meeting_checks"] % 500_000 == 0:
             logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
             # logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
         
@@ -145,9 +145,12 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
                     graph.has_edge(state_B.head, state_VB.head) or graph.has_edge(state_VF.head, state_VB.head): # ADD THIS WHEN EXPANDING ONE FRONTIER AT A TIME:  and state_F.g != g_upper_cutoff_F - 1 and state_B.g != g_upper_cutoff_B - 1:
                 stats["violations_per_g"][g] += 1
                 return False, None
-            if state_F.illegal & (1 << state_B.head) or state_F.illegal & (1 << state_VF.head) or \
-                state_F.illegal & (1 << state_VB.head) or state_B.illegal & (1 << state_VF.head) or \
-                    state_B.illegal & (1 << state_VB.head) or state_VF.illegal & (1 << state_VB.head):
+            if state_F.illegal & (1 << state_B.head) or state_B.illegal & (1 << state_F.head) or \
+                state_F.illegal & (1 << state_VF.head) or state_VF.illegal & (1 << state_F.head) or \
+                state_F.illegal & (1 << state_VB.head) or state_VB.illegal & (1 << state_F.head) or \
+                state_B.illegal & (1 << state_VF.head) or state_VF.illegal & (1 << state_B.head) or \
+                state_B.illegal & (1 << state_VB.head) or state_VB.illegal & (1 << state_B.head) or \
+                    ((state_VF.illegal & (1 << state_VB.head) or state_VB.illegal & (1 << state_VF.head)) and g > 1):
                 stats["violations_per_g"][g] += 1
                 return False, None
             if args.heuristic is not None and args.heuristic != "heuristic0":

@@ -42,7 +42,7 @@ DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = True               # True # False
-DEFAULT_SOLUTION_VERTICES = [177, 232]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
+DEFAULT_SOLUTION_VERTICES = [68, 105]        # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
 DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -312,8 +312,8 @@ def search(
                 if G.has_node(sym_to_v):
                     neighbors = set(G.neighbors(sym_to_v))
                     G.remove_nodes_from(neighbors | {sym_to_v})
-                else: raise ValueError(f"Symmetric vertex {sym_to_v} of solution vertex {v} is not in the graph after previous removals, cannot remove it. Check if the solution vertices are valid and if the previous removals are correct.")
-
+                else: 
+                    args.logger(f"Symmetric vertex {sym_to_v} of solution vertex {v} is not in the graph after previous removals.", error=True)
 
             # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
             args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]

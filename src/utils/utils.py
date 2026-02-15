@@ -216,7 +216,7 @@ def make_logger(logfile, t0: float | None = None):
     _t0 = t0
     _closed = False
 
-    def log(msg: str) -> None:
+    def log(msg: str, error=False) -> None:
         if _closed:
             return
 
@@ -231,6 +231,8 @@ def make_logger(logfile, t0: float | None = None):
         logfile.write(line + "\n")
         logfile.flush()
 
+        if error:
+            raise RuntimeError(line)
 
     def set_t0(t: float | None = None) -> None:
         nonlocal _t0
