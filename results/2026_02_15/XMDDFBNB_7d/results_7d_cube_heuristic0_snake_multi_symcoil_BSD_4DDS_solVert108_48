@@ -1,0 +1,34 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: False
+run_multi: True
+solution_vertices: [108, 48]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:17:485] Valid meeting checks so far: 500,000, state_vs_state: 8,996, state_vs_prefix: 0, prefix_vs_prefix: 491,004
+[00:00:00:34:624] Valid meeting checks so far: 1,000,000, state_vs_state: 12,348, state_vs_prefix: 0, prefix_vs_prefix: 987,652
+[00:00:00:50:170] Valid meeting checks so far: 1,500,000, state_vs_state: 12,960, state_vs_prefix: 0, prefix_vs_prefix: 1,487,040
+[00:00:01:06:677] Valid meeting checks so far: 2,000,000, state_vs_state: 14,956, state_vs_prefix: 0, prefix_vs_prefix: 1,985,044
+[00:00:01:22:477] Valid meeting checks so far: 2,500,000, state_vs_state: 16,768, state_vs_prefix: 0, prefix_vs_prefix: 2,483,232
+[00:00:01:29:175] No path found.
+[00:00:01:29:177] LOGS: {'time[ms]': 89,175, 'expansions': 206,660, 'generated': {'F': 147,621, 'B': 107,377, 'VF': 154,042, 'VB': 154,042}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 2,731,982, 'state_vs_state_meeting_checks': 17,276, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 2,714,706, 'num_of_states_per_g': {'F': {0: 0, 1: 3, 2: 540, 3: 46,992, 4: 97,008, 5: 3,078, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 3, 2: 840, 3: 34,230, 4: 66,874, 5: 5,430, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VF': {0: 0, 1: 5, 2: 1,008, 3: 59,326, 4: 85,852, 5: 7,851, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VB': {0: 0, 1: 5, 2: 1,008, 3: 59,326, 4: 85,852, 5: 7,851, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 45, 2: 59,852, 3: 776,164, 4: 1,826,980, 5: 17,235, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 41, 'g_upper_cutoff': 5.0}
+[00:00:01:29:178] ! Multidirectional. expansions: 206,660, time: 89,175 [ms], path length: N/A [edges], generated: {'F': 147,621, 'B': 107,377, 'VF': 154,042, 'VB': 154,042}
+average expansions: (0, 0, 0, 206660)
+average time: (0, 0, 0, 89175)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 0 , 0 (expansions , time[ms])
+MDS1: 206660 , 89175 (expansions , time[ms])

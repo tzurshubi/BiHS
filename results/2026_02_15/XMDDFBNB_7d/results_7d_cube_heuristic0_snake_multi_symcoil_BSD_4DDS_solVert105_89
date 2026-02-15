@@ -1,0 +1,31 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: False
+run_multi: True
+solution_vertices: [105, 89]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:15:327] Valid meeting checks so far: 500,000, state_vs_state: 642, state_vs_prefix: 0, prefix_vs_prefix: 499,358
+[00:00:00:30:616] Valid meeting checks so far: 1,000,000, state_vs_state: 912, state_vs_prefix: 0, prefix_vs_prefix: 999,088
+[00:00:00:34:662] No path found.
+[00:00:00:34:665] LOGS: {'time[ms]': 34,662, 'expansions': 80,620, 'generated': {'F': 41,849, 'B': 37,917, 'VF': 49,269, 'VB': 49,269}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 1,138,474, 'state_vs_state_meeting_checks': 912, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 1,137,562, 'num_of_states_per_g': {'F': {0: 0, 1: 3, 2: 540, 3: 26,320, 4: 13,984, 5: 1,002, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 3, 2: 600, 3: 22,790, 4: 11,442, 5: 3,082, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VF': {0: 0, 1: 5, 2: 864, 3: 28,154, 4: 15,113, 5: 5,133, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VB': {0: 0, 1: 5, 2: 864, 3: 28,154, 4: 15,113, 5: 5,133, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 45, 2: 31,248, 3: 487,672, 4: 598,442, 5: 892, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 20, 'g_upper_cutoff': 5.0}
+[00:00:00:34:665] ! Multidirectional. expansions: 80,620, time: 34,662 [ms], path length: N/A [edges], generated: {'F': 41,849, 'B': 37,917, 'VF': 49,269, 'VB': 49,269}
+average expansions: (0, 0, 0, 80620)
+average time: (0, 0, 0, 34662)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 0 , 0 (expansions , time[ms])
+MDS1: 80620 , 34662 (expansions , time[ms])

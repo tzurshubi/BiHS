@@ -95,7 +95,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
         if state_F.g == g_upper_cutoff_F and state_B.g == g_upper_cutoff_B: stats["state_vs_state_meeting_checks"] += 1
         elif state_F.g < g_upper_cutoff_F and state_B.g < g_upper_cutoff_B: stats["prefix_vs_prefix_meeting_checks"] += 1
         else: stats["state_vs_prefix_meeting_checks"] += 1
-        if stats["valid_meeting_checks"] % 10_000 == 0:
+        if stats["valid_meeting_checks"] % 200_000 == 0:
             logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
             # logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, memory [MB]: {memory_used_mb():.2f}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
         

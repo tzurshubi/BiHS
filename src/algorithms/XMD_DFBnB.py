@@ -129,7 +129,7 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
                 stats["violations_per_g"][g] += 1
                 return False, None
             stats["must_checks"] += 1
-            half_coil_to_check = args.cube_first_dims_path + state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
+            half_coil_to_check = args.cube_first_dims_path + state_F.materialize_path() + state_VB.materialize_path()[::-1][1:-1] + state_VF.materialize_path() + state_B.materialize_path()[::-1][1:]
             is_sym_coil, sym_coil = is_half_of_symmetric_double_coil(half_coil_to_check, args.size_of_graphs[0])
             if is_sym_coil:
                 logger(f"SYM_COIL_FOUND! {sym_coil}")

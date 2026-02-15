@@ -1,0 +1,29 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: False
+run_multi: True
+solution_vertices: [123, 54]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:06:944] SYM_COIL_FOUND! [0, 1, 3, 7, 15, 14, 10, 26, 27, 25, 57, 41, 43, 107, 123, 122, 120, 124, 116, 117, 113, 97, 96, 98, 66, 82, 80, 16, 0]
+[00:00:00:06:948] LOGS: {'time[ms]': 6,945, 'expansions': 19,384, 'generated': {'F': 9,052, 'B': 11,516, 'VF': 12,267, 'VB': 12,142}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 218,153, 'state_vs_state_meeting_checks': 3,758, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 214,395, 'num_of_states_per_g': {'F': {0: 0, 1: 2, 2: 135, 3: 2,458, 4: 5,244, 5: 1,213, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 5, 2: 225, 3: 4,484, 4: 5,728, 5: 1,074, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VF': {0: 0, 1: 5, 2: 172, 3: 5,068, 4: 5,601, 5: 1,421, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VB': {0: 0, 1: 5, 2: 171, 3: 4,858, 4: 5,623, 5: 1,485, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 11, 2: 7,424, 3: 26,011, 4: 176,103, 5: 3,754, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 4, 'g_upper_cutoff': 5.0}
+[00:00:00:06:948] ! Multidirectional. expansions: 19,384, time: 6,945 [ms], path length: 28 [edges], generated: {'F': 9,052, 'B': 11,516, 'VF': 12,267, 'VB': 12,142}
+average expansions: (0, 0, 0, 19384)
+average time: (0, 0, 0, 6945)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 0 , 0 (expansions , time[ms])
+MDS1: 19384 , 6945 (expansions , time[ms])

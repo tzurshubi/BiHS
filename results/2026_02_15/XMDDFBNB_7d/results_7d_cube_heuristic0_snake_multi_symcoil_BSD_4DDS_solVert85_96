@@ -1,0 +1,29 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: False
+run_multi: True
+solution_vertices: [85, 96]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:02:483] SYM_COIL_FOUND! [0, 1, 3, 7, 15, 13, 29, 25, 27, 59, 123, 115, 113, 81, 85, 84, 86, 82, 90, 88, 72, 76, 78, 110, 46, 38, 36, 4, 0]
+[00:00:00:02:486] LOGS: {'time[ms]': 2,483, 'expansions': 3,344, 'generated': {'F': 1,500, 'B': 2,519, 'VF': 2,588, 'VB': 2,547}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 79,182, 'state_vs_state_meeting_checks': 2,526, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 76,656, 'num_of_states_per_g': {'F': {0: 0, 1: 3, 2: 60, 3: 371, 4: 738, 5: 328, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 3, 2: 60, 3: 529, 4: 1,076, 5: 851, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VF': {0: 0, 1: 5, 2: 128, 3: 766, 4: 1,123, 5: 566, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VB': {0: 0, 1: 5, 2: 126, 3: 701, 4: 1,095, 5: 620, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 7, 2: 1,852, 3: 8,310, 4: 65,651, 5: 2,513, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 13, 'g_upper_cutoff': 5.0}
+[00:00:00:02:486] ! Multidirectional. expansions: 3,344, time: 2,483 [ms], path length: 28 [edges], generated: {'F': 1,500, 'B': 2,519, 'VF': 2,588, 'VB': 2,547}
+average expansions: (0, 0, 0, 3344)
+average time: (0, 0, 0, 2483)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 0 , 0 (expansions , time[ms])
+MDS1: 3344 , 2483 (expansions , time[ms])

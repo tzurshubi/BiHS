@@ -1,0 +1,30 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: False
+run_multi: True
+solution_vertices: [106, 24]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:16:019] Valid meeting checks so far: 500,000, state_vs_state: 6,810, state_vs_prefix: 0, prefix_vs_prefix: 493,190
+[00:00:00:16:821] No path found.
+[00:00:00:16:823] LOGS: {'time[ms]': 16,821, 'expansions': 50,500, 'generated': {'F': 24,264, 'B': 26,638, 'VF': 28,025, 'VB': 31,085}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 527,923, 'state_vs_state_meeting_checks': 6,810, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 521,113, 'num_of_states_per_g': {'F': {0: 0, 1: 3, 2: 432, 3: 9,757, 4: 10,500, 5: 3,572, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 3, 2: 672, 3: 10,723, 4: 12,031, 5: 3,209, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VF': {0: 0, 1: 4, 2: 684, 3: 10,634, 4: 11,063, 5: 5,640, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'VB': {0: 0, 1: 5, 2: 810, 3: 12,187, 4: 12,044, 5: 6,039, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 36, 2: 48,661, 3: 112,951, 4: 346,840, 5: 6,761, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 49, 'g_upper_cutoff': 5.0}
+[00:00:00:16:824] ! Multidirectional. expansions: 50,500, time: 16,821 [ms], path length: N/A [edges], generated: {'F': 24,264, 'B': 26,638, 'VF': 28,025, 'VB': 31,085}
+average expansions: (0, 0, 0, 50500)
+average time: (0, 0, 0, 16821)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 0 , 0 (expansions , time[ms])
+MDS1: 50500 , 16821 (expansions , time[ms])
