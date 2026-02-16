@@ -118,6 +118,10 @@ def XDFBnB_qp(graph, start, goal, heuristic_name, snake, args):
             if state_F_head_diff_bits_with_qp != edges_left_until_qp or state_B_head_diff_bits_with_qp != edges_left_until_qp:
                 stats["violations_per_g"][g] += 1
                 return False, None
+        
+        if edges_left_until_qp > 1 and (state_F_head_diff_bits_with_qp <= 1 or state_B_head_diff_bits_with_qp <= 1):
+            stats["violations_per_g"][g] += 1
+            return False, None
 
         if g == g_upper_cutoff:
             if state_F.head != state_B.head:
