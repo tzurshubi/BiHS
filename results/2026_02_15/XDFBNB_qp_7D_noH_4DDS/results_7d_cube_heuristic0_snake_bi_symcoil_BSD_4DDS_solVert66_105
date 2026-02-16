@@ -1,0 +1,29 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [7, 7]
+heuristic: heuristic0
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: [66, 105]
+algo: basic
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: True
+prefix_set: None
+
+---------- cubes/7d_cube ----------
+[00:00:00:05:488] No path found.
+[00:00:00:05:490] LOGS: {'time[ms]': 5,489, 'expansions': 42,014, 'generated': {'F': 28,394, 'B': 42,063}, 'symmetric_states_removed': 0, 'dominated_states_removed': 0, 'valid_meeting_checks': 60,730, 'state_vs_state_meeting_checks': 0, 'state_vs_prefix_meeting_checks': 0, 'prefix_vs_prefix_meeting_checks': 60,730, 'num_of_states_per_g': {'F': {0: 0, 1: 2, 2: 28, 3: 296, 4: 1,566, 5: 4,562, 6: 10,824, 7: 8,074, 8: 2,399, 9: 643, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'B': {0: 0, 1: 4, 2: 42, 3: 369, 4: 1,612, 5: 6,275, 6: 11,642, 7: 18,162, 8: 2,851, 9: 1,106, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}}, 'violations_per_g': {0: 0, 1: 0, 2: 13, 3: 256, 4: 1,828, 5: 5,462, 6: 16,122, 7: 11,818, 8: 3,572, 9: 652, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}, 'prefix_set_mean_size': {'F': 0, 'B': 0}, 'paths_with_g_upper_cutoff': {'F': 0, 'B': 0}, 'paths_with_g_lower_cutoff': {'F': 0, 'B': 0}, 'valid_meeting_check_time': 0, 'calc_h_time': 0, 'moved_OPEN_to_AUXOPEN': 0, 'must_checks': 0, 'g_upper_cutoff': 10.0}
+[00:00:00:05:491] ! Bidirectional Symmetrical Coil. No path found. expansions: 42,14, time: 5,489 [ms], generated: {'F': 28,394, 'B': 42,063}
+average expansions: (0, 0, 42014, 0)
+average time: (0, 0, 5489, 0)
+
+A*: 0 , 0 (expansions , time[ms])
+XMM: 42014 , 5489 (expansions , time[ms])
+MDS1: 0 , 0 (expansions , time[ms])
