@@ -369,6 +369,64 @@ def bcc_heuristic_paper(state, goal):
 
     return 0
 
+def F2F_bcc_heuristic_solVert(state_F, state_B, v, graph):
+    """
+    Heuristic: add an edge between head (=state.head) and goal to form Q.
+    Let B be the biconnected component in Q that contains both head and goal.
+    Return |V(B)| - 1. If head/goal are absent or no such B exists, return 0.
+    """
+    s = getattr(state_F, "head", None)
+    t = getattr(state_B, "head", None)
+    if s not in graph or t not in graph or v not in graph:
+        return 0
+
+    # Add the probe edge
+    G = graph.copy()
+    G.add_edge(s, t)
+    
+    # Find all biconnected components
+    # bccs = list(nx.biconnected_components(G)) # for debug
+    # print(f"graph has {len(bccs)} biconnected components")
+    for comp in nx.biconnected_components(G):
+        if s in comp and t in comp and v in comp:
+            # h = max(0, len(comp) - 1) # for debug
+            return max(0, len(comp) - 1)
+
+    return 0
+
+def F2F_bcc_snake_heuristic_solVert(state_F, state_B, v, graph):
+    """
+    Heuristic: add an edge between head (=state.head) and goal to form Q.
+    Let B be the biconnected component in Q that contains both head and goal.
+    Return |V(B)| - 1. If head/goal are absent or no such B exists, return 0.\
+    v should be in the path from s to t.
+    """
+    calc_Y_heuristic = True    # True # False
+    s = getattr(state_F, "head", None)
+    t = getattr(state_B, "head", None)
+    if s not in graph or t not in graph or v not in graph:
+        return 0
+
+    # Add the probe edge (necessarily there isn't one before because of the snake constraint)
+    graph.add_edge(s, t)
+    
+    # Find all biconnected components
+    # bccs = list(nx.biconnected_components(graph)) # for debug
+    # print(f"graph has {len(bccs)} biconnected components")
+    for bcc in nx.biconnected_components(graph):
+        if s in bcc and t in bcc and v in bcc:
+            # snake head heuristic inside this BCC
+            graph.remove_edge(s, t)
+            nodes_to_remove = [n for n in graph if n not in bcc or n in graph[s] or n in graph[t]]
+            if s in nodes_to_remove or t in nodes_to_remove:
+                raise ValueError(f"Error: trying to remove head or goal from the graph. s: {s}, t: {t}, nodes_to_remove: {nodes_to_remove}")
+            graph.remove_nodes_from(nodes_to_remove)
+            
+            if calc_Y_heuristic: return Y_heuristic(graph) + 1 # add 1 for neighbor of head or neighbor of goal
+            else: return max(0, len(graph.nodes) + 1)
+            # return max(0, len(comp) - 1)
+    return 0
+
 
 def bcc_heuristic(state, goal):
     graph = state.graph.copy()  # Clone the graph to avoid modifying the original
@@ -564,13 +622,22 @@ def find_component_containing_vertex(tric, vertex):
     return None
 
 
-def heuristic(state, goal, heuristic_name, snake, args=None):
+def heuristic(state, goal, heuristic_name, snake, args=None, h_graph=None):
+    #F2F heuristics
     if isinstance(goal, State) and isinstance(state, State): #F2F heuristic
-        return f2f_reachable_heuristic(state, goal, args)
+        if heuristic_name == "reachable_heuristic":
+            return f2f_reachable_heuristic(state, goal, args)
+        elif heuristic_name == "bcc_heuristic":
+            if not snake:
+                return F2F_bcc_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
+            else:
+                return F2F_bcc_snake_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
+        
     if not isinstance(goal,int):
         if not snake: goal = max(goal)
         else: goal = State(state.graph, goal, [], snake)
-
+    
+    #F2E heuristic
     if heuristic_name == "heuristic0":
         return heuristic0(state)
     
