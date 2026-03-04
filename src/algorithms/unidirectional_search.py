@@ -30,7 +30,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     open_set.push(initial_state, initial_f_value)
 
     # Basic symmetry detection - a dictionary with the key (head,nodes)
-    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors_bitmap if snake else initial_state.path_vertices_bitmap)}
+    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors if snake else initial_state.path_vertices)}
 
     # The best path found
     best_path = None
@@ -71,13 +71,13 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         g_degree_pairs.append((current_state.g, len(successors)))
 
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
                 stats["symmetric_states_removed"] += 1
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
-            if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
+            if buffer_dim is not None and has_bridge_edge_across_dim(current_state, successor, buffer_dim):
                 if successor.traversed_buffer_dimension: continue  # already traversed buffer dimension
                 successor.traversed_buffer_dimension = True
 
@@ -100,6 +100,6 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             f_successor = g_successor + h_successor
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
-            FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
+            FNV.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
 
-    return best_path.path, stats
+    return best_path.materialize_path() if best_path else None, stats

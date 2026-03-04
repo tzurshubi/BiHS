@@ -33,8 +33,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     OPENvOPEN = Openvopen(graph, start, goal)
 
     # Initial states
-    initial_state_F = State(graph, [start], [], snake) if isinstance(start, int) else State(graph, start, [], snake)
-    initial_state_B = State(graph, [goal], [], snake) if isinstance(goal, int) else State(graph, goal, [], snake)
+    initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
+    initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
 
     # Initial f_values
     initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake)
@@ -47,8 +47,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     OPEN_B.push(initial_state_B, initial_f_value_B)
     OPENvOPEN.insert_state(initial_state_F, True)
     OPENvOPEN.insert_state(initial_state_B, False)
-    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap if snake else initial_state_F.path_vertices_bitmap)}
-    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap if snake else initial_state_B.path_vertices_bitmap)}
+    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices)}
+    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)}
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -144,13 +144,13 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         successors = current_state.generate_successors(args, snake, directionF)
         stats["BF_values"].append(len(successors))
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
                 stats["symmetric_states_removed"] += 1
                 continue
 
             # Check if successor traverses the buffer dimension in cube graphs
-            if has_bridge_edge_across_dim(current_state, successor, buffer_dim):
+            if buffer_dim is not None and has_bridge_edge_across_dim(current_state, successor, buffer_dim):
                 successor.traversed_buffer_dimension = True
                 if not directionF: continue  # do not add backward states that traversed buffer dimension to OPEN_B
 
@@ -179,7 +179,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
             
-            FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
+            FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
             OPENvOPEN.insert_state(successor,directionF)
             if cube and args.backward_sym_generation: 
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)

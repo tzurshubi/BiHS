@@ -110,7 +110,7 @@ def time_ms(start_time, end_time):
 
     return int(1000*elapsed_time)
     
-def calculate_averages(avgs, log_file_name=None):
+def calculate_averages(avgs, log_file_name=None, algo = "full"):
     """
     Calculate and print the averages for each metric across categories.
 
@@ -163,20 +163,56 @@ def calculate_averages(avgs, log_file_name=None):
         last_exp = exp_avgs[-1]
         last_time = time_avgs[-1]
 
-        line1 = f"A*: {first_min_exp} , {first_min_time} (expansions , time[ms])"
-        line2 = f"XMM: {mid_exp} , {mid_time} (expansions , time[ms])"
+        line1 = f"{"A*" if algo == "full" else "X-DFBnB"}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
+        line2 = f"{"XMM" if algo == "full" else "BiX-DFBnB"}: {mid_exp} , {mid_time} (expansions , time[ms])"
         line3 = f"MDS1: {last_exp} , {last_time} (expansions , time[ms])"
         print()
         print(line1)
         print(line2)
-        print(line3)
+        # print(line3)
         if log_file_name:
             with open(log_file_name, 'a') as f:
                 f.write("\n" + line1 + "\n")
                 f.write(line2 + "\n")
-                f.write(line3 + "\n")
+                # f.write(line3 + "\n")
 
+def print_stats(d, indent=0, parent_key=""):
+    """
+    Recursively prints a dictionary in a readable row-based format.
+    Nested dictionaries are expanded with indentation.
+    """
+    for key, value in d.items():
+        prefix = "    " * indent
+        
+        # Compose full key path if needed
+        full_key = f"{parent_key}.{key}" if parent_key else str(key)
 
+        if isinstance(value, dict):
+            print(f"{prefix}{key}:")
+            print_stats(value, indent + 1, full_key)
+        elif isinstance(value, list):
+            print(f"{prefix}{key}: [len={len(value)}] {value}")
+        else:
+            print(f"{prefix}{key}: {value}")
+
+def format_stats(d, indent=0, depth = 0):
+    """
+    Recursively formats a dictionary into a readable multi-line string.
+    Nested dictionaries are expanded with indentation.
+    """
+    lines = []
+    prefix = "    " * indent
+
+    for key, value in d.items():
+        if isinstance(value, dict) and depth < 1:  # Only expand nested dicts up to a certain depth for readability
+            lines.append(f"{prefix}{key}:")
+            lines.append(format_stats(value, indent + 1, depth + 1))
+        elif isinstance(value, list):
+            lines.append(f"{prefix}{key}: [len={len(value)}] {value}")
+        else:
+            lines.append(f"{prefix}{key}: {value}")
+
+    return "\n".join(lines)
 # ---------------------------
 # Logging utilities
 # ---------------------------
@@ -765,6 +801,14 @@ def symmetric_vertex(v: int, mp: int) -> int:
     """
     return v ^ mp
 
+def is_vertex_in_bitmap(vertex, bitmap):
+    """
+    Returns True if the vertex is present in the bitmap, False otherwise.
+    """
+    return (bitmap & (1 << vertex)) != 0
+
+def g(path):
+    return len(path) - 1 if path and len(path) > 0 else 0
 
 # ---------------------------
 # Graph utilities

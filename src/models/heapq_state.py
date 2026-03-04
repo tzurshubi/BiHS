@@ -210,7 +210,8 @@ class HeapqState:
             # If you truly need exact path identity, keep tuple(state.path).
             return (
                 0,
-                tuple(state.path),
+                state.head,
+                state.path_vertices,
             )
 
     def push(self, state, f_value):

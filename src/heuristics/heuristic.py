@@ -369,6 +369,31 @@ def bcc_heuristic_paper(state, goal):
 
     return 0
 
+def F2F_bcc_heuristic(state_F, state_B, graph):
+    """
+    Heuristic: add an edge between head (=state.head) and goal to form Q.
+    Let B be the biconnected component in Q that contains both head and goal.
+    Return |V(B)| - 1. If head/goal are absent or no such B exists, return 0.
+    """
+    s = getattr(state_F, "head", None)
+    t = getattr(state_B, "head", None)
+    if s not in graph or t not in graph:
+        return 0
+
+    # Add the probe edge
+    graph.add_edge(s, t)
+    
+    # Find all biconnected components
+    # bccs = list(nx.biconnected_components(G)) # for debug
+    # print(f"graph has {len(bccs)} biconnected components")
+    for bcc in nx.biconnected_components(graph):
+        if s in bcc and t in bcc:
+            # h = max(0, len(comp) - 1) # for debug
+            graph.remove_edge(s, t)
+            return max(0, len(bcc) - 1)
+    graph.remove_edge(s, t)
+    return 0
+
 def F2F_bcc_heuristic_solVert(state_F, state_B, v, graph):
     """
     Heuristic: add an edge between head (=state.head) and goal to form Q.
@@ -427,7 +452,6 @@ def F2F_bcc_snake_heuristic_solVert(state_F, state_B, v, graph):
             # return max(0, len(comp) - 1)
     return 0
 
-
 def bcc_heuristic(state, goal):
     graph = state.graph.copy()  # Clone the graph to avoid modifying the original
     tail_nodes = state.tail()  # Nodes to be removed
@@ -479,7 +503,6 @@ def bcc_heuristic(state, goal):
             reachable_vertices.update(bcc[element])
 
     return len(reachable_vertices) - 1
-
 
 def bcc_snake_heuristic_paper(state, goal):
     calc_Y_heuristic = True    # True # False
@@ -543,7 +566,6 @@ def bcc_snake_heuristic_paper(state, goal):
     if calc_Y_heuristic: Y = Y_heuristic(Qn_subgraph) 
 
     return Y + 2, info # add 1 for neighbor of head, 1 for neighbor of goal
-
 
 def bcc_snake_heuristic(state, goal):
     calc_Y_heuristic = True
@@ -611,7 +633,6 @@ def bcc_snake_heuristic(state, goal):
 
     return Y + 2, info # add 1 for neighbor of head, 1 for neighbor of goal
 
-
 def find_component_containing_vertex(tric, vertex):
     # Iterate over triconnected components to find which contains the vertex
     for component in tric.get_triconnected_components():
@@ -621,17 +642,19 @@ def find_component_containing_vertex(tric, vertex):
                 return component
     return None
 
-
 def heuristic(state, goal, heuristic_name, snake, args=None, h_graph=None):
+    if heuristic_name == "heuristic0": return len(h_graph.nodes) if h_graph else len(state.graph.nodes)
     #F2F heuristics
     if isinstance(goal, State) and isinstance(state, State): #F2F heuristic
         if heuristic_name == "reachable_heuristic":
             return f2f_reachable_heuristic(state, goal, args)
         elif heuristic_name == "bcc_heuristic":
-            if not snake:
-                return F2F_bcc_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
+            if args.solution_vertices and len(args.solution_vertices) > 1:
+                if snake: return F2F_bcc_snake_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
+                else: return F2F_bcc_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
             else:
-                return F2F_bcc_snake_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
+                if snake: return F2F_bcc_snake_heuristic(state, goal, h_graph)
+                else: return F2F_bcc_heuristic(state, goal, h_graph)    
         
     if not isinstance(goal,int):
         if not snake: goal = max(goal)

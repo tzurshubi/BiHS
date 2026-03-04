@@ -60,7 +60,7 @@ class State:
                         self.max_dim_crossed = self._compute_max_dim_crossed_from_path(path)
             else:
                 self.path_vertices_and_neighbors = 0
-                self.illegal = set()
+                self.illegal = self.path_vertices
                 self.max_dim_crossed = max_dim_crossed
         # if parent is not None
         else: 
@@ -88,13 +88,13 @@ class State:
                 # Illegal from symmetric path if sym_coil
                 illegal_from_sym = 0
                 if self.args.sym_coil:
-                    sym_path_head = self.args.vertex_symmetric_to_start ^ (self.args.start ^ self.head)
+                    mp = self.args.solution_vertices[0]
+                    sym_path_head = self.head ^ mp
                     illegal_from_sym |= (1 << sym_path_head)
-                    # self.graph.remove_nodes_from([sym_path_head])
-                    if sym_path_head in self.graph:
-                        for nb in self.graph.neighbors(sym_path_head):
-                            # self.graph.remove_nodes_from([nb])
-                            illegal_from_sym |= (1 << nb)
+                    
+
+                    for nb in self.args.original_graph.neighbors(sym_path_head):
+                        illegal_from_sym |= (1 << nb)
                     self.illegal |= illegal_from_sym
             else:
                 self.path_vertices_and_neighbors = 0
@@ -146,9 +146,7 @@ class State:
         Returns: (illegal_bitmap, pvan_bitmap)
         """
         pvan = 0
-        head = path[-1]
-        dimensions = [(path[j] - path[j+1]).bit_length() - 1 for j in range(len(path) - 1)]
-            
+        head = path[-1]            
 
         # PVAN, illegal: include body vertices + neighbors, excludes head
         for v in path[:-1]:
@@ -158,18 +156,15 @@ class State:
                     pvan |= 1 << nb
 
         illegal = pvan
-        # If symCoilGoal is provided, add the symmetric path's vertices and their neighbors to illegal
+        # If sym_coil, add the symmetric path's vertices and their neighbors to illegal
         if self.args.sym_coil:
-            v = self.args.goal
-            T_path = []
-            for d in dimensions:
-                v ^= (1 << d)
-                T_path.append(v)
-
-            for x in T_path:
-                illegal |= 1 << x
-                for x_neighbor in self.graph.neighbors(x):
-                    illegal |= 1 << x_neighbor
+            mp = self.args.solution_vertices[0]
+            # Iterate over the body vertices (v1, v2, v3, v4, etc.)
+            for v in path[:-1]:
+                sym_v = v ^ mp
+                illegal |= 1 << sym_v
+                for nb in self.graph.neighbors(sym_v):
+                    illegal |= 1 << nb
 
         return illegal, pvan
 
@@ -225,6 +220,9 @@ class State:
         successors = []
         head = self.head
 
+        # if self.materialize_path() == [15, 14, 10, 26, 24, 56]:
+        #     print(f"DEBUG: Generating successors for state {self.materialize_path()}")
+
         # Pre-calculate masks/values to avoid repetitive attribute lookups
         p_bitmap = self.path_vertices
         pvan_bitmap = self.path_vertices_and_neighbors if snake else 0
@@ -232,6 +230,8 @@ class State:
         
         # Iterate neighbors
         neighbors = list(self.graph.neighbors(head))
+        # neighbors = sorted(self.graph.neighbors(head)) # remove later
+
         for neighbor in neighbors:
             neighbor_mask = 1 << neighbor
             
@@ -285,7 +285,7 @@ class State:
             if snake:
                 succ.illegal |= succ.path_vertices_and_neighbors
             else:
-                succ.illegal |= succ.path_vertices
+                succ.illegal = succ.path_vertices
         return successors
 
     def shares_vertex_with(self, other_state, snake=False):
@@ -353,6 +353,7 @@ class State:
             new_path,
             meet_points=self.meet_points + other.meet_points + [c],
             snake=snakeish,
+            args=self.args,
         )
         
         # Merge buffer dimensions

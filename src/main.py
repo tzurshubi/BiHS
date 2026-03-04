@@ -22,9 +22,12 @@ from algorithms.unidirectional_search_sym_coil import *
 from algorithms.unidirectional_gradual_sym_coil import *
 from algorithms.bidirectional_dfbnb_sym_coil import *
 from algorithms.bidirectional_gradual_sym_coil import *
-from algorithms.XDFBnB import *
-from algorithms.XDFBnB_qp import *
+from algorithms.BiXDFS_CIB import *
+from algorithms.BiXDFS_CIB_qp import *
 from algorithms.XMD_DFBnB import *
+from algorithms.BiXDFS_LSP import *
+from algorithms.XDFS_CIB_qp import *
+from algorithms.XDFS_LSP import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -33,23 +36,23 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
-DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
-DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
+DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
+DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [6,8]          # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 8              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = False                 # True # False
+DEFAULT_SNAKE = False                    # True # False
+DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
-DEFAULT_SOLUTION_VERTICES = [68, 111]   # [] # for multidirectional search on cubes # 60 is good mean for 7d cube symcoil
-DEFAULT_ALGO = "basic"                  # "basic" # "light" # "cutoff" # "full"
-DEFAULT_BSD = True                      # True # False
+DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
+DEFAULT_ALGO = "DFS"                  # "basic" # "light" # "cutoff" # "full" # "DFS"
+DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
-DEFAULT_SYM_COIL = True                # True # False
+DEFAULT_SYM_COIL = False                # True # False
 DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 
 base_dir = "/"
@@ -243,54 +246,84 @@ def search(
     
     # Remove nodes and edges from the graph
     G_original = G.copy()
+    args.original_graph = G_original
     args.graph = G.copy()
     if args.graph_type=="cube" and cube_first_dims:
         if args.sym_coil:
             if G.has_edge(0, 1): G.remove_edge(0, 1)
 
             # ----------------------------
-            # Remove IP (initial path) ([0,1,3,...]) and N(IP) except keepers
+            # Identify ip (initial path) ([0,1,3,...]) and N(IP)
             # ----------------------------
-
-            # Compute the vertices: 1, 3, 7, ... (2^(cube_first_dims-1) - 1) - those will be removed along with their neighbors
-            # Keep the last one: 2^cube_first_dims - 1 (for ex: 15)
-            verts = [(2**k - 1) for k in range(0, cube_first_dims)]
-            verts_set = set(verts)
-            keepers = {2**cube_first_dims - 1}
-
-            neighbors = set()
-            for qp in verts:
-                neighbors |= set(G.neighbors(qp))
-
-            G.remove_nodes_from((neighbors | verts_set) - keepers)
+            ip = [(2**k - 1) for k in range(0, cube_first_dims+1)]
+            print(f"ip: {ip}")
+            ip_set = set(ip)
+            
+            ip_neighbors = set()
+            for ip_vertex in ip:
+                if ip_vertex != start:
+                    ip_neighbors |= set(G.neighbors(ip_vertex))
+            print(f"ip neighbors: {sorted(ip_neighbors)}")
 
             # ----------------------------
-            # Remove T path (t -> traverse dims 0..d-1 once, in order) and N(T) except keepers
+            # Identify ips path (mp -> traverse dims 0..d-1 once, in order) and N(ips) except keepers
             # ----------------------------
-            t = int(args.solution_vertices[0])
+            mp = int(args.solution_vertices[0])
             d = int(cube_first_dims)
-            keepers = {t}
 
-            # Path vertices: v0=t, v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
-            # T_path vertices: v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
-            T_path = []
-            qp = t
-            vertex_symmetric_to_start = t
+            # ips: v0=mp, v1=t^2^0, v2=t^2^0^2^1, ..., v_d=t^(2^0^...^2^(d-1))
+            ips = [mp]
+            ips_vertex = mp
+            vertex_symmetric_to_start = mp
             for i in range(d):
-                qp ^= (1 << i)
-                T_path.append(qp)
-                vertex_symmetric_to_start = qp
+                ips_vertex ^= (1 << i)
+                ips.append(ips_vertex)
+                vertex_symmetric_to_start = ips_vertex
+            print(f"ips: {ips}")
+            ips_set = set(ips)
 
-            T_set = set(T_path)
+            # N(T): union of neighbors of all vertices in ips
+            ips_neighbors = set()
+            for ips_vertex in ips_set:
+                if ips_vertex != goal:
+                    ips_neighbors |= set(G.neighbors(ips_vertex))
+            print(f"ips neighbors: {sorted(ips_neighbors)}")
 
-            # N(T): union of neighbors of all vertices in the path (in the current G)
-            N_T = set()
-            for x in T_set:
-                if G.has_node(x):
-                    N_T |= set(G.neighbors(x))
+            
+            # ----------------------------
+            # If solution_vertices has more than 1 vertex, then sol_verts=[goal, v1, v2, ...] and we also remove the vertices symmetric to the other sol_verts in the same way as we did
+            # ----------------------------
+            if args.solution_vertices is not None and len(args.solution_vertices) >= 2:
+                qp = int(args.solution_vertices[1])
+                print(f"qp: {qp}")
+                qps = symmetric_vertex(qp, goal)
+                print(f"qps: {qps}")
+                qps_neighbors = set(G.neighbors(qps))
+                print(f"qps neighbors: {sorted(qps_neighbors)}")
+                qps_and_qps_neighbors = qps_neighbors | {qps}
+            
+            # ----------------------------
+            # Checks (ips, ips, qp, qps)
+            # ----------------------------
+            for ip_vertex in ip_set:
+                for ips_vertex in ips_set:
+                    if ip_vertex == ips_vertex or G.has_edge(ip_vertex, ips_vertex):
+                        args.logger(f"Error: ip vertex {ip_vertex} and ips vertex {ips_vertex} are adjacent or the same, which violates the required properties.", error=True)    
+            for ip_vertex in ip_set:
+                if ip_vertex == qp or G.has_edge(ip_vertex, qp):
+                    args.logger(f"Error: ip vertex {ip_vertex} and qp vertex {qp} are adjacent or the same, which violates the required properties.", error=True)
+            for ips_vertex in ips_set:
+                if ips_vertex == qp or G.has_edge(ips_vertex, qp):
+                    args.logger(f"Error: ips vertex {ips_vertex} and qp vertex {qp} are adjacent or the same, which violates the required properties.", error=True)
+            for qps_vertex in qps_and_qps_neighbors:
+                if qps_vertex == qp or G.has_edge(qps_vertex, qp):
+                    args.logger(f"Error: qps vertex {qps_vertex} and qp vertex {qp} are adjacent or the same, which violates the required properties.", error=True)
 
-            # Remove T ∪ N(T)
-            G.remove_nodes_from((T_set | N_T) - keepers)
+
+            # Remove from graph
+            keepers = {start, goal}
+            G.remove_nodes_from((ip_set | ip_neighbors | ips_set | ips_neighbors | qps_and_qps_neighbors) - keepers)
+            print(f"Graph after removals has {G.number_of_nodes()} nodes: {sorted(G.nodes())}")
 
             # ----------------------------
             # If buffer dimension is defined: keep only vertices with BD bit = 1
@@ -303,25 +336,10 @@ def search(
                 to_remove = [v for v in G.nodes() if (int(v) & mask) == 0]
                 G.remove_nodes_from(to_remove)
 
-            # ----------------------------
-            # If solution_vertices has more than 1 vertex, then sol_verts=[goal, v1, v2, ...] and we also remove the vertices symmetric to the other sol_verts in the same way as we did
-            # ----------------------------
-            if args.solution_vertices is not None and len(args.solution_vertices) >= 2:
-                qp = int(args.solution_vertices[1])
-                sym_to_qp = symmetric_vertex(qp, goal)
-                # remove sym_to_qp and its neighbors
-                if not G.has_node(qp):
-                    args.logger(f"Solution vertex {qp} is not in the graph after previous removals.", error=True)
-                if G.has_node(sym_to_qp):
-                    neighbors = set(G.neighbors(sym_to_qp))
-                    G.remove_nodes_from(neighbors | {sym_to_qp})
-                else: 
-                    args.logger(f"Symmetric vertex {sym_to_qp} of solution vertex {qp} is not in the graph after previous removals.", error=True)
-
             # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
             args.dim_swaps_F_B_symmetry = [] # [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
             args.dim_flips_F_B_symmetry = list(range(args.size_of_graphs[0]))
-            args.cube_first_dims_path = verts
+            args.cube_first_dims_path = ip
             args.vertex_symmetric_to_start = vertex_symmetric_to_start
         else:
             if G.has_edge(0, 1): G.remove_edge(0, 1)
@@ -330,18 +348,18 @@ def search(
             #G.remove_nodes_from((set(G.neighbors(1)) | set(G.neighbors(3)) | set(G.neighbors(7)) | set(G.neighbors(15))) - {0, 31})
 
             # Compute the vertices: 1, 3, 7, 15, ... (2^k - 1)
-            verts = [(2**k - 1) for k in range(1, cube_first_dims)]
+            ip = [(2**k - 1) for k in range(1, cube_first_dims)]
 
             # Compute the end vertex to keep: 0 and last vertex
             keepers = {0, 2**cube_first_dims - 1}
 
             # Union of all neighbors of these vertices
-            neighbors = set()
-            for qp in verts:
-                neighbors |= set(G.neighbors(qp))
+            ip_neighbors = set()
+            for ip_vertex in ip:
+                ip_neighbors |= set(G.neighbors(ip_vertex))
 
             # Remove all except keepers
-            G.remove_nodes_from(neighbors - keepers)
+            G.remove_nodes_from(ip_neighbors - keepers)
 
             # The list of dimension-swap pairs used to mirror the first `cube_first_dims` dimensions of a hypercube.
             args.dim_swaps_F_B_symmetry = [(i, cube_first_dims - 1 - i) for i in range(cube_first_dims // 2)]
@@ -375,22 +393,32 @@ def search(
     if search_type == "unidirectional":
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
-            path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
+            if args.algo=="DFS":
+                path, stats = XDFS_LSP(G, start, goal, heuristic, snake, args)
+            else:
+                path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
             # path, stats = unidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
-            path, stats = unidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
+            # path, stats = unidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
+            if len(args.solution_vertices)>=2:
+                path, stats = XDFS_CIB_qp(G, start, goal, heuristic, snake, args)
+            else:
+                path, stats = XDFS_CIB(G, start, goal, heuristic, snake, args)
     elif search_type == "bidirectional":
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
-            path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
+            if args.algo=="DFS":
+                path, stats, meet_point = BiXDFS_LSP(G, start, goal, heuristic, snake, args)
+            else:
+                path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
             # path, stats, meet_point = bidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_dfbnb_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
             if len(args.solution_vertices)>=2:
-                path, stats = XDFBnB_qp(G, start, goal, heuristic, snake, args)
+                path, stats = BiXDFS_CIB_qp(G, start, goal, heuristic, snake, args)
             else:
-                path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
+                path, stats = BiXDFS_CIB(G, start, goal, heuristic, snake, args)
 
     elif search_type == "multidirectional":
         # print(f"\nMultidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
@@ -406,6 +434,7 @@ def search(
         path_state = path
         path = path_state.materialize_path()
     if not path: args.logger("No path found.")
+    else: args.logger(f"Path of length {len(path)-1} found: {path}")
 
     # Collect logs
     end_time = time.time()
@@ -413,9 +442,9 @@ def search(
     if stats: logs.update(stats)
 
 
-    excluded = {"g_values", "BF_values"}
-    filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
-    args.logger(f"LOGS: {filtered_logs}")
+    # excluded = {"g_values", "BF_values"}
+    # filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
+    # args.logger(f"LOGS: {format_stats(filtered_logs)}")
 
 
     # Save the graph as PNG with the path if found
@@ -674,6 +703,6 @@ if __name__ == "__main__":
 
             
     print()
-    calculate_averages(avgs, log_file_name)
+    calculate_averages(avgs, log_file_name, args.algo)
     # parse_results_file(log_file_name, log_file_name+".csv")
     args.logger.close()
