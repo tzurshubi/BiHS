@@ -505,6 +505,8 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
+        if algo is not None:
+            log_file_name += f"_{algo}"
         if cube_buffer_dim is not None:
             log_file_name += f"_buffDim{cube_buffer_dim}"
         if backward_sym_generation:
