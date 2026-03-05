@@ -110,7 +110,7 @@ def time_ms(start_time, end_time):
 
     return int(1000*elapsed_time)
     
-def calculate_averages(avgs, log_file_name=None, algo = "full"):
+def calculate_averages(avgs, log_file_name=None, args=None):
     """
     Calculate and print the averages for each metric across categories.
 
@@ -163,18 +163,22 @@ def calculate_averages(avgs, log_file_name=None, algo = "full"):
         last_exp = exp_avgs[-1]
         last_time = time_avgs[-1]
 
-        line1 = f"{"A*" if algo == "full" else "X-DFBnB"}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
-        line2 = f"{"XMM" if algo == "full" else "BiX-DFBnB"}: {mid_exp} , {mid_time} (expansions , time[ms])"
+        line1 = f"{"A*" if args.algo == "full" else "X-DFBnB"}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
+        line2 = f"{"XMM" if args.algo == "full" else "BiX-DFBnB"}: {mid_exp} , {mid_time} (expansions , time[ms])"
         line3 = f"MDS1: {last_exp} , {last_time} (expansions , time[ms])"
         print()
         print(line1)
         print(line2)
         # print(line3)
-        if log_file_name:
-            with open(log_file_name, 'a') as f:
-                f.write("\n" + line1 + "\n")
-                f.write(line2 + "\n")
-                # f.write(line3 + "\n")
+        if args.logger:
+            args.logger(line1)
+            args.logger(line2)
+            # args.logger(line3)
+        # if log_file_name:
+        #     with open(log_file_name, 'a') as f:
+        #         f.write("\n" + line1 + "\n")
+        #         f.write(line2 + "\n")
+        #         # f.write(line3 + "\n")
 
 def print_stats(d, indent=0, parent_key=""):
     """

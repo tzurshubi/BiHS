@@ -688,6 +688,6 @@ if __name__ == "__main__":
 
                 
         print()
-        calculate_averages(avgs, log_file_name, args.algo)
+        calculate_averages(avgs, log_file_name, args)
     # parse_results_file(log_file_name, log_file_name+".csv")
     args.logger.close()
