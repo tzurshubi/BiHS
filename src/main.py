@@ -477,6 +477,8 @@ def search(
 if __name__ == "__main__":
     # Parse arguments
     args = parse_args()
+    if args.heuristic == "None":
+        args.heuristic = None
 
     # Assign values from arguments or defaults
     log = args.log
