@@ -48,8 +48,8 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
     OPEN_B.push(initial_state_B, initial_f_value_B)
     OPENvOPEN.insert_state(initial_state_F, True)
     OPENvOPEN.insert_state(initial_state_B, False)
-    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap if snake else initial_state_F.path_vertices_bitmap)}
-    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap if snake else initial_state_B.path_vertices_bitmap)}
+    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices)}
+    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)}
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -111,8 +111,8 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
                         # print(f"p1: {p1}")
                         # print(f"p2: {p2}")
                         # print(f"New best path of length {best_path_length}: {best_path}")
-                        if snake:
-                            logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={current_st_state.g}, f_max={f_value}, generated={stats['generated']}")
+                        # if snake:
+                        #     logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={current_st_state.g}, f_max={f_value}, generated={stats['generated']}")
             st_states.append(current_st_state)
 
         # Termination Condition: check if U is the largest it will ever be
@@ -151,7 +151,7 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
         successors = current_state.generate_successors(args, snake, directionF)
         BF_values.append(len(successors))
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
                 stats["symmetric_states_removed"] += 1
                 continue
@@ -194,7 +194,7 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
                 if cube and backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
             
-            FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
+            FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
             OPENvOPEN.insert_state(successor,directionF)
             if cube and backward_sym_generation: 
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)

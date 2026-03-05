@@ -70,8 +70,8 @@ def BiXDFS_CIB_qp(graph, start, goal, heuristic_name, snake, args):
     initial_state_F.illegal = illegal
     initial_state_B.illegal = illegal
 
-    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
-    # FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap)}
+    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors)}
+    # FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors)}
 
     # graph for heuristic calculations
     h_graph = graph.copy()

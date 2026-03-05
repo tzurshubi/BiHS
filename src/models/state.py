@@ -310,8 +310,8 @@ class State:
     def __add__(self, other):
         if not isinstance(other, State):
             return NotImplemented
-        if self.graph is not other.graph:
-            raise ValueError("Cannot add states from different graphs.")
+        # if self.graph is not other.graph:
+        #     raise ValueError("Cannot add states from different graphs.")
 
         # Must materialize to merge
         p = self.materialize_path()

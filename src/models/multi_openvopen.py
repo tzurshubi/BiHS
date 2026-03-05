@@ -22,8 +22,8 @@ class MultiOpenvopen:
         """
         multiOPENvOPEN with n vertices.
         For each segment (u,v) we maintain simple paths (u,...,v) in buckets, indexed by their length.
-        :param snake: whether to use path_vertices_and_neighbors_bitmap (snake)
-                      or path_vertices_bitmap (ordinary simple path).
+        :param snake: whether to use path_vertices_and_neighbors (snake)
+                      or path_vertices (ordinary simple path).
         """
         self.graph = graph
         self.snake = snake
@@ -41,9 +41,9 @@ class MultiOpenvopen:
 
     def _state_bitmap_and_len(self, state):
         bitmap = (
-            state.path_vertices_and_neighbors_bitmap
+            state.path_vertices_and_neighbors
             if self.snake
-            else state.path_vertices_bitmap
+            else state.path_vertices
         )
         length = len(state.path) - 1
         return bitmap, length

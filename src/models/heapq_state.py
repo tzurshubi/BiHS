@@ -199,8 +199,8 @@ class HeapqState:
             return (
                 1,  # snake flag
                 state.head,
-                state.path_vertices_bitmap,
-                state.path_vertices_and_neighbors_bitmap,
+                state.path_vertices,
+                state.path_vertices_and_neighbors,
                 # optionally include max_dim_crossed if it affects successors / legality
                 getattr(state, "max_dim_crossed", None),
             )

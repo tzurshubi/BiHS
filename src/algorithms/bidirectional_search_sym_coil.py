@@ -54,8 +54,8 @@ def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, arg
     # Push initial states with priority based on f_value
     OPEN_F.push(initial_state_F, initial_f_value_F)
     OPEN_B.push(initial_state_B, initial_f_value_B)
-    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
-    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap)}
+    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors)}
+    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors)}
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -144,7 +144,7 @@ def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, arg
         stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
                 stats["symmetric_states_removed"] += 1
                 # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
@@ -180,7 +180,7 @@ def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, arg
                 if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
             
-            FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
+            FNV_D.add((successor.head, successor.path_vertices_and_neighbors))
             if successor.g == g_cutoff: 
                 OPENvOPEN.insert_state(successor, directionF, stats)
             if cube and args.backward_sym_generation: 

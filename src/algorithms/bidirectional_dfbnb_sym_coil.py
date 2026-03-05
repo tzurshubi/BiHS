@@ -38,8 +38,8 @@ def bidirectional_dfbnb_sym_coil(graph, start, goal, heuristic_name, snake, args
     stack_B = deque()
     stack_F.append(initial_state_F)
     stack_B.append(initial_state_B)
-    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
-    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap)}
+    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors)}
+    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors)}
     states_g_cutoff_F = []
     states_g_cutoff_B = []
 
@@ -92,7 +92,7 @@ def bidirectional_dfbnb_sym_coil(graph, start, goal, heuristic_name, snake, args
         stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV_D:
                 stats["symmetric_states_removed"] += 1
                 # logger(f"symmetric state removed: {successor.path}")
                 # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
@@ -102,7 +102,7 @@ def bidirectional_dfbnb_sym_coil(graph, start, goal, heuristic_name, snake, args
 
             # Insert successor into the stack and FNV set
             stack_D.append(successor)
-            FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
+            FNV_D.add((successor.head, successor.path_vertices_and_neighbors))
             # if successor.g == g_cutoff: 
             #     OPENvOPEN.insert_state(successor, directionF, stats)
 

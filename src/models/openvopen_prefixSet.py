@@ -43,7 +43,7 @@ class Openvopen_prefixSet:
         cell_index = state.head
         target = 'F' if is_f else 'B'
         g_value = state.g
-        prefix = State._compute_path_vertices_bitmap_from_path(
+        prefix = State._compute_path_vertices_from_path(
             state.materialize_path()[:-self.length_prefix_set]
         )
 
@@ -186,7 +186,7 @@ class Openvopen_prefixSet:
 
         # Scan all prefixes in the opposite direction
         for prefix in opp_struct:
-            if prefix & state.path_vertices_and_neighbors_bitmap != 0:
+            if prefix & state.path_vertices_and_neighbors != 0:
                 # Prefix shares vertex with state; skip
                 stats["state_vs_prefix_meeting_checks"] += 1
                 stats["valid_meeting_checks"] += 1

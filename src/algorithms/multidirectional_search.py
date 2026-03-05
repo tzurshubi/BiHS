@@ -107,7 +107,7 @@ def initialize_segments_and_frontiers(graph, start, goal, solution_vertices, heu
         frontier["FNV"] = {
             (
                 initial_state.head,
-                initial_state.path_vertices_and_neighbors_bitmap if snake else initial_state.path_vertices_bitmap
+                initial_state.path_vertices_and_neighbors if snake else initial_state.path_vertices
             )
         }
     OPENs_empty = len(frontiers) * [False]
@@ -212,7 +212,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                     multi_best_path_length = st_path_len
                     multi_best_path = st_path
                     best_path_meet_point = current_state.head
-                    print(f"!!! [{time2str(args.start_time,time.time())} expansion {multi_expansions}, {time_ms(args.start_time,time.time())}] Found path of length {multi_best_path_length}: {multi_best_path.path}. g_F={current_path_length}, g_B={st_path_len - current_path_length}, f_max={f_value}, generated={multi_generated}")
+                    # print(f"!!! [{time2str(args.start_time,time.time())} expansion {multi_expansions}, {time_ms(args.start_time,time.time())}] Found path of length {multi_best_path_length}: {multi_best_path.path}. g_F={current_path_length}, g_B={st_path_len - current_path_length}, f_max={f_value}, generated={multi_generated}")
                     # with open(args.log_file_name, 'a') as file:
                     #     file.write(f"[{time2str(args.start_time,time.time())} expansion {multi_expansions}] Found path of length {multi_best_path_length}. {multi_best_path}. g_F={current_path_length}, g_B={st_path_len - current_path_length}, f_max={f_value}\n")
 
@@ -250,7 +250,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                 # print(f"Generated {len(successors)} successors: {[s.path for s in successors]}")
                 for successor in successors:
                     # Handle symmetric states removal
-                    if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap) in FNV_D:
+                    if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV_D:
                         # print(f"symmetric state removed: {successor.path}")
                         continue
 
@@ -265,7 +265,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                         if args.algo == "light" or args.algo == "full":
                             OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
                         else: OPEN_D.push(successor, min(f_value, f_successor))
-                        FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
+                        FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
                         OPENvOPEN.insert_state(successor,directionF)
                     
                     # If this is not Forward from start or Backward from goal, we need to add this state to another OPEN list
@@ -279,7 +279,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                             if args.algo == "light" or args.algo == "full":
                                 additional_frontier["OPEN"].push(successor, min(2 * h_successor, f_value, f_successor))
                             else: additional_frontier["OPEN"].push(successor, min(f_value, f_successor))
-                            additional_frontier["FNV"].add((successor.head, successor.path_vertices_and_neighbors_bitmap if snake else successor.path_vertices_bitmap))
+                            additional_frontier["FNV"].add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
                             additional_segment["OPENvOPEN"].insert_state(successor,not directionF)
                         
                 # Update the segment and frontier structures

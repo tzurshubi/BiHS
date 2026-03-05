@@ -102,15 +102,15 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path_length = total_length
                 best_path = current_state.materialize_path()[:-1] + state.materialize_path()[::-1]
                 best_path_meet_point = current_state.head
-                if snake:
-                    logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={stats['generated']}")
+                # if snake:
+                #     logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={stats['generated']}")
                     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
             OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
             OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
         ):
-            logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
+            # logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
             break
 
         # Skip states that traverse the buffer dimension in cube graphs

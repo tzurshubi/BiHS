@@ -12,7 +12,7 @@ from models.openvopen_prefixSet import Openvopen_prefixSet
 from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def BiXDFS_LSP(graph, start, goal, heuristic_name, snake, args):
+def BiXDFS(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
@@ -87,15 +87,19 @@ def BiXDFS_LSP(graph, start, goal, heuristic_name, snake, args):
         
         # Expand
         if state_F.g <= state_B.g:
+            state_F_successors = state_F.generate_successors(args, snake, True)
             h_graph_for_succ_F = h_graph.copy()
             h_graph_for_succ_F.remove_nodes_from([state_F.head])
-            state_F_successors = state_F.generate_successors(args, snake, True)
-            
+
+            successors_with_h = []
             if heuristic_name:
-                successors_with_h = [(heuristic(succ_F, state_B, heuristic_name, snake, args, h_graph_for_succ_F), succ_F) for succ_F in state_F_successors]
+                for succ_F in state_F_successors:
+                    h_val = heuristic(succ_F, state_B, heuristic_name, snake, args, h_graph_for_succ_F.copy() if snake else h_graph_for_succ_F)
+                    successors_with_h.append((h_val, succ_F))
                 successors_with_h.sort(key=lambda item: item[0], reverse=True)
             else:
-                successors_with_h = [(V, succ_F) for succ_F in state_F_successors]
+                for succ_F in state_F_successors:
+                    successors_with_h.append((V, succ_F))
             
             stats["expansions"] += 1
             stats["generated"]['F'] += len(state_F_successors)
@@ -107,19 +111,24 @@ def BiXDFS_LSP(graph, start, goal, heuristic_name, snake, args):
                 if succ_F.g + h_val + state_B.g <= len(global_longest_path) - 1: 
                     stats["violations"]["heuristic"][state_F.g] += 1
                     break # Prune this and all subsequent sorted successors
-                    
+
                 exp_n_check_states(succ_F, state_B, h_graph_for_succ_F)
             
         else:
+            state_B_successors = state_B.generate_successors(args, snake, False)
             h_graph_for_succ_B = h_graph.copy()
             h_graph_for_succ_B.remove_nodes_from([state_B.head])
-            state_B_successors = state_B.generate_successors(args, snake, False)
-            
+
+            successors_with_h = []
             if heuristic_name:
-                successors_with_h = [(heuristic(state_F, succ_B, heuristic_name, snake, args, h_graph_for_succ_B), succ_B) for succ_B in state_B_successors]
+                for succ_B in state_B_successors:
+                    
+                    h_val = heuristic(state_F, succ_B, heuristic_name, snake, args, h_graph_for_succ_B.copy() if snake else h_graph_for_succ_B)
+                    successors_with_h.append((h_val, succ_B))
                 successors_with_h.sort(key=lambda item: item[0], reverse=True)
             else:
-                successors_with_h = [(V, succ_B) for succ_B in state_B_successors]
+                for succ_B in state_B_successors:
+                    successors_with_h.append((V, succ_B))
             
             stats["expansions"] += 1
             stats["generated"]['B'] += len(state_B_successors)
@@ -133,7 +142,7 @@ def BiXDFS_LSP(graph, start, goal, heuristic_name, snake, args):
                     break # Prune this and all subsequent sorted successors
                     
                 exp_n_check_states(state_F, succ_B, h_graph_for_succ_B)
-        
+                
     h_graph = graph.copy()
     exp_n_check_states(initial_state_F, initial_state_B, h_graph)
     

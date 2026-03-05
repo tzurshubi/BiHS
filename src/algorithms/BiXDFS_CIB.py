@@ -74,8 +74,8 @@ def BiXDFS_CIB(graph, start, goal, heuristic_name, snake, args):
     stack_B = deque()
     stack_F.append(initial_state_F)
     stack_B.append(initial_state_B)
-    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
-    # FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors_bitmap)}
+    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors)}
+    # FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors)}
     states_g_lower_cutoff_F = []
     states_g_lower_cutoff_B = []
 

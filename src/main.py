@@ -22,12 +22,12 @@ from algorithms.unidirectional_search_sym_coil import *
 from algorithms.unidirectional_gradual_sym_coil import *
 from algorithms.bidirectional_dfbnb_sym_coil import *
 from algorithms.bidirectional_gradual_sym_coil import *
+from algorithms.XMD_DFBnB import *
 from algorithms.BiXDFS_CIB import *
 from algorithms.BiXDFS_CIB_qp import *
-from algorithms.XMD_DFBnB import *
-from algorithms.BiXDFS_LSP import *
 from algorithms.XDFS_CIB_qp import *
-from algorithms.XDFS_LSP import *
+from algorithms.XDFS import *
+from algorithms.BiXDFS import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -36,19 +36,19 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
-DEFAULT_DATE = "mazes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 3            # 10
-DEFAULT_GRAPH_TYPE = "maze"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [13,13]          # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 8              # 4 / 8 / 12 / 16
+DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
+DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "mis_heuristic" / "heuristic0" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
 DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGO = "full"                  # "basic" # "light" # "cutoff" # "full" # "DFS"
-DEFAULT_BSD = False                      # True # False
+DEFAULT_ALGORITHMS = ["full", "DFS"]                  # "basic" # "light" # "cutoff" # "full" # "DFS"
+DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
@@ -78,7 +78,7 @@ def parse_args():
     parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
     parser.add_argument("--run_multi", action="store_true", default=DEFAULT_RUN_MULTI, help="Enable snake mode.")
     parser.add_argument("--solution_vertices", nargs='+', type=int, default=DEFAULT_SOLUTION_VERTICES, help="Solution vertices for multidirectional search.")
-    parser.add_argument("--algo", type=str, default=DEFAULT_ALGO, help="Algo to use: basic, light, full")
+    parser.add_argument("--algorithms", nargs='+', type=str, default=DEFAULT_ALGORITHMS, help="Algorithms to use: basic, light, full, DFS")
     parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
     parser.add_argument("--cube_buffer_dim", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
@@ -394,7 +394,7 @@ def search(
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
             if args.algo=="DFS":
-                path, stats = XDFS_LSP(G, start, goal, heuristic, snake, args)
+                path, stats = XDFS(G, start, goal, heuristic, snake, args)
             else:
                 path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
@@ -408,7 +408,7 @@ def search(
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
             if args.algo=="DFS":
-                path, stats, meet_point = BiXDFS_LSP(G, start, goal, heuristic, snake, args)
+                path, stats, meet_point = BiXDFS(G, start, goal, heuristic, snake, args)
             else:
                 path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
@@ -491,7 +491,7 @@ if __name__ == "__main__":
     run_bi = args.run_bi
     run_multi = args.run_multi
     solution_vertices = args.solution_vertices
-    algo = args.algo
+    algorithms = args.algorithms
     bsd = args.bsd
     cube_first_dims = args.cube_first_dims
     cube_buffer_dim = args.cube_buffer_dim
@@ -505,8 +505,6 @@ if __name__ == "__main__":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
-        if algo is not None:
-            log_file_name += f"_{algo}"
         if cube_buffer_dim is not None:
             log_file_name += f"_buffDim{cube_buffer_dim}"
         if backward_sym_generation:
@@ -535,7 +533,7 @@ if __name__ == "__main__":
         args.logger(f"run_bi: {run_bi}")
         args.logger(f"run_multi: {run_multi}")
         args.logger(f"solution_vertices: {solution_vertices}")
-        args.logger(f"algo: {algo}")
+        args.logger(f"algorithms: {algorithms}")
         args.logger(f"bsd: {bsd}")
         args.logger(f"cube_first_dims: {cube_first_dims}")
         args.logger(f"cube_buffer_dim: {cube_buffer_dim}")
@@ -556,74 +554,56 @@ if __name__ == "__main__":
     ]
     # results_df = pd.DataFrame(columns=columns)
     results = []
+    for algorithm in args.algorithms:
+        args.algo = algorithm
+        avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
+        for i in list(range(0, number_of_graphs)):
+        # for i in range(number_of_graphs, number_of_graphs+1):
+            # try:
+            # Inputs
+            if graph_type=="grid":
+                if per_blocked:
+                    name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
+                else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
+                start = 0  # 0 # "s"
+                goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+            elif graph_type=="maze":
+                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                start = 0  # 0 # "s"
+                goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
+                # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
+            elif graph_type=="cube":
+                # if i<3: continue
+                name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
+                start = 2**cube_first_dims-1 if cube_first_dims is not None else 2**size_of_graphs[0]-1 # 7 # 15 # 31
+                goal = 0
+                if args.sym_coil:
+                    start = 2**cube_first_dims-1 if cube_first_dims is not None else 0 # 7 # 15 # 31
+                    goal = args.solution_vertices[0]
+            elif graph_type=="manual":
+                name_of_graph = f"paper_graph_{i}"
+                start = "s"  # 0 # "s"
+                goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
 
-    avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
-    for i in list(range(0, number_of_graphs)):
-    # for i in range(number_of_graphs, number_of_graphs+1):
-        # try:
-        # Inputs
-        if graph_type=="grid":
-            if per_blocked:
-                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{per_blocked}per_{i}"
-            else: name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-            # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
-            start = 0  # 0 # "s"
-            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-        elif graph_type=="maze":
-            name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-            start = 0  # 0 # "s"
-            goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-            # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]
-        elif graph_type=="cube":
-            # if i<3: continue
-            name_of_graph=f"{size_of_graphs[0]}d_cube" # hypercube
-            start = 2**cube_first_dims-1 if cube_first_dims is not None else 2**size_of_graphs[0]-1 # 7 # 15 # 31
-            goal = 0
-            if args.sym_coil:
-                start = 2**cube_first_dims-1 if cube_first_dims is not None else 0 # 7 # 15 # 31
-                goal = args.solution_vertices[0]
-        elif graph_type=="manual":
-            name_of_graph = f"paper_graph_{i}"
-            start = "s"  # 0 # "s"
-            goal = "t"  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
-
-        name_of_graph=f"{date}/"+name_of_graph
-        args.logger("\n---------- "+name_of_graph+" ----------")
-           
-        
-        # unidirectional
-        if run_uni:
-            # unidirectional s-t
-            logs, path, _ = search(
-                name_of_graph, start, goal, "unidirectional", heuristic, snake, args
-            )
-            avgs["uni_st"]["expansions"].append(logs['expansions'])
-            avgs["uni_st"]["time"].append(logs['time[ms]'])
-            if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-            else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}")
-            results.append(
-                {
-                    "# blocks": i,
-                    "Search type": "unidirectional s-t",
-                    "# expansions": logs["expansions"],
-                    "Time [ms]": logs["time[ms]"],
-                    "[g_F,g_B]": "[N/A,N/A]",
-                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                }
-            )
-
-            # unidirectional t-s
-            if graph_type!="cube":
+            name_of_graph=f"{date}/"+name_of_graph
+            args.logger("\n---------- "+name_of_graph+" ----------")
+            
+            
+            # unidirectional
+            if run_uni:
+                # unidirectional s-t
                 logs, path, _ = search(
-                    name_of_graph, goal, start, "unidirectional", heuristic, snake, args
+                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args
                 )
-                avgs["uni_ts"]["expansions"].append(logs['expansions'])
-                avgs["uni_ts"]["time"].append(logs['time[ms]'])
-                args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                avgs["uni_st"]["expansions"].append(logs['expansions'])
+                avgs["uni_st"]["time"].append(logs['time[ms]'])
+                if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}")
                 results.append(
                     {
                         "# blocks": i,
-                        "Search type": "unidirectional t-s",
+                        "Search type": "unidirectional s-t",
                         "# expansions": logs["expansions"],
                         "Time [ms]": logs["time[ms]"],
                         "[g_F,g_B]": "[N/A,N/A]",
@@ -631,80 +611,83 @@ if __name__ == "__main__":
                     }
                 )
 
-        # bidirectional
-        if run_bi:
-            logs, path, meet_point = search(
-                name_of_graph, start, goal, "bidirectional", heuristic, snake, args
-            )
-            avgs["bi"]["expansions"].append(logs['expansions'])
-            avgs["bi"]["time"].append(logs['time[ms]'])
-            # print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
-            if not args.sym_coil: 
-                args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                # unidirectional t-s
+                if graph_type!="cube":
+                    logs, path, _ = search(
+                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args
+                    )
+                    avgs["uni_ts"]["expansions"].append(logs['expansions'])
+                    avgs["uni_ts"]["time"].append(logs['time[ms]'])
+                    args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                    results.append(
+                        {
+                            "# blocks": i,
+                            "Search type": "unidirectional t-s",
+                            "# expansions": logs["expansions"],
+                            "Time [ms]": logs["time[ms]"],
+                            "[g_F,g_B]": "[N/A,N/A]",
+                            "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                        }
+                    )
+
+            # bidirectional
+            if run_bi:
+                logs, path, meet_point = search(
+                    name_of_graph, start, goal, "bidirectional", heuristic, snake, args
+                )
+                avgs["bi"]["expansions"].append(logs['expansions'])
+                avgs["bi"]["time"].append(logs['time[ms]'])
+                # print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
+                if not args.sym_coil: 
+                    args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                    results.append(
+                    {
+                        "# blocks": i,
+                        "Search type": "bidirectional",
+                        "# expansions": logs["expansions"],
+                        "Time [ms]": logs["time[ms]"],
+                        "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                    }
+                )
+                else:
+                    if path:    args.logger(f"! Bidirectional Symmetrical Coil. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                    else:       args.logger(f"! Bidirectional Symmetrical Coil. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                    results.append(
+                    {
+                        "# blocks": i,
+                        "Search type": "bidirectional symmetrical coil",
+                        "# expansions": logs["expansions"],
+                        "Time [ms]": logs["time[ms]"],
+                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                    }
+                )
+
+            # multidirectional
+            if run_multi:
+                logs, path, meet_point = search(
+                    name_of_graph, start, goal, "multidirectional", heuristic, snake,args
+                )
+                path_length = len(path)-1 if path else "N/A"
+                args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {path_length} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                 results.append(
-                {
-                    "# blocks": i,
-                    "Search type": "bidirectional",
-                    "# expansions": logs["expansions"],
-                    "Time [ms]": logs["time[ms]"],
-                    "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
-                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                }
-            )
-            else:
-                if path:    args.logger(f"! Bidirectional Symmetrical Coil. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-                else:       args.logger(f"! Bidirectional Symmetrical Coil. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-                results.append(
-                {
-                    "# blocks": i,
-                    "Search type": "bidirectional symmetrical coil",
-                    "# expansions": logs["expansions"],
-                    "Time [ms]": logs["time[ms]"],
-                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                }
-            )
+                    {
+                        "# blocks": i,
+                        "Search type": "multidirectional",          
+                        "# expansions": logs["expansions"],
+                        "Time [ms]": logs["time[ms]"],
+                        "Path length": path_length,
+                        # "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
+                        "Grid with Solution": "file_path_here",  # Update with actual file path if needed
+                    }
+                )
 
-        # multidirectional
-        if run_multi:
-            logs, path, meet_point = search(
-                name_of_graph, start, goal, "multidirectional", heuristic, snake,args
-            )
-            path_length = len(path)-1 if path else "N/A"
-            args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {path_length} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-            results.append(
-                {
-                    "# blocks": i,
-                    "Search type": "multidirectional",          
-                    "# expansions": logs["expansions"],
-                    "Time [ms]": logs["time[ms]"],
-                    "Path length": path_length,
-                    # "[g_F,g_B]": f"[{logs['g_F']},{logs['g_B']}]",
-                    "Grid with Solution": "file_path_here",  # Update with actual file path if needed
-                }
-            )
+                avgs["multi"]["expansions"].append(logs['expansions'])
+                avgs["multi"]["time"].append(logs['time[ms]'])
 
-            avgs["multi"]["expansions"].append(logs['expansions'])
-            avgs["multi"]["time"].append(logs['time[ms]'])
 
-        # if graph_type == "cube":
-        #     os.system('cls' if os.name == 'nt' else 'clear')
-        #     print(f"Path: {path}")
-        #     cube_dimension = size_of_graphs[0]
-        #     # longest_coil = [path[0], 1, 3] + path[-1:0:-1]
-        #     longest_coil = [path[-1], 1, 3] + path[0:-1]
-        #     path_length = len(longest_coil)
-        #     print(f"Longest coil in {cube_dimension}D cube (Length={path_length}): {longest_coil}")
-        #     longest_coil_on_bits = node_num_to_bits_on(cube_dimension, longest_coil)
-        #     print(longest_coil_on_bits)
-        #     print("---------------------------")
-        #     for bits_on in node_num_to_bits_on(cube_dimension, longest_coil):
-        #         print(bits_on)
-        #     print("---------------------------")
-        #     print_bit_statistics(longest_coil_on_bits)
-        #     exit()
-
-            
-    print()
-    calculate_averages(avgs, log_file_name, args.algo)
+                
+        print()
+        calculate_averages(avgs, log_file_name, args.algo)
     # parse_results_file(log_file_name, log_file_name+".csv")
     args.logger.close()

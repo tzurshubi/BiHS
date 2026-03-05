@@ -1,18 +1,13 @@
 from os import stat
 import math
 import queue
-import matplotlib.pyplot as plt
 from collections import deque
 import heapq, time
 from heuristics.heuristic import heuristic
 from models.state import State
-from models.openvopen import Openvopen
-from models.heapq_state import HeapqState
-from models.openvopen_prefixSet import Openvopen_prefixSet
-from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def XDFS_LSP(graph, start, goal, heuristic_name, snake, args):
+def XDFS(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
@@ -29,10 +24,16 @@ def XDFS_LSP(graph, start, goal, heuristic_name, snake, args):
         "num_of_states_per_g": {g: 0 for g in range(0, N + 1)},
         "violations": {reason: {g: 0 for g in range(0, N + 1)} for reason in violation_reasons.keys()},
         "calc_h_time": 0,
+        "symmetric_states_removed": 0,
     }
     
     # Initial state
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
+
+    # ---> FIX 2: BSD must be a dict tracking max `g` <---
+    if args.bsd:
+        state_key = (initial_state.head, initial_state.path_vertices_and_neighbors if snake else initial_state.path_vertices)
+        FNV = {state_key: initial_state.g}
 
     # Track the global best path across the entire DFS tree for true B&B pruning
     global_longest_path = []
@@ -45,9 +46,10 @@ def XDFS_LSP(graph, start, goal, heuristic_name, snake, args):
         nonlocal global_longest_path
         
         # Log
+        # print(f"Expanding state: {state.materialize_path()}")
         stats["valid_meeting_checks"] += 1
         if stats["valid_meeting_checks"] % 200_000 == 0:
-            logger(f"Valid states checked so far: {stats['valid_meeting_checks']}, Expansions: {stats['expansions']}")
+            logger(f"Valid states checked so far: {stats['valid_meeting_checks']}, Expansions: {stats['expansions']}, Global best: {len(global_longest_path)}")
 
         # Base Case: Reached the goal
         if state.head == goal:
@@ -70,23 +72,28 @@ def XDFS_LSP(graph, start, goal, heuristic_name, snake, args):
             stats["violations"]["no_successors"][state.g] += 1
             return [], stats
 
-        # Calculate heuristic and sort (descending order to find long paths first)
-        # Note: Your heuristic function must be able to handle an integer 'goal' instead of a state_B object
         if heuristic_name:
-            successors_with_h = [(heuristic(succ, goal, heuristic_name, snake, args, h_graph_for_succ), succ) for succ in successors]
+            successors_with_h = [(heuristic(succ, goal, heuristic_name, snake, args, h_graph_for_succ.copy() if snake else h_graph_for_succ), succ) for succ in successors]
             successors_with_h.sort(key=lambda item: item[0], reverse=True)
         else:
             successors_with_h = [(V, succ) for succ in successors]
                 
         for h_val, succ in successors_with_h:
-            # DFBnB Pruning:
-            # succ.g is the number of edges taken so far. h_val is the max possible remaining edges.
-            # If the best possible path through this child cannot beat our global best, prune it!
-            best_edges_found_so_far = max(len(global_longest_path) - 1, 0)
+            if args.bsd:
+                state_key = (succ.head, succ.path_vertices_and_neighbors if snake else succ.path_vertices)
+                if state_key in FNV and FNV[state_key] >= succ.g:
+                    stats["symmetric_states_removed"] += 1
+                    continue
             
+            # DFBnB Pruning
+            best_edges_found_so_far = max(len(global_longest_path) - 1, 0)
             if succ.g + h_val <= best_edges_found_so_far: 
                 stats["violations"]["heuristic"][state.g] += 1
-                break # Because it's sorted descending, all subsequent children will also fail this check
+                break 
+                
+            # Update BSD tracker with the new longest arrival to this footprint
+            if args.bsd: 
+                FNV[state_key] = succ.g
                 
             exp_n_check_states(succ, h_graph_for_succ)
                 
@@ -97,5 +104,4 @@ def XDFS_LSP(graph, start, goal, heuristic_name, snake, args):
     # Start the recursive search
     exp_n_check_states(initial_state, h_graph)
     
-    # In unidirectional, the meet point is simply the goal node
-    return global_longest_path, stats #, goal
+    return global_longest_path, stats

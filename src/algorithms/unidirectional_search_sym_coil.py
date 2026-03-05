@@ -29,7 +29,7 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
     open_set.push(initial_state, initial_f_value)
 
     # Basic symmetry detection - a dictionary with the key (head,nodes)
-    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors_bitmap)}
+    FNV = {(initial_state.head, initial_state.path_vertices_and_neighbors)}
 
     # The best path found
     best_path = None
@@ -73,7 +73,7 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
         successors = current_state.generate_successors(args, snake, True)
 
         for successor in successors:
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV:
+            if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
                 # [0, 1, 3, 7, 6, 14, 12, 13, 29, 21, 20]
                 stats["symmetric_states_removed"] += 1
@@ -104,6 +104,6 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
             f_successor = g_successor + h_successor
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
-            FNV.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
+            FNV.add((successor.head, successor.path_vertices_and_neighbors))
 
     return best_path.path, stats

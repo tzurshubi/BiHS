@@ -44,11 +44,11 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
         "must_checks": 0,
         "sym_coil_checks": 0
     }
-    goal_neighbors_bitmap = 0
-    goal_and_neighbors_bitmap = 1 << goal
+    goal_neighbors = 0
+    goal_and_neighbors = 1 << goal
     for goal_neighbor in graph.neighbors(goal):
-        goal_neighbors_bitmap |= 1 << goal_neighbor
-        goal_and_neighbors_bitmap |= 1 << goal_neighbor
+        goal_neighbors |= 1 << goal_neighbor
+        goal_and_neighbors |= 1 << goal_neighbor
     
     # Initial states
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
@@ -58,7 +58,7 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
     # Push initial states to stack
     stack = deque()
     stack.append(initial_state)
-    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors_bitmap)}
+    # FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors)}
     states_g_lower_cutoff = []
 
     ############################################
@@ -93,10 +93,10 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
             stats["generated"] += 1
 
             # # If successor is short and reaches the goal or its neighbors, skip it
-            # if successor.g < g_upper_cutoff - 1 and (1 << successor.head) & goal_and_neighbors_bitmap != 0:
+            # if successor.g < g_upper_cutoff - 1 and (1 << successor.head) & goal_and_neighbors != 0:
             #     continue
             # # If successor has g equal to g_upper_cutoff - 1 but doesn't reach goal neighbors, skip it
-            # if successor.g == g_upper_cutoff - 1 and (1 << successor.head) & goal_neighbors_bitmap != 0:
+            # if successor.g == g_upper_cutoff - 1 and (1 << successor.head) & goal_neighbors != 0:
             #     continue
             
             # If successor has g equal to g_upper_cutoff but doesn't reach the goal, skip it
@@ -115,7 +115,7 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
                 
                 continue
 
-            # if args.bsd and (successor.head, successor.path_vertices_and_neighbors_bitmap) in FNV_D:
+            # if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV_D:
             #     stats["symmetric_states_removed"] += 1
             #     # logger(f"symmetric state removed: {successor.path}")
             #     # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
@@ -123,7 +123,7 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
 
             # Insert successor into the stack and FNV set
             stack.append(successor)
-            # FNV_D.add((successor.head, successor.path_vertices_and_neighbors_bitmap))
+            # FNV_D.add((successor.head, successor.path_vertices_and_neighbors))
 
     # Print stats
     excluded = {"g_values", "BF_values"}
