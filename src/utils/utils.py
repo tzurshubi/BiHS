@@ -131,10 +131,11 @@ def calculate_averages(avgs, log_file_name=None, args=None):
 
         formatted = ", ".join(str(x) for x in avgs_list)
         line = f"average {metric}: ({formatted})"
-        print(line)
-        if log_file_name:
-            with open(log_file_name, 'a') as f:
-                f.write(line + "\n")
+        if args.logger: args.logger(line)
+        else: print(line)
+        # if log_file_name:
+        #     with open(log_file_name, 'a') as f:
+        #         f.write(line + "\n")
                 
 
     # Calculate and print average expansions per second
@@ -166,14 +167,17 @@ def calculate_averages(avgs, log_file_name=None, args=None):
         line1 = f"{"A*" if args.algo == "full" else "X-DFBnB"}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
         line2 = f"{"XMM" if args.algo == "full" else "BiX-DFBnB"}: {mid_exp} , {mid_time} (expansions , time[ms])"
         line3 = f"MDS1: {last_exp} , {last_time} (expansions , time[ms])"
-        print()
-        print(line1)
-        print(line2)
-        # print(line3)
+        
         if args.logger:
             args.logger(line1)
-            args.logger(line2)
+            args.logger(line2+"\n")
             # args.logger(line3)
+        else: 
+            print()
+            print(line1)
+            print(line2+"\n")
+            # print(line3)
+
         # if log_file_name:
         #     with open(log_file_name, 'a') as f:
         #         f.write("\n" + line1 + "\n")
