@@ -73,11 +73,13 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             directionF = False if lastDirectionF else True
             lastDirectionF = not lastDirectionF
         else:
-            best_state_F = OPEN_F.top() if len(OPEN_F) > 0 else (float("inf"), None, None, None)
-            best_state_B = OPEN_B.top() if len(OPEN_B) > 0 else (float("inf"), None, None, None)
+            best_state_F = OPEN_F.top() if len(OPEN_F) > 0 else (float("-inf"), None, None, None)
+            best_state_B = OPEN_B.top() if len(OPEN_B) > 0 else (float("-inf"), None, None, None)
             if len(OPEN_F) > 0 and (best_state_F[0] > best_state_B[0] or (best_state_F[0] == best_state_B[0] and best_state_F[1] > best_state_B[1])):
                 directionF = True
-            else: directionF = False
+            elif len(OPEN_B) > 0:
+                directionF = False
+            else: break # Both OPEN_F and OPEN_B are empty, should not happen due to while condition
 
         # Set general variables
         D, D_hat = ('F', 'B') if directionF else ('B', 'F')
