@@ -20,9 +20,8 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
     initial_h_value = heuristic(initial_state, goal, heuristic_name, snake)
     initial_f_value = initial_state.g + initial_h_value
-    open_set.push(initial_state, initial_f_value)
+    open_set.push(initial_state, initial_f_value, initial_f_value)
 
-    # ---> FIX 1: FNV must be a dictionary tracking the maximum 'g' <---
     if args.bsd:
         state_key = (initial_state.head, initial_state.path_vertices_and_neighbors if snake else initial_state.path_vertices)
         FNV = {state_key: initial_state.g}
@@ -31,7 +30,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     best_path_length = -1
 
     while len(open_set) > 0:
-        f_value, g_value, current_state = open_set.pop()
+        priority, f_value, g_value, current_state = open_set.pop()
 
         stats["expansions"] += 1
         # if stats["expansions"] % 10_000 == 0:
@@ -78,6 +77,6 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             f_successor = g_successor + h_successor
             
             # min(f_successor, f_value) enforces pathmax/monotonicity 
-            open_set.push(successor, min(f_successor, f_value))
+            open_set.push(successor, min(f_successor, f_value), min(f_successor, f_value))
 
     return best_path.materialize_path() if best_path else None, stats

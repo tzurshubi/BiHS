@@ -1,5 +1,3 @@
-from asyncio.log import logger
-
 import matplotlib.pyplot as plt
 import heapq, time
 from heuristics.heuristic import heuristic
@@ -45,8 +43,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     initial_f_value_B = initial_state_B.g + initial_state_B.h
 
     # Push initial states with priority based on f_value
-    OPEN_F.push(initial_state_F, initial_f_value_F)
-    OPEN_B.push(initial_state_B, initial_f_value_B)
+    OPEN_F.push(initial_state_F, initial_f_value_F, initial_f_value_F)
+    OPEN_B.push(initial_state_B, initial_f_value_B, initial_f_value_B)
     OPENvOPEN.insert_state(initial_state_F, True)
     OPENvOPEN.insert_state(initial_state_B, False)
     FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices)}
@@ -75,12 +73,11 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             directionF = False if lastDirectionF else True
             lastDirectionF = not lastDirectionF
         else:
-            if len(OPEN_F) > 0 and (
-                len(OPEN_B) == 0 or OPEN_F.top()[0] >= OPEN_B.top()[0]
-            ):
+            best_state_F = OPEN_F.top() if len(OPEN_F) > 0 else (float("inf"), None, None, None)
+            best_state_B = OPEN_B.top() if len(OPEN_B) > 0 else (float("inf"), None, None, None)
+            if len(OPEN_F) > 0 and (best_state_F[0] > best_state_B[0] or (best_state_F[0] == best_state_B[0] and best_state_F[1] > best_state_B[1])):
                 directionF = True
-            else:
-                directionF = False
+            else: directionF = False
 
         # Set general variables
         D, D_hat = ('F', 'B') if directionF else ('B', 'F')
@@ -89,15 +86,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         FNV_D , FNV_D_hat = (FNV_F, FNV_B) if directionF else (FNV_B, FNV_F)
 
         # Get the best state from OPEN_D
-        f_value, g_value, current_state = OPEN_D.top()
+        priority, f_value, g_value, current_state = OPEN_D.top()
         current_path_length = current_state.g
-
-        if current_state.materialize_path() == [0,1,9,17,16,24,32,33,25,26,34,35,27,28,36,44,43,51,52,53,45,37,29]:
-            logger(f"Debug: current_state: {current_state.materialize_path()}, f_value: {f_value}, g_value: {g_value}")
-        if current_state.materialize_path() == [55,54,46,38,30,31,23,15,7,6,14,13,5,4,3,2,10,18,19,11,12,20,21]:
-            logger(f"Debug: current_state: {current_state.materialize_path()}, f_value: {f_value}, g_value: {g_value}")
-        if current_state.materialize_path() == [55,54,46,38,30,31,23,15,7,6,14,13,5,4,3,2,10,18,19,11,12,20,21,29]:
-            logger(f"Debug: current_state: {current_state.materialize_path()}, f_value: {f_value}, g_value: {g_value}")
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
@@ -116,8 +106,8 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
-            OPEN_F.top()[0] if len(OPEN_F) > 0 else float("inf"),
-            OPEN_B.top()[0] if len(OPEN_B) > 0 else float("inf"),
+            OPEN_F.max_f() if len(OPEN_F) > 0 else float("inf"),
+            OPEN_B.max_f() if len(OPEN_B) > 0 else float("inf"),
         ):
             # logger(f"Upper Bound Terminatation - best path length: {best_path_length}. best path: {best_path}")
             break
@@ -145,7 +135,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         stats["g_values"].append(current_state.g)
 
         # Get the current state from OPEN_D TO CLOSED_D
-        f_value, g_value, current_state = OPEN_D.pop()
+        priority, f_value, g_value, current_state = OPEN_D.pop()
         # OPENvOPEN.remove_state(current_state, directionF)
         # CLOSED_D.add(current_state)
 
@@ -167,9 +157,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
             # Calculate g, h, f values for successor
             curr_time = time.time()
-            h_successor = heuristic(
-                successor, goal if directionF else start, heuristic_name, snake
-            )
+            h_successor = heuristic(successor, goal if directionF else start, heuristic_name, snake)
             stats["calc_h_time"] += time.time() - curr_time
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
@@ -180,13 +168,15 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
             # XMM_light + PathMin
             if args.algo == "light" or args.algo == "full":
-                OPEN_D.push(successor, min(2 * h_successor, f_value, f_successor))
+                priority_successor = min(2 * h_successor, f_value, f_successor)
+                OPEN_D.push(successor, priority_successor, f_successor)
                 if cube and args.backward_sym_generation: 
-                    OPEN_D_hat.push(successor_symmetric, min(2 * h_successor, f_value, f_successor))
-            else: 
-                OPEN_D.push(successor, min(f_value, f_successor))
+                    OPEN_D_hat.push(successor_symmetric, priority_successor, f_successor)
+            else:
+                priority_successor = min(f_value, f_successor)
+                OPEN_D.push(successor, priority_successor, priority_successor)
                 if cube and args.backward_sym_generation: 
-                    OPEN_D_hat.push(successor_symmetric, min(f_value, f_successor))
+                    OPEN_D_hat.push(successor_symmetric, priority_successor, priority_successor)
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
             OPENvOPEN.insert_state(successor,directionF)
