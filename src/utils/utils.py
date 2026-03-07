@@ -164,8 +164,18 @@ def calculate_averages(avgs, log_file_name=None, args=None):
         last_exp = exp_avgs[-1]
         last_time = time_avgs[-1]
 
-        line1 = f"{"A*" if args.algo == "full" else "X-DFBnB"}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
-        line2 = f"{"XMM" if args.algo == "full" else "BiX-DFBnB"}: {mid_exp} , {mid_time} (expansions , time[ms])"
+        uni_algo_name = ""
+        bi_algo_name = ""
+        if args.algo == "full":
+            uni_algo_name = "A*"
+            bi_algo_name = "BiX-DFBnB"
+        elif args.algo == "DFS":
+            uni_algo_name = "X-DFS"
+            bi_algo_name = "BiX-DFS"
+        elif args.algo == "BHK":
+            uni_algo_name = "BHK"
+        line1 = f"{uni_algo_name}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
+        line2 = f"{bi_algo_name}: {mid_exp} , {mid_time} (expansions , time[ms])"
         line3 = f"MDS1: {last_exp} , {last_time} (expansions , time[ms])"
         
         if args.logger:

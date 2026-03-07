@@ -381,7 +381,9 @@ def F2F_bcc_heuristic(state_F, state_B, graph):
         return 0
 
     # Add the probe edge
-    graph.add_edge(s, t)
+    s_t_edge_existed = graph.has_edge(s, t)
+    if not s_t_edge_existed:
+        graph.add_edge(s, t)
     
     # Find all biconnected components
     # bccs = list(nx.biconnected_components(G)) # for debug
@@ -389,9 +391,10 @@ def F2F_bcc_heuristic(state_F, state_B, graph):
     for bcc in nx.biconnected_components(graph):
         if s in bcc and t in bcc:
             # h = max(0, len(comp) - 1) # for debug
-            graph.remove_edge(s, t)
+            if not s_t_edge_existed: graph.remove_edge(s, t)
             return max(0, len(bcc) - 1)
-    graph.remove_edge(s, t)
+        
+    if not s_t_edge_existed: graph.remove_edge(s, t)
     return 0
 
 def F2F_bcc_snake_heuristic(state_F, state_B, graph):

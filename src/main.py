@@ -28,6 +28,7 @@ from algorithms.BiXDFS_CIB_qp import *
 from algorithms.XDFS_CIB_qp import *
 from algorithms.XDFS import *
 from algorithms.BiXDFS import *
+from algorithms.BHK import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
@@ -37,9 +38,9 @@ from utils.utils import *
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
+DEFAULT_NUMBER_OF_GRAPHS = 7            # 10
 DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,8]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
@@ -47,7 +48,7 @@ DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["full", "DFS"]                  # "basic" # "light" # "cutoff" # "full" # "DFS"
+DEFAULT_ALGORITHMS = ["full"]                  # "basic" # "light" # "cutoff" # "full" # "DFS" # "BHK"
 DEFAULT_BSD = True                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
@@ -389,8 +390,10 @@ def search(
     args.start = start
     args.goal = goal
 
-    # Run heuristic search to find LSP in the graph
-    if search_type == "unidirectional":
+    # Run some algorithm
+    if args.algo == "BHK":
+        path, stats = BHK(G, start, goal, args)
+    elif search_type == "unidirectional":
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
             if args.algo=="DFS":
@@ -559,7 +562,7 @@ if __name__ == "__main__":
     for algorithm in args.algorithms:
         args.algo = algorithm
         avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
-        for i in list(range(0, number_of_graphs)):
+        for i in list(range(6, number_of_graphs)):
         # for i in range(number_of_graphs, number_of_graphs+1):
             # try:
             # Inputs
@@ -600,8 +603,8 @@ if __name__ == "__main__":
                 )
                 avgs["uni_st"]["expansions"].append(logs['expansions'])
                 avgs["uni_st"]["time"].append(logs['time[ms]'])
-                if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
-                else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}")
+                if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated'] if "generated" in logs else "N/A"}") # , memory: {logs['memory[kB]']:,} [kB]
+                else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated'] if "generated" in logs else "N/A"}")
                 results.append(
                     {
                         "# blocks": i,
@@ -620,7 +623,7 @@ if __name__ == "__main__":
                     )
                     avgs["uni_ts"]["expansions"].append(logs['expansions'])
                     avgs["uni_ts"]["time"].append(logs['time[ms]'])
-                    args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}")
+                    args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated'] if "generated" in logs else "N/A"}") # , memory: {logs['memory[kB]']:,} [kB]
                     results.append(
                         {
                             "# blocks": i,

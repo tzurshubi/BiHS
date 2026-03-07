@@ -1,3 +1,5 @@
+from asyncio.log import logger
+
 import matplotlib.pyplot as plt
 import heapq, time
 from heuristics.heuristic import heuristic
@@ -90,6 +92,13 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
         f_value, g_value, current_state = OPEN_D.top()
         current_path_length = current_state.g
 
+        if current_state.materialize_path() == [0,1,9,17,16,24,32,33,25,26,34,35,27,28,36,44,43,51,52,53,45,37,29]:
+            logger(f"Debug: current_state: {current_state.materialize_path()}, f_value: {f_value}, g_value: {g_value}")
+        if current_state.materialize_path() == [55,54,46,38,30,31,23,15,7,6,14,13,5,4,3,2,10,18,19,11,12,20,21]:
+            logger(f"Debug: current_state: {current_state.materialize_path()}, f_value: {f_value}, g_value: {g_value}")
+        if current_state.materialize_path() == [55,54,46,38,30,31,23,15,7,6,14,13,5,4,3,2,10,18,19,11,12,20,21,29]:
+            logger(f"Debug: current_state: {current_state.materialize_path()}, f_value: {f_value}, g_value: {g_value}")
+
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
         state, _, _, _, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_longest_non_overlapping_state(current_state, directionF, best_path_length, f_value, snake)
@@ -114,7 +123,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
             break
 
         # Skip states that traverse the buffer dimension in cube graphs
-        if current_state.traversed_buffer_dimension:
+        if buffer_dim is not None and current_state.traversed_buffer_dimension:
             OPEN_D.pop()
             continue
 

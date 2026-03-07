@@ -1,0 +1,31 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 3
+graph_type: grid
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFS']
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/6x6_grid_with_random_blocks_20per_2 ----------
+[00:00:00:00:077] Path of length 24 found: [0, 6, 12, 18, 19, 25, 24, 30, 31, 32, 26, 27, 21, 20, 14, 8, 2, 3, 9, 10, 16, 17, 23, 29, 35]
+[00:00:00:00:077] ! Unidirectional s-t. expansions: 90, time: 77 [ms], path length: 24 [edges], generated: 144
+[00:00:00:00:023] Path of length 24 found: [35, 29, 23, 17, 11, 10, 9, 3, 2, 8, 14, 20, 21, 27, 26, 32, 31, 30, 24, 25, 19, 18, 12, 6, 0]
+[00:00:00:00:023] ! Unidirectional t-s. expansions: 29, time: 23 [ms], path length: 24 [edges], generated: 44
+[00:00:00:00:029] Path of length 24 found: [0, 6, 12, 18, 19, 25, 24, 30, 31, 32, 26, 27, 21, 20, 14, 8, 2, 3, 9, 10, 11, 17, 23, 29, 35]
+[00:00:00:00:297] ! Bidirectional. expansions: 59, time: 29 [ms], path length: 24 [edges], g_F: 12, g_B: 12, generated: {'F': 50, 'B': 49}, MM: 0, MMPER: -1.0%
+[00:00:00:00:298] average expansions: (90, 29, 59, 0)
+[00:00:00:00:298] average time: (77, 23, 29, 0)
+[00:00:00:00:298] X-DFS: 29 , 23 (expansions , time[ms])
+[00:00:00:00:298] BiX-DFS: 59 , 29 (expansions , time[ms])
+
