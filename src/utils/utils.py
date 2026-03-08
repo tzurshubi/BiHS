@@ -259,7 +259,8 @@ def fmt_elapsed(seconds: float) -> str:
 
     return f"{days:02d}:{hours:02d}:{minutes:02d}:{s:02d}:{ms:03d}"
 
-_INT_RE = re.compile(r"\b\d+\b")
+# _INT_RE = re.compile(r"\b\d+\b")
+_INT_RE = re.compile(r"(?<!\.)\b[1-9]\d{3,}\b")
 
 def format_numbers(s: str) -> str:
     def repl(m):
