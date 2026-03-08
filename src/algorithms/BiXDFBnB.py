@@ -12,7 +12,7 @@ from models.openvopen_prefixSet import Openvopen_prefixSet
 from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def BiXDFS(graph, start, goal, heuristic_name, snake, args):
+def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
@@ -52,6 +52,10 @@ def BiXDFS(graph, start, goal, heuristic_name, snake, args):
     # Initial states
     initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
+
+    if args.bsd:
+        double_state_key = (initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices, initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)
+        FNV = {double_state_key: initial_state_F.g + initial_state_B.g}
 
     # Global bound
     global_longest_path = []
@@ -106,11 +110,19 @@ def BiXDFS(graph, start, goal, heuristic_name, snake, args):
             stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
             
             for h_val, succ_F in successors_with_h:
+                if args.bsd:
+                    double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, state_B.head, state_B.path_vertices_and_neighbors if snake else state_B.path_vertices)
+                    if double_state_key in FNV and FNV[double_state_key] >= succ_F.g + state_B.g:
+                        stats["symmetric_states_removed"] += 1
+                        continue
+                    
                 # Compare against global bound
                 # print(f"{succ_F.g} + {h_val} + {state_B.g} <= {len(global_longest_path) - 1}")
                 if succ_F.g + h_val + state_B.g <= len(global_longest_path) - 1: 
                     stats["violations"]["heuristic"][state_F.g] += 1
                     break # Prune this and all subsequent sorted successors
+
+                if args.bsd: FNV[double_state_key] = succ_F.g + state_B.g
 
                 exp_n_check_states(succ_F, state_B, h_graph_for_succ_F)
             
@@ -122,7 +134,6 @@ def BiXDFS(graph, start, goal, heuristic_name, snake, args):
             successors_with_h = []
             if heuristic_name:
                 for succ_B in state_B_successors:
-                    
                     h_val = heuristic(state_F, succ_B, heuristic_name, snake, args, h_graph_for_succ_B.copy() if snake else h_graph_for_succ_B)
                     successors_with_h.append((h_val, succ_B))
                 successors_with_h.sort(key=lambda item: item[0], reverse=True)
@@ -135,11 +146,19 @@ def BiXDFS(graph, start, goal, heuristic_name, snake, args):
             stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
             
             for h_val, succ_B in successors_with_h:
+                if args.bsd:
+                    double_state_key = (state_F.head, state_F.path_vertices_and_neighbors if snake else state_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)
+                    if double_state_key in FNV and FNV[double_state_key] >= state_F.g + succ_B.g:
+                        stats["symmetric_states_removed"] += 1
+                        continue
+
                 # Compare against global bound
                 # print(f"{state_F.g} + {h_val} + {succ_B.g} <= {len(globaly_longest_path) - 1}")
                 if state_F.g + h_val + succ_B.g <= len(global_longest_path) - 1: 
                     stats["violations"]["heuristic"][state_B.g] += 1
                     break # Prune this and all subsequent sorted successors
+
+                if args.bsd: FNV[double_state_key] = state_F.g + succ_B.g
                     
                 exp_n_check_states(state_F, succ_B, h_graph_for_succ_B)
                 

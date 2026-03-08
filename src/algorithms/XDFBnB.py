@@ -7,7 +7,7 @@ from heuristics.heuristic import heuristic
 from models.state import State
 from utils.utils import *
 
-def XDFS(graph, start, goal, heuristic_name, snake, args):
+def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
@@ -30,7 +30,6 @@ def XDFS(graph, start, goal, heuristic_name, snake, args):
     # Initial state
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
-    # ---> FIX 2: BSD must be a dict tracking max `g` <---
     if args.bsd:
         state_key = (initial_state.head, initial_state.path_vertices_and_neighbors if snake else initial_state.path_vertices)
         FNV = {state_key: initial_state.g}
@@ -92,8 +91,7 @@ def XDFS(graph, start, goal, heuristic_name, snake, args):
                 break 
                 
             # Update BSD tracker with the new longest arrival to this footprint
-            if args.bsd: 
-                FNV[state_key] = succ.g
+            if args.bsd: FNV[state_key] = succ.g
                 
             exp_n_check_states(succ, h_graph_for_succ)
                 

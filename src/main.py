@@ -26,8 +26,8 @@ from algorithms.XMD_DFBnB import *
 from algorithms.BiXDFS_CIB import *
 from algorithms.BiXDFS_CIB_qp import *
 from algorithms.XDFS_CIB_qp import *
-from algorithms.XDFS import *
-from algorithms.BiXDFS import *
+from algorithms.XDFBnB import *
+from algorithms.BiXDFBnB import *
 from algorithms.BHK import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
@@ -41,15 +41,15 @@ DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "C
 DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
 DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 16              # 4 / 8 / 12 / 16
+DEFAULT_PER_OF_BLOCKS = 4              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
 DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["full", "DFS"]                  # "basic" # "light" # "cutoff" # "full" # "DFS" # "BHK"
-DEFAULT_BSD = True                      # True # False
+DEFAULT_ALGORITHMS = ["full", "DFBnB"]                  # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK"
+DEFAULT_BSD = False                     # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
@@ -79,7 +79,7 @@ def parse_args():
     parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
     parser.add_argument("--run_multi", action="store_true", default=DEFAULT_RUN_MULTI, help="Enable snake mode.")
     parser.add_argument("--solution_vertices", nargs='+', type=int, default=DEFAULT_SOLUTION_VERTICES, help="Solution vertices for multidirectional search.")
-    parser.add_argument("--algorithms", nargs='+', type=str, default=DEFAULT_ALGORITHMS, help="Algorithms to use: basic, light, full, DFS")
+    parser.add_argument("--algorithms", nargs='+', type=str, default=DEFAULT_ALGORITHMS, help="Algorithms to use: basic, light, full, DFBnB")
     parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
     parser.add_argument("--cube_buffer_dim", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
@@ -396,8 +396,8 @@ def search(
     elif search_type == "unidirectional":
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
-            if args.algo=="DFS":
-                path, stats = XDFS(G, start, goal, heuristic, snake, args)
+            if args.algo=="DFBnB":
+                path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
             else:
                 path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
@@ -410,8 +410,8 @@ def search(
     elif search_type == "bidirectional":
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
-            if args.algo=="DFS":
-                path, stats, meet_point = BiXDFS(G, start, goal, heuristic, snake, args)
+            if args.algo=="DFBnB":
+                path, stats, meet_point = BiXDFBnB(G, start, goal, heuristic, snake, args)
             else:
                 path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:

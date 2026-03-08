@@ -169,7 +169,7 @@ def calculate_averages(avgs, log_file_name=None, args=None):
         if args.algo == "full":
             uni_algo_name = "A*"
             bi_algo_name = "XMM"
-        elif args.algo == "DFS":
+        elif args.algo == "DFBnB":
             uni_algo_name = "X-DFBnB"
             bi_algo_name = "BiX-DFBnB"
         elif args.algo == "BHK":

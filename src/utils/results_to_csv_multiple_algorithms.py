@@ -7,7 +7,7 @@ from collections import defaultdict
 # CONFIGURATION
 # ==========================================
 # Set this to the path where your results files are located
-results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_08/LSP_hBCC" 
+results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_08/snake_hBCC" 
 
 def parse_and_check_results(directory):
     bug_reports = []
@@ -71,8 +71,8 @@ def parse_and_check_results(directory):
     return data, bug_reports
 
 def write_csv(data, output_file):
-    grids = ['6x6', '6x7', '6x8', '7x7', '7x8', '8x8']
-    percents = ['8%', '12%', '16%', '20%']
+    grids = ['6x6', '6x7', '6x8', '7x7', '7x8', '8x8'] if "snake" not in results_dir else ['7x7', '7x8', '7x9', '8x8', '8x9', '9x9']
+    percents = ['20%', '16%', '12%', '8%', '4%']
     algs = ['A*', 'XMM', 'X-DFBnB', 'BiX-DFBnB']
 
     with open(output_file, 'w', newline='') as f:
