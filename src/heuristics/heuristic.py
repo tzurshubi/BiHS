@@ -423,10 +423,11 @@ def F2F_bcc_snake_heuristic(state_F, state_B, graph):
             nodes_to_remove = [n for n in graph if n not in bcc or n in graph[s] or n in graph[t]]
             if s in nodes_to_remove or t in nodes_to_remove:
                 raise ValueError(f"Error: trying to remove head or goal from the graph. s: {s}, t: {t}, nodes_to_remove: {nodes_to_remove}")
-            graph.remove_nodes_from(nodes_to_remove)
             
-            if calc_Y_heuristic: return Y_heuristic(graph) + 1 # add 1 for neighbor of head or neighbor of goal
-            else: return max(0, len(graph.nodes) + 1)
+            if calc_Y_heuristic: 
+                graph.remove_nodes_from(nodes_to_remove)
+                return Y_heuristic(graph) + 1 # add 1 for neighbor of head or neighbor of goal
+            else: return len(graph.nodes) - len(nodes_to_remove) + 1 # max(0, len(graph.nodes) + 1)
             # return max(0, len(comp) - 1)
     return 0
 
