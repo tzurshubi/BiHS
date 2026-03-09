@@ -78,89 +78,133 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         
         # Check Meeting
         if state_F.head == state_B.head:
-            current_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
-            # Update global bound if we found a better path
-            if len(current_path) > len(global_longest_path):
-                global_longest_path = current_path
+            # We found a meeting, check if it's better than global bound
+            if state_F.g + state_B.g > len(global_longest_path):
+                global_longest_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_F.head
-            return current_path, state_F.head
-            
+            return global_longest_path, state_F.head
+        elif graph.has_edge(state_F.head, state_B.head):
+            # We found a meeting via adjacent heads, check if it's better than global bound
+            if state_F.g + 1 + state_B.g > len(global_longest_path):
+                global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
+                global_meet_point = state_B.head
+            return global_longest_path, state_B.head
         elif is_vertex_in_bitmap(state_F.head, state_B.illegal) or is_vertex_in_bitmap(state_B.head, state_F.illegal):
-            stats["violations"]["intersection"][state_F.g] += 1
-            return [], None
+            # paths are intersecting at an illegal vertex, prune
+             stats["violations"]["intersection"][state_F.g] += 1
+             return [], None
         
-        # Expand
-        if state_F.g <= state_B.g:
-            state_F_successors = state_F.generate_successors(args, snake, True)
-            h_graph_for_succ_F = h_graph.copy()
-            h_graph_for_succ_F.remove_nodes_from([state_F.head])
-
-            successors_with_h = []
-            if heuristic_name:
-                for succ_F in state_F_successors:
-                    h_val = heuristic(succ_F, state_B, heuristic_name, snake, args, h_graph_for_succ_F.copy() if snake else h_graph_for_succ_F)
-                    successors_with_h.append((h_val, succ_F))
-                successors_with_h.sort(key=lambda item: item[0], reverse=True)
-            else:
-                for succ_F in state_F_successors:
-                    successors_with_h.append((V, succ_F))
-            
-            stats["expansions"] += 1
-            stats["generated"]['F'] += len(state_F_successors)
-            stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-            
-            for h_val, succ_F in successors_with_h:
-                if args.bsd:
-                    double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, state_B.head, state_B.path_vertices_and_neighbors if snake else state_B.path_vertices)
-                    if double_state_key in FNV and FNV[double_state_key] >= succ_F.g + state_B.g:
-                        stats["symmetric_states_removed"] += 1
-                        continue
-                    
-                # Compare against global bound
-                # print(f"{succ_F.g} + {h_val} + {state_B.g} <= {len(global_longest_path) - 1}")
-                if succ_F.g + h_val + state_B.g <= len(global_longest_path) - 1: 
-                    stats["violations"]["heuristic"][state_F.g] += 1
-                    break # Prune this and all subsequent sorted successors
-
-                if args.bsd: FNV[double_state_key] = succ_F.g + state_B.g
-
-                exp_n_check_states(succ_F, state_B, h_graph_for_succ_F)
-            
+        # Expand - both frontiers together
+        state_F_successors = state_F.generate_successors(args, snake, True)
+        state_B_successors = state_B.generate_successors(args, snake, False)
+        h_graph_for_succ = h_graph.copy()
+        h_graph_for_succ.remove_nodes_from([state_F.head, state_B.head])
+        successors_with_h = []
+        if heuristic_name:
+            for succ_F in state_F_successors:
+                for succ_B in state_B_successors:
+                    h_val = heuristic(succ_F, succ_B, heuristic_name, snake, args, h_graph_for_succ.copy() if snake else h_graph_for_succ)
+                    successors_with_h.append((h_val, succ_F, succ_B))
+            successors_with_h.sort(key=lambda item: item[0], reverse=True)
         else:
-            state_B_successors = state_B.generate_successors(args, snake, False)
-            h_graph_for_succ_B = h_graph.copy()
-            h_graph_for_succ_B.remove_nodes_from([state_B.head])
-
-            successors_with_h = []
-            if heuristic_name:
+            for succ_F in state_F_successors:
                 for succ_B in state_B_successors:
-                    h_val = heuristic(state_F, succ_B, heuristic_name, snake, args, h_graph_for_succ_B.copy() if snake else h_graph_for_succ_B)
-                    successors_with_h.append((h_val, succ_B))
-                successors_with_h.sort(key=lambda item: item[0], reverse=True)
-            else:
-                for succ_B in state_B_successors:
-                    successors_with_h.append((V, succ_B))
-            
-            stats["expansions"] += 1
-            stats["generated"]['B'] += len(state_B_successors)
-            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
-            
-            for h_val, succ_B in successors_with_h:
-                if args.bsd:
-                    double_state_key = (state_F.head, state_F.path_vertices_and_neighbors if snake else state_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)
-                    if double_state_key in FNV and FNV[double_state_key] >= state_F.g + succ_B.g:
-                        stats["symmetric_states_removed"] += 1
-                        continue
+                    successors_with_h.append((V, succ_F, succ_B))
 
-                # Compare against global bound
-                # print(f"{state_F.g} + {h_val} + {succ_B.g} <= {len(globaly_longest_path) - 1}")
-                if state_F.g + h_val + succ_B.g <= len(global_longest_path) - 1: 
-                    stats["violations"]["heuristic"][state_B.g] += 1
-                    break # Prune this and all subsequent sorted successors
+        stats["expansions"] += 2
+        stats["generated"]['F'] += len(state_F_successors)
+        stats["generated"]['B'] += len(state_B_successors)
+        stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
+        stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
 
-                if args.bsd: FNV[double_state_key] = state_F.g + succ_B.g
+        for h_val, succ_F, succ_B in successors_with_h:
+            if args.bsd:
+                double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)
+                if double_state_key in FNV and FNV[double_state_key] >= succ_F.g + succ_B.g:
+                    stats["symmetric_states_removed"] += 1
+                    continue
+            
+            # DFBnB Pruning
+            if succ_F.g + h_val + succ_B.g <= len(global_longest_path) - 1: 
+                stats["violations"]["heuristic"][state_F.g] += 1
+                break # Prune this and all subsequent sorted successors
+
+            if args.bsd: FNV[double_state_key] = succ_F.g + succ_B.g
+
+            exp_n_check_states(succ_F, succ_B, h_graph_for_succ)
+
+
+        # Expand one frontier at a time, alternating between F and B
+        # if state_F.g <= state_B.g:
+        #     state_F_successors = state_F.generate_successors(args, snake, True)
+        #     h_graph_for_succ_F = h_graph.copy()
+        #     h_graph_for_succ_F.remove_nodes_from([state_F.head])
+
+        #     successors_with_h = []
+        #     if heuristic_name:
+        #         for succ_F in state_F_successors:
+        #             h_val = heuristic(succ_F, state_B, heuristic_name, snake, args, h_graph_for_succ_F.copy() if snake else h_graph_for_succ_F)
+        #             successors_with_h.append((h_val, succ_F))
+        #         successors_with_h.sort(key=lambda item: item[0], reverse=True)
+        #     else:
+        #         for succ_F in state_F_successors:
+        #             successors_with_h.append((V, succ_F))
+            
+        #     stats["expansions"] += 1
+        #     stats["generated"]['F'] += len(state_F_successors)
+        #     stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
+            
+        #     for h_val, succ_F in successors_with_h:
+        #         if args.bsd:
+        #             double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, state_B.head, state_B.path_vertices_and_neighbors if snake else state_B.path_vertices)
+        #             if double_state_key in FNV and FNV[double_state_key] >= succ_F.g + state_B.g:
+        #                 stats["symmetric_states_removed"] += 1
+        #                 continue
                     
-                exp_n_check_states(state_F, succ_B, h_graph_for_succ_B)
+        #         # Compare against global bound
+        #         # print(f"{succ_F.g} + {h_val} + {state_B.g} <= {len(global_longest_path) - 1}")
+        #         if succ_F.g + h_val + state_B.g <= len(global_longest_path) - 1: 
+        #             stats["violations"]["heuristic"][state_F.g] += 1
+        #             break # Prune this and all subsequent sorted successors
+
+        #         if args.bsd: FNV[double_state_key] = succ_F.g + state_B.g
+
+        #         exp_n_check_states(succ_F, state_B, h_graph_for_succ_F)    
+        # else:
+        #     state_B_successors = state_B.generate_successors(args, snake, False)
+        #     h_graph_for_succ_B = h_graph.copy()
+        #     h_graph_for_succ_B.remove_nodes_from([state_B.head])
+
+        #     successors_with_h = []
+        #     if heuristic_name:
+        #         for succ_B in state_B_successors:
+        #             h_val = heuristic(state_F, succ_B, heuristic_name, snake, args, h_graph_for_succ_B.copy() if snake else h_graph_for_succ_B)
+        #             successors_with_h.append((h_val, succ_B))
+        #         successors_with_h.sort(key=lambda item: item[0], reverse=True)
+        #     else:
+        #         for succ_B in state_B_successors:
+        #             successors_with_h.append((V, succ_B))
+            
+        #     stats["expansions"] += 1
+        #     stats["generated"]['B'] += len(state_B_successors)
+        #     stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
+            
+        #     for h_val, succ_B in successors_with_h:
+        #         if args.bsd:
+        #             double_state_key = (state_F.head, state_F.path_vertices_and_neighbors if snake else state_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)
+        #             if double_state_key in FNV and FNV[double_state_key] >= state_F.g + succ_B.g:
+        #                 stats["symmetric_states_removed"] += 1
+        #                 continue
+
+        #         # Compare against global bound
+        #         # print(f"{state_F.g} + {h_val} + {succ_B.g} <= {len(globaly_longest_path) - 1}")
+        #         if state_F.g + h_val + succ_B.g <= len(global_longest_path) - 1: 
+        #             stats["violations"]["heuristic"][state_B.g] += 1
+        #             break # Prune this and all subsequent sorted successors
+
+        #         if args.bsd: FNV[double_state_key] = state_F.g + succ_B.g
+                    
+        #         exp_n_check_states(state_F, succ_B, h_graph_for_succ_B)
                 
     h_graph = graph.copy()
     exp_n_check_states(initial_state_F, initial_state_B, h_graph)
