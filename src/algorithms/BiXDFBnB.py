@@ -92,6 +92,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if state_F.g + 1 + state_B.g > len(global_longest_path) - 1:
                 global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_B.head
+            if snake: return global_longest_path, global_meet_point
         
         
         # Expand - both frontiers together
