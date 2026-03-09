@@ -79,20 +79,20 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         # Check Meeting
         if state_F.head == state_B.head:
             # We found a meeting, check if it's better than global bound
-            if state_F.g + state_B.g > len(global_longest_path):
+            if state_F.g + state_B.g > len(global_longest_path) - 1:
                 global_longest_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_F.head
             return global_longest_path, state_F.head
-        elif graph.has_edge(state_F.head, state_B.head):
-            # We found a meeting via adjacent heads, check if it's better than global bound
-            if state_F.g + 1 + state_B.g > len(global_longest_path):
-                global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
-                global_meet_point = state_B.head
-            return global_longest_path, state_B.head
         elif is_vertex_in_bitmap(state_F.head, state_B.illegal) or is_vertex_in_bitmap(state_B.head, state_F.illegal):
             # paths are intersecting at an illegal vertex, prune
              stats["violations"]["intersection"][state_F.g] += 1
              return [], None
+        elif graph.has_edge(state_F.head, state_B.head):
+            # We found a meeting via adjacent heads, check if it's better than global bound
+            if state_F.g + 1 + state_B.g > len(global_longest_path) - 1:
+                global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
+                global_meet_point = state_B.head
+        
         
         # Expand - both frontiers together
         state_F_successors = state_F.generate_successors(args, snake, True)

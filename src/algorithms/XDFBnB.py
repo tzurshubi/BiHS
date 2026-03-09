@@ -58,7 +58,6 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
         elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
             # Found a better path via direct edge to goal
             global_longest_path = state.materialize_path() + [goal]
-            return global_longest_path, stats
         
         # Prepare for expansion
         h_graph_for_succ = h_graph.copy()
