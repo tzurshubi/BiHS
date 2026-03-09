@@ -338,7 +338,7 @@ def Y_heuristic(graph):
     return counter + len(graph)
 
 
-def bcc_heuristic_paper(state, goal):
+def bcc_heuristic_paper(state, goal, graph=None):
     """
     Heuristic: add an edge between head (=state.head) and goal to form Q.
     Let B be the biconnected component in Q that contains both head and goal.
@@ -350,23 +350,27 @@ def bcc_heuristic_paper(state, goal):
         return 0
 
     # Copy graph and remove tail nodes
-    G = state.graph.copy()
+    G = state.graph if graph is None else graph
     tail_nodes = set(state.tail())
     if head in tail_nodes or goal in tail_nodes:
         return 0
-    G.remove_nodes_from(tail_nodes)
+    if graph is None: G.remove_nodes_from(tail_nodes)
 
     if head not in G or goal not in G:
         return 0
 
     # Add the probe edge
-    G.add_edge(head, goal)
+    s_t_edge_existed = graph.has_edge(head, goal)
+    if not s_t_edge_existed:
+        G.add_edge(head, goal)
 
     # Find all biconnected components
     for comp in nx.biconnected_components(G):
         if head in comp and goal in comp:
+            if not s_t_edge_existed: graph.remove_edge(head, goal)
             return max(0, len(comp) - 1)
-
+        
+    if not s_t_edge_existed: graph.remove_edge(head, goal)
     return 0
 
 def F2F_bcc_heuristic(state_F, state_B, graph):
@@ -710,24 +714,10 @@ def heuristic(state, goal, heuristic_name, snake, args=None, h_graph=None):
     
     elif heuristic_name == "bcc_heuristic":
         if snake: 
-            # paper, paper_info = bcc_snake_heuristic_paper(state, goal)
-            # impl, impl_info = bcc_snake_heuristic(state, goal)
-            # if paper != impl: 
-            #     print(f"Error: paper={paper} != impl={impl}.\nVars: paper={paper_info}, impl={impl_info}")
-            #     paper, paper_info = bcc_snake_heuristic_paper(state, goal)
-            #     impl, impl_info = bcc_snake_heuristic(state, goal)
-            #     return 0/0
             h, info = bcc_snake_heuristic_paper(state, goal)
             return h # return bcc_snake_heuristic(state, goal)
         else: 
-            # paper = bcc_heuristic_paper(state,goal)
-            # impl = bcc_heuristic(state,goal)
-            # if paper != impl: 
-            #     print(f"Error: paper={paper} != impl={impl}")
-            #     paper = bcc_heuristic_paper(state,goal)
-            #     impl = bcc_heuristic(state,goal)
-            #     return 0/0
-            return bcc_heuristic_paper(state,goal) # return bcc_heuristic(state,goal)
+            return bcc_heuristic_paper(state, goal, h_graph) # return bcc_heuristic(state,goal)
     elif heuristic_name == "mis_heuristic":
         if snake: 
             return mis_snake_heuristic(state, goal, snake)

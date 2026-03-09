@@ -85,8 +85,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
                     continue
             
             # DFBnB Pruning
-            best_edges_found_so_far = max(len(global_longest_path) - 1, 0)
-            if succ.g + h_val <= best_edges_found_so_far: 
+            if succ.g + h_val <= len(global_longest_path) - 1: 
                 stats["violations"]["heuristic"][state.g] += 1
                 break 
                 
