@@ -3,11 +3,13 @@ import re
 import csv
 from collections import defaultdict
 
+from plotly.express import line
+
 # ==========================================
 # CONFIGURATION
 # ==========================================
 # Set this to the path where your results files are located
-results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_09/snake_hBCC" 
+results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_10/snake_hBCC" 
 
 def parse_and_check_results(directory):
     bug_reports = []
@@ -55,7 +57,7 @@ def parse_and_check_results(directory):
                 lengths_for_graph[current_graph_id].append(val)
 
             # 3. Extract the final summary stats for the CSV
-            summary_match = re.search(r"\]\s*(A\*|XMM|X-DFBnB|BiX-DFBnB):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
+            summary_match = re.search(r"(A\*|XMM|X-DFBnB|BiX-DFBnB):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
             if summary_match:
                 alg = summary_match.group(1)
                 expansions = summary_match.group(2).replace(',', '')
