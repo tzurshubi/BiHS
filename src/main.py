@@ -80,7 +80,7 @@ def parse_args():
     parser.add_argument("--run_multi", action="store_true", default=DEFAULT_RUN_MULTI, help="Enable snake mode.")
     parser.add_argument("--solution_vertices", nargs='+', type=int, default=DEFAULT_SOLUTION_VERTICES, help="Solution vertices for multidirectional search.")
     parser.add_argument("--algorithms", nargs='+', type=str, default=DEFAULT_ALGORITHMS, help="Algorithms to use: basic, light, full, DFBnB")
-    parser.add_argument("--bsd", type=str, default=DEFAULT_BSD, help="Basic Symmetry Detection")
+    parser.add_argument("--bsd", action="store_true", default=DEFAULT_BSD, help="Basic Symmetry Detection")
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
     parser.add_argument("--cube_buffer_dim", type=int, default=DEFAULT_CUBE_BUFFER_DIMENSION, help="Buffer dimension for cube graphs.")
     parser.add_argument("--backward_sym_generation", type=str, default=DEFAULT_BACKWARD_SYM_GENERATION, help="Symmetrical generation in other frontier.")
