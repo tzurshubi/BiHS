@@ -82,7 +82,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if state_F.g + state_B.g > len(global_longest_path) - 1:
                 global_longest_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_F.head
-                # args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
+                args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
             return global_longest_path, state_F.head
         elif is_vertex_in_bitmap(state_F.head, state_B.illegal) or is_vertex_in_bitmap(state_B.head, state_F.illegal):
             # paths are intersecting at an illegal vertex, prune
@@ -93,7 +93,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if state_F.g + 1 + state_B.g > len(global_longest_path) - 1:
                 global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_B.head
-                # args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
+                args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
             if snake: return global_longest_path, global_meet_point
         
         
