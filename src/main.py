@@ -28,6 +28,7 @@ from algorithms.BiXDFS_CIB_qp import *
 from algorithms.XDFS_CIB_qp import *
 from algorithms.XDFBnB import *
 from algorithms.BiXDFBnB import *
+from algorithms.BiXDFBnB_F2E import *
 from algorithms.BHK import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
@@ -40,15 +41,15 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
 DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                    # True # False
+DEFAULT_SNAKE = False                    # True # False
 DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["full", "DFBnB"]                  # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK"
+DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK"
 DEFAULT_BSD = False                     # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
@@ -411,7 +412,8 @@ def search(
         # print(f"\nBidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
             if args.algo=="DFBnB":
-                path, stats, meet_point = BiXDFBnB(G, start, goal, heuristic, snake, args)
+                # path, stats, meet_point = BiXDFBnB(G, start, goal, heuristic, snake, args)
+                path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args) # remove later
             else:
                 path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:

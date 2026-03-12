@@ -9,7 +9,7 @@ from plotly.express import line
 # CONFIGURATION
 # ==========================================
 # Set this to the path where your results files are located
-results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_12/snake_hBCC" 
+results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_12/snake_hBCC_DFBnB_full" 
 
 def parse_and_check_results(directory):
     bug_reports = []
