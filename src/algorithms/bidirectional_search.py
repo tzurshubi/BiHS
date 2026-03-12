@@ -37,9 +37,9 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
 
     # Initial f_values
-    initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake, args, graph)
+    initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake)
     initial_f_value_F = initial_state_F.g + initial_state_F.h
-    initial_state_B.h = heuristic(initial_state_B, start, heuristic_name, snake, args, graph)
+    initial_state_B.h = heuristic(initial_state_B, start, heuristic_name, snake)
     initial_f_value_B = initial_state_B.g + initial_state_B.h
 
     # Push initial states with priority based on f_value
@@ -159,7 +159,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
 
             # Calculate g, h, f values for successor
             curr_time = time.time()
-            h_successor = heuristic(successor, goal if directionF else start, heuristic_name, snake, args, graph)
+            h_successor = heuristic(successor, goal if directionF else start, heuristic_name, snake)
             stats["calc_h_time"] += time.time() - curr_time
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor

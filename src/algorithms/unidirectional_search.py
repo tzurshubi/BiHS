@@ -18,7 +18,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
     open_set = HeapqState()
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
-    initial_h_value = heuristic(initial_state, goal, heuristic_name, snake, args, graph)
+    initial_h_value = heuristic(initial_state, goal, heuristic_name, snake)
     initial_f_value = initial_state.g + initial_h_value
     open_set.push(initial_state, initial_f_value, initial_f_value)
 
@@ -71,7 +71,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
                     if f_value <= best_path_length:
                         break
             else:
-                h_successor = heuristic(successor, goal, heuristic_name, snake, args, graph)
+                h_successor = heuristic(successor, goal, heuristic_name, snake)
                 
             g_successor = successor.g
             f_successor = g_successor + h_successor

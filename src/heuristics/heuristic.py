@@ -360,17 +360,17 @@ def bcc_heuristic_paper(state, goal, graph=None):
         return 0
 
     # Add the probe edge
-    s_t_edge_existed = graph.has_edge(head, goal)
+    s_t_edge_existed = G.has_edge(head, goal)
     if not s_t_edge_existed:
         G.add_edge(head, goal)
 
     # Find all biconnected components
     for comp in nx.biconnected_components(G):
         if head in comp and goal in comp:
-            if not s_t_edge_existed: graph.remove_edge(head, goal)
+            if not s_t_edge_existed: G.remove_edge(head, goal)
             return max(0, len(comp) - 1)
         
-    if not s_t_edge_existed: graph.remove_edge(head, goal)
+    if not s_t_edge_existed: G.remove_edge(head, goal)
     return 0
 
 def F2F_bcc_heuristic(state_F, state_B, graph):
@@ -434,6 +434,76 @@ def F2F_bcc_snake_heuristic(state_F, state_B, graph):
             else: return len(graph.nodes) - len(nodes_to_remove) + 1 # max(0, len(graph.nodes) + 1)
             # return max(0, len(comp) - 1)
     return 0
+
+def F2F_bcc_snake_heuristic_paper(state_F, state_B):
+    calc_Y_heuristic = True    # True # False
+    info = {}
+    graph = state_F.graph
+    head_F = state_F.head
+    head_B = state_B.head
+
+    # 1. Base case: The frontiers have exactly met
+    if head_F == head_B: 
+        return 0, info
+        
+    # 2. Intersection Check: If one head is in the illegal footprint of the other, 
+    # it means connecting them would cause a chord or intersection.
+    if isinstance(state_F.illegal, int):
+        if ((state_F.illegal >> head_B) & 1) or ((state_B.illegal >> head_F) & 1):
+            return -1, info
+    else:
+        if head_B in state_F.illegal or head_F in state_B.illegal:
+            return -1, info
+
+    # 3. Adjacency Check: If they are adjacent and legal, the remaining distance is exactly 1 edge.
+    if graph.has_edge(head_F, head_B):
+        return 1, info
+
+    # 4. Compute Qn (Nodes available to BOTH frontiers)
+    if isinstance(state_F.illegal, int):
+        # Combine both illegal bitmasks
+        illegal_mask = state_F.illegal | state_B.illegal
+        Qn = {v for v in graph.nodes if not (illegal_mask & (1 << v))}
+    else:
+        # Set subtraction
+        Qn = set(graph.nodes) - state_F.illegal - state_B.illegal
+
+    # 5. Create Subgraph and add dummy edge between heads
+    Qn_subgraph = graph.subgraph(Qn | {head_F, head_B}).copy()
+    Qn_subgraph.add_edge(head_F, head_B)
+
+    # 6. Find Biconnected Component bridging the two heads
+    Bn = None
+    for comp in nx.biconnected_components(Qn_subgraph):
+        if head_F in comp and head_B in comp:
+            Bn = set(comp)
+            break
+            
+    # If no component contains both, they are disconnected. 
+    # (Replaced the original 0/0 crash with a graceful -1 dead-end return)
+    if not Bn:
+        return -1, info
+    
+    info['Bn'] = len(Bn)
+    
+    # 7. Shrink to HGP (Heuristic Graph Pattern)
+    # Remove everything not in the bridging component
+    Qn_subgraph.remove_nodes_from(set(Qn_subgraph.nodes) - Bn)
+    
+    # Remove both heads and their respective neighbors
+    neighbors_F = set(graph.neighbors(head_F))
+    neighbors_B = set(graph.neighbors(head_B))
+    Qn_subgraph.remove_nodes_from({head_F, head_B} | neighbors_F | neighbors_B)
+    
+    info['HGP'] = len(Qn_subgraph.nodes)
+    Y = len(Qn_subgraph.nodes)
+
+    # 8. Compute Y patterns
+    if calc_Y_heuristic: 
+        Y = Y_heuristic(Qn_subgraph) 
+
+    # Add 2 (1 edge connecting F to its neighbor + 1 edge connecting B to its neighbor)
+    return Y + 2, info
 
 def F2F_bcc_heuristic_solVert(state_F, state_B, v, graph):
     """
@@ -696,7 +766,8 @@ def heuristic(state, goal, heuristic_name, snake, args=None, h_graph=None):
                 else: return F2F_bcc_heuristic_solVert(state, goal, args.solution_vertices[1], h_graph)
             else:
                 if snake: 
-                    return F2F_bcc_snake_heuristic(state, goal, h_graph)
+                    return F2F_bcc_snake_heuristic_paper(state, goal)[0]
+                    # return F2F_bcc_snake_heuristic(state, goal, h_graph)
                     # print(f"F2F_bcc_snake_heuristic: {h}")
                     # return h
                 else: return F2F_bcc_heuristic(state, goal, h_graph)    

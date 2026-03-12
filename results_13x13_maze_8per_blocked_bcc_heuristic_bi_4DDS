@@ -1,0 +1,49 @@
+--------------------------
+date: mazes
+number_of_graphs: 3
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_blocks_and_random_removals_0 ----------
+[00:00:00:00:054] New longest path found with length 78 at expansion 44
+[00:00:00:00:130] New longest path found with length 80 at expansion 106
+[00:00:00:00:288] New longest path found with length 82 at expansion 227
+[00:00:00:00:406] New longest path found with length 84 at expansion 308
+[00:00:00:00:694] Path of length 84 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 60, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:00:00:694] ! Bidirectional. expansions: 501, time: 694 [ms], path length: 84 [edges], g_F: 42, g_B: 42, generated: {'F': 695, 'B': 607}, MM: 0, MMPER: -1.0%
+[00:00:00:00:694] 
+---------- mazes/13x13_maze_with_blocks_and_random_removals_1 ----------
+[00:00:00:00:071] New longest path found with length 90 at expansion 46
+[00:00:00:01:938] New longest path found with length 92 at expansion 1,243
+[00:00:00:02:046] New longest path found with length 94 at expansion 1,344
+[00:00:00:04:734] Path of length 94 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 61, 48, 35, 34, 47, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 50, 37, 36, 49, 62, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:00:04:734] ! Bidirectional. expansions: 3,279, time: 4,734 [ms], path length: 94 [edges], g_F: 47, g_B: 47, generated: {'F': 5,758, 'B': 4,450}, MM: 0, MMPER: -1.0%
+[00:00:00:04:734] 
+---------- mazes/13x13_maze_with_blocks_and_random_removals_2 ----------
+[00:00:00:00:124] New longest path found with length 88 at expansion 44
+[00:00:00:00:130] New longest path found with length 100 at expansion 50
+[00:00:00:02:139] New longest path found with length 102 at expansion 1,321
+[00:00:04:35:357] Valid meeting checks so far: 200,000, state_vs_state: 5, state_vs_prefix: 0, prefix_vs_prefix: 199,995
+[00:00:08:15:973] New longest path found with length 104 at expansion 361,770
+[00:00:09:07:327] Valid meeting checks so far: 400,000, state_vs_state: 19, state_vs_prefix: 0, prefix_vs_prefix: 399,981
+[00:00:14:01:248] Valid meeting checks so far: 600,000, state_vs_state: 59, state_vs_prefix: 0, prefix_vs_prefix: 599,941
+[00:00:18:28:110] Path of length 104 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 50, 37, 36, 35, 34, 47, 60, 61, 48, 49, 62, 75, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 126, 125, 138, 137, 136, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 151, 164, 165, 166, 153, 152, 139, 140, 141, 142, 155, 168]
+[00:00:18:28:111] ! Bidirectional. expansions: 776,165, time: 1,108,110 [ms], path length: 104 [edges], g_F: 52, g_B: 52, generated: {'F': 1,336,648, 'B': 1,126,592}, MM: 0, MMPER: -1.0%
+[00:00:18:28:111] average expansions: (0, 0, 259,982, 0)
+[00:00:18:28:111] average time: (0, 0, 371,179, 0)
+[00:00:18:28:111] X-DFBnB: 0 , 0 (expansions , time[ms])
+[00:00:18:28:111] BiX-DFBnB: 259,982 , 371,179 (expansions , time[ms])
+
