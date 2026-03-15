@@ -1,0 +1,335 @@
+Thu 12 Mar 2026 17:43:04 IST
+
+SLURM_JOBID:		 15627691
+SLURM_JOB_NODELIST:	 ise-cpu256-31 
+
+
+--------------------------
+date: mazes
+number_of_graphs: 3
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_blocks_and_random_removals_0 ----------
+[00:00:00:02:712] Path of length 84 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 60, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:00:02:712] ! Unidirectional s-t. expansions: 1,304, time: 2,712 [ms], path length: 84 [edges], generated: 1,727
+[00:00:00:01:612] Path of length 84 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 57, 58, 71, 84, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 31, 30, 17, 4, 3, 2, 1, 0]
+[00:00:00:01:612] ! Unidirectional t-s. expansions: 888, time: 1,612 [ms], path length: 84 [edges], generated: 1,211
+[00:00:00:19:859] Path of length 84 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 60, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:00:19:859] ! Bidirectional. expansions: 4,606, time: 19,859 [ms], path length: 84 [edges], g_F: 42, g_B: 42, generated: {'F': 6,230, 'B': 5,865}, MM: 0, MMPER: -1.0%
+[00:00:00:19:859] 
+---------- mazes/13x13_maze_with_blocks_and_random_removals_1 ----------
+[00:00:02:18:985] Path of length 94 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 61, 48, 35, 34, 47, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 50, 51, 64, 63, 62, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:02:18:985] ! Unidirectional s-t. expansions: 63,370, time: 138,985 [ms], path length: 94 [edges], generated: 91,633
+[00:00:01:01:279] Path of length 94 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 57, 58, 71, 84, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 75, 62, 49, 48, 61, 60, 47, 34, 35, 36, 37, 50, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 31, 30, 17, 4, 3, 2, 1, 0]
+[00:00:01:01:279] ! Unidirectional t-s. expansions: 35,123, time: 61,279 [ms], path length: 94 [edges], generated: 53,576
+[00:00:12:27:805] Valid meeting checks so far: 200,000, state_vs_state: 14,169, state_vs_prefix: 0, prefix_vs_prefix: 185,831
+[00:00:17:11:821] Path of length 94 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 61, 48, 35, 34, 47, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 50, 37, 36, 49, 62, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:17:11:823] ! Bidirectional. expansions: 208,794, time: 1,031,822 [ms], path length: 94 [edges], g_F: 47, g_B: 47, generated: {'F': 309,030, 'B': 298,178}, MM: 0, MMPER: -1.0%
+[00:00:17:11:823] 
+---------- mazes/13x13_maze_with_blocks_and_random_removals_2 ----------
+[00:00:05:10:237] Path of length 104 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 35, 34, 47, 60, 61, 48, 49, 50, 51, 64, 63, 62, 75, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 126, 125, 138, 137, 136, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 151, 164, 165, 166, 153, 152, 139, 140, 141, 142, 155, 168]
+[00:00:05:10:237] ! Unidirectional s-t. expansions: 121,009, time: 310,237 [ms], path length: 104 [edges], generated: 217,901
+[00:00:07:04:514] Valid states checked so far: 200,000, Expansions: 199,999, Global best: 101
+[00:00:14:19:453] Valid states checked so far: 400,000, Expansions: 399,999, Global best: 101
+[00:00:20:49:682] Valid states checked so far: 600,000, Expansions: 599,999, Global best: 103
+[00:00:27:34:786] Valid states checked so far: 800,000, Expansions: 799,999, Global best: 103
+[00:00:34:10:285] Valid states checked so far: 1,000,000, Expansions: 999,999, Global best: 103
+[00:00:40:57:820] Valid states checked so far: 1,200,000, Expansions: 1,199,999, Global best: 103
+[00:00:47:37:974] Valid states checked so far: 1,400,000, Expansions: 1,399,999, Global best: 103
+[00:00:54:24:642] Valid states checked so far: 1,600,000, Expansions: 1,599,999, Global best: 105
+[00:01:01:36:504] Valid states checked so far: 1,800,000, Expansions: 1,799,999, Global best: 105
+[00:01:08:21:306] Valid states checked so far: 2,000,000, Expansions: 1,999,999, Global best: 105
+[00:01:15:34:260] Valid states checked so far: 2,200,000, Expansions: 2,199,999, Global best: 105
+[00:01:23:03:625] Valid states checked so far: 2,400,000, Expansions: 2,399,999, Global best: 105
+[00:01:29:57:994] Valid states checked so far: 2,600,000, Expansions: 2,599,999, Global best: 105
+[00:01:36:56:559] Valid states checked so far: 2,800,000, Expansions: 2,799,999, Global best: 105
+[00:01:44:33:176] Valid states checked so far: 3,000,000, Expansions: 2,999,999, Global best: 105
+[00:01:52:14:706] Valid states checked so far: 3,200,000, Expansions: 3,199,999, Global best: 105
+[00:01:59:18:868] Valid states checked so far: 3,400,000, Expansions: 3,399,999, Global best: 105
+[00:02:05:54:020] Valid states checked so far: 3,600,000, Expansions: 3,599,999, Global best: 105
+[00:02:13:31:025] Valid states checked so far: 3,800,000, Expansions: 3,799,999, Global best: 105
+[00:02:20:32:095] Valid states checked so far: 4,000,000, Expansions: 3,999,999, Global best: 105
+[00:02:27:00:294] Path of length 104 found: [168, 155, 142, 141, 140, 139, 152, 153, 166, 165, 164, 151, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 136, 137, 138, 125, 126, 127, 114, 115, 116, 103, 90, 89, 88, 75, 74, 61, 48, 35, 36, 49, 62, 63, 64, 51, 50, 37, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 33, 34, 47, 60, 59, 58, 71, 84, 85, 86, 99, 112, 111, 110, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:02:27:00:294] ! Unidirectional t-s. expansions: 4,176,587, time: 8,820,294 [ms], path length: 104 [edges], generated: 6,248,094
+[00:00:10:55:260] Valid meeting checks so far: 200,000, state_vs_state: 14,142, state_vs_prefix: 0, prefix_vs_prefix: 185,858
+[00:00:24:08:368] Valid meeting checks so far: 400,000, state_vs_state: 14,446, state_vs_prefix: 0, prefix_vs_prefix: 385,554
+[00:00:34:08:625] Valid meeting checks so far: 600,000, state_vs_state: 34,183, state_vs_prefix: 0, prefix_vs_prefix: 565,817
+[00:00:44:13:826] Valid meeting checks so far: 800,000, state_vs_state: 55,546, state_vs_prefix: 0, prefix_vs_prefix: 744,454
+[00:00:56:21:995] Valid meeting checks so far: 1,000,000, state_vs_state: 70,262, state_vs_prefix: 0, prefix_vs_prefix: 929,738
+[00:01:06:51:745] Valid meeting checks so far: 1,200,000, state_vs_state: 94,573, state_vs_prefix: 0, prefix_vs_prefix: 1,105,427
+[00:01:20:46:685] Valid meeting checks so far: 1,400,000, state_vs_state: 95,666, state_vs_prefix: 0, prefix_vs_prefix: 1,304,334
+[00:01:32:54:874] Valid meeting checks so far: 1,600,000, state_vs_state: 115,598, state_vs_prefix: 0, prefix_vs_prefix: 1,484,402
+[00:01:46:56:048] Valid meeting checks so far: 1,800,000, state_vs_state: 118,830, state_vs_prefix: 0, prefix_vs_prefix: 1,681,170
+[00:02:01:43:413] Valid meeting checks so far: 2,000,000, state_vs_state: 120,483, state_vs_prefix: 0, prefix_vs_prefix: 1,879,517
+[00:02:16:05:413] Valid meeting checks so far: 2,200,000, state_vs_state: 122,976, state_vs_prefix: 0, prefix_vs_prefix: 2,077,024
+[00:02:30:39:054] Valid meeting checks so far: 2,400,000, state_vs_state: 125,437, state_vs_prefix: 0, prefix_vs_prefix: 2,274,563
+[00:02:47:51:034] Valid meeting checks so far: 2,600,000, state_vs_state: 127,806, state_vs_prefix: 0, prefix_vs_prefix: 2,472,194
+[00:03:03:09:190] Valid meeting checks so far: 2,800,000, state_vs_state: 130,253, state_vs_prefix: 0, prefix_vs_prefix: 2,669,747
+[00:03:18:20:212] Valid meeting checks so far: 3,000,000, state_vs_state: 132,621, state_vs_prefix: 0, prefix_vs_prefix: 2,867,379
+[00:03:33:41:049] Valid meeting checks so far: 3,200,000, state_vs_state: 135,048, state_vs_prefix: 0, prefix_vs_prefix: 3,064,952
+[00:03:49:25:168] Valid meeting checks so far: 3,400,000, state_vs_state: 137,459, state_vs_prefix: 0, prefix_vs_prefix: 3,262,541
+[00:04:05:14:802] Valid meeting checks so far: 3,600,000, state_vs_state: 138,777, state_vs_prefix: 0, prefix_vs_prefix: 3,461,223
+[00:04:20:56:946] Valid meeting checks so far: 3,800,000, state_vs_state: 139,555, state_vs_prefix: 0, prefix_vs_prefix: 3,660,445
+[00:04:36:29:229] Valid meeting checks so far: 4,000,000, state_vs_state: 141,090, state_vs_prefix: 0, prefix_vs_prefix: 3,858,910
+[00:04:51:53:016] Valid meeting checks so far: 4,200,000, state_vs_state: 143,103, state_vs_prefix: 0, prefix_vs_prefix: 4,056,897
+[00:05:07:11:914] Valid meeting checks so far: 4,400,000, state_vs_state: 145,223, state_vs_prefix: 0, prefix_vs_prefix: 4,254,777
+[00:05:23:19:603] Valid meeting checks so far: 4,600,000, state_vs_state: 146,677, state_vs_prefix: 0, prefix_vs_prefix: 4,453,323
+[00:05:39:09:535] Valid meeting checks so far: 4,800,000, state_vs_state: 148,949, state_vs_prefix: 0, prefix_vs_prefix: 4,651,051
+[00:05:54:44:361] Valid meeting checks so far: 5,000,000, state_vs_state: 151,509, state_vs_prefix: 0, prefix_vs_prefix: 4,848,491
+[00:06:10:01:384] Valid meeting checks so far: 5,200,000, state_vs_state: 153,980, state_vs_prefix: 0, prefix_vs_prefix: 5,046,020
+[00:06:25:35:800] Valid meeting checks so far: 5,400,000, state_vs_state: 156,446, state_vs_prefix: 0, prefix_vs_prefix: 5,243,554
+[00:06:42:11:816] Valid meeting checks so far: 5,600,000, state_vs_state: 157,868, state_vs_prefix: 0, prefix_vs_prefix: 5,442,132
+[00:06:58:19:650] Valid meeting checks so far: 5,800,000, state_vs_state: 159,037, state_vs_prefix: 0, prefix_vs_prefix: 5,640,963
+[00:07:13:34:413] Valid meeting checks so far: 6,000,000, state_vs_state: 161,551, state_vs_prefix: 0, prefix_vs_prefix: 5,838,449
+[00:07:29:08:292] Valid meeting checks so far: 6,200,000, state_vs_state: 163,820, state_vs_prefix: 0, prefix_vs_prefix: 6,036,180
+[00:07:44:25:084] Valid meeting checks so far: 6,400,000, state_vs_state: 164,796, state_vs_prefix: 0, prefix_vs_prefix: 6,235,204
+[00:08:00:57:152] Valid meeting checks so far: 6,600,000, state_vs_state: 164,855, state_vs_prefix: 0, prefix_vs_prefix: 6,435,145
+[00:08:17:27:656] Valid meeting checks so far: 6,800,000, state_vs_state: 165,047, state_vs_prefix: 0, prefix_vs_prefix: 6,634,953
+[00:08:33:06:581] Valid meeting checks so far: 7,000,000, state_vs_state: 165,743, state_vs_prefix: 0, prefix_vs_prefix: 6,834,257
+[00:08:49:24:261] Valid meeting checks so far: 7,200,000, state_vs_state: 166,765, state_vs_prefix: 0, prefix_vs_prefix: 7,033,235
+[00:09:06:12:406] Valid meeting checks so far: 7,400,000, state_vs_state: 167,454, state_vs_prefix: 0, prefix_vs_prefix: 7,232,546
+[00:09:23:19:912] Valid meeting checks so far: 7,600,000, state_vs_state: 167,831, state_vs_prefix: 0, prefix_vs_prefix: 7,432,169
+[00:09:37:09:598] Valid meeting checks so far: 7,800,000, state_vs_state: 177,981, state_vs_prefix: 0, prefix_vs_prefix: 7,622,019
+[00:09:51:05:595] Valid meeting checks so far: 8,000,000, state_vs_state: 187,805, state_vs_prefix: 0, prefix_vs_prefix: 7,812,195
+[00:10:07:22:041] Valid meeting checks so far: 8,200,000, state_vs_state: 191,747, state_vs_prefix: 0, prefix_vs_prefix: 8,008,253
+[00:10:23:42:012] Valid meeting checks so far: 8,400,000, state_vs_state: 194,218, state_vs_prefix: 0, prefix_vs_prefix: 8,205,782
+[00:10:40:21:815] Valid meeting checks so far: 8,600,000, state_vs_state: 197,280, state_vs_prefix: 0, prefix_vs_prefix: 8,402,720
+[00:11:03:00:665] Valid meeting checks so far: 8,800,000, state_vs_state: 200,422, state_vs_prefix: 0, prefix_vs_prefix: 8,599,578
+[00:11:19:49:508] Valid meeting checks so far: 9,000,000, state_vs_state: 203,303, state_vs_prefix: 0, prefix_vs_prefix: 8,796,697
+[00:11:36:56:318] Valid meeting checks so far: 9,200,000, state_vs_state: 205,101, state_vs_prefix: 0, prefix_vs_prefix: 8,994,899
+[00:11:55:58:109] Valid meeting checks so far: 9,400,000, state_vs_state: 207,070, state_vs_prefix: 0, prefix_vs_prefix: 9,192,930
+[00:12:12:20:498] Valid meeting checks so far: 9,600,000, state_vs_state: 210,504, state_vs_prefix: 0, prefix_vs_prefix: 9,389,496
+[00:12:28:23:932] Valid meeting checks so far: 9,800,000, state_vs_state: 214,133, state_vs_prefix: 0, prefix_vs_prefix: 9,585,867
+[00:12:44:40:252] Valid meeting checks so far: 10,000,000, state_vs_state: 217,469, state_vs_prefix: 0, prefix_vs_prefix: 9,782,531
+[00:13:01:25:100] Valid meeting checks so far: 10,200,000, state_vs_state: 220,701, state_vs_prefix: 0, prefix_vs_prefix: 9,979,299
+[00:13:17:45:739] Valid meeting checks so far: 10,400,000, state_vs_state: 223,045, state_vs_prefix: 0, prefix_vs_prefix: 10,176,955
+[00:13:34:41:658] Valid meeting checks so far: 10,600,000, state_vs_state: 226,423, state_vs_prefix: 0, prefix_vs_prefix: 10,373,577
+[00:13:51:37:029] Valid meeting checks so far: 10,800,000, state_vs_state: 229,237, state_vs_prefix: 0, prefix_vs_prefix: 10,570,763
+[00:14:09:54:828] Valid meeting checks so far: 11,000,000, state_vs_state: 230,806, state_vs_prefix: 0, prefix_vs_prefix: 10,769,194
+[00:14:28:32:729] Valid meeting checks so far: 11,200,000, state_vs_state: 232,777, state_vs_prefix: 0, prefix_vs_prefix: 10,967,223
+[00:14:45:20:726] Valid meeting checks so far: 11,400,000, state_vs_state: 235,294, state_vs_prefix: 0, prefix_vs_prefix: 11,164,706
+[00:15:01:04:099] Valid meeting checks so far: 11,600,000, state_vs_state: 238,666, state_vs_prefix: 0, prefix_vs_prefix: 11,361,334
+[00:15:16:56:195] Valid meeting checks so far: 11,800,000, state_vs_state: 241,102, state_vs_prefix: 0, prefix_vs_prefix: 11,558,898
+[00:15:33:17:014] Valid meeting checks so far: 12,000,000, state_vs_state: 243,895, state_vs_prefix: 0, prefix_vs_prefix: 11,756,105
+[00:15:49:35:477] Valid meeting checks so far: 12,200,000, state_vs_state: 246,762, state_vs_prefix: 0, prefix_vs_prefix: 11,953,238
+[00:16:06:01:155] Valid meeting checks so far: 12,400,000, state_vs_state: 249,257, state_vs_prefix: 0, prefix_vs_prefix: 12,150,743
+[00:16:22:48:717] Valid meeting checks so far: 12,600,000, state_vs_state: 250,762, state_vs_prefix: 0, prefix_vs_prefix: 12,349,238
+[00:16:39:03:982] Valid meeting checks so far: 12,800,000, state_vs_state: 253,637, state_vs_prefix: 0, prefix_vs_prefix: 12,546,363
+[00:16:55:15:981] Valid meeting checks so far: 13,000,000, state_vs_state: 256,690, state_vs_prefix: 0, prefix_vs_prefix: 12,743,310
+[00:17:09:22:103] Valid meeting checks so far: 13,200,000, state_vs_state: 261,013, state_vs_prefix: 0, prefix_vs_prefix: 12,938,987
+[00:17:23:46:708] Valid meeting checks so far: 13,400,000, state_vs_state: 264,576, state_vs_prefix: 0, prefix_vs_prefix: 13,135,424
+[00:17:38:11:353] Valid meeting checks so far: 13,600,000, state_vs_state: 269,508, state_vs_prefix: 0, prefix_vs_prefix: 13,330,492
+[00:17:52:48:673] Valid meeting checks so far: 13,800,000, state_vs_state: 273,627, state_vs_prefix: 0, prefix_vs_prefix: 13,526,373
+[00:18:07:22:512] Valid meeting checks so far: 14,000,000, state_vs_state: 276,645, state_vs_prefix: 0, prefix_vs_prefix: 13,723,355
+[00:18:22:21:881] Valid meeting checks so far: 14,200,000, state_vs_state: 278,832, state_vs_prefix: 0, prefix_vs_prefix: 13,921,168
+[00:18:36:28:903] Valid meeting checks so far: 14,400,000, state_vs_state: 284,061, state_vs_prefix: 0, prefix_vs_prefix: 14,115,939
+[00:18:47:43:546] Valid meeting checks so far: 14,600,000, state_vs_state: 297,142, state_vs_prefix: 0, prefix_vs_prefix: 14,302,858
+[00:19:00:15:904] Valid meeting checks so far: 14,800,000, state_vs_state: 310,726, state_vs_prefix: 0, prefix_vs_prefix: 14,489,274
+[00:19:14:05:213] Valid meeting checks so far: 15,000,000, state_vs_state: 313,582, state_vs_prefix: 0, prefix_vs_prefix: 14,686,418
+[00:19:28:21:527] Valid meeting checks so far: 15,200,000, state_vs_state: 315,472, state_vs_prefix: 0, prefix_vs_prefix: 14,884,528
+[00:19:42:20:832] Valid meeting checks so far: 15,400,000, state_vs_state: 317,723, state_vs_prefix: 0, prefix_vs_prefix: 15,082,277
+[00:19:56:32:291] Valid meeting checks so far: 15,600,000, state_vs_state: 319,633, state_vs_prefix: 0, prefix_vs_prefix: 15,280,367
+[00:20:10:53:423] Valid meeting checks so far: 15,800,000, state_vs_state: 320,186, state_vs_prefix: 0, prefix_vs_prefix: 15,479,814
+[00:20:25:12:262] Valid meeting checks so far: 16,000,000, state_vs_state: 322,369, state_vs_prefix: 0, prefix_vs_prefix: 15,677,631
+[00:20:39:23:373] Valid meeting checks so far: 16,200,000, state_vs_state: 324,215, state_vs_prefix: 0, prefix_vs_prefix: 15,875,785
+[00:20:53:32:982] Valid meeting checks so far: 16,400,000, state_vs_state: 325,851, state_vs_prefix: 0, prefix_vs_prefix: 16,074,149
+[00:21:07:41:621] Valid meeting checks so far: 16,600,000, state_vs_state: 328,191, state_vs_prefix: 0, prefix_vs_prefix: 16,271,809
+[00:21:21:46:515] Valid meeting checks so far: 16,800,000, state_vs_state: 330,768, state_vs_prefix: 0, prefix_vs_prefix: 16,469,232
+[00:21:34:01:093] Valid meeting checks so far: 17,000,000, state_vs_state: 341,488, state_vs_prefix: 0, prefix_vs_prefix: 16,658,512
+[00:21:45:04:733] Valid meeting checks so far: 17,200,000, state_vs_state: 357,138, state_vs_prefix: 0, prefix_vs_prefix: 16,842,862
+[00:21:59:15:087] Valid meeting checks so far: 17,400,000, state_vs_state: 359,134, state_vs_prefix: 0, prefix_vs_prefix: 17,040,866
+[00:22:13:42:785] Valid meeting checks so far: 17,600,000, state_vs_state: 362,492, state_vs_prefix: 0, prefix_vs_prefix: 17,237,508
+[00:22:27:28:569] Valid meeting checks so far: 17,800,000, state_vs_state: 369,784, state_vs_prefix: 0, prefix_vs_prefix: 17,430,216
+[00:22:40:58:818] Valid meeting checks so far: 18,000,000, state_vs_state: 378,131, state_vs_prefix: 0, prefix_vs_prefix: 17,621,869
+[00:22:54:56:377] Valid meeting checks so far: 18,200,000, state_vs_state: 384,929, state_vs_prefix: 0, prefix_vs_prefix: 17,815,071
+[00:23:08:38:495] Valid meeting checks so far: 18,400,000, state_vs_state: 392,914, state_vs_prefix: 0, prefix_vs_prefix: 18,007,086
+[00:23:22:45:570] Valid meeting checks so far: 18,600,000, state_vs_state: 399,388, state_vs_prefix: 0, prefix_vs_prefix: 18,200,612
+[00:23:36:37:748] Valid meeting checks so far: 18,800,000, state_vs_state: 406,845, state_vs_prefix: 0, prefix_vs_prefix: 18,393,155
+[00:23:50:39:765] Valid meeting checks so far: 19,000,000, state_vs_state: 414,022, state_vs_prefix: 0, prefix_vs_prefix: 18,585,978
+[01:00:04:38:930] Valid meeting checks so far: 19,200,000, state_vs_state: 420,749, state_vs_prefix: 0, prefix_vs_prefix: 18,779,251
+[01:00:18:13:119] Valid meeting checks so far: 19,400,000, state_vs_state: 430,701, state_vs_prefix: 0, prefix_vs_prefix: 18,969,299
+[01:00:32:55:064] Valid meeting checks so far: 19,600,000, state_vs_state: 432,831, state_vs_prefix: 0, prefix_vs_prefix: 19,167,169
+[01:00:46:11:763] Valid meeting checks so far: 19,800,000, state_vs_state: 443,316, state_vs_prefix: 0, prefix_vs_prefix: 19,356,684
+[01:00:59:50:782] Valid meeting checks so far: 20,000,000, state_vs_state: 448,425, state_vs_prefix: 0, prefix_vs_prefix: 19,551,575
+[01:01:12:58:785] Valid meeting checks so far: 20,200,000, state_vs_state: 454,201, state_vs_prefix: 0, prefix_vs_prefix: 19,745,799
+[01:01:26:00:082] Valid meeting checks so far: 20,400,000, state_vs_state: 460,578, state_vs_prefix: 0, prefix_vs_prefix: 19,939,422
+[01:01:37:22:481] Valid meeting checks so far: 20,600,000, state_vs_state: 475,370, state_vs_prefix: 0, prefix_vs_prefix: 20,124,630
+[01:01:50:03:991] Valid meeting checks so far: 20,800,000, state_vs_state: 485,566, state_vs_prefix: 0, prefix_vs_prefix: 20,314,434
+[01:02:02:58:993] Valid meeting checks so far: 21,000,000, state_vs_state: 494,547, state_vs_prefix: 0, prefix_vs_prefix: 20,505,453
+[01:02:15:24:799] Valid meeting checks so far: 21,200,000, state_vs_state: 504,687, state_vs_prefix: 0, prefix_vs_prefix: 20,695,313
+[01:02:28:19:283] Valid meeting checks so far: 21,400,000, state_vs_state: 513,235, state_vs_prefix: 0, prefix_vs_prefix: 20,886,765
+[01:02:39:28:819] Valid meeting checks so far: 21,600,000, state_vs_state: 528,926, state_vs_prefix: 0, prefix_vs_prefix: 21,071,074
+[01:02:52:34:370] Valid meeting checks so far: 21,800,000, state_vs_state: 536,097, state_vs_prefix: 0, prefix_vs_prefix: 21,263,903
+[01:03:04:35:564] Valid meeting checks so far: 22,000,000, state_vs_state: 549,926, state_vs_prefix: 0, prefix_vs_prefix: 21,450,074
+[01:03:17:56:022] Valid meeting checks so far: 22,200,000, state_vs_state: 556,691, state_vs_prefix: 0, prefix_vs_prefix: 21,643,309
+[01:03:30:44:612] Valid meeting checks so far: 22,400,000, state_vs_state: 567,799, state_vs_prefix: 0, prefix_vs_prefix: 21,832,201
+[01:03:43:10:104] Valid meeting checks so far: 22,600,000, state_vs_state: 577,093, state_vs_prefix: 0, prefix_vs_prefix: 22,022,907
+[01:03:53:19:640] Valid meeting checks so far: 22,800,000, state_vs_state: 599,194, state_vs_prefix: 0, prefix_vs_prefix: 22,200,806
+[01:04:03:47:141] Valid meeting checks so far: 23,000,000, state_vs_state: 619,324, state_vs_prefix: 0, prefix_vs_prefix: 22,380,676
+[01:04:15:42:312] Valid meeting checks so far: 23,200,000, state_vs_state: 630,269, state_vs_prefix: 0, prefix_vs_prefix: 22,569,731
+[01:04:28:47:040] Valid meeting checks so far: 23,400,000, state_vs_state: 636,479, state_vs_prefix: 0, prefix_vs_prefix: 22,763,521
+[01:04:41:38:025] Valid meeting checks so far: 23,600,000, state_vs_state: 645,394, state_vs_prefix: 0, prefix_vs_prefix: 22,954,606
+[01:04:54:47:418] Valid meeting checks so far: 23,800,000, state_vs_state: 652,622, state_vs_prefix: 0, prefix_vs_prefix: 23,147,378
+[01:05:08:04:597] Valid meeting checks so far: 24,000,000, state_vs_state: 659,386, state_vs_prefix: 0, prefix_vs_prefix: 23,340,614
+[01:05:21:30:318] Valid meeting checks so far: 24,200,000, state_vs_state: 665,915, state_vs_prefix: 0, prefix_vs_prefix: 23,534,085
+[01:05:34:39:285] Valid meeting checks so far: 24,400,000, state_vs_state: 673,354, state_vs_prefix: 0, prefix_vs_prefix: 23,726,646
+[01:05:47:26:867] Valid meeting checks so far: 24,600,000, state_vs_state: 680,726, state_vs_prefix: 0, prefix_vs_prefix: 23,919,274
+[01:06:00:35:908] Valid meeting checks so far: 24,800,000, state_vs_state: 688,532, state_vs_prefix: 0, prefix_vs_prefix: 24,111,468
+[01:06:14:01:171] Valid meeting checks so far: 25,000,000, state_vs_state: 695,979, state_vs_prefix: 0, prefix_vs_prefix: 24,304,021
+[01:06:26:20:996] Valid meeting checks so far: 25,200,000, state_vs_state: 708,938, state_vs_prefix: 0, prefix_vs_prefix: 24,491,062
+[01:06:38:10:254] Valid meeting checks so far: 25,400,000, state_vs_state: 723,186, state_vs_prefix: 0, prefix_vs_prefix: 24,676,814
+[01:06:51:27:973] Valid meeting checks so far: 25,600,000, state_vs_state: 730,113, state_vs_prefix: 0, prefix_vs_prefix: 24,869,887
+[01:07:04:55:137] Valid meeting checks so far: 25,800,000, state_vs_state: 737,230, state_vs_prefix: 0, prefix_vs_prefix: 25,062,770
+[01:07:16:50:320] Valid meeting checks so far: 26,000,000, state_vs_state: 751,155, state_vs_prefix: 0, prefix_vs_prefix: 25,248,845
+[01:07:29:34:654] Valid meeting checks so far: 26,200,000, state_vs_state: 758,525, state_vs_prefix: 0, prefix_vs_prefix: 25,441,475
+[01:07:42:44:818] Valid meeting checks so far: 26,400,000, state_vs_state: 764,901, state_vs_prefix: 0, prefix_vs_prefix: 25,635,099
+[01:07:55:55:930] Valid meeting checks so far: 26,600,000, state_vs_state: 772,330, state_vs_prefix: 0, prefix_vs_prefix: 25,827,670
+[01:08:09:08:499] Valid meeting checks so far: 26,800,000, state_vs_state: 779,985, state_vs_prefix: 0, prefix_vs_prefix: 26,020,015
+[01:08:21:48:158] Valid meeting checks so far: 27,000,000, state_vs_state: 789,231, state_vs_prefix: 0, prefix_vs_prefix: 26,210,769
+[01:08:35:07:508] Valid meeting checks so far: 27,200,000, state_vs_state: 794,265, state_vs_prefix: 0, prefix_vs_prefix: 26,405,735
+[01:08:49:11:594] Valid meeting checks so far: 27,400,000, state_vs_state: 795,114, state_vs_prefix: 0, prefix_vs_prefix: 26,604,886
+[01:09:03:01:034] Valid meeting checks so far: 27,600,000, state_vs_state: 796,418, state_vs_prefix: 0, prefix_vs_prefix: 26,803,582
+[01:09:17:11:079] Valid meeting checks so far: 27,800,000, state_vs_state: 797,669, state_vs_prefix: 0, prefix_vs_prefix: 27,002,331
+[01:09:31:29:648] Valid meeting checks so far: 28,000,000, state_vs_state: 799,545, state_vs_prefix: 0, prefix_vs_prefix: 27,200,455
+[01:09:45:44:894] Valid meeting checks so far: 28,200,000, state_vs_state: 801,885, state_vs_prefix: 0, prefix_vs_prefix: 27,398,115
+[01:09:59:58:234] Valid meeting checks so far: 28,400,000, state_vs_state: 803,733, state_vs_prefix: 0, prefix_vs_prefix: 27,596,267
+[01:10:14:07:464] Valid meeting checks so far: 28,600,000, state_vs_state: 804,838, state_vs_prefix: 0, prefix_vs_prefix: 27,795,162
+[01:10:28:27:625] Valid meeting checks so far: 28,800,000, state_vs_state: 806,106, state_vs_prefix: 0, prefix_vs_prefix: 27,993,894
+[01:10:41:47:550] Valid meeting checks so far: 29,000,000, state_vs_state: 811,384, state_vs_prefix: 0, prefix_vs_prefix: 28,188,616
+[01:10:55:49:352] Valid meeting checks so far: 29,200,000, state_vs_state: 812,496, state_vs_prefix: 0, prefix_vs_prefix: 28,387,504
+[01:11:09:46:489] Valid meeting checks so far: 29,400,000, state_vs_state: 813,843, state_vs_prefix: 0, prefix_vs_prefix: 28,586,157
+[01:11:24:20:036] Valid meeting checks so far: 29,600,000, state_vs_state: 814,634, state_vs_prefix: 0, prefix_vs_prefix: 28,785,366
+[01:11:37:54:393] Valid meeting checks so far: 29,800,000, state_vs_state: 820,140, state_vs_prefix: 0, prefix_vs_prefix: 28,979,860
+[01:11:51:32:210] Valid meeting checks so far: 30,000,000, state_vs_state: 823,638, state_vs_prefix: 0, prefix_vs_prefix: 29,176,362
+[01:12:05:08:844] Valid meeting checks so far: 30,200,000, state_vs_state: 827,869, state_vs_prefix: 0, prefix_vs_prefix: 29,372,131
+[01:12:19:06:229] Valid meeting checks so far: 30,400,000, state_vs_state: 831,510, state_vs_prefix: 0, prefix_vs_prefix: 29,568,490
+[01:12:32:40:481] Valid meeting checks so far: 30,600,000, state_vs_state: 836,394, state_vs_prefix: 0, prefix_vs_prefix: 29,763,606
+[01:12:45:55:837] Valid meeting checks so far: 30,800,000, state_vs_state: 841,834, state_vs_prefix: 0, prefix_vs_prefix: 29,958,166
+[01:12:59:21:008] Valid meeting checks so far: 31,000,000, state_vs_state: 847,490, state_vs_prefix: 0, prefix_vs_prefix: 30,152,510
+[01:13:12:49:926] Valid meeting checks so far: 31,200,000, state_vs_state: 855,437, state_vs_prefix: 0, prefix_vs_prefix: 30,344,563
+[01:13:24:57:416] Valid meeting checks so far: 31,400,000, state_vs_state: 869,236, state_vs_prefix: 0, prefix_vs_prefix: 30,530,764
+[01:13:38:36:059] Valid meeting checks so far: 31,600,000, state_vs_state: 876,613, state_vs_prefix: 0, prefix_vs_prefix: 30,723,387
+[01:13:51:37:765] Valid meeting checks so far: 31,800,000, state_vs_state: 886,840, state_vs_prefix: 0, prefix_vs_prefix: 30,913,160
+[01:14:02:14:634] Valid meeting checks so far: 32,000,000, state_vs_state: 908,666, state_vs_prefix: 0, prefix_vs_prefix: 31,091,334
+[01:14:12:17:772] Valid meeting checks so far: 32,200,000, state_vs_state: 934,512, state_vs_prefix: 0, prefix_vs_prefix: 31,265,488
+[01:14:24:18:501] Valid meeting checks so far: 32,400,000, state_vs_state: 948,752, state_vs_prefix: 0, prefix_vs_prefix: 31,451,248
+[01:14:37:36:990] Valid meeting checks so far: 32,600,000, state_vs_state: 957,479, state_vs_prefix: 0, prefix_vs_prefix: 31,642,521
+[01:14:50:46:169] Valid meeting checks so far: 32,800,000, state_vs_state: 967,664, state_vs_prefix: 0, prefix_vs_prefix: 31,832,336
+[01:15:04:27:344] Valid meeting checks so far: 33,000,000, state_vs_state: 976,240, state_vs_prefix: 0, prefix_vs_prefix: 32,023,760
+[01:15:17:58:140] Valid meeting checks so far: 33,200,000, state_vs_state: 984,679, state_vs_prefix: 0, prefix_vs_prefix: 32,215,321
+[01:15:31:26:262] Valid meeting checks so far: 33,400,000, state_vs_state: 993,116, state_vs_prefix: 0, prefix_vs_prefix: 32,406,884
+[01:15:44:49:752] Valid meeting checks so far: 33,600,000, state_vs_state: 1,000,603, state_vs_prefix: 0, prefix_vs_prefix: 32,599,397
+[01:15:58:49:547] Valid meeting checks so far: 33,800,000, state_vs_state: 1,008,297, state_vs_prefix: 0, prefix_vs_prefix: 32,791,703
+[01:16:12:18:011] Valid meeting checks so far: 34,000,000, state_vs_state: 1,016,339, state_vs_prefix: 0, prefix_vs_prefix: 32,983,661
+[01:16:25:01:860] Valid meeting checks so far: 34,200,000, state_vs_state: 1,024,944, state_vs_prefix: 0, prefix_vs_prefix: 33,175,056
+[01:16:37:57:442] Valid meeting checks so far: 34,400,000, state_vs_state: 1,030,362, state_vs_prefix: 0, prefix_vs_prefix: 33,369,638
+[01:16:51:21:101] Valid meeting checks so far: 34,600,000, state_vs_state: 1,034,369, state_vs_prefix: 0, prefix_vs_prefix: 33,565,631
+[01:17:04:10:316] Valid meeting checks so far: 34,800,000, state_vs_state: 1,043,339, state_vs_prefix: 0, prefix_vs_prefix: 33,756,661
+[01:17:17:23:898] Valid meeting checks so far: 35,000,000, state_vs_state: 1,052,868, state_vs_prefix: 0, prefix_vs_prefix: 33,947,132
+[01:17:30:22:389] Valid meeting checks so far: 35,200,000, state_vs_state: 1,063,122, state_vs_prefix: 0, prefix_vs_prefix: 34,136,878
+[01:17:44:15:264] Valid meeting checks so far: 35,400,000, state_vs_state: 1,065,682, state_vs_prefix: 0, prefix_vs_prefix: 34,334,318
+[01:17:58:22:322] Valid meeting checks so far: 35,600,000, state_vs_state: 1,067,879, state_vs_prefix: 0, prefix_vs_prefix: 34,532,121
+[01:18:11:23:820] Valid meeting checks so far: 35,800,000, state_vs_state: 1,074,453, state_vs_prefix: 0, prefix_vs_prefix: 34,725,547
+[01:18:25:09:445] Valid meeting checks so far: 36,000,000, state_vs_state: 1,078,068, state_vs_prefix: 0, prefix_vs_prefix: 34,921,932
+[01:18:36:37:674] Valid meeting checks so far: 36,200,000, state_vs_state: 1,096,092, state_vs_prefix: 0, prefix_vs_prefix: 35,103,908
+[01:18:49:47:274] Valid meeting checks so far: 36,400,000, state_vs_state: 1,105,451, state_vs_prefix: 0, prefix_vs_prefix: 35,294,549
+[01:19:03:32:337] Valid meeting checks so far: 36,600,000, state_vs_state: 1,114,042, state_vs_prefix: 0, prefix_vs_prefix: 35,485,958
+[01:19:16:43:584] Valid meeting checks so far: 36,800,000, state_vs_state: 1,123,738, state_vs_prefix: 0, prefix_vs_prefix: 35,676,262
+[01:19:28:15:698] Valid meeting checks so far: 37,000,000, state_vs_state: 1,142,453, state_vs_prefix: 0, prefix_vs_prefix: 35,857,547
+[01:19:41:26:714] Valid meeting checks so far: 37,200,000, state_vs_state: 1,151,817, state_vs_prefix: 0, prefix_vs_prefix: 36,048,183
+[01:19:55:08:308] Valid meeting checks so far: 37,400,000, state_vs_state: 1,160,408, state_vs_prefix: 0, prefix_vs_prefix: 36,239,592
+[01:20:08:05:991] Valid meeting checks so far: 37,600,000, state_vs_state: 1,170,008, state_vs_prefix: 0, prefix_vs_prefix: 36,429,992
+[01:20:22:04:920] Valid meeting checks so far: 37,800,000, state_vs_state: 1,171,116, state_vs_prefix: 0, prefix_vs_prefix: 36,628,884
+[01:20:36:22:724] Valid meeting checks so far: 38,000,000, state_vs_state: 1,173,124, state_vs_prefix: 0, prefix_vs_prefix: 36,826,876
+[01:20:50:33:026] Valid meeting checks so far: 38,200,000, state_vs_state: 1,174,700, state_vs_prefix: 0, prefix_vs_prefix: 37,025,300
+[01:21:03:27:644] Valid meeting checks so far: 38,400,000, state_vs_state: 1,182,686, state_vs_prefix: 0, prefix_vs_prefix: 37,217,314
+[01:21:16:17:512] Valid meeting checks so far: 38,600,000, state_vs_state: 1,189,878, state_vs_prefix: 0, prefix_vs_prefix: 37,410,122
+[01:21:30:49:603] Valid meeting checks so far: 38,800,000, state_vs_state: 1,190,810, state_vs_prefix: 0, prefix_vs_prefix: 37,609,190
+[01:21:44:18:379] Valid meeting checks so far: 39,000,000, state_vs_state: 1,195,661, state_vs_prefix: 0, prefix_vs_prefix: 37,804,339
+[01:21:57:55:917] Valid meeting checks so far: 39,200,000, state_vs_state: 1,199,149, state_vs_prefix: 0, prefix_vs_prefix: 38,000,851
+[01:22:11:18:990] Valid meeting checks so far: 39,400,000, state_vs_state: 1,203,884, state_vs_prefix: 0, prefix_vs_prefix: 38,196,116
+[01:22:24:42:534] Valid meeting checks so far: 39,600,000, state_vs_state: 1,211,759, state_vs_prefix: 0, prefix_vs_prefix: 38,388,241
+[01:22:37:18:081] Valid meeting checks so far: 39,800,000, state_vs_state: 1,221,109, state_vs_prefix: 0, prefix_vs_prefix: 38,578,891
+[01:22:50:30:007] Valid meeting checks so far: 40,000,000, state_vs_state: 1,226,582, state_vs_prefix: 0, prefix_vs_prefix: 38,773,418
+[01:23:03:30:469] Valid meeting checks so far: 40,200,000, state_vs_state: 1,232,638, state_vs_prefix: 0, prefix_vs_prefix: 38,967,362
+[01:23:16:50:404] Valid meeting checks so far: 40,400,000, state_vs_state: 1,237,271, state_vs_prefix: 0, prefix_vs_prefix: 39,162,729
+[01:23:30:05:833] Valid meeting checks so far: 40,600,000, state_vs_state: 1,247,115, state_vs_prefix: 0, prefix_vs_prefix: 39,352,885
+[01:23:43:34:281] Valid meeting checks so far: 40,800,000, state_vs_state: 1,256,427, state_vs_prefix: 0, prefix_vs_prefix: 39,543,573
+[01:23:56:49:916] Valid meeting checks so far: 41,000,000, state_vs_state: 1,264,305, state_vs_prefix: 0, prefix_vs_prefix: 39,735,695
+[02:00:10:59:672] Valid meeting checks so far: 41,200,000, state_vs_state: 1,266,186, state_vs_prefix: 0, prefix_vs_prefix: 39,933,814
+[02:00:24:24:336] Valid meeting checks so far: 41,400,000, state_vs_state: 1,271,820, state_vs_prefix: 0, prefix_vs_prefix: 40,128,180
+[02:00:38:12:046] Valid meeting checks so far: 41,600,000, state_vs_state: 1,274,897, state_vs_prefix: 0, prefix_vs_prefix: 40,325,103
+[02:00:50:55:612] Valid meeting checks so far: 41,800,000, state_vs_state: 1,285,380, state_vs_prefix: 0, prefix_vs_prefix: 40,514,620
+[02:01:03:17:487] Valid meeting checks so far: 42,000,000, state_vs_state: 1,299,251, state_vs_prefix: 0, prefix_vs_prefix: 40,700,749
+[02:01:16:35:910] Valid meeting checks so far: 42,200,000, state_vs_state: 1,308,727, state_vs_prefix: 0, prefix_vs_prefix: 40,891,273
+[02:01:30:31:842] Valid meeting checks so far: 42,400,000, state_vs_state: 1,317,272, state_vs_prefix: 0, prefix_vs_prefix: 41,082,728
+[02:01:43:08:131] Valid meeting checks so far: 42,600,000, state_vs_state: 1,330,920, state_vs_prefix: 0, prefix_vs_prefix: 41,269,080
+[02:01:55:23:573] Valid meeting checks so far: 42,800,000, state_vs_state: 1,345,283, state_vs_prefix: 0, prefix_vs_prefix: 41,454,717
+[02:02:08:35:153] Valid meeting checks so far: 43,000,000, state_vs_state: 1,354,850, state_vs_prefix: 0, prefix_vs_prefix: 41,645,150
+[02:02:22:45:481] Valid meeting checks so far: 43,200,000, state_vs_state: 1,364,015, state_vs_prefix: 0, prefix_vs_prefix: 41,835,985
+[02:02:36:41:847] Valid meeting checks so far: 43,400,000, state_vs_state: 1,375,257, state_vs_prefix: 0, prefix_vs_prefix: 42,024,743
+[02:02:48:33:133] Valid meeting checks so far: 43,600,000, state_vs_state: 1,397,026, state_vs_prefix: 0, prefix_vs_prefix: 42,202,974
+[02:03:02:23:960] Valid meeting checks so far: 43,800,000, state_vs_state: 1,408,297, state_vs_prefix: 0, prefix_vs_prefix: 42,391,703
+[02:03:16:28:664] Valid meeting checks so far: 44,000,000, state_vs_state: 1,419,419, state_vs_prefix: 0, prefix_vs_prefix: 42,580,581
+[02:03:31:00:396] Valid meeting checks so far: 44,200,000, state_vs_state: 1,428,636, state_vs_prefix: 0, prefix_vs_prefix: 42,771,364
+[02:03:46:03:432] Valid meeting checks so far: 44,400,000, state_vs_state: 1,437,353, state_vs_prefix: 0, prefix_vs_prefix: 42,962,647
+[02:03:59:37:132] Valid meeting checks so far: 44,600,000, state_vs_state: 1,448,293, state_vs_prefix: 0, prefix_vs_prefix: 43,151,707
+[02:04:12:32:251] Valid meeting checks so far: 44,800,000, state_vs_state: 1,461,071, state_vs_prefix: 0, prefix_vs_prefix: 43,338,929
+[02:04:25:22:983] Valid meeting checks so far: 45,000,000, state_vs_state: 1,473,388, state_vs_prefix: 0, prefix_vs_prefix: 43,526,612
+[02:04:38:51:308] Valid meeting checks so far: 45,200,000, state_vs_state: 1,481,155, state_vs_prefix: 0, prefix_vs_prefix: 43,718,845
+[02:04:53:11:412] Valid meeting checks so far: 45,400,000, state_vs_state: 1,487,999, state_vs_prefix: 0, prefix_vs_prefix: 43,912,001
+[02:05:07:33:820] Valid meeting checks so far: 45,600,000, state_vs_state: 1,492,027, state_vs_prefix: 0, prefix_vs_prefix: 44,107,973
+[02:05:21:29:709] Valid meeting checks so far: 45,800,000, state_vs_state: 1,498,939, state_vs_prefix: 0, prefix_vs_prefix: 44,301,061
+[02:05:36:13:966] Valid meeting checks so far: 46,000,000, state_vs_state: 1,501,997, state_vs_prefix: 0, prefix_vs_prefix: 44,498,003
+[02:05:48:16:235] Valid meeting checks so far: 46,200,000, state_vs_state: 1,523,087, state_vs_prefix: 0, prefix_vs_prefix: 44,676,913
+[02:05:59:54:543] Valid meeting checks so far: 46,400,000, state_vs_state: 1,547,462, state_vs_prefix: 0, prefix_vs_prefix: 44,852,538
+[02:06:11:21:195] Valid meeting checks so far: 46,600,000, state_vs_state: 1,569,383, state_vs_prefix: 0, prefix_vs_prefix: 45,030,617
+[02:06:24:17:357] Valid meeting checks so far: 46,800,000, state_vs_state: 1,587,085, state_vs_prefix: 0, prefix_vs_prefix: 45,212,915
+[02:06:38:25:999] Valid meeting checks so far: 47,000,000, state_vs_state: 1,593,876, state_vs_prefix: 0, prefix_vs_prefix: 45,406,124
+[02:06:52:17:980] Valid meeting checks so far: 47,200,000, state_vs_state: 1,604,076, state_vs_prefix: 0, prefix_vs_prefix: 45,595,924
+[02:07:05:18:494] Valid meeting checks so far: 47,400,000, state_vs_state: 1,615,770, state_vs_prefix: 0, prefix_vs_prefix: 45,784,230
+[02:07:18:31:577] Valid meeting checks so far: 47,600,000, state_vs_state: 1,627,072, state_vs_prefix: 0, prefix_vs_prefix: 45,972,928
+[02:07:31:52:212] Valid meeting checks so far: 47,800,000, state_vs_state: 1,633,294, state_vs_prefix: 0, prefix_vs_prefix: 46,166,706
+[02:07:45:06:759] Valid meeting checks so far: 48,000,000, state_vs_state: 1,644,833, state_vs_prefix: 0, prefix_vs_prefix: 46,355,167
+[02:07:58:43:613] Valid meeting checks so far: 48,200,000, state_vs_state: 1,651,052, state_vs_prefix: 0, prefix_vs_prefix: 46,548,948
+[02:08:12:46:913] Valid meeting checks so far: 48,400,000, state_vs_state: 1,658,780, state_vs_prefix: 0, prefix_vs_prefix: 46,741,220
+[02:08:26:42:175] Valid meeting checks so far: 48,600,000, state_vs_state: 1,666,798, state_vs_prefix: 0, prefix_vs_prefix: 46,933,202
+[02:08:40:50:984] Valid meeting checks so far: 48,800,000, state_vs_state: 1,676,842, state_vs_prefix: 0, prefix_vs_prefix: 47,123,158
+[02:08:55:02:540] Valid meeting checks so far: 49,000,000, state_vs_state: 1,685,182, state_vs_prefix: 0, prefix_vs_prefix: 47,314,818
+[02:09:09:32:359] Valid meeting checks so far: 49,200,000, state_vs_state: 1,693,905, state_vs_prefix: 0, prefix_vs_prefix: 47,506,095
+[02:09:25:05:408] Valid meeting checks so far: 49,400,000, state_vs_state: 1,696,179, state_vs_prefix: 0, prefix_vs_prefix: 47,703,821
+[02:09:40:14:000] Valid meeting checks so far: 49,600,000, state_vs_state: 1,700,555, state_vs_prefix: 0, prefix_vs_prefix: 47,899,445
+[02:09:54:36:233] Valid meeting checks so far: 49,800,000, state_vs_state: 1,706,904, state_vs_prefix: 0, prefix_vs_prefix: 48,093,096
+[02:10:09:00:540] Valid meeting checks so far: 50,000,000, state_vs_state: 1,710,778, state_vs_prefix: 0, prefix_vs_prefix: 48,289,222
+[02:10:24:27:989] Valid meeting checks so far: 50,200,000, state_vs_state: 1,713,660, state_vs_prefix: 0, prefix_vs_prefix: 48,486,340
+[02:10:39:00:431] Valid meeting checks so far: 50,400,000, state_vs_state: 1,718,235, state_vs_prefix: 0, prefix_vs_prefix: 48,681,765
+[02:10:53:32:291] Valid meeting checks so far: 50,600,000, state_vs_state: 1,723,503, state_vs_prefix: 0, prefix_vs_prefix: 48,876,497
+[02:11:06:48:597] Valid meeting checks so far: 50,800,000, state_vs_state: 1,730,709, state_vs_prefix: 0, prefix_vs_prefix: 49,069,291
+[02:11:20:53:743] Valid meeting checks so far: 51,000,000, state_vs_state: 1,737,172, state_vs_prefix: 0, prefix_vs_prefix: 49,262,828
+[02:11:34:57:151] Valid meeting checks so far: 51,200,000, state_vs_state: 1,743,717, state_vs_prefix: 0, prefix_vs_prefix: 49,456,283
+[02:11:48:58:142] Valid meeting checks so far: 51,400,000, state_vs_state: 1,750,235, state_vs_prefix: 0, prefix_vs_prefix: 49,649,765
+[02:12:02:20:878] Valid meeting checks so far: 51,600,000, state_vs_state: 1,755,941, state_vs_prefix: 0, prefix_vs_prefix: 49,844,059
+[02:12:16:38:284] Valid meeting checks so far: 51,800,000, state_vs_state: 1,762,357, state_vs_prefix: 0, prefix_vs_prefix: 50,037,643
+[02:12:31:14:075] Valid meeting checks so far: 52,000,000, state_vs_state: 1,768,625, state_vs_prefix: 0, prefix_vs_prefix: 50,231,375
+[02:12:39:37:150] Path of length 104 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 50, 37, 36, 35, 34, 47, 60, 61, 48, 49, 62, 75, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 126, 125, 138, 137, 136, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 151, 164, 165, 166, 153, 152, 139, 140, 141, 142, 155, 168]
+[02:12:39:37:155] ! Bidirectional. expansions: 43,797,685, time: 218,377,150 [ms], path length: 104 [edges], g_F: 52, g_B: 52, generated: {'F': 67,234,041, 'B': 59,076,586}, MM: 0, MMPER: -1.0%
+
+[02:12:39:37:155] average expansions: (61,894, 1,404,199, 14,670,362, 0)
+[02:12:39:37:155] average time: (150,645, 2,961,062, 73,142,944, 0)
+[02:12:39:37:156] X-DFBnB: 61,894 , 150,645 (expansions , time[ms])
+[02:12:39:37:156] BiX-DFBnB: 14,670,362 , 73,142,944 (expansions , time[ms])
+

@@ -73,7 +73,7 @@ def parse_and_check_results(directory):
     return data, bug_reports
 
 def write_csv(data, output_file):
-    grids = ['6x6', '6x7', '6x8', '7x7', '7x8', '8x8'] if "snake" not in results_dir else ['7x7', '7x8', '7x9', '8x8', '8x9', '9x9']
+    grids = ['6x6', '6x7', '6x8', '7x7', '7x8', '8x8'] if "snake" not in results_dir.lower() else ['7x7', '7x8', '7x9', '8x8', '8x9', '9x9']
     percents = ['20%', '16%', '12%', '8%', '4%']
     algs = ['A*', 'XMM', 'X-DFBnB', 'BiX-DFBnB']
 
