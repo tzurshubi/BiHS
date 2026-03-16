@@ -33,13 +33,14 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
         priority, f_value, g_value, current_state = open_set.pop()
 
         stats["expansions"] += 1
-        # if stats["expansions"] % 10_000 == 0:
-        #     logger(f"Expansion {stats['expansions']}: state {current_state.path}, f={f_value}, g={g_value}")
+        if stats["expansions"] % 10_000 == 0:
+            logger(f"Expansion {stats['expansions']}: state {current_state.path}, f={f_value}, g={g_value}")
             
         if current_state.head == goal:
             if g_value > best_path_length:
                 best_path = current_state
                 best_path_length = g_value
+                logger(f"New best path found with length {best_path_length}: {best_path.path}")
             continue
 
         if f_value <= best_path_length:
