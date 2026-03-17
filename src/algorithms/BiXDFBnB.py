@@ -69,7 +69,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         nonlocal global_longest_path, global_meet_point
         
         # Log
-        # print(f"state_F: {state_F.materialize_path()}, state_B: {state_B.materialize_path()}")
+        # print(f"Expansion {stats['expansions']}: state_F: {state_F.materialize_path()}, state_B: {state_B.materialize_path()}")
         stats["valid_meeting_checks"] += 1
         if state_F.head == state_B.head: stats["state_vs_state_meeting_checks"] += 1
         else: stats["prefix_vs_prefix_meeting_checks"] += 1
@@ -82,7 +82,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if state_F.g + state_B.g > len(global_longest_path) - 1:
                 global_longest_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_F.head
-                args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
+                args.logger(f"Expansion {stats['expansions']}:New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
             return global_longest_path, state_F.head
         elif is_vertex_in_bitmap(state_F.head, state_B.illegal) or is_vertex_in_bitmap(state_B.head, state_F.illegal):
             # paths are intersecting at an illegal vertex, prune
@@ -93,7 +93,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if state_F.g + 1 + state_B.g > len(global_longest_path) - 1:
                 global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_B.head
-                args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
+                args.logger(f"Expansion {stats['expansions']}:New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
             if snake: return global_longest_path, global_meet_point
         
         
@@ -119,6 +119,8 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         stats["generated"]['B'] += len(state_B_successors)
         stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
         stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
+        # logger(f"Expansion {stats['expansions']}: state_F: {state_F.materialize_path()}, state_B: {state_B.materialize_path()} Generated {len(state_F_successors)} F successors and {len(state_B_successors)} B successors: {[(h,succ_F.materialize_path(), succ_B.materialize_path()) for h, succ_F, succ_B in successors_with_h]}")
+
 
         for h_val, succ_F, succ_B in successors_with_h:
             if args.bsd:

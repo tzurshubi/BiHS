@@ -104,7 +104,7 @@ def bidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 best_path = current_state.materialize_path()[:-1] + state.materialize_path()[::-1]
                 best_path_meet_point = current_state.head
                 if snake:
-                    logger(f"Expansion {stats['expansions']}: Found path of length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={stats['generated']}")
+                    logger(f"Expansion {stats['expansions']}: New longest path found with length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={stats['generated']}")
                     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(

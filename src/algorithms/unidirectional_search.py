@@ -40,7 +40,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
             if g_value > best_path_length:
                 best_path = current_state
                 best_path_length = g_value
-                logger(f"New best path found with length {best_path_length}: {best_path.path}")
+                logger(f"Expansion {stats['expansions']}: New longest path found with length {best_path_length}: {best_path.materialize_path()}")
             continue
 
         if f_value <= best_path_length:
@@ -69,6 +69,7 @@ def unidirectional_search(graph, start, goal, heuristic_name, snake, args):
                 if successor.g > best_path_length:
                     best_path = successor
                     best_path_length = successor.g
+                    logger(f"Expansion {stats['expansions']}: New longest path found with length {best_path_length}: {best_path.materialize_path()}")
                     if f_value <= best_path_length:
                         break
             else:

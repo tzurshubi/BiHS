@@ -45,7 +45,8 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
         nonlocal global_longest_path
         
         # Log
-        # print(f"Expanding state: {state.materialize_path()}")
+        # print(f"Expansion {stats['expansions']}: {state.materialize_path()}")
+
         stats["valid_meeting_checks"] += 1
         if stats["valid_meeting_checks"] % 200_000 == 0:
             logger(f"Valid states checked so far: {stats['valid_meeting_checks']}, Expansions: {stats['expansions']}, Global best: {len(global_longest_path)}")
@@ -54,32 +55,33 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
         if state.head == goal:
             if state.g > len(global_longest_path) - 1:  # Found a better path than current global best
                 global_longest_path = state.materialize_path()
-                args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
+                args.logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
             return global_longest_path, stats
         elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
             # Found a better path via direct edge to goal
             global_longest_path = state.materialize_path() + [goal]
-            args.logger(f"New longest path found with length {len(global_longest_path) - 1} at expansion {stats['expansions']}")
+            args.logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
         
         # Prepare for expansion
         h_graph_for_succ = h_graph.copy()
         h_graph_for_succ.remove_nodes_from([state.head])
         
         successors = state.generate_successors(args, snake, True)
-        
-        stats["expansions"] += 1
-        stats["generated"] += len(successors)
-        stats["num_of_states_per_g"][state.g + 1] += len(successors)
 
         if not successors:
             stats["violations"]["no_successors"][state.g] += 1
             return [], stats
+        
+        stats["expansions"] += 1
+        stats["generated"] += len(successors)
+        stats["num_of_states_per_g"][state.g + 1] += len(successors)
 
         if heuristic_name:
             successors_with_h = [(heuristic(succ, goal, heuristic_name, snake, args, h_graph_for_succ.copy() if snake else h_graph_for_succ), succ) for succ in successors]
             successors_with_h.sort(key=lambda item: item[0], reverse=True)
         else:
             successors_with_h = [(V, succ) for succ in successors]
+        # logger(f"Expansion {stats['expansions']}: {state.materialize_path()} Generated {len(successors)} successors: {[(h,succ.materialize_path()) for h, succ in successors_with_h]}")
                 
         for h_val, succ in successors_with_h:
             if args.bsd:

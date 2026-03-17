@@ -626,6 +626,8 @@ def bcc_snake_heuristic_paper(state, goal):
     # this line means: if goal in state.illegal:
     if (state.illegal >> goal) & 1: 
         return -1, info
+    if graph.has_edge(head, goal):
+        return 1, info
 
     # Step 1: Compute Rn - vertices reachable from state.head
     if isinstance(state.illegal, int):
