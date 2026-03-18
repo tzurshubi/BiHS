@@ -305,6 +305,19 @@ def make_logger(logfile, t0: float | None = None):
 
     return log
 
+def matrix_to_sparse_string(l : list) -> str:
+        """
+        Converts the 2D array into a string containing only non-zero entries 
+        in the format: (g, h) = count
+        """
+        non_zero_entries = []
+        
+        for g, h_array in enumerate(l):
+            for h, count in enumerate(h_array):
+                if count > 0:
+                    non_zero_entries.append(f"({g}, {h}) = {count}")
+                    
+        return "\n".join(non_zero_entries)
 
 # ---------------------------
 # Coil utilities
