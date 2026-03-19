@@ -12,7 +12,7 @@ from models.openvopen_prefixSet import Openvopen_prefixSet
 from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
-def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
+def BiXDFBnB_alternating(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
