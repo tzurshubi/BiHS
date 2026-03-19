@@ -11,7 +11,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
-    g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
+    # g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
 
     violation_reasons = {
         "heuristic": 0,
@@ -57,13 +57,13 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
             if state.g > len(global_longest_path) - 1:  # Found a better path than current global best
                 global_longest_path = state.materialize_path()
                 logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+                # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
             return global_longest_path, stats
         elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
             # Found a better path via direct edge to goal
             global_longest_path = state.materialize_path() + [goal]
             logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-            logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+            # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
         
         # Prepare for expansion
         h_graph_for_succ = h_graph.copy()
@@ -88,7 +88,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
                 
         for h_val, succ in successors_with_h:
             succ.h = h_val
-            g_h_buckets[succ.g][succ.h if succ.h >= 0 else 0] += 1
+            # g_h_buckets[succ.g][succ.h if succ.h >= 0 else 0] += 1
             if args.bsd:
                 state_key = (succ.head, succ.path_vertices_and_neighbors if snake else succ.path_vertices)
                 if state_key in FNV and FNV[state_key] >= succ.g:
@@ -111,5 +111,5 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     
     # Start the recursive search
     exp_n_check_states(initial_state, h_graph)
-    logger(f"Search completed. g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+    # logger(f"Search completed. g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
     return global_longest_path, stats

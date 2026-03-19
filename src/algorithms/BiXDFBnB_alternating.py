@@ -16,7 +16,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
-    g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
+    # g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
 
     violation_reasons = {
         "intersection": 0,
@@ -84,7 +84,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 global_longest_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_F.head
                 logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+                # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
             return global_longest_path, state_F.head
         elif is_vertex_in_bitmap(state_F.head, state_B.illegal) or is_vertex_in_bitmap(state_B.head, state_F.illegal):
             # paths are intersecting at an illegal vertex, prune
@@ -96,7 +96,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
                 global_meet_point = state_B.head
                 logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+                # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
             if snake: return global_longest_path, global_meet_point
 
 
@@ -176,5 +176,5 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
     exp_n_check_states(initial_state_F, initial_state_B, h_graph)
     
     # Return the global best found after the whole DFS tree is resolved
-    logger(f"Search completed. g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+    # logger(f"Search completed. g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
     return global_longest_path, stats, global_meet_point
