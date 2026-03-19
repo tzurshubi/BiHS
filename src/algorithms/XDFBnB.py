@@ -88,7 +88,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
                 
         for h_val, succ in successors_with_h:
             succ.h = h_val
-            g_h_buckets[succ.g][succ.h] += 1
+            g_h_buckets[succ.g][succ.h if succ.h >= 0 else 0] += 1
             if args.bsd:
                 state_key = (succ.head, succ.path_vertices_and_neighbors if snake else succ.path_vertices)
                 if state_key in FNV and FNV[state_key] >= succ.g:

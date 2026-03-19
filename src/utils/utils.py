@@ -317,7 +317,7 @@ def matrix_to_sparse_string(l : list) -> str:
                 if count > 0:
                     non_zero_entries.append(f"({g}, {h}) = {count}")
                     
-        return "\n".join(non_zero_entries)
+        return " , ".join(non_zero_entries)
 
 # ---------------------------
 # Coil utilities
