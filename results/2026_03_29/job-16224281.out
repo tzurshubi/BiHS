@@ -1,0 +1,17 @@
+Fri 20 Mar 2026 12:54:45 IST
+
+SLURM_JOBID:		 16224281
+SLURM_JOB_NODELIST:	 ise-cpu256-28 
+
+
+Traceback (most recent call last):
+  File "/home/shubit/bihs/sbatching.py", line 236, in <module>
+    main()
+  File "/home/shubit/bihs/sbatching.py", line 230, in main
+    if j>=i: submit_job(run_lines=f'python BiHS/src/main.py --size_of_graphs {i} {j} --per_blocked {per}', job_name=f"j{i}x{j}_{per}", output_file=f"j{i}x{j}_{per}per_BiXDFBnB_1lookahead.log", conda_env='bihs')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/shubit/bihs/sbatching.py", line 173, in submit_job
+    raise Exception(f"Unknown error from job submission: \n {stderr}")
+Exception: Unknown error from job submission: 
+ sbatch: error: Batch job submission failed: Socket timed out on send/recv operation
+
