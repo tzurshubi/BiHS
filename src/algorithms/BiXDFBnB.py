@@ -16,7 +16,6 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
-    # g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
 
     violation_reasons = {
         "intersection": 0,
@@ -25,6 +24,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         "heuristic": 0,
         "no_successors": 0,
     }
+    
     stats = {
         "expansions": 0,
         "generated": {'F': 0, 'B': 0},
@@ -35,10 +35,10 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         "state_vs_prefix_meeting_checks": 0,
         "prefix_vs_prefix_meeting_checks": 0,
         "num_of_states_per_g": {
-            'F': {g: 0 for g in range(0, math.ceil(N/2) + 1)},
-            'B': {g: 0 for g in range(0, math.ceil(N/2) + 1)}
+            'F': {g: 0 for g in range(0, N + 1)},
+            'B': {g: 0 for g in range(0, N + 1)}
         },
-        "violations": {reason: {g: 0 for g in range(0, math.ceil(N/2) + 1)} for reason in violation_reasons.keys()},
+        "violations": {reason: {g: 0 for g in range(0, N + 1)} for reason in violation_reasons.keys()},
         "prefix_set_mean_size": {'F': 0, 'B': 0},
         "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
         "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
@@ -50,7 +50,6 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         "must_checks": 0,
     }
 
-    # Initial states
     initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
 
@@ -58,94 +57,160 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         double_state_key = (initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices, initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)
         FNV = {double_state_key: initial_state_F.g + initial_state_B.g}
 
-    # Global bound
     global_longest_path = []
     global_meet_point = None
 
-    ############################################
-    # Main Search Loop
-    ############################################
+
+    def evaluate_pair(f, b):
+        """ Evaluates intermediate lookahead states to stop chord violations and capture meets immediately. """
+        nonlocal global_longest_path, global_meet_point
+        
+        stats["valid_meeting_checks"] += 1
+        if f.head == b.head: stats["state_vs_state_meeting_checks"] += 1
+        else: stats["prefix_vs_prefix_meeting_checks"] += 1
+        
+        if stats["expansions"] % 100_000 == 0:
+            logger(f"Expansions: {stats['expansions']}. Chekcs - state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
+
+        # 1. Check Intersection / Chord Violation
+        if is_vertex_in_bitmap(f.head, b.illegal) or is_vertex_in_bitmap(b.head, f.illegal):
+            stats["violations"]["intersection"][f.g] += 1
+            return False, False # Invalid, do not expand
+
+        # 2. Check Exact Meet
+        if f.head == b.head:
+            if f.g + b.g > len(global_longest_path) - 1:
+                global_longest_path = f.materialize_path() + b.materialize_path()[::-1][1:]
+                global_meet_point = f.head
+                if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+            return True, False # Valid, but met, do not expand
+
+        # 3. Check Adjacent Meet
+        if graph.has_edge(f.head, b.head):
+            if f.g + 1 + b.g > len(global_longest_path) - 1:
+                global_longest_path = f.materialize_path() + [b.head] + b.materialize_path()[::-1][1:]
+                global_meet_point = b.head
+                if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+            if snake:
+                return True, False # Valid snake meet, do not expand
+
+        return True, True # Valid, continue expanding
+
+
+    def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining):
+        """Recursively advances frontiers while strictly enforcing mutual validity."""
+        if remaining == 0:
+            h_val = V
+            if heuristic_name:
+                h_val = heuristic(cur_F, cur_B, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            return [(h_val, cur_F, cur_B, cur_h_graph)]
+        
+        if remaining >= 2:
+            succs_F = cur_F.generate_successors(args, snake, True)
+            succs_B = cur_B.generate_successors(args, snake, False)
+            
+            stats["generated"]['F'] += len(succs_F)
+            stats["generated"]['B'] += len(succs_B)
+            if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+            if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+
+            all_leaves = []
+            for f in succs_F:
+                for b in succs_B:
+                    # Enforce intermediate validity before recursing deeper
+                    is_valid, should_continue = evaluate_pair(f, b)
+                    if not is_valid or not should_continue:
+                        continue
+
+                    next_h_graph = cur_h_graph.copy()
+                    if f.head in next_h_graph: next_h_graph.remove_node(f.head)
+                    if b.head in next_h_graph: next_h_graph.remove_node(b.head)
+
+                    all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
+            return all_leaves
+
+        if remaining == 1:
+            # 1-step logic ensures checking F against cur_B, and B against cur_F
+            succs_F = cur_F.generate_successors(args, snake, True)
+            F_leaves = []
+            for f in succs_F:
+                is_valid, should_continue = evaluate_pair(f, cur_B)
+                if not is_valid or not should_continue: continue
+                
+                next_h_graph_F = cur_h_graph.copy()
+                if f.head in next_h_graph_F: next_h_graph_F.remove_node(f.head)
+                h_val = V
+                if heuristic_name:
+                    h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph_F.copy() if snake else next_h_graph_F)
+                F_leaves.append((h_val, f, cur_B, next_h_graph_F))
+            
+            F_leaves.sort(key=lambda item: item[0], reverse=True)
+            max_h_F = F_leaves[0][0] if F_leaves else -1
+            avg_h_F = sum(item[0] for item in F_leaves) / len(F_leaves) if F_leaves else -1
+
+            succs_B = cur_B.generate_successors(args, snake, False)
+            B_leaves = []
+            for b in succs_B:
+                is_valid, should_continue = evaluate_pair(cur_F, b)
+                if not is_valid or not should_continue: continue
+                
+                next_h_graph_B = cur_h_graph.copy()
+                if b.head in next_h_graph_B: next_h_graph_B.remove_node(b.head)
+                h_val = V
+                if heuristic_name:
+                    h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph_B.copy() if snake else next_h_graph_B)
+                B_leaves.append((h_val, cur_F, b, next_h_graph_B))
+            
+            B_leaves.sort(key=lambda item: item[0], reverse=True)
+            max_h_B = B_leaves[0][0] if B_leaves else -1
+            avg_h_B = sum(item[0] for item in B_leaves) / len(B_leaves) if B_leaves else -1
+
+            expand_F = True
+            if max_h_B > max_h_F or (max_h_B == max_h_F and avg_h_B > avg_h_F):
+                expand_F = False
+
+            if expand_F:
+                stats["generated"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                return F_leaves
+            else:
+                stats["generated"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                return B_leaves
+
 
     def exp_n_check_states(state_F, state_B, h_graph):
         nonlocal global_longest_path, global_meet_point
         
-        # Log
-        # print(f"Expansion {stats['expansions']}: state_F: {state_F.materialize_path()}, state_B: {state_B.materialize_path()}")
-        stats["valid_meeting_checks"] += 1
-        if state_F.head == state_B.head: stats["state_vs_state_meeting_checks"] += 1
-        else: stats["prefix_vs_prefix_meeting_checks"] += 1
-        if stats["valid_meeting_checks"] % 200_000 == 0:
-            logger(f"Valid meeting checks so far: {stats['valid_meeting_checks']}, state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
-        
-        # Check Meeting
-        if state_F.head == state_B.head:
-            # Exact Meet
-            if state_F.g + state_B.g > len(global_longest_path) - 1:
-                global_longest_path = state_F.materialize_path() + state_B.materialize_path()[::-1][1:]
-                global_meet_point = state_F.head
-                logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
-            return global_longest_path, state_F.head
-        elif is_vertex_in_bitmap(state_F.head, state_B.illegal) or is_vertex_in_bitmap(state_B.head, state_F.illegal):
-            # Overlap Rejection
-             stats["violations"]["intersection"][state_F.g] += 1
-             return [], None
-        elif graph.has_edge(state_F.head, state_B.head):
-            # Adjacent Meet
-            if state_F.g + 1 + state_B.g > len(global_longest_path) - 1:
-                global_longest_path = state_F.materialize_path() + [state_B.head] + state_B.materialize_path()[::-1][1:]
-                global_meet_point = state_B.head
-                logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
-            if snake: return global_longest_path, global_meet_point
-        
-        
-        # Expand - both frontiers together
-        state_F_successors = state_F.generate_successors(args, snake, True)
-        state_B_successors = state_B.generate_successors(args, snake, False)
-        h_graph_for_succ = h_graph.copy()
-        h_graph_for_succ.remove_nodes_from([state_F.head, state_B.head])
-        successors_with_h = []
-        if heuristic_name:
-            for succ_F in state_F_successors:
-                for succ_B in state_B_successors:
-                    h_val = heuristic(succ_F, succ_B, heuristic_name, snake, args, h_graph_for_succ.copy() if snake else h_graph_for_succ)
-                    successors_with_h.append((h_val, succ_F, succ_B))
-            successors_with_h.sort(key=lambda item: item[0], reverse=True)
-        else:
-            for succ_F in state_F_successors:
-                for succ_B in state_B_successors:
-                    successors_with_h.append((V, succ_F, succ_B))
-
+        # Expand macro-state
         stats["expansions"] += 1
-        stats["generated"]['F'] += len(state_F_successors)
-        stats["generated"]['B'] += len(state_B_successors)
-        stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-        stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
-        # logger(f"Expansion {stats['expansions']}: state_F: {state_F.materialize_path()}, state_B: {state_B.materialize_path()} Generated {len(state_F_successors)} F successors and {len(state_B_successors)} B successors: {[(h,succ_F.materialize_path(), succ_B.materialize_path()) for h, succ_F, succ_B in successors_with_h]}")
+        
+        # Retrieve thoroughly validated leaves
+        leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead)
+        leaves.sort(key=lambda item: item[0], reverse=True)
 
-
-        for h_val, succ_F, succ_B in successors_with_h:
-            # g_h_buckets[succ_F.g + succ_B.g][h_val if h_val >= 0 else 0] += 1
+        for h_val, leaf_F, leaf_B, leaf_h_graph in leaves:
             if args.bsd:
-                double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)
-                if double_state_key in FNV and FNV[double_state_key] >= succ_F.g + succ_B.g:
+                double_state_key = (leaf_F.head, leaf_F.path_vertices_and_neighbors if snake else leaf_F.path_vertices, leaf_B.head, leaf_B.path_vertices_and_neighbors if snake else leaf_B.path_vertices)
+                if double_state_key in FNV and FNV[double_state_key] >= leaf_F.g + leaf_B.g:
                     stats["symmetric_states_removed"] += 1
                     continue
             
             # DFBnB Pruning
-            if succ_F.g + h_val + succ_B.g <= len(global_longest_path) - 1: 
+            if leaf_F.g + h_val + leaf_B.g <= len(global_longest_path) - 1: 
                 stats["violations"]["heuristic"][state_F.g] += 1
-                break # Prune this and all subsequent sorted successors
+                break 
 
-            if args.bsd: FNV[double_state_key] = succ_F.g + succ_B.g
+            if args.bsd: FNV[double_state_key] = leaf_F.g + leaf_B.g
 
-            exp_n_check_states(succ_F, succ_B, h_graph_for_succ)
+            exp_n_check_states(leaf_F, leaf_B, leaf_h_graph)
 
                 
     h_graph = graph.copy()
-    exp_n_check_states(initial_state_F, initial_state_B, h_graph)
     
-    # Return the global best found after the whole DFS tree is resolved
-    # logger(f"Search completed. g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+    # Initialize the search by checking the starting positions
+    is_valid, should_continue = evaluate_pair(initial_state_F, initial_state_B)
+    if is_valid and should_continue:
+        exp_n_check_states(initial_state_F, initial_state_B, h_graph)
+    
     return global_longest_path, stats, global_meet_point
