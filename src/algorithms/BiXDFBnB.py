@@ -70,14 +70,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         else: stats["prefix_vs_prefix_meeting_checks"] += 1
         
         if stats["expansions"] % 100_000 == 0:
-            logger(f"Expansions: {stats['expansions']}. Chekcs - state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
+            logger(f"Expansions: {stats['expansions']}. Checks - state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
 
-        # 1. Check Intersection / Chord Violation
-        if is_vertex_in_bitmap(f.head, b.illegal) or is_vertex_in_bitmap(b.head, f.illegal):
-            stats["violations"]["intersection"][f.g] += 1
-            return False, False # Invalid, do not expand
-
-        # 2. Check Exact Meet
+        # 1. Check Exact Meet FIRST
         if f.head == b.head:
             if f.g + b.g > len(global_longest_path) - 1:
                 global_longest_path = f.materialize_path() + b.materialize_path()[::-1][1:]
@@ -85,17 +80,55 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
             return True, False # Valid, but met, do not expand
 
-        # 3. Check Adjacent Meet
-        if graph.has_edge(f.head, b.head):
+        # 2. Check Overlap / Chord Violations AND Snake Adjacent Meets
+        is_f_in_b = is_vertex_in_bitmap(f.head, b.illegal)
+        is_b_in_f = is_vertex_in_bitmap(b.head, f.illegal)
+        
+        if is_f_in_b or is_b_in_f:
+            if graph.has_edge(f.head, b.head):
+                if snake:
+                    # Snake logic: They are adjacent, so they WILL trigger the illegal bitmap.
+                    # We must manually verify that there are no chords to the opposite tails.
+                    f_path = f.materialize_path()
+                    b_path = b.materialize_path()
+                    valid_snake_meet = True
+                    for v in b_path:
+                        if v != b.head and graph.has_edge(f.head, v):
+                            valid_snake_meet = False
+                            break
+                    if valid_snake_meet:
+                        for v in f_path:
+                            if v != f.head and graph.has_edge(b.head, v):
+                                valid_snake_meet = False
+                                break
+                    
+                    if valid_snake_meet:
+                        if f.g + 1 + b.g > len(global_longest_path) - 1:
+                            global_longest_path = f_path + [b.head] + b_path[::-1][1:]
+                            global_meet_point = b.head
+                            if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+                        return True, False # Valid snake meet, stop expanding
+                    else:
+                        stats["violations"]["intersection"][f.g] += 1
+                        return False, False # Invalid adjacent meet (has chord to tail)
+                else:
+                    # LSP logic: If it's adjacent but STILL triggered the illegal bitmap, it hit the tail.
+                    stats["violations"]["intersection"][f.g] += 1
+                    return False, False
+            else:
+                # No edge between heads; it is a pure intersection/chord.
+                stats["violations"]["intersection"][f.g] += 1
+                return False, False
+
+        # 3. Check Adjacent Meet for LSP (snake=False)
+        elif graph.has_edge(f.head, b.head):
             if f.g + 1 + b.g > len(global_longest_path) - 1:
                 global_longest_path = f.materialize_path() + [b.head] + b.materialize_path()[::-1][1:]
                 global_meet_point = b.head
                 if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-            if snake:
-                return True, False # Valid snake meet, do not expand
+            return True, True # Valid LSP meet, continue expanding
 
         return True, True # Valid, continue expanding
-
 
     def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining):
         """Recursively advances frontiers while strictly enforcing mutual validity."""
@@ -122,9 +155,10 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     if not is_valid or not should_continue:
                         continue
 
+                    # FIX: Remove the OLD heads that are now consumed as tail/body
                     next_h_graph = cur_h_graph.copy()
-                    if f.head in next_h_graph: next_h_graph.remove_node(f.head)
-                    if b.head in next_h_graph: next_h_graph.remove_node(b.head)
+                    if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
+                    if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
 
                     all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
             return all_leaves
@@ -137,8 +171,10 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 is_valid, should_continue = evaluate_pair(f, cur_B)
                 if not is_valid or not should_continue: continue
                 
+                # FIX: Remove the OLD forward head
                 next_h_graph_F = cur_h_graph.copy()
-                if f.head in next_h_graph_F: next_h_graph_F.remove_node(f.head)
+                if cur_F.head in next_h_graph_F: next_h_graph_F.remove_node(cur_F.head)
+                
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph_F.copy() if snake else next_h_graph_F)
@@ -154,8 +190,10 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 is_valid, should_continue = evaluate_pair(cur_F, b)
                 if not is_valid or not should_continue: continue
                 
+                # FIX: Remove the OLD backward head
                 next_h_graph_B = cur_h_graph.copy()
-                if b.head in next_h_graph_B: next_h_graph_B.remove_node(b.head)
+                if cur_B.head in next_h_graph_B: next_h_graph_B.remove_node(cur_B.head)
+                
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph_B.copy() if snake else next_h_graph_B)
@@ -177,7 +215,6 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 stats["generated"]['B'] += len(succs_B)
                 if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
                 return B_leaves
-
 
     def exp_n_check_states(state_F, state_B, h_graph):
         nonlocal global_longest_path, global_meet_point

@@ -9,7 +9,7 @@ from plotly.express import line
 # CONFIGURATION
 # ==========================================
 # Set this to the path where your results files are located
-results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_21/lsp_grids_1steplookahead" 
+results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_03_30/LSP_Grids/2la" 
 
 def parse_and_check_results(directory):
     bug_reports = []

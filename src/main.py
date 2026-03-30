@@ -47,8 +47,8 @@ DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
-DEFAULT_RUN_BI = True                   # True # False
+DEFAULT_RUN_UNI = False                 # True # False
+DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
 DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK"
@@ -453,9 +453,10 @@ def search(
     if stats: logs.update(stats)
 
 
-    excluded = {"g_values", "BF_values"}
-    filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
-    args.logger(f"LOGS: {format_stats(filtered_logs)}")
+    # print logs
+    # excluded = {"g_values", "BF_values"}
+    # filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
+    # args.logger(f"LOGS: {format_stats(filtered_logs)}")
 
 
     # Save the graph as PNG with the path if found
