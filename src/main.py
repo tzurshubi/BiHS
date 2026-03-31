@@ -47,8 +47,8 @@ DEFAULT_SIZE_OF_GRAPHS = [6,6]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
-DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
 DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK"
@@ -577,6 +577,7 @@ if __name__ == "__main__":
     for algorithm in args.algorithms:
         args.algo = algorithm
         avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
+        if graph_type=="maze": number_of_graphs = 21
         for i in list(range(0, number_of_graphs)):
         # for i in range(number_of_graphs, number_of_graphs+1):
             # try:
@@ -589,7 +590,12 @@ if __name__ == "__main__":
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
             elif graph_type=="maze":
-                name_of_graph = f"{size_of_graphs[0]}x{size_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                if i==0:
+                    name_of_graph = f"13x13_maze_with_0_open_diamonds_0" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                elif i<=10:
+                    name_of_graph = f"13x13_maze_with_1_open_diamonds_{i-1}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                else:
+                    name_of_graph = f"13x13_maze_with_2_open_diamonds_{i-10}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
                 # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]

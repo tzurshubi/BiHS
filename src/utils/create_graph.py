@@ -338,7 +338,7 @@ def create_graphs(args):
         os.makedirs(folder_path)
 
     for percent_of_blocks in percentages_of_blocks:
-        for i in range(number_of_graphs):
+        for i in range(number_of_graphs if percent_of_blocks > 0 else 1):
             if graph_type == "grid":
                 name_of_graph = f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{percent_of_blocks}per_{i}"
                 num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1]) * percent_of_blocks / 100)
@@ -347,8 +347,13 @@ def create_graphs(args):
                 name_of_graph = f"{i}d_hypercube"
                 G = create_nd_cube_graph(i)
             elif graph_type == "maze":
-                name_of_graph = f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_maze_with_blocks_and_random_removals_{i}"
-                blocks = random_5x5_nodes_from_13x13_grid() if i > 0 else []
+                init_blocks = [5, 14, 15, 16, 18, 20, 21, 22, 23, 24, 29, 40, 42, 44, 46, 47, 48, 50] + list(range(66, 71)) + [72, 73] + list(range(75, 78)) + [91] + list(range(93, 99)) + [100, 101, 102, 104] + list(range(117, 122)) + list(range(123, 129)) + [138] + list(range(144, 150)) + [151, 153, 154]
+                name_of_graph = f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_maze_with_{percent_of_blocks}_open_diamonds_{i if percent_of_blocks > 0 else 0}"
+                open_diamonds = []
+                for _ in range(0, percent_of_blocks):
+                    open_diamond = random_5x5_nodes_from_13x13_grid() if percent_of_blocks > 0 else []
+                    open_diamonds.extend(open_diamond)
+                blocks = [v for v in init_blocks if v not in open_diamonds]
                 G = create_grid_graph_with_specified_blocks(dimension_of_graphs[0], dimension_of_graphs[1], blocks)
             else:
                 raise ValueError("Unsupported graph type")
@@ -378,11 +383,11 @@ def create_graphs(args):
 
 if __name__ == "__main__":
     args = type('', (), {})()  # Create a simple object to hold attributes
-    args.date = "SM_Grids"
+    args.date = "mazes"
     args.number_of_graphs = 10
-    args.graph_type = "grid" # "grid" # "cube" # "manual" # maze"
-    args.dimension_of_graphs = [5,5] # dimension for cube
-    args.percentages_of_blocks = [30,40,50]  # percentages of blocks to remove
+    args.graph_type = "maze" # "grid" # "cube" # "manual" # maze"
+    args.dimension_of_graphs = [13,13] # dimension for cube
+    args.percentages_of_blocks = [0,1,2]  # percentages of blocks to remove
 
     create_graphs(args)
 
