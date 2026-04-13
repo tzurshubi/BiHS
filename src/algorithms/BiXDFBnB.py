@@ -126,7 +126,11 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 global_longest_path = f.materialize_path() + [b.head] + b.materialize_path()[::-1][1:]
                 global_meet_point = b.head
                 if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-            return True, True # Valid LSP meet, continue expanding
+            if not snake:
+                return True, True # Valid LSP meet, continue expanding
+            else:
+                stats["violations"]["intersection"][f.g] += 1
+                return False, False # Any further expansions would be invalid due to the snake adjacency violation (chord)
 
         return True, True # Valid, continue expanding
 
@@ -147,6 +151,12 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
             if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
 
+            # --- OPTIMIZATION 1: Move graph copy OUTSIDE the cross-product loop ---
+            # The parents' heads are consumed identically for all successor combinations
+            next_h_graph = cur_h_graph.copy()
+            if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
+            if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
+
             all_leaves = []
             for f in succs_F:
                 for b in succs_B:
@@ -155,25 +165,29 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     if not is_valid or not should_continue:
                         continue
 
-                    # FIX: Remove the OLD heads that are now consumed as tail/body
-                    next_h_graph = cur_h_graph.copy()
-                    if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
-                    if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
-
-                    all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
+                    # --- OPTIMIZATION 2: Fast-path for lookahead=2 ---
+                    # Bypasses the overhead of a recursive function call for remaining=0
+                    if remaining == 2:
+                        h_val = V
+                        if heuristic_name:
+                            h_val = heuristic(f, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                        all_leaves.append((h_val, f, b, next_h_graph))
+                    else:
+                        all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
             return all_leaves
 
         if remaining == 1:
             # 1-step logic ensures checking F against cur_B, and B against cur_F
             succs_F = cur_F.generate_successors(args, snake, True)
+            
+            # --- OPTIMIZATION 3: Graph copy OUTSIDE the F loop ---
+            next_h_graph_F = cur_h_graph.copy()
+            if cur_F.head in next_h_graph_F: next_h_graph_F.remove_node(cur_F.head)
+            
             F_leaves = []
             for f in succs_F:
                 is_valid, should_continue = evaluate_pair(f, cur_B)
                 if not is_valid or not should_continue: continue
-                
-                # FIX: Remove the OLD forward head
-                next_h_graph_F = cur_h_graph.copy()
-                if cur_F.head in next_h_graph_F: next_h_graph_F.remove_node(cur_F.head)
                 
                 h_val = V
                 if heuristic_name:
@@ -185,14 +199,15 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             avg_h_F = sum(item[0] for item in F_leaves) / len(F_leaves) if F_leaves else -1
 
             succs_B = cur_B.generate_successors(args, snake, False)
+            
+            # --- OPTIMIZATION 4: Graph copy OUTSIDE the B loop ---
+            next_h_graph_B = cur_h_graph.copy()
+            if cur_B.head in next_h_graph_B: next_h_graph_B.remove_node(cur_B.head)
+            
             B_leaves = []
             for b in succs_B:
                 is_valid, should_continue = evaluate_pair(cur_F, b)
                 if not is_valid or not should_continue: continue
-                
-                # FIX: Remove the OLD backward head
-                next_h_graph_B = cur_h_graph.copy()
-                if cur_B.head in next_h_graph_B: next_h_graph_B.remove_node(cur_B.head)
                 
                 h_val = V
                 if heuristic_name:
@@ -215,6 +230,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 stats["generated"]['B'] += len(succs_B)
                 if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
                 return B_leaves
+            
 
     def exp_n_check_states(state_F, state_B, h_graph):
         nonlocal global_longest_path, global_meet_point
