@@ -134,8 +134,53 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
 
         return True, True # Valid, continue expanding
 
-    def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining):
+
+
+    def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining, expand_F_turn=True):
         """Recursively advances frontiers while strictly enforcing mutual validity."""
+        
+        # Alternating Mode (lookahead = -1) ---
+        if remaining == -1:
+            # Determine which side to expand based on the turn
+            if expand_F_turn:
+                succs_F = cur_F.generate_successors(args, snake, True)
+                stats["generated"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                
+                next_h_graph = cur_h_graph.copy()
+                if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
+                
+                leaves = []
+                for f in succs_F:
+                    is_valid, should_continue = evaluate_pair(f, cur_B) # B is frozen
+                    if not is_valid or not should_continue: continue
+                    
+                    h_val = V
+                    if heuristic_name:
+                        h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    leaves.append((h_val, f, cur_B, next_h_graph))
+                return leaves
+                
+            else:
+                succs_B = cur_B.generate_successors(args, snake, False)
+                stats["generated"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                
+                next_h_graph = cur_h_graph.copy()
+                if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
+                
+                leaves = []
+                for b in succs_B:
+                    is_valid, should_continue = evaluate_pair(cur_F, b) # F is frozen
+                    if not is_valid or not should_continue: continue
+                    
+                    h_val = V
+                    if heuristic_name:
+                        h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    leaves.append((h_val, cur_F, b, next_h_graph))
+                return leaves
+
+        # Standard Lookahead (remaining >= 0) ---
         if remaining == 0:
             h_val = V
             if heuristic_name:
@@ -232,14 +277,13 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 return B_leaves
             
 
-    def exp_n_check_states(state_F, state_B, h_graph):
+    def exp_n_check_states(state_F, state_B, h_graph, expand_F_turn=True):
         nonlocal global_longest_path, global_meet_point
         
-        # Expand macro-state
         stats["expansions"] += 1
         
-        # Retrieve thoroughly validated leaves
-        leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead)
+        # Pass the turn variable into the successor generator
+        leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)
         leaves.sort(key=lambda item: item[0], reverse=True)
 
         for h_val, leaf_F, leaf_B, leaf_h_graph in leaves:
@@ -249,16 +293,17 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     stats["symmetric_states_removed"] += 1
                     continue
             
-            # DFBnB Pruning
             if leaf_F.g + h_val + leaf_B.g <= len(global_longest_path) - 1: 
                 stats["violations"]["heuristic"][state_F.g] += 1
                 break 
 
             if args.bsd: FNV[double_state_key] = leaf_F.g + leaf_B.g
 
-            exp_n_check_states(leaf_F, leaf_B, leaf_h_graph)
+            # For alternating mode, invert the turn on the recursive dive.
+            # If lookahead >= 0, this flip still happens but is functionally ignored by the standard logic.
+            next_turn = not expand_F_turn if args.lookahead == -1 else True
+            exp_n_check_states(leaf_F, leaf_B, leaf_h_graph, next_turn)
 
-                
     h_graph = graph.copy()
     
     # Initialize the search by checking the starting positions
