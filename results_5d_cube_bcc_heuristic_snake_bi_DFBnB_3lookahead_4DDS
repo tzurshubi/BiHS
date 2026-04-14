@@ -1,0 +1,31 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [5, 5]
+heuristic: bcc_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 3
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/5d_cube ----------
+[00:00:00:00:001] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:005] Expansion 1: New longest path found with length 4: [15, 13, 12, 8, 0]
+[00:00:00:00:035] Expansion 3: New longest path found with length 10: [15, 13, 29, 21, 20, 22, 18, 26, 10, 8, 0]
+[00:00:00:00:046] Path of length 10 found: [15, 13, 29, 21, 20, 22, 18, 26, 10, 8, 0]
+[00:00:00:00:229] ! Bidirectional. expansions: 8, time: 46 [ms], path length: 10 [edges], g_F: 6, g_B: 4, generated: {'F': 53, 'B': 35}, MM: 2, MMPER: 17.181818181818183%
+[00:00:00:00:229] average expansions: (0, 0, 8, 0)
+[00:00:00:00:229] average time: (0, 0, 46, 0)
+[00:00:00:00:229] X-DFBnB: 0 , 0 (expansions , time[ms])
+[00:00:00:00:229] BiX-DFBnB: 8 , 46 (expansions , time[ms])
+

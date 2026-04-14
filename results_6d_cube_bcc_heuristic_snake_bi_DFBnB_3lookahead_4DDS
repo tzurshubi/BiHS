@@ -1,0 +1,35 @@
+--------------------------
+date: cubes
+number_of_graphs: 1
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 3
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:00:002] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:030] Expansion 1: New longest path found with length 4: [15, 13, 12, 8, 0]
+[00:00:00:00:192] Expansion 3: New longest path found with length 10: [15, 13, 29, 25, 57, 56, 58, 26, 10, 8, 0]
+[00:00:00:00:251] Expansion 5: New longest path found with length 16: [15, 13, 29, 25, 57, 59, 63, 55, 53, 52, 20, 22, 30, 26, 10, 8, 0]
+[00:00:00:00:263] Expansion 12: New longest path found with length 18: [15, 13, 29, 25, 57, 59, 51, 50, 34, 38, 36, 52, 20, 22, 30, 26, 10, 8, 0]
+[00:00:00:00:271] Expansion 13: New longest path found with length 20: [15, 13, 29, 25, 57, 59, 51, 50, 34, 38, 46, 44, 60, 52, 20, 22, 30, 26, 10, 8, 0]
+[00:00:00:02:145] Expansion 175: New longest path found with length 22: [15, 13, 29, 28, 30, 22, 18, 50, 48, 56, 57, 59, 63, 55, 53, 37, 36, 44, 46, 42, 10, 8, 0]
+[00:00:00:38:303] Path of length 22 found: [15, 13, 29, 28, 30, 22, 18, 50, 48, 56, 57, 59, 63, 55, 53, 37, 36, 44, 46, 42, 10, 8, 0]
+[00:00:00:38:566] ! Bidirectional. expansions: 1,632, time: 38,303 [ms], path length: 22 [edges], g_F: 12, g_B: 10, generated: {'F': 16,726, 'B': 14,614}, MM: 2, MMPER: 7.695652173913043%
+[00:00:00:38:566] average expansions: (0, 0, 1,632, 0)
+[00:00:00:38:566] average time: (0, 0, 38,303, 0)
+[00:00:00:38:566] X-DFBnB: 0 , 0 (expansions , time[ms])
+[00:00:00:38:566] BiX-DFBnB: 1,632 , 38,303 (expansions , time[ms])
+

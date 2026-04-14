@@ -10,7 +10,7 @@ run_bi: True
 run_multi: False
 solution_vertices: []
 algorithms: ['DFBnB']
-lookahead: 4
+lookahead: -1
 bsd: False
 cube_first_dims: 4
 cube_buffer_dim: None
@@ -19,44 +19,12 @@ sym_coil: False
 prefix_set: None
 
 ---------- cubes/4d_cube ----------
-[00:00:00:00:000] Expansion 1: New longest path found with length 4: [15, 13, 12, 8, 0]
-[00:00:00:00:001] Path of length 4 found: [15, 13, 12, 8, 0]
-[00:00:00:00:002] LOGS: time[ms]: 1
-expansions: 1
-generated:
-    F: 8
-    B: 8
-symmetric_states_removed: 0
-dominated_states_removed: 0
-valid_meeting_checks: 14
-state_vs_state_meeting_checks: 5
-state_vs_prefix_meeting_checks: 0
-prefix_vs_prefix_meeting_checks: 9
-num_of_states_per_g:
-    F: {0: 0, 1: 2, 2: 6, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-    B: {0: 0, 1: 2, 2: 6, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-violations:
-    intersection: {0: 0, 1: 0, 2: 4, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-    meet_adjacent: {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-    illegal_vertex: {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-    heuristic: {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-    no_successors: {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0}
-prefix_set_mean_size:
-    F: 0
-    B: 0
-paths_with_g_upper_cutoff:
-    F: 0
-    B: 0
-paths_with_g_lower_cutoff:
-    F: 0
-    B: 0
-valid_meeting_check_time: 0
-calc_h_time: 0
-moved_OPEN_to_AUXOPEN: 0
-must_checks: 0
-[00:00:00:00:178] ! Bidirectional. expansions: 1, time: 1 [ms], path length: 4 [edges], g_F: 2, g_B: 2, generated: {'F': 8, 'B': 8}, MM: 0, MMPER: -1.0%
-[00:00:00:00:178] average expansions: (0, 0, 1, 0)
-[00:00:00:00:178] average time: (0, 0, 1, 0)
+[00:00:00:00:000] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:002] Expansion 3: New longest path found with length 4: [15, 13, 12, 8, 0]
+[00:00:00:00:002] Path of length 4 found: [15, 13, 12, 8, 0]
+[00:00:00:00:178] ! Bidirectional. expansions: 3, time: 2 [ms], path length: 4 [edges], g_F: 3, g_B: 1, generated: {'F': 3, 'B': 2}, MM: 2, MMPER: 39.0%
+[00:00:00:00:178] average expansions: (0, 0, 3, 0)
+[00:00:00:00:178] average time: (0, 0, 2, 0)
 [00:00:00:00:178] X-DFBnB: 0 , 0 (expansions , time[ms])
-[00:00:00:00:178] BiX-DFBnB: 1 , 1 (expansions , time[ms])
+[00:00:00:00:178] BiX-DFBnB: 3 , 2 (expansions , time[ms])
 

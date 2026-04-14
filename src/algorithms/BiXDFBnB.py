@@ -139,7 +139,52 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
     def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining, expand_F_turn=True):
         """Recursively advances frontiers while strictly enforcing mutual validity."""
         
-        # Alternating Mode (lookahead = -1) ---
+        # --- Smallest Branching Factor Mode (lookahead = -2) ---
+        if remaining == -2:
+            # We must generate both to count them, but we only "keep" the smaller set
+            succs_F = cur_F.generate_successors(args, snake, True)
+            succs_B = cur_B.generate_successors(args, snake, False)
+            
+            # Tie-breaker defaults to expanding F
+            expand_F = len(succs_F) <= len(succs_B)
+
+            if expand_F:
+                stats["generated"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                
+                next_h_graph = cur_h_graph.copy()
+                if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
+                
+                leaves = []
+                for f in succs_F:
+                    is_valid, should_continue = evaluate_pair(f, cur_B) # B is frozen
+                    if not is_valid or not should_continue: continue
+                    
+                    h_val = V
+                    if heuristic_name:
+                        h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    leaves.append((h_val, f, cur_B, next_h_graph))
+                return leaves
+                
+            else:
+                stats["generated"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                
+                next_h_graph = cur_h_graph.copy()
+                if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
+                
+                leaves = []
+                for b in succs_B:
+                    is_valid, should_continue = evaluate_pair(cur_F, b) # F is frozen
+                    if not is_valid or not should_continue: continue
+                    
+                    h_val = V
+                    if heuristic_name:
+                        h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    leaves.append((h_val, cur_F, b, next_h_graph))
+                return leaves
+
+        # --- Alternating Mode (lookahead = -1) ---
         if remaining == -1:
             # Determine which side to expand based on the turn
             if expand_F_turn:
@@ -180,7 +225,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     leaves.append((h_val, cur_F, b, next_h_graph))
                 return leaves
 
-        # Standard Lookahead (remaining >= 0) ---
+        # --- Standard Lookahead (remaining >= 0) ---
         if remaining == 0:
             h_val = V
             if heuristic_name:
