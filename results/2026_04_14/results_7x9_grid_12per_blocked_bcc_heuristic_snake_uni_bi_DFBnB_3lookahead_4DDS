@@ -1,0 +1,114 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 10
+graph_type: grid
+size_of_graphs: [7, 9]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 3
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_0 ----------
+[00:00:00:14:096] Path of length 32 found: [0, 9, 18, 19, 20, 11, 2, 3, 4, 13, 14, 15, 16, 25, 26, 35, 44, 43, 42, 33, 32, 31, 30, 39, 38, 47, 56, 57, 58, 59, 60, 61, 62]
+[00:00:00:14:096] ! Unidirectional s-t. expansions: 3,772, time: 14,096 [ms], path length: 32 [edges], generated: 6,973
+[00:00:00:15:856] Path of length 32 found: [62, 61, 60, 59, 58, 57, 56, 47, 38, 39, 30, 31, 32, 41, 42, 43, 44, 35, 26, 25, 16, 7, 6, 5, 14, 13, 12, 11, 20, 19, 18, 9, 0]
+[00:00:00:15:857] ! Unidirectional t-s. expansions: 5,358, time: 15,856 [ms], path length: 32 [edges], generated: 8,653
+[00:00:00:00:004] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:20:762] Path of length 32 found: [0, 9, 18, 19, 20, 11, 2, 3, 4, 5, 6, 7, 16, 25, 24, 23, 22, 31, 30, 39, 38, 47, 56, 57, 58, 59, 60, 51, 42, 43, 44, 53, 62]
+[00:00:00:21:247] ! Bidirectional. expansions: 1,187, time: 20,763 [ms], path length: 32 [edges], g_F: 18, g_B: 14, generated: {'F': 6,131, 'B': 3,860}, MM: 4, MMPER: 11.121212121212121%
+[00:00:00:21:247] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_1 ----------
+[00:00:00:04:675] Path of length 32 found: [0, 9, 18, 19, 20, 11, 12, 13, 14, 5, 6, 7, 16, 17, 26, 35, 34, 43, 42, 41, 32, 31, 30, 39, 38, 47, 56, 57, 58, 59, 60, 61, 62]
+[00:00:00:04:676] ! Unidirectional s-t. expansions: 1,086, time: 4,675 [ms], path length: 32 [edges], generated: 1,882
+[00:00:00:13:929] Path of length 32 found: [62, 61, 60, 59, 58, 57, 56, 47, 38, 39, 30, 31, 32, 41, 42, 43, 34, 35, 26, 17, 16, 7, 6, 5, 14, 13, 12, 11, 20, 19, 18, 9, 0]
+[00:00:00:13:929] ! Unidirectional t-s. expansions: 4,218, time: 13,929 [ms], path length: 32 [edges], generated: 7,163
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:15:647] Path of length 32 found: [0, 9, 18, 19, 20, 11, 12, 13, 14, 5, 6, 7, 16, 25, 26, 35, 44, 43, 42, 41, 32, 31, 30, 39, 38, 47, 56, 57, 58, 59, 60, 61, 62]
+[00:00:00:16:095] ! Bidirectional. expansions: 548, time: 15,648 [ms], path length: 32 [edges], g_F: 14, g_B: 18, generated: {'F': 3,541, 'B': 2,480}, MM: 4, MMPER: 11.121212121212121%
+[00:00:00:16:095] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_2 ----------
+[00:00:00:09:062] Path of length 32 found: [0, 9, 18, 19, 28, 37, 36, 45, 54, 55, 56, 47, 48, 49, 50, 41, 32, 31, 30, 21, 12, 3, 4, 5, 14, 15, 24, 25, 34, 43, 52, 61, 62]
+[00:00:00:09:062] ! Unidirectional s-t. expansions: 2,204, time: 9,062 [ms], path length: 32 [edges], generated: 4,013
+[00:00:00:18:993] Path of length 32 found: [62, 53, 44, 43, 34, 25, 16, 7, 6, 5, 14, 23, 32, 41, 50, 49, 48, 47, 56, 55, 54, 45, 36, 27, 18, 19, 20, 21, 12, 3, 2, 1, 0]
+[00:00:00:18:993] ! Unidirectional t-s. expansions: 5,384, time: 18,993 [ms], path length: 32 [edges], generated: 9,598
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:33:649] Path of length 32 found: [0, 9, 18, 27, 36, 45, 54, 55, 56, 47, 38, 39, 30, 21, 20, 11, 2, 3, 4, 5, 6, 7, 16, 25, 24, 23, 32, 41, 42, 43, 44, 53, 62]
+[00:00:00:34:085] ! Bidirectional. expansions: 1,912, time: 33,650 [ms], path length: 32 [edges], g_F: 18, g_B: 14, generated: {'F': 8,878, 'B': 7,069}, MM: 4, MMPER: 11.121212121212121%
+[00:00:00:34:086] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_3 ----------
+[00:00:00:05:687] Path of length 36 found: [0, 9, 10, 11, 2, 3, 4, 5, 6, 7, 8, 17, 26, 25, 34, 43, 42, 41, 32, 23, 22, 21, 30, 29, 28, 27, 36, 45, 46, 47, 48, 49, 58, 59, 60, 61, 62]
+[00:00:00:05:687] ! Unidirectional s-t. expansions: 1,411, time: 5,687 [ms], path length: 36 [edges], generated: 2,375
+[00:00:00:05:825] Path of length 36 found: [62, 61, 60, 59, 50, 49, 40, 39, 38, 47, 46, 45, 36, 27, 28, 19, 20, 21, 22, 23, 32, 33, 42, 43, 44, 35, 26, 17, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+[00:00:00:05:825] ! Unidirectional t-s. expansions: 1,517, time: 5,825 [ms], path length: 36 [edges], generated: 2,717
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:08:029] Path of length 36 found: [0, 9, 10, 11, 2, 3, 4, 5, 6, 7, 8, 17, 26, 35, 44, 43, 42, 33, 32, 23, 22, 21, 30, 29, 28, 27, 36, 45, 46, 47, 48, 49, 50, 59, 60, 61, 62]
+[00:00:00:08:471] ! Bidirectional. expansions: 245, time: 8,029 [ms], path length: 36 [edges], g_F: 18, g_B: 18, generated: {'F': 1,397, 'B': 1,121}, MM: 0, MMPER: -1.0%
+[00:00:00:08:471] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_4 ----------
+[00:00:00:04:432] Path of length 36 found: [0, 1, 10, 11, 12, 13, 4, 5, 6, 7, 8, 17, 26, 25, 24, 23, 32, 41, 40, 39, 30, 29, 28, 27, 36, 45, 46, 47, 56, 57, 58, 59, 60, 51, 52, 53, 62]
+[00:00:00:04:433] ! Unidirectional s-t. expansions: 1,170, time: 4,432 [ms], path length: 36 [edges], generated: 1,974
+[00:00:00:04:396] Path of length 36 found: [62, 53, 52, 51, 60, 59, 58, 57, 56, 47, 46, 45, 36, 27, 28, 29, 30, 39, 40, 41, 32, 33, 34, 25, 26, 17, 8, 7, 6, 5, 4, 13, 12, 11, 2, 1, 0]
+[00:00:00:04:396] ! Unidirectional t-s. expansions: 1,067, time: 4,396 [ms], path length: 36 [edges], generated: 1,870
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:05:869] Path of length 36 found: [0, 1, 10, 11, 12, 13, 4, 5, 6, 7, 8, 17, 26, 25, 24, 23, 32, 41, 40, 39, 30, 29, 28, 27, 36, 45, 46, 47, 56, 57, 58, 59, 60, 51, 52, 53, 62]
+[00:00:00:06:309] ! Bidirectional. expansions: 265, time: 5,869 [ms], path length: 36 [edges], g_F: 22, g_B: 14, generated: {'F': 1,289, 'B': 898}, MM: 8, MMPER: 20.62162162162162%
+[00:00:00:06:309] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_5 ----------
+[00:00:00:01:977] Path of length 30 found: [0, 1, 10, 19, 28, 29, 38, 39, 48, 49, 50, 41, 32, 31, 22, 21, 12, 3, 4, 5, 14, 15, 24, 25, 26, 35, 44, 43, 52, 61, 62]
+[00:00:00:01:978] ! Unidirectional s-t. expansions: 398, time: 1,978 [ms], path length: 30 [edges], generated: 776
+[00:00:00:08:558] Path of length 30 found: [62, 53, 44, 35, 26, 17, 16, 15, 6, 5, 4, 3, 12, 21, 22, 31, 32, 33, 42, 51, 50, 49, 48, 39, 38, 29, 28, 19, 10, 1, 0]
+[00:00:00:08:558] ! Unidirectional t-s. expansions: 2,131, time: 8,558 [ms], path length: 30 [edges], generated: 3,777
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:07:799] Path of length 30 found: [0, 1, 10, 19, 28, 29, 38, 39, 48, 49, 50, 41, 32, 23, 22, 21, 12, 3, 4, 5, 6, 15, 16, 17, 26, 35, 44, 43, 52, 61, 62]
+[00:00:00:08:236] ! Bidirectional. expansions: 242, time: 7,799 [ms], path length: 30 [edges], g_F: 16, g_B: 14, generated: {'F': 1,666, 'B': 1,088}, MM: 2, MMPER: 5.451612903225806%
+[00:00:00:08:236] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_6 ----------
+[00:00:00:06:247] Path of length 36 found: [0, 9, 18, 19, 20, 11, 12, 3, 4, 5, 6, 7, 16, 25, 24, 23, 22, 31, 40, 39, 38, 37, 36, 45, 54, 55, 56, 57, 58, 59, 50, 51, 42, 43, 44, 53, 62]
+[00:00:00:06:248] ! Unidirectional s-t. expansions: 1,533, time: 6,248 [ms], path length: 36 [edges], generated: 2,626
+[00:00:00:07:776] Path of length 36 found: [62, 53, 44, 35, 26, 17, 16, 15, 24, 33, 42, 51, 60, 59, 58, 57, 56, 55, 54, 45, 36, 37, 38, 39, 40, 31, 22, 13, 4, 3, 2, 11, 20, 19, 18, 9, 0]
+[00:00:00:07:776] ! Unidirectional t-s. expansions: 2,763, time: 7,776 [ms], path length: 36 [edges], generated: 4,099
+[00:00:00:00:004] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:11:927] Path of length 36 found: [0, 9, 18, 19, 20, 11, 2, 3, 4, 13, 22, 31, 40, 39, 38, 37, 36, 45, 54, 55, 56, 57, 58, 59, 50, 51, 42, 33, 24, 15, 16, 17, 26, 35, 44, 53, 62]
+[00:00:00:12:361] ! Bidirectional. expansions: 555, time: 11,927 [ms], path length: 36 [edges], g_F: 21, g_B: 15, generated: {'F': 2,690, 'B': 2,005}, MM: 6, MMPER: 15.216216216216218%
+[00:00:00:12:361] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_7 ----------
+[00:00:00:07:666] Path of length 34 found: [0, 9, 18, 19, 28, 37, 36, 45, 54, 55, 56, 57, 58, 59, 60, 51, 42, 41, 32, 31, 22, 21, 12, 3, 4, 5, 14, 15, 24, 25, 34, 35, 44, 53, 62]
+[00:00:00:07:667] ! Unidirectional s-t. expansions: 2,246, time: 7,666 [ms], path length: 34 [edges], generated: 3,776
+[00:00:00:07:429] Path of length 34 found: [62, 53, 44, 35, 34, 25, 24, 15, 14, 5, 4, 3, 12, 21, 30, 31, 32, 41, 42, 51, 60, 59, 58, 57, 56, 55, 54, 45, 36, 37, 28, 19, 10, 1, 0]
+[00:00:00:07:429] ! Unidirectional t-s. expansions: 2,105, time: 7,429 [ms], path length: 34 [edges], generated: 3,461
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:09:290] Path of length 34 found: [0, 9, 10, 19, 28, 27, 36, 45, 54, 55, 56, 57, 58, 59, 60, 51, 42, 41, 32, 31, 22, 21, 12, 3, 4, 5, 14, 15, 24, 25, 34, 35, 44, 53, 62]
+[00:00:00:09:707] ! Bidirectional. expansions: 423, time: 9,291 [ms], path length: 34 [edges], g_F: 21, g_B: 13, generated: {'F': 1,993, 'B': 1,519}, MM: 8, MMPER: 21.857142857142858%
+[00:00:00:09:707] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_8 ----------
+[00:00:00:09:647] Path of length 32 found: [0, 9, 18, 27, 36, 37, 38, 29, 20, 11, 2, 3, 4, 13, 22, 31, 40, 49, 50, 51, 42, 33, 24, 15, 6, 7, 8, 17, 26, 35, 44, 53, 62]
+[00:00:00:09:648] ! Unidirectional s-t. expansions: 2,658, time: 9,648 [ms], path length: 32 [edges], generated: 5,044
+[00:00:00:08:868] Path of length 32 found: [62, 61, 52, 51, 50, 49, 40, 31, 32, 33, 34, 35, 26, 17, 8, 7, 6, 15, 14, 13, 4, 3, 2, 11, 20, 29, 38, 37, 36, 27, 18, 9, 0]
+[00:00:00:08:868] ! Unidirectional t-s. expansions: 2,256, time: 8,868 [ms], path length: 32 [edges], generated: 3,938
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:16:290] Path of length 32 found: [0, 9, 18, 27, 36, 37, 38, 39, 30, 21, 20, 11, 2, 3, 4, 13, 14, 15, 6, 7, 8, 17, 26, 25, 34, 33, 32, 41, 50, 51, 60, 61, 62]
+[00:00:00:16:697] ! Bidirectional. expansions: 647, time: 16,290 [ms], path length: 32 [edges], g_F: 19, g_B: 13, generated: {'F': 3,632, 'B': 2,676}, MM: 6, MMPER: 17.181818181818183%
+[00:00:00:16:698] 
+---------- SM_Grids/7x9_grid_with_random_blocks_12per_9 ----------
+[00:00:00:05:957] Path of length 36 found: [0, 1, 10, 19, 18, 27, 36, 45, 54, 55, 56, 47, 48, 49, 58, 59, 60, 51, 42, 41, 32, 23, 22, 21, 12, 3, 4, 5, 6, 15, 16, 25, 34, 35, 44, 53, 62]
+[00:00:00:05:957] ! Unidirectional s-t. expansions: 1,698, time: 5,957 [ms], path length: 36 [edges], generated: 2,999
+[00:00:00:09:658] Path of length 36 found: [62, 53, 44, 35, 26, 17, 16, 7, 6, 5, 4, 3, 12, 21, 30, 31, 32, 33, 42, 51, 60, 59, 58, 49, 48, 47, 56, 55, 54, 45, 36, 37, 28, 19, 10, 1, 0]
+[00:00:00:09:659] ! Unidirectional t-s. expansions: 3,109, time: 9,658 [ms], path length: 36 [edges], generated: 5,068
+[00:00:00:00:003] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:14:462] Path of length 36 found: [0, 1, 10, 19, 18, 27, 36, 45, 54, 55, 56, 47, 48, 49, 58, 59, 60, 51, 42, 41, 32, 23, 22, 21, 12, 3, 4, 5, 6, 7, 16, 17, 26, 35, 44, 53, 62]
+[00:00:00:14:874] ! Bidirectional. expansions: 1,492, time: 14,463 [ms], path length: 36 [edges], g_F: 17, g_B: 19, generated: {'F': 5,122, 'B': 3,920}, MM: 2, MMPER: 4.405405405405405%
+[00:00:00:14:874] average expansions: (1,818, 2,991, 752, 0)
+[00:00:00:14:874] average time: (6,945, 10,129, 14,373, 0)
+[00:00:00:14:874] X-DFBnB: 1,818 , 6,945 (expansions , time[ms])
+[00:00:00:14:874] BiX-DFBnB: 752 , 14,373 (expansions , time[ms])
+

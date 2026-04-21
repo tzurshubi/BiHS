@@ -1,15 +1,5 @@
-from os import stat
-import queue
-import math
-import matplotlib.pyplot as plt
-from collections import deque
-import heapq, time
 from heuristics.heuristic import heuristic
 from models.state import State
-from models.openvopen import Openvopen
-from models.heapq_state import HeapqState
-from models.openvopen_prefixSet import Openvopen_prefixSet
-from models.openvopen_illegalVerts import Openvopen_illegalVerts
 from utils.utils import *
 
 def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
@@ -133,7 +123,6 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 return False, False # Any further expansions would be invalid due to the snake adjacency violation (chord)
 
         return True, True # Valid, continue expanding
-
 
 
     def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining, expand_F_turn=True):
