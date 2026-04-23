@@ -52,8 +52,8 @@ DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["IDA"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
-DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
+DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
+DEFAULT_LOOKAHEAD = 1                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
@@ -404,7 +404,7 @@ def search(
         if not args.sym_coil:
             if args.algo=="DFBnB":
                 path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
-            if args.algo=="IDA":
+            elif args.algo=="IDA":
                 path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
             else:
                 path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)

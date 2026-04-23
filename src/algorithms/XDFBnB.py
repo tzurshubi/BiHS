@@ -11,7 +11,6 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
-    # g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
 
     violation_reasons = {
         "heuristic": 0,
@@ -38,6 +37,71 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     # Track the global best path across the entire DFS tree for true B&B pruning
     global_longest_path = []
 
+    def evaluate_state(state):
+        """ Evaluates intermediate lookahead states against the goal. """
+        nonlocal global_longest_path
+        
+        stats["valid_meeting_checks"] += 1
+        if stats["valid_meeting_checks"] % 200_000 == 0:
+            logger(f"Valid states checked so far: {stats['valid_meeting_checks']}, Expansions: {stats['expansions']}, Global best: {len(global_longest_path)}")
+
+        # Base Case: Reached the exact goal
+        if state.head == goal:
+            if state.g > len(global_longest_path) - 1:  # Found a better path than current global best
+                global_longest_path = state.materialize_path()
+                if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+            return True, False # Reached the goal, stop exploring this specific branch
+
+        # Reached adjacent to goal
+        elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
+            global_longest_path = state.materialize_path() + [goal]
+            if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+            return True, True # Found better path via adjacent edge, but continue expanding as per original logic
+        
+        return True, True # Valid intermediate state, continue expanding
+
+
+    def get_lookahead_successors(cur_state, cur_h_graph, remaining):
+        """Recursively advances the frontier down to depth k."""
+        if remaining == 0:
+            h_val = V
+            if heuristic_name:
+                h_val = heuristic(cur_state, goal, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            return [(h_val, cur_state, cur_h_graph)]
+            
+        succs = cur_state.generate_successors(args, snake, True)
+        
+        stats["generated"] += len(succs)
+        if len(succs) > 0: stats["num_of_states_per_g"][cur_state.g + 1] += len(succs)
+
+        # Graph copy hoisted outside the loop for performance
+        next_h_graph = cur_h_graph.copy()
+        if cur_state.head in next_h_graph: next_h_graph.remove_node(cur_state.head)
+
+        all_leaves = []
+        for succ in succs:
+            is_valid, should_continue = evaluate_state(succ)
+            
+            if not is_valid: 
+                continue 
+                
+            if not should_continue:
+                # The state hit the exact goal. Treat it as a completed leaf.
+                all_leaves.append((0, succ, next_h_graph))
+                continue
+
+            if remaining == 1:
+                # Fast-path for the final lookahead layer
+                h_val = V
+                if heuristic_name:
+                    h_val = heuristic(succ, goal, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                all_leaves.append((h_val, succ, next_h_graph))
+            else:
+                all_leaves.extend(get_lookahead_successors(succ, next_h_graph, remaining - 1))
+                
+        return all_leaves
+
+
     ############################################
     # Main Search Loop
     ############################################
@@ -45,71 +109,41 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     def exp_n_check_states(state, h_graph):
         nonlocal global_longest_path
         
-        # Log
-        # print(f"Expansion {stats['expansions']}: {state.materialize_path()}")
-
-        stats["valid_meeting_checks"] += 1
-        if stats["valid_meeting_checks"] % 200_000 == 0:
-            logger(f"Valid states checked so far: {stats['valid_meeting_checks']}, Expansions: {stats['expansions']}, Global best: {len(global_longest_path)}")
-
-        # Base Case: Reached the goal
-        if state.head == goal:
-            if state.g > len(global_longest_path) - 1:  # Found a better path than current global best
-                global_longest_path = state.materialize_path()
-                if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
-            return global_longest_path, stats
-        elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
-            # Found a better path via direct edge to goal
-            global_longest_path = state.materialize_path() + [goal]
-            if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-            # logger(f"g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
-        
-        # Prepare for expansion
-        h_graph_for_succ = h_graph.copy()
-        h_graph_for_succ.remove_nodes_from([state.head])
-        
-        successors = state.generate_successors(args, snake, True)
-
-        if not successors:
-            stats["violations"]["no_successors"][state.g] += 1
-            return [], stats
-        
         stats["expansions"] += 1
-        stats["generated"] += len(successors)
-        stats["num_of_states_per_g"][state.g + 1] += len(successors)
-
-        if heuristic_name:
-            successors_with_h = [(heuristic(succ, goal, heuristic_name, snake, args, h_graph_for_succ.copy() if snake else h_graph_for_succ), succ) for succ in successors]
-            successors_with_h.sort(key=lambda item: item[0], reverse=True)
-        else:
-            successors_with_h = [(V, succ) for succ in successors]
-        # logger(f"Expansion {stats['expansions']}: {state.materialize_path()} Generated {len(successors)} successors: {[(h,succ.materialize_path()) for h, succ in successors_with_h]}")
+        
+        # Retrieve lookahead leaves (or immediate successors if args.lookahead == 1)
+        leaves = get_lookahead_successors(state, h_graph, args.lookahead)
+        
+        if not leaves:
+            stats["violations"]["no_successors"][state.g] += 1
+            return
+            
+        leaves.sort(key=lambda item: item[0], reverse=True)
                 
-        for h_val, succ in successors_with_h:
-            succ.h = h_val
-            # g_h_buckets[succ.g][succ.h if succ.h >= 0 else 0] += 1
+        for h_val, leaf, leaf_h_graph in leaves:
+            leaf.h = h_val
+            
             if args.bsd:
-                state_key = (succ.head, succ.path_vertices_and_neighbors if snake else succ.path_vertices)
-                if state_key in FNV and FNV[state_key] >= succ.g:
+                state_key = (leaf.head, leaf.path_vertices_and_neighbors if snake else leaf.path_vertices)
+                if state_key in FNV and FNV[state_key] >= leaf.g:
                     stats["symmetric_states_removed"] += 1
                     continue
             
             # DFBnB Pruning
-            if succ.g + h_val <= len(global_longest_path) - 1: 
+            if leaf.g + h_val <= len(global_longest_path) - 1: 
                 stats["violations"]["heuristic"][state.g] += 1
                 break 
                 
             # Update BSD tracker with the new longest arrival to this footprint
-            if args.bsd: FNV[state_key] = succ.g
+            if args.bsd: FNV[state_key] = leaf.g
                 
-            exp_n_check_states(succ, h_graph_for_succ)
+            exp_n_check_states(leaf, leaf_h_graph)
                 
-        return global_longest_path, stats
-        
     h_graph = graph.copy()
     
-    # Start the recursive search
-    exp_n_check_states(initial_state, h_graph)
-    # logger(f"Search completed. g_h_buckets: {matrix_to_sparse_string(g_h_buckets)}")
+    # Initialize the search by checking the starting position
+    is_valid, should_continue = evaluate_state(initial_state)
+    if is_valid and should_continue:
+        exp_n_check_states(initial_state, h_graph)
+        
     return global_longest_path, stats
