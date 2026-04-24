@@ -54,8 +54,12 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
 
         # Reached adjacent to goal
         elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
+            if is_vertex_in_bitmap(goal, state.illegal): 
+                return False, False 
             global_longest_path = state.materialize_path() + [goal]
             if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+            if snake:
+                return True, False # For snake, treat adjacent as a valid solution, but do not continue expanding
             return True, True # Found better path via adjacent edge, but continue expanding as per original logic
         
         return True, True # Valid intermediate state, continue expanding
