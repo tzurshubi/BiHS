@@ -1,0 +1,96 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 10
+graph_type: grid
+size_of_graphs: [8, 8]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 3
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/8x8_grid_with_random_blocks_8per_0 ----------
+[00:00:01:02:364] Valid states checked so far: 200,000, Expansions: 19,575, Global best: 55
+[00:00:02:05:189] Valid states checked so far: 400,000, Expansions: 39,206, Global best: 55
+[00:00:03:09:069] Valid states checked so far: 600,000, Expansions: 58,982, Global best: 55
+[00:00:04:18:113] Valid states checked so far: 800,000, Expansions: 77,544, Global best: 55
+[00:00:05:25:516] Valid states checked so far: 1,000,000, Expansions: 96,013, Global best: 55
+[00:00:06:34:593] Valid states checked so far: 1,200,000, Expansions: 114,086, Global best: 55
+[00:00:06:42:826] Path of length 56 found: [0, 8, 9, 17, 16, 24, 32, 40, 41, 49, 57, 58, 59, 51, 43, 42, 34, 33, 25, 26, 18, 19, 11, 10, 2, 3, 4, 5, 13, 21, 20, 28, 27, 35, 36, 44, 45, 37, 29, 30, 22, 14, 6, 7, 15, 23, 31, 39, 38, 46, 47, 55, 54, 53, 61, 62, 63]
+[00:00:06:42:826] ! Unidirectional s-t. expansions: 115,986, time: 402,826 [ms], path length: 56 [edges], generated: 1,223,928
+[00:00:00:14:094] Path of length 56 found: [63, 55, 47, 39, 31, 23, 15, 7, 6, 5, 4, 3, 2, 10, 11, 19, 18, 26, 25, 33, 34, 42, 43, 44, 36, 35, 27, 28, 20, 21, 13, 14, 22, 30, 29, 37, 38, 46, 45, 53, 54, 62, 61, 60, 59, 58, 57, 49, 41, 40, 32, 24, 16, 17, 9, 8, 0]
+[00:00:00:14:094] ! Unidirectional t-s. expansions: 2,577, time: 14,094 [ms], path length: 56 [edges], generated: 31,377
+[00:00:00:00:001] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:08:28:170] Path of length 56 found: [0, 8, 9, 17, 16, 24, 32, 40, 41, 49, 57, 58, 59, 60, 61, 62, 54, 53, 45, 46, 38, 37, 29, 30, 22, 14, 13, 21, 20, 28, 27, 35, 36, 44, 43, 42, 34, 33, 25, 26, 18, 19, 11, 10, 2, 3, 4, 5, 6, 7, 15, 23, 31, 39, 47, 55, 63]
+[00:00:08:28:618] ! Bidirectional. expansions: 84,398, time: 508,170 [ms], path length: 56 [edges], g_F: 34, g_B: 22, generated: {'F': 458,071, 'B': 347,412}, MM: 12, MMPER: 20.05263157894737%
+[00:00:08:28:618] 
+---------- SM_Grids/8x8_grid_with_random_blocks_8per_1 ----------
+[00:00:01:12:909] Valid states checked so far: 200,000, Expansions: 19,707, Global best: 57
+[00:00:01:49:208] Path of length 56 found: [0, 8, 16, 24, 32, 40, 48, 56, 57, 49, 41, 42, 50, 51, 59, 60, 52, 44, 43, 35, 34, 26, 18, 17, 9, 1, 2, 10, 11, 3, 4, 12, 20, 28, 36, 37, 29, 21, 13, 5, 6, 7, 15, 14, 22, 23, 31, 30, 38, 39, 47, 46, 54, 53, 61, 62, 63]
+[00:00:01:49:209] ! Unidirectional s-t. expansions: 29,232, time: 109,208 [ms], path length: 56 [edges], generated: 297,039
+[00:00:01:16:687] Valid states checked so far: 200,000, Expansions: 20,901, Global best: 57
+[00:00:02:29:990] Valid states checked so far: 400,000, Expansions: 41,227, Global best: 57
+[00:00:03:06:583] Path of length 56 found: [63, 55, 47, 39, 31, 23, 15, 7, 6, 5, 4, 3, 2, 1, 9, 17, 18, 26, 34, 35, 43, 44, 36, 28, 20, 19, 11, 12, 13, 14, 22, 21, 29, 37, 38, 46, 54, 62, 61, 53, 52, 60, 59, 51, 50, 42, 41, 49, 57, 56, 48, 40, 32, 24, 16, 8, 0]
+[00:00:03:06:583] ! Unidirectional t-s. expansions: 50,294, time: 186,583 [ms], path length: 56 [edges], generated: 492,770
+[00:00:00:00:000] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:07:52:245] Path of length 56 found: [0, 8, 16, 24, 32, 40, 48, 56, 57, 49, 41, 42, 50, 51, 59, 60, 52, 53, 61, 62, 54, 46, 38, 30, 22, 14, 13, 12, 11, 19, 20, 21, 29, 37, 36, 44, 43, 35, 34, 26, 18, 17, 9, 1, 2, 3, 4, 5, 6, 7, 15, 23, 31, 39, 47, 55, 63]
+[00:00:07:52:677] ! Bidirectional. expansions: 71,263, time: 472,245 [ms], path length: 56 [edges], g_F: 29, g_B: 27, generated: {'F': 397,244, 'B': 276,801}, MM: 2, MMPER: 2.508771929824561%
+[00:00:07:52:677] 
+---------- SM_Grids/8x8_grid_with_random_blocks_8per_2 ----------
+[00:00:00:00:103] Path of length 58 found: [0, 8, 16, 24, 32, 40, 48, 56, 57, 49, 41, 42, 34, 35, 27, 26, 25, 17, 18, 10, 9, 1, 2, 3, 11, 12, 20, 21, 13, 5, 6, 7, 15, 14, 22, 23, 31, 30, 29, 37, 36, 44, 43, 51, 50, 58, 59, 60, 52, 53, 45, 46, 38, 39, 47, 55, 54, 62, 63]
+[00:00:00:00:103] ! Unidirectional s-t. expansions: 19, time: 103 [ms], path length: 58 [edges], generated: 229
+[00:00:00:00:092] Path of length 58 found: [63, 62, 54, 55, 47, 39, 31, 23, 15, 7, 6, 5, 13, 14, 22, 21, 20, 12, 11, 3, 2, 1, 9, 10, 18, 17, 25, 26, 27, 35, 34, 42, 41, 49, 50, 51, 43, 44, 36, 37, 29, 30, 38, 46, 45, 53, 52, 60, 59, 58, 57, 56, 48, 40, 32, 24, 16, 8, 0]
+[00:00:00:00:093] ! Unidirectional t-s. expansions: 19, time: 92 [ms], path length: 58 [edges], generated: 198
+[00:00:00:00:000] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:187] Path of length 58 found: [0, 8, 16, 24, 32, 40, 48, 56, 57, 49, 41, 42, 34, 35, 27, 26, 25, 17, 18, 10, 9, 1, 2, 3, 11, 12, 20, 21, 29, 37, 36, 44, 43, 51, 50, 58, 59, 60, 52, 53, 45, 46, 38, 30, 22, 14, 13, 5, 6, 7, 15, 23, 31, 39, 47, 55, 54, 62, 63]
+[00:00:00:00:706] ! Bidirectional. expansions: 31, time: 187 [ms], path length: 58 [edges], g_F: 38, g_B: 20, generated: {'F': 165, 'B': 99}, MM: 18, MMPER: 29.508474576271187%
+[00:00:00:00:706] 
+---------- SM_Grids/8x8_grid_with_random_blocks_8per_3 ----------
+[00:00:00:07:542] Path of length 56 found: [0, 8, 16, 17, 25, 33, 32, 40, 41, 49, 48, 56, 57, 58, 50, 51, 59, 60, 52, 44, 43, 35, 34, 26, 18, 10, 2, 3, 4, 12, 20, 19, 27, 28, 36, 37, 29, 21, 13, 5, 6, 7, 15, 14, 22, 30, 31, 39, 47, 46, 45, 53, 61, 62, 54, 55, 63]
+[00:00:00:07:542] ! Unidirectional s-t. expansions: 2,077, time: 7,542 [ms], path length: 56 [edges], generated: 21,482
+[00:00:01:18:790] Valid states checked so far: 200,000, Expansions: 20,329, Global best: 57
+[00:00:01:31:155] Path of length 56 found: [63, 55, 47, 39, 31, 23, 15, 7, 6, 5, 4, 3, 2, 10, 18, 26, 34, 35, 43, 44, 36, 28, 27, 19, 20, 12, 13, 14, 22, 21, 29, 37, 45, 46, 54, 62, 61, 53, 52, 60, 59, 51, 50, 58, 57, 56, 48, 49, 41, 40, 32, 33, 25, 17, 16, 8, 0]
+[00:00:01:31:155] ! Unidirectional t-s. expansions: 22,982, time: 91,155 [ms], path length: 56 [edges], generated: 226,404
+[00:00:00:00:000] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:44:017] Path of length 56 found: [0, 8, 16, 17, 25, 33, 32, 40, 41, 49, 48, 56, 57, 58, 50, 51, 59, 60, 52, 53, 61, 62, 54, 46, 45, 37, 29, 30, 22, 14, 13, 12, 20, 19, 27, 28, 36, 44, 43, 35, 34, 26, 18, 10, 2, 3, 4, 5, 6, 7, 15, 23, 31, 39, 47, 55, 63]
+[00:00:00:44:494] ! Bidirectional. expansions: 6,206, time: 44,017 [ms], path length: 56 [edges], g_F: 33, g_B: 23, generated: {'F': 35,656, 'B': 23,980}, MM: 10, MMPER: 16.54385964912281%
+[00:00:00:44:494] 
+---------- SM_Grids/8x8_grid_with_random_blocks_8per_4 ----------
+[00:00:01:02:750] Valid states checked so far: 200,000, Expansions: 21,986, Global best: 53
+[00:00:02:11:661] Valid states checked so far: 400,000, Expansions: 43,508, Global best: 53
+[00:00:03:21:099] Valid states checked so far: 600,000, Expansions: 65,012, Global best: 53
+[00:00:04:29:646] Valid states checked so far: 800,000, Expansions: 86,515, Global best: 53
+[00:00:05:37:522] Valid states checked so far: 1,000,000, Expansions: 109,636, Global best: 53
+[00:00:06:49:014] Valid states checked so far: 1,200,000, Expansions: 131,028, Global best: 53
+[00:00:07:58:873] Valid states checked so far: 1,400,000, Expansions: 152,549, Global best: 53
+[00:00:09:07:386] Valid states checked so far: 1,600,000, Expansions: 175,737, Global best: 53
+[00:00:10:18:685] Valid states checked so far: 1,800,000, Expansions: 197,854, Global best: 53
+[00:00:11:26:016] Valid states checked so far: 2,000,000, Expansions: 220,682, Global best: 53
+[00:00:12:41:245] Valid states checked so far: 2,200,000, Expansions: 241,102, Global best: 53
+[00:00:13:52:998] Valid states checked so far: 2,400,000, Expansions: 261,819, Global best: 53
+[00:00:15:02:589] Valid states checked so far: 2,600,000, Expansions: 283,900, Global best: 53
+[00:00:16:09:336] Valid states checked so far: 2,800,000, Expansions: 306,110, Global best: 53
+[00:00:17:20:978] Valid states checked so far: 3,000,000, Expansions: 329,460, Global best: 53
+[00:00:18:33:136] Valid states checked so far: 3,200,000, Expansions: 351,322, Global best: 53
+[00:00:19:44:766] Valid states checked so far: 3,400,000, Expansions: 373,648, Global best: 53
+[00:00:20:53:831] Valid states checked so far: 3,600,000, Expansions: 396,905, Global best: 53
+[00:00:22:06:278] Valid states checked so far: 3,800,000, Expansions: 419,978, Global best: 53
+[00:00:23:13:876] Valid states checked so far: 4,000,000, Expansions: 442,323, Global best: 53
+[00:00:24:30:987] Valid states checked so far: 4,200,000, Expansions: 462,880, Global best: 53
+[00:00:25:52:014] Valid states checked so far: 4,400,000, Expansions: 482,523, Global best: 53
+[00:00:26:56:419] Path of length 52 found: [0, 8, 16, 24, 32, 40, 48, 56, 57, 49, 41, 33, 25, 17, 9, 1, 2, 10, 18, 26, 34, 42, 43, 51, 59, 60, 52, 44, 36, 35, 27, 19, 11, 3, 4, 12, 20, 28, 29, 21, 13, 14, 22, 30, 31, 39, 38, 46, 47, 55, 54, 62, 63]
+[00:00:26:56:419] ! Unidirectional s-t. expansions: 498,709, time: 1,616,419 [ms], path length: 52 [edges], generated: 4,566,528
+[00:00:01:09:612] Valid states checked so far: 200,000, Expansions: 20,404, Global best: 53
+[00:00:02:13:941] Valid states checked so far: 400,000, Expansions: 39,675, Global best: 53
+[00:00:02:14:661] Path of length 52 found: [63, 55, 47, 39, 31, 30, 22, 14, 13, 12, 4, 3, 2, 1, 9, 17, 25, 33, 41, 42, 34, 26, 18, 10, 11, 19, 27, 35, 43, 44, 36, 28, 20, 21, 29, 37, 38, 46, 54, 53, 52, 51, 59, 58, 57, 49, 48, 40, 32, 24, 16, 8, 0]
+[00:00:02:14:662] ! Unidirectional t-s. expansions: 39,786, time: 134,661 [ms], path length: 52 [edges], generated: 401,526
+[00:00:00:00:001] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
