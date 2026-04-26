@@ -32,6 +32,7 @@ from algorithms.BiXDFBnB_F2E import *
 from algorithms.BiXDFBnB_alternating import *
 from algorithms.BiXDFBnB_1lookahead import *
 from algorithms.BiXIDA import *
+from algorithms.XIDA import *
 from algorithms.BHK import *
 from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
@@ -52,7 +53,7 @@ DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["IDA"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
+DEFAULT_ALGORITHMS = [""]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
 DEFAULT_LOOKAHEAD = 4                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -405,7 +406,7 @@ def search(
             if args.algo=="DFBnB":
                 path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
             elif args.algo=="IDA":
-                path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
+                path, stats = XIDA(G, start, goal, heuristic, snake, args)
             else:
                 path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:

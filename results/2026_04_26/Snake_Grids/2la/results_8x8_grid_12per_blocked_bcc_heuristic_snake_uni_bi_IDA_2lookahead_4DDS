@@ -1,0 +1,464 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 10
+graph_type: grid
+size_of_graphs: [8, 8]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['IDA']
+lookahead: 2
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_0 ----------
+[00:00:00:02:837] Path of length 36 found: [0, 8, 16, 24, 25, 33, 41, 40, 48, 56, 57, 58, 50, 51, 52, 53, 45, 37, 36, 35, 27, 19, 18, 10, 2, 3, 4, 12, 13, 21, 22, 30, 31, 39, 47, 55, 63]
+[00:00:00:02:837] ! Unidirectional s-t. expansions: 558, time: 2,837 [ms], path length: 36 [edges], generated: 2,283
+[00:00:00:00:758] Path of length 36 found: [63, 55, 47, 39, 31, 30, 22, 14, 13, 12, 4, 3, 2, 10, 18, 19, 27, 28, 36, 37, 45, 53, 61, 60, 59, 58, 57, 56, 48, 40, 41, 33, 25, 24, 16, 8, 0]
+[00:00:00:00:758] ! Unidirectional t-s. expansions: 129, time: 758 [ms], path length: 36 [edges], generated: 572
+[00:00:00:00:006] Starting IDA* iteration with threshold: 42
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:019] Starting IDA* iteration with threshold: 41
+[00:00:00:00:061] Starting IDA* iteration with threshold: 40
+[00:00:00:00:120] Starting IDA* iteration with threshold: 39
+[00:00:00:00:247] Starting IDA* iteration with threshold: 38
+[00:00:00:00:553] Starting IDA* iteration with threshold: 37
+[00:00:00:00:976] Starting IDA* iteration with threshold: 36
+[00:00:00:01:074] Optimal path of length 36 verified.
+[00:00:00:01:075] Path of length 36 found: [0, 8, 16, 24, 25, 33, 41, 40, 48, 56, 57, 58, 59, 60, 61, 53, 45, 37, 36, 35, 27, 19, 18, 10, 2, 3, 4, 12, 13, 14, 22, 30, 31, 39, 47, 55, 63]
+[00:00:00:01:513] ! Bidirectional. expansions: 169, time: 1,075 [ms], path length: 36 [edges], g_F: 18, g_B: 18, generated: {'F': 322, 'B': 240}, MM: 0, MMPER: -1.0%
+[00:00:00:01:513] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_1 ----------
+[00:00:00:05:601] Path of length 32 found: [0, 8, 9, 10, 2, 3, 4, 5, 6, 14, 22, 21, 20, 19, 27, 26, 25, 33, 41, 49, 50, 58, 59, 60, 61, 53, 45, 37, 38, 39, 47, 55, 63]
+[00:00:00:05:601] ! Unidirectional s-t. expansions: 883, time: 5,601 [ms], path length: 32 [edges], generated: 4,327
+[00:00:00:08:377] Path of length 32 found: [63, 55, 47, 39, 38, 37, 36, 44, 52, 60, 59, 58, 50, 49, 41, 33, 34, 26, 27, 19, 20, 21, 22, 14, 6, 5, 4, 3, 2, 10, 9, 8, 0]
+[00:00:00:08:378] ! Unidirectional t-s. expansions: 1,455, time: 8,377 [ms], path length: 32 [edges], generated: 7,088
+[00:00:00:00:006] Starting IDA* iteration with threshold: 41
+[00:00:00:00:007] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:045] Starting IDA* iteration with threshold: 40
+[00:00:00:00:133] Starting IDA* iteration with threshold: 39
+[00:00:00:00:358] Starting IDA* iteration with threshold: 38
+[00:00:00:00:927] Starting IDA* iteration with threshold: 37
+[00:00:00:02:012] Starting IDA* iteration with threshold: 36
+[00:00:00:03:604] Starting IDA* iteration with threshold: 35
+[00:00:00:06:530] Starting IDA* iteration with threshold: 34
+[00:00:00:10:665] Starting IDA* iteration with threshold: 33
+[00:00:00:16:925] Starting IDA* iteration with threshold: 32
+[00:00:00:16:940] Optimal path of length 32 verified.
+[00:00:00:16:941] Path of length 32 found: [0, 8, 9, 10, 2, 3, 4, 5, 6, 14, 22, 21, 20, 19, 27, 26, 25, 33, 41, 49, 50, 58, 59, 60, 52, 44, 36, 37, 38, 39, 47, 55, 63]
+[00:00:00:17:395] ! Bidirectional. expansions: 2,263, time: 16,941 [ms], path length: 32 [edges], g_F: 16, g_B: 16, generated: {'F': 4,040, 'B': 4,251}, MM: 0, MMPER: -1.0%
+[00:00:00:17:395] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_2 ----------
+[00:00:00:01:575] Path of length 34 found: [0, 1, 2, 3, 4, 12, 13, 14, 15, 23, 31, 30, 29, 28, 27, 19, 18, 17, 16, 24, 32, 33, 34, 42, 50, 58, 59, 60, 52, 44, 45, 46, 54, 62, 63]
+[00:00:00:01:575] ! Unidirectional s-t. expansions: 241, time: 1,575 [ms], path length: 34 [edges], generated: 1,033
+[00:00:00:04:076] Path of length 34 found: [63, 62, 61, 60, 59, 58, 50, 42, 34, 33, 32, 24, 16, 17, 18, 19, 27, 28, 36, 44, 45, 46, 38, 30, 31, 23, 15, 14, 13, 5, 4, 3, 2, 1, 0]
+[00:00:00:04:076] ! Unidirectional t-s. expansions: 919, time: 4,076 [ms], path length: 34 [edges], generated: 3,823
+[00:00:00:00:006] Starting IDA* iteration with threshold: 41
+[00:00:00:00:007] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:020] Starting IDA* iteration with threshold: 39
+[00:00:00:00:164] Starting IDA* iteration with threshold: 38
+[00:00:00:00:496] Starting IDA* iteration with threshold: 37
+[00:00:00:01:123] Starting IDA* iteration with threshold: 36
+[00:00:00:02:246] Starting IDA* iteration with threshold: 35
+[00:00:00:03:919] Starting IDA* iteration with threshold: 34
+[00:00:00:06:425] Starting IDA* iteration with threshold: 33
+[00:00:00:10:149] Starting IDA* iteration with threshold: 32
+[00:00:00:14:817] Starting IDA* iteration with threshold: 31
+[00:00:00:21:344] Starting IDA* iteration with threshold: 30
+[00:00:00:29:286] Starting IDA* iteration with threshold: 29
+[00:00:00:39:746] Starting IDA* iteration with threshold: 28
+[00:00:00:52:116] Starting IDA* iteration with threshold: 27
+[00:00:01:06:911] Starting IDA* iteration with threshold: 26
+[00:00:01:23:969] Starting IDA* iteration with threshold: 25
+[00:00:01:43:633] Starting IDA* iteration with threshold: 24
+[00:00:02:07:892] Starting IDA* iteration with threshold: 23
+[00:00:02:36:215] Starting IDA* iteration with threshold: 22
+[00:00:03:10:659] Starting IDA* iteration with threshold: 21
+[00:00:03:48:706] Starting IDA* iteration with threshold: 20
+[00:00:04:42:393] Starting IDA* iteration with threshold: 19
+[00:00:05:38:800] Starting IDA* iteration with threshold: 18
+[00:00:06:57:452] Starting IDA* iteration with threshold: 17
+[00:00:08:17:506] Starting IDA* iteration with threshold: 16
+[00:00:10:02:010] Expansions: 300,000. Checks - state_vs_state: 36,154, state_vs_prefix: 0, prefix_vs_prefix: 635,301
+[00:00:10:02:010] Expansions: 300,000. Checks - state_vs_state: 36,154, state_vs_prefix: 0, prefix_vs_prefix: 635,302
+[00:00:10:02:011] Expansions: 300,000. Checks - state_vs_state: 36,154, state_vs_prefix: 0, prefix_vs_prefix: 635,303
+[00:00:10:02:012] Expansions: 300,000. Checks - state_vs_state: 36,154, state_vs_prefix: 0, prefix_vs_prefix: 635,304
+[00:00:10:02:012] Expansions: 300,000. Checks - state_vs_state: 36,154, state_vs_prefix: 0, prefix_vs_prefix: 635,305
+[00:00:10:02:013] Expansions: 300,000. Checks - state_vs_state: 36,154, state_vs_prefix: 0, prefix_vs_prefix: 635,306
+[00:00:10:25:383] Starting IDA* iteration with threshold: 15
+[00:00:12:32:205] Starting IDA* iteration with threshold: 14
+[00:00:15:44:814] Expansions: 500,000. Checks - state_vs_state: 45,184, state_vs_prefix: 0, prefix_vs_prefix: 971,353
+[00:00:15:44:814] Expansions: 500,000. Checks - state_vs_state: 45,184, state_vs_prefix: 0, prefix_vs_prefix: 971,354
+[00:00:15:44:815] Expansions: 500,000. Checks - state_vs_state: 45,184, state_vs_prefix: 0, prefix_vs_prefix: 971,355
+[00:00:15:44:815] Expansions: 500,000. Checks - state_vs_state: 45,184, state_vs_prefix: 0, prefix_vs_prefix: 971,356
+[00:00:17:19:843] Starting IDA* iteration with threshold: 13
+[00:00:18:31:101] Expansions: 600,000. Checks - state_vs_state: 47,918, state_vs_prefix: 0, prefix_vs_prefix: 1,134,854
+[00:00:18:31:101] Expansions: 600,000. Checks - state_vs_state: 47,918, state_vs_prefix: 0, prefix_vs_prefix: 1,134,855
+[00:00:18:31:102] Expansions: 600,000. Checks - state_vs_state: 47,918, state_vs_prefix: 0, prefix_vs_prefix: 1,134,856
+[00:00:18:31:102] Expansions: 600,000. Checks - state_vs_state: 47,918, state_vs_prefix: 0, prefix_vs_prefix: 1,134,857
+[00:00:21:19:681] Expansions: 700,000. Checks - state_vs_state: 51,279, state_vs_prefix: 0, prefix_vs_prefix: 1,290,137
+[00:00:21:19:682] Expansions: 700,000. Checks - state_vs_state: 51,279, state_vs_prefix: 0, prefix_vs_prefix: 1,290,138
+[00:00:22:02:688] Starting IDA* iteration with threshold: 12
+[00:00:26:54:388] Expansions: 900,000. Checks - state_vs_state: 56,723, state_vs_prefix: 0, prefix_vs_prefix: 1,610,788
+[00:00:26:54:388] Expansions: 900,000. Checks - state_vs_state: 56,723, state_vs_prefix: 0, prefix_vs_prefix: 1,610,789
+[00:00:26:54:388] Expansions: 900,000. Checks - state_vs_state: 56,723, state_vs_prefix: 0, prefix_vs_prefix: 1,610,790
+[00:00:26:54:388] Expansions: 900,000. Checks - state_vs_state: 56,723, state_vs_prefix: 0, prefix_vs_prefix: 1,610,791
+[00:00:26:54:388] Expansions: 900,000. Checks - state_vs_state: 56,723, state_vs_prefix: 0, prefix_vs_prefix: 1,610,792
+[00:00:26:54:388] Expansions: 900,000. Checks - state_vs_state: 56,723, state_vs_prefix: 0, prefix_vs_prefix: 1,610,793
+[00:00:27:33:977] Starting IDA* iteration with threshold: 10
+[00:00:32:16:929] Expansions: 1,100,000. Checks - state_vs_state: 61,960, state_vs_prefix: 0, prefix_vs_prefix: 1,930,495
+[00:00:32:16:929] Expansions: 1,100,000. Checks - state_vs_state: 61,960, state_vs_prefix: 0, prefix_vs_prefix: 1,930,496
+[00:00:32:51:213] Path of length 34 found: [0, 8, 16, 24, 32, 33, 34, 42, 50, 58, 59, 60, 52, 44, 36, 28, 20, 19, 18, 10, 2, 3, 4, 5, 13, 14, 15, 23, 31, 30, 38, 46, 47, 55, 63]
+[00:00:32:51:624] ! Bidirectional. expansions: 1,121,437, time: 1,971,213 [ms], path length: 34 [edges], g_F: 17, g_B: 17, generated: {'F': 1,471,161, 'B': 1,508,134}, MM: 0, MMPER: -1.0%
+[00:00:32:51:624] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_3 ----------
+[00:00:00:16:097] Path of length 34 found: [0, 8, 16, 24, 32, 33, 41, 49, 57, 58, 59, 60, 52, 44, 43, 35, 27, 19, 18, 10, 2, 3, 4, 12, 13, 14, 15, 23, 31, 30, 38, 46, 54, 62, 63]
+[00:00:00:16:097] ! Unidirectional s-t. expansions: 3,911, time: 16,097 [ms], path length: 34 [edges], generated: 15,058
+[00:00:00:19:199] Path of length 34 found: [63, 62, 54, 46, 47, 39, 31, 30, 22, 14, 6, 5, 4, 12, 20, 19, 27, 35, 36, 44, 52, 60, 59, 58, 57, 49, 41, 33, 32, 24, 16, 17, 9, 1, 0]
+[00:00:00:19:199] ! Unidirectional t-s. expansions: 4,904, time: 19,199 [ms], path length: 34 [edges], generated: 19,783
+[00:00:00:00:006] Starting IDA* iteration with threshold: 44
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:031] Starting IDA* iteration with threshold: 43
+[00:00:00:00:109] Starting IDA* iteration with threshold: 42
+[00:00:00:00:278] Starting IDA* iteration with threshold: 41
+[00:00:00:00:670] Starting IDA* iteration with threshold: 40
+[00:00:00:01:447] Starting IDA* iteration with threshold: 39
+[00:00:00:02:696] Starting IDA* iteration with threshold: 38
+[00:00:00:04:375] Starting IDA* iteration with threshold: 37
+[00:00:00:06:738] Starting IDA* iteration with threshold: 36
+[00:00:00:09:962] Starting IDA* iteration with threshold: 35
+[00:00:00:14:781] Starting IDA* iteration with threshold: 34
+[00:00:00:21:720] Starting IDA* iteration with threshold: 33
+[00:00:00:36:088] Starting IDA* iteration with threshold: 32
+[00:00:00:54:176] Starting IDA* iteration with threshold: 31
+[00:00:01:23:514] Starting IDA* iteration with threshold: 30
+[00:00:01:57:980] Starting IDA* iteration with threshold: 29
+[00:00:02:39:275] Starting IDA* iteration with threshold: 28
+[00:00:03:27:145] Expansions: 100,000. Checks - state_vs_state: 21,741, state_vs_prefix: 0, prefix_vs_prefix: 246,949
+[00:00:03:27:146] Expansions: 100,000. Checks - state_vs_state: 21,741, state_vs_prefix: 0, prefix_vs_prefix: 246,950
+[00:00:03:27:147] Expansions: 100,000. Checks - state_vs_state: 21,741, state_vs_prefix: 0, prefix_vs_prefix: 246,951
+[00:00:03:27:148] Expansions: 100,000. Checks - state_vs_state: 21,741, state_vs_prefix: 0, prefix_vs_prefix: 246,952
+[00:00:03:27:149] Expansions: 100,000. Checks - state_vs_state: 21,741, state_vs_prefix: 0, prefix_vs_prefix: 246,953
+[00:00:03:27:151] Expansions: 100,000. Checks - state_vs_state: 21,741, state_vs_prefix: 0, prefix_vs_prefix: 246,954
+[00:00:03:27:574] Starting IDA* iteration with threshold: 27
+[00:00:04:21:452] Starting IDA* iteration with threshold: 26
+[00:00:05:20:212] Starting IDA* iteration with threshold: 25
+[00:00:06:16:211] Expansions: 200,000. Checks - state_vs_state: 43,024, state_vs_prefix: 0, prefix_vs_prefix: 476,530
+[00:00:06:16:212] Expansions: 200,000. Checks - state_vs_state: 43,024, state_vs_prefix: 0, prefix_vs_prefix: 476,531
+[00:00:06:22:940] Starting IDA* iteration with threshold: 24
+[00:00:07:36:128] Starting IDA* iteration with threshold: 23
+[00:00:08:54:743] Starting IDA* iteration with threshold: 22
+[00:00:10:19:266] Starting IDA* iteration with threshold: 21
+[00:00:11:34:628] Expansions: 400,000. Checks - state_vs_state: 81,083, state_vs_prefix: 0, prefix_vs_prefix: 891,435
+[00:00:11:46:087] Starting IDA* iteration with threshold: 20
+[00:00:13:18:583] Starting IDA* iteration with threshold: 19
+[00:00:14:15:747] Expansions: 500,000. Checks - state_vs_state: 100,338, state_vs_prefix: 0, prefix_vs_prefix: 1,092,591
+[00:00:14:15:747] Expansions: 500,000. Checks - state_vs_state: 100,339, state_vs_prefix: 0, prefix_vs_prefix: 1,092,591
+[00:00:14:54:158] Starting IDA* iteration with threshold: 18
+[00:00:16:48:214] Starting IDA* iteration with threshold: 17
+[00:00:16:54:783] Expansions: 600,000. Checks - state_vs_state: 116,005, state_vs_prefix: 0, prefix_vs_prefix: 1,289,768
+[00:00:18:45:440] Starting IDA* iteration with threshold: 16
+[00:00:21:33:425] Starting IDA* iteration with threshold: 15
+[00:00:22:03:368] Expansions: 800,000. Checks - state_vs_state: 140,774, state_vs_prefix: 0, prefix_vs_prefix: 1,667,469
+[00:00:22:03:368] Expansions: 800,000. Checks - state_vs_state: 140,774, state_vs_prefix: 0, prefix_vs_prefix: 1,667,470
+[00:00:24:23:091] Starting IDA* iteration with threshold: 14
+[00:00:27:08:769] Expansions: 1,000,000. Checks - state_vs_state: 158,515, state_vs_prefix: 0, prefix_vs_prefix: 2,023,012
+[00:00:27:08:770] Expansions: 1,000,000. Checks - state_vs_state: 158,515, state_vs_prefix: 0, prefix_vs_prefix: 2,023,013
+[00:00:28:54:052] Starting IDA* iteration with threshold: 13
+[00:00:29:38:754] Expansions: 1,100,000. Checks - state_vs_state: 164,285, state_vs_prefix: 0, prefix_vs_prefix: 2,203,142
+[00:00:29:38:754] Expansions: 1,100,000. Checks - state_vs_state: 164,286, state_vs_prefix: 0, prefix_vs_prefix: 2,203,142
+[00:00:32:09:638] Expansions: 1,200,000. Checks - state_vs_state: 171,250, state_vs_prefix: 0, prefix_vs_prefix: 2,371,621
+[00:00:33:25:986] Starting IDA* iteration with threshold: 12
+[00:00:34:41:062] Expansions: 1,300,000. Checks - state_vs_state: 177,867, state_vs_prefix: 0, prefix_vs_prefix: 2,549,972
+[00:00:34:41:062] Expansions: 1,300,000. Checks - state_vs_state: 177,867, state_vs_prefix: 0, prefix_vs_prefix: 2,549,973
+[00:00:34:41:063] Expansions: 1,300,000. Checks - state_vs_state: 177,867, state_vs_prefix: 0, prefix_vs_prefix: 2,549,974
+[00:00:34:41:063] Expansions: 1,300,000. Checks - state_vs_state: 177,867, state_vs_prefix: 0, prefix_vs_prefix: 2,549,975
+[00:00:34:41:063] Expansions: 1,300,000. Checks - state_vs_state: 177,867, state_vs_prefix: 0, prefix_vs_prefix: 2,549,976
+[00:00:34:41:064] Expansions: 1,300,000. Checks - state_vs_state: 177,867, state_vs_prefix: 0, prefix_vs_prefix: 2,549,977
+[00:00:37:11:032] Expansions: 1,400,000. Checks - state_vs_state: 182,625, state_vs_prefix: 0, prefix_vs_prefix: 2,720,400
+[00:00:37:11:032] Expansions: 1,400,000. Checks - state_vs_state: 182,625, state_vs_prefix: 0, prefix_vs_prefix: 2,720,401
+[00:00:38:47:688] Path of length 34 found: [0, 1, 2, 3, 4, 12, 13, 14, 15, 23, 31, 39, 47, 46, 45, 37, 36, 35, 27, 26, 18, 17, 16, 24, 32, 33, 41, 49, 50, 51, 52, 60, 61, 62, 63]
+[00:00:38:48:094] ! Bidirectional. expansions: 1,464,951, time: 2,327,688 [ms], path length: 34 [edges], g_F: 17, g_B: 17, generated: {'F': 2,107,462, 'B': 2,077,795}, MM: 0, MMPER: -1.0%
+[00:00:38:48:094] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_4 ----------
+[00:00:00:06:020] Path of length 34 found: [0, 8, 16, 24, 25, 26, 18, 10, 11, 12, 4, 5, 6, 14, 22, 23, 31, 39, 38, 37, 36, 35, 43, 42, 41, 49, 57, 58, 59, 60, 52, 53, 54, 62, 63]
+[00:00:00:06:020] ! Unidirectional s-t. expansions: 972, time: 6,020 [ms], path length: 34 [edges], generated: 4,426
+[00:00:00:10:282] Path of length 34 found: [63, 55, 54, 53, 61, 60, 59, 58, 57, 49, 41, 42, 34, 35, 27, 28, 29, 37, 38, 39, 31, 23, 22, 14, 6, 5, 4, 12, 11, 10, 18, 17, 16, 8, 0]
+[00:00:00:10:282] ! Unidirectional t-s. expansions: 1,752, time: 10,282 [ms], path length: 34 [edges], generated: 8,233
+[00:00:00:00:006] Starting IDA* iteration with threshold: 43
+[00:00:00:00:007] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:015] Starting IDA* iteration with threshold: 41
+[00:00:00:00:067] Starting IDA* iteration with threshold: 40
+[00:00:00:00:211] Starting IDA* iteration with threshold: 39
+[00:00:00:00:610] Starting IDA* iteration with threshold: 38
+[00:00:00:01:363] Starting IDA* iteration with threshold: 37
+[00:00:00:02:806] Starting IDA* iteration with threshold: 36
+[00:00:00:05:408] Starting IDA* iteration with threshold: 35
+[00:00:00:09:815] Starting IDA* iteration with threshold: 34
+[00:00:00:16:945] Starting IDA* iteration with threshold: 33
+[00:00:00:27:085] Starting IDA* iteration with threshold: 32
+[00:00:00:41:092] Starting IDA* iteration with threshold: 31
+[00:00:01:00:289] Starting IDA* iteration with threshold: 30
+[00:00:01:26:385] Starting IDA* iteration with threshold: 29
+[00:00:02:01:557] Starting IDA* iteration with threshold: 28
+[00:00:02:45:521] Starting IDA* iteration with threshold: 27
+[00:00:03:41:157] Starting IDA* iteration with threshold: 26
+[00:00:04:45:692] Expansions: 100,000. Checks - state_vs_state: 22,421, state_vs_prefix: 0, prefix_vs_prefix: 305,673
+[00:00:04:45:693] Expansions: 100,000. Checks - state_vs_state: 22,421, state_vs_prefix: 0, prefix_vs_prefix: 305,674
+[00:00:04:49:599] Starting IDA* iteration with threshold: 25
+[00:00:06:04:751] Starting IDA* iteration with threshold: 24
+[00:00:07:29:787] Starting IDA* iteration with threshold: 23
+[00:00:08:10:519] Expansions: 200,000. Checks - state_vs_state: 45,729, state_vs_prefix: 0, prefix_vs_prefix: 587,129
+[00:00:08:10:519] Expansions: 200,000. Checks - state_vs_state: 45,729, state_vs_prefix: 0, prefix_vs_prefix: 587,130
+[00:00:09:00:410] Starting IDA* iteration with threshold: 22
+[00:00:10:53:633] Starting IDA* iteration with threshold: 21
+[00:00:11:12:277] Expansions: 300,000. Checks - state_vs_state: 65,209, state_vs_prefix: 0, prefix_vs_prefix: 841,156
+[00:00:11:12:278] Expansions: 300,000. Checks - state_vs_state: 65,209, state_vs_prefix: 0, prefix_vs_prefix: 841,157
+[00:00:11:12:278] Expansions: 300,000. Checks - state_vs_state: 65,209, state_vs_prefix: 0, prefix_vs_prefix: 841,158
+[00:00:11:12:278] Expansions: 300,000. Checks - state_vs_state: 65,209, state_vs_prefix: 0, prefix_vs_prefix: 841,159
+[00:00:11:12:279] Expansions: 300,000. Checks - state_vs_state: 65,209, state_vs_prefix: 0, prefix_vs_prefix: 841,160
+[00:00:11:12:279] Expansions: 300,000. Checks - state_vs_state: 65,209, state_vs_prefix: 0, prefix_vs_prefix: 841,161
+[00:00:12:48:262] Starting IDA* iteration with threshold: 20
+[00:00:15:32:128] Starting IDA* iteration with threshold: 19
+[00:00:16:49:372] Expansions: 500,000. Checks - state_vs_state: 93,574, state_vs_prefix: 0, prefix_vs_prefix: 1,296,220
+[00:00:16:49:372] Expansions: 500,000. Checks - state_vs_state: 93,574, state_vs_prefix: 0, prefix_vs_prefix: 1,296,221
+[00:00:16:49:373] Expansions: 500,000. Checks - state_vs_state: 93,574, state_vs_prefix: 0, prefix_vs_prefix: 1,296,222
+[00:00:16:49:373] Expansions: 500,000. Checks - state_vs_state: 93,574, state_vs_prefix: 0, prefix_vs_prefix: 1,296,223
+[00:00:18:15:657] Starting IDA* iteration with threshold: 18
+[00:00:22:13:588] Expansions: 700,000. Checks - state_vs_state: 114,543, state_vs_prefix: 0, prefix_vs_prefix: 1,709,421
+[00:00:22:13:588] Expansions: 700,000. Checks - state_vs_state: 114,543, state_vs_prefix: 0, prefix_vs_prefix: 1,709,422
+[00:00:22:31:525] Starting IDA* iteration with threshold: 17
+[00:00:26:49:784] Starting IDA* iteration with threshold: 16
+[00:00:27:33:228] Expansions: 900,000. Checks - state_vs_state: 129,961, state_vs_prefix: 0, prefix_vs_prefix: 2,116,622
+[00:00:30:11:673] Expansions: 1,000,000. Checks - state_vs_state: 135,010, state_vs_prefix: 0, prefix_vs_prefix: 2,302,386
+[00:00:30:11:675] Expansions: 1,000,000. Checks - state_vs_state: 135,010, state_vs_prefix: 0, prefix_vs_prefix: 2,302,387
+[00:00:33:11:559] Starting IDA* iteration with threshold: 15
+[00:00:35:29:325] Expansions: 1,200,000. Checks - state_vs_state: 145,998, state_vs_prefix: 0, prefix_vs_prefix: 2,678,619
+[00:00:39:34:329] Starting IDA* iteration with threshold: 14
+[00:00:40:47:642] Expansions: 1,400,000. Checks - state_vs_state: 158,175, state_vs_prefix: 0, prefix_vs_prefix: 3,054,397
+[00:00:40:47:642] Expansions: 1,400,000. Checks - state_vs_state: 158,175, state_vs_prefix: 0, prefix_vs_prefix: 3,054,398
+[00:00:40:47:643] Expansions: 1,400,000. Checks - state_vs_state: 158,175, state_vs_prefix: 0, prefix_vs_prefix: 3,054,399
+[00:00:40:47:643] Expansions: 1,400,000. Checks - state_vs_state: 158,175, state_vs_prefix: 0, prefix_vs_prefix: 3,054,400
+[00:00:46:07:460] Expansions: 1,600,000. Checks - state_vs_state: 168,110, state_vs_prefix: 0, prefix_vs_prefix: 3,401,945
+[00:00:46:07:460] Expansions: 1,600,000. Checks - state_vs_state: 168,110, state_vs_prefix: 0, prefix_vs_prefix: 3,401,946
+[00:00:47:31:112] Starting IDA* iteration with threshold: 12
+[00:00:51:25:480] Expansions: 1,800,000. Checks - state_vs_state: 176,694, state_vs_prefix: 0, prefix_vs_prefix: 3,767,064
+[00:00:54:04:749] Expansions: 1,900,000. Checks - state_vs_state: 182,278, state_vs_prefix: 0, prefix_vs_prefix: 3,938,031
+[00:00:54:04:750] Expansions: 1,900,000. Checks - state_vs_state: 182,278, state_vs_prefix: 0, prefix_vs_prefix: 3,938,032
+[00:00:54:04:751] Expansions: 1,900,000. Checks - state_vs_state: 182,278, state_vs_prefix: 0, prefix_vs_prefix: 3,938,033
+[00:00:54:04:751] Expansions: 1,900,000. Checks - state_vs_state: 182,278, state_vs_prefix: 0, prefix_vs_prefix: 3,938,034
+[00:00:55:26:642] Starting IDA* iteration with threshold: 10
+[00:01:02:15:612] Expansions: 2,200,000. Checks - state_vs_state: 196,383, state_vs_prefix: 0, prefix_vs_prefix: 4,474,155
+[00:01:02:15:613] Expansions: 2,200,000. Checks - state_vs_state: 196,383, state_vs_prefix: 0, prefix_vs_prefix: 4,474,156
+[00:01:03:38:622] Path of length 34 found: [0, 8, 16, 24, 25, 26, 18, 10, 11, 12, 4, 5, 6, 14, 22, 23, 31, 39, 38, 37, 36, 35, 43, 42, 41, 49, 57, 58, 59, 60, 61, 53, 54, 55, 63]
+[00:01:03:39:037] ! Bidirectional. expansions: 2,249,020, time: 3,818,622 [ms], path length: 34 [edges], g_F: 17, g_B: 17, generated: {'F': 3,184,543, 'B': 3,286,576}, MM: 0, MMPER: -1.0%
+[00:01:03:39:037] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_5 ----------
+[00:00:00:10:349] Path of length 34 found: [0, 1, 9, 17, 16, 24, 32, 40, 41, 42, 50, 58, 59, 60, 52, 44, 45, 37, 29, 28, 27, 19, 11, 3, 4, 5, 13, 14, 22, 23, 31, 39, 47, 55, 63]
+[00:00:00:10:349] ! Unidirectional s-t. expansions: 1,894, time: 10,349 [ms], path length: 34 [edges], generated: 8,168
+[00:00:00:11:193] Path of length 34 found: [63, 55, 47, 39, 31, 23, 15, 14, 6, 5, 4, 3, 11, 19, 27, 28, 29, 37, 45, 53, 61, 60, 59, 51, 43, 42, 34, 33, 32, 24, 16, 17, 9, 1, 0]
+[00:00:00:11:193] ! Unidirectional t-s. expansions: 1,956, time: 11,193 [ms], path length: 34 [edges], generated: 8,141
+[00:00:00:00:006] Starting IDA* iteration with threshold: 42
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:020] Starting IDA* iteration with threshold: 41
+[00:00:00:00:116] Starting IDA* iteration with threshold: 40
+[00:00:00:00:323] Starting IDA* iteration with threshold: 39
+[00:00:00:00:721] Starting IDA* iteration with threshold: 38
+[00:00:00:01:640] Starting IDA* iteration with threshold: 37
+[00:00:00:03:193] Starting IDA* iteration with threshold: 36
+[00:00:00:06:370] Starting IDA* iteration with threshold: 35
+[00:00:00:11:608] Starting IDA* iteration with threshold: 34
+[00:00:00:19:590] Starting IDA* iteration with threshold: 33
+[00:00:00:34:776] Starting IDA* iteration with threshold: 32
+[00:00:00:56:943] Starting IDA* iteration with threshold: 31
+[00:00:01:31:617] Starting IDA* iteration with threshold: 30
+[00:00:02:13:303] Starting IDA* iteration with threshold: 29
+[00:00:03:03:976] Starting IDA* iteration with threshold: 28
+[00:00:04:03:738] Starting IDA* iteration with threshold: 27
+[00:00:04:21:791] Expansions: 100,000. Checks - state_vs_state: 23,257, state_vs_prefix: 0, prefix_vs_prefix: 270,032
+[00:00:04:21:792] Expansions: 100,000. Checks - state_vs_state: 23,257, state_vs_prefix: 0, prefix_vs_prefix: 270,033
+[00:00:05:13:816] Starting IDA* iteration with threshold: 26
+[00:00:06:33:548] Starting IDA* iteration with threshold: 25
+[00:00:07:39:291] Expansions: 200,000. Checks - state_vs_state: 51,376, state_vs_prefix: 0, prefix_vs_prefix: 519,977
+[00:00:07:39:291] Expansions: 200,000. Checks - state_vs_state: 51,376, state_vs_prefix: 0, prefix_vs_prefix: 519,978
+[00:00:08:00:398] Starting IDA* iteration with threshold: 24
+[00:00:09:51:435] Starting IDA* iteration with threshold: 23
+[00:00:10:37:269] Expansions: 300,000. Checks - state_vs_state: 72,530, state_vs_prefix: 0, prefix_vs_prefix: 756,822
+[00:00:10:37:270] Expansions: 300,000. Checks - state_vs_state: 72,530, state_vs_prefix: 0, prefix_vs_prefix: 756,823
+[00:00:11:49:434] Starting IDA* iteration with threshold: 22
+[00:00:13:25:406] Expansions: 400,000. Checks - state_vs_state: 89,242, state_vs_prefix: 0, prefix_vs_prefix: 977,231
+[00:00:13:25:406] Expansions: 400,000. Checks - state_vs_state: 89,242, state_vs_prefix: 0, prefix_vs_prefix: 977,232
+[00:00:14:29:788] Starting IDA* iteration with threshold: 21
+[00:00:16:11:842] Expansions: 500,000. Checks - state_vs_state: 105,245, state_vs_prefix: 0, prefix_vs_prefix: 1,193,800
+[00:00:16:11:842] Expansions: 500,000. Checks - state_vs_state: 105,245, state_vs_prefix: 0, prefix_vs_prefix: 1,193,801
+[00:00:16:11:843] Expansions: 500,000. Checks - state_vs_state: 105,246, state_vs_prefix: 0, prefix_vs_prefix: 1,193,801
+[00:00:16:11:843] Expansions: 500,000. Checks - state_vs_state: 105,246, state_vs_prefix: 0, prefix_vs_prefix: 1,193,802
+[00:00:17:12:986] Starting IDA* iteration with threshold: 20
+[00:00:21:02:779] Starting IDA* iteration with threshold: 19
+[00:00:21:30:930] Expansions: 700,000. Checks - state_vs_state: 129,647, state_vs_prefix: 0, prefix_vs_prefix: 1,605,305
+[00:00:21:30:930] Expansions: 700,000. Checks - state_vs_state: 129,647, state_vs_prefix: 0, prefix_vs_prefix: 1,605,306
+[00:00:24:55:298] Starting IDA* iteration with threshold: 18
+[00:00:26:44:385] Expansions: 900,000. Checks - state_vs_state: 147,512, state_vs_prefix: 0, prefix_vs_prefix: 1,995,620
+[00:00:26:44:386] Expansions: 900,000. Checks - state_vs_state: 147,512, state_vs_prefix: 0, prefix_vs_prefix: 1,995,621
+[00:00:29:18:645] Expansions: 1,000,000. Checks - state_vs_state: 155,204, state_vs_prefix: 0, prefix_vs_prefix: 2,178,383
+[00:00:31:07:094] Starting IDA* iteration with threshold: 17
+[00:00:34:33:336] Expansions: 1,200,000. Checks - state_vs_state: 169,949, state_vs_prefix: 0, prefix_vs_prefix: 2,562,748
+[00:00:34:33:337] Expansions: 1,200,000. Checks - state_vs_state: 169,949, state_vs_prefix: 0, prefix_vs_prefix: 2,562,749
+[00:00:37:09:943] Expansions: 1,300,000. Checks - state_vs_state: 178,997, state_vs_prefix: 0, prefix_vs_prefix: 2,764,924
+[00:00:37:20:201] Starting IDA* iteration with threshold: 16
+[00:00:42:20:825] Expansions: 1,500,000. Checks - state_vs_state: 188,255, state_vs_prefix: 0, prefix_vs_prefix: 3,125,158
+[00:00:42:20:827] Expansions: 1,500,000. Checks - state_vs_state: 188,255, state_vs_prefix: 0, prefix_vs_prefix: 3,125,159
+[00:00:44:59:025] Expansions: 1,600,000. Checks - state_vs_state: 195,638, state_vs_prefix: 0, prefix_vs_prefix: 3,321,616
+[00:00:44:59:026] Expansions: 1,600,000. Checks - state_vs_state: 195,638, state_vs_prefix: 0, prefix_vs_prefix: 3,321,617
+[00:00:44:59:027] Expansions: 1,600,000. Checks - state_vs_state: 195,638, state_vs_prefix: 0, prefix_vs_prefix: 3,321,618
+[00:00:44:59:027] Expansions: 1,600,000. Checks - state_vs_state: 195,638, state_vs_prefix: 0, prefix_vs_prefix: 3,321,619
+[00:00:45:42:641] Starting IDA* iteration with threshold: 15
+[00:00:47:36:145] Expansions: 1,700,000. Checks - state_vs_state: 198,727, state_vs_prefix: 0, prefix_vs_prefix: 3,509,533
+[00:00:50:13:231] Expansions: 1,800,000. Checks - state_vs_state: 204,602, state_vs_prefix: 0, prefix_vs_prefix: 3,687,566
+[00:00:52:49:385] Expansions: 1,900,000. Checks - state_vs_state: 211,885, state_vs_prefix: 0, prefix_vs_prefix: 3,873,222
+[00:00:54:06:012] Starting IDA* iteration with threshold: 14
+[00:00:55:27:118] Expansions: 2,000,000. Checks - state_vs_state: 215,261, state_vs_prefix: 0, prefix_vs_prefix: 4,070,313
+[00:00:55:27:118] Expansions: 2,000,000. Checks - state_vs_state: 215,261, state_vs_prefix: 0, prefix_vs_prefix: 4,070,314
+[00:00:55:27:118] Expansions: 2,000,000. Checks - state_vs_state: 215,261, state_vs_prefix: 0, prefix_vs_prefix: 4,070,315
+[00:00:55:27:119] Expansions: 2,000,000. Checks - state_vs_state: 215,261, state_vs_prefix: 0, prefix_vs_prefix: 4,070,316
+[00:00:58:01:956] Expansions: 2,100,000. Checks - state_vs_state: 218,117, state_vs_prefix: 0, prefix_vs_prefix: 4,250,525
+[00:00:58:01:957] Expansions: 2,100,000. Checks - state_vs_state: 218,117, state_vs_prefix: 0, prefix_vs_prefix: 4,250,526
+[00:00:58:01:957] Expansions: 2,100,000. Checks - state_vs_state: 218,117, state_vs_prefix: 0, prefix_vs_prefix: 4,250,527
+[00:01:00:38:948] Expansions: 2,200,000. Checks - state_vs_state: 224,200, state_vs_prefix: 0, prefix_vs_prefix: 4,428,650
+[00:01:03:22:432] Expansions: 2,300,000. Checks - state_vs_state: 231,002, state_vs_prefix: 0, prefix_vs_prefix: 4,624,871
+[00:01:03:22:432] Expansions: 2,300,000. Checks - state_vs_state: 231,002, state_vs_prefix: 0, prefix_vs_prefix: 4,624,872
+[00:01:03:22:432] Expansions: 2,300,000. Checks - state_vs_state: 231,003, state_vs_prefix: 0, prefix_vs_prefix: 4,624,872
+[00:01:03:22:432] Expansions: 2,300,000. Checks - state_vs_state: 231,003, state_vs_prefix: 0, prefix_vs_prefix: 4,624,873
+[00:01:03:22:432] Expansions: 2,300,000. Checks - state_vs_state: 231,003, state_vs_prefix: 0, prefix_vs_prefix: 4,624,874
+[00:01:03:22:434] Expansions: 2,300,000. Checks - state_vs_state: 231,003, state_vs_prefix: 0, prefix_vs_prefix: 4,624,875
+[00:01:03:58:717] Starting IDA* iteration with threshold: 13
+[00:01:05:58:604] Expansions: 2,400,000. Checks - state_vs_state: 233,738, state_vs_prefix: 0, prefix_vs_prefix: 4,810,073
+[00:01:08:36:409] Expansions: 2,500,000. Checks - state_vs_state: 238,648, state_vs_prefix: 0, prefix_vs_prefix: 4,986,281
+[00:01:11:13:134] Expansions: 2,600,000. Checks - state_vs_state: 244,081, state_vs_prefix: 0, prefix_vs_prefix: 5,164,345
+[00:01:11:13:135] Expansions: 2,600,000. Checks - state_vs_state: 244,081, state_vs_prefix: 0, prefix_vs_prefix: 5,164,346
+[00:01:11:13:136] Expansions: 2,600,000. Checks - state_vs_state: 244,081, state_vs_prefix: 0, prefix_vs_prefix: 5,164,347
+[00:01:13:50:609] Path of length 34 found: [0, 8, 9, 17, 25, 24, 32, 40, 41, 42, 50, 58, 59, 60, 52, 44, 45, 37, 29, 28, 27, 19, 11, 3, 4, 5, 6, 14, 15, 23, 31, 39, 47, 55, 63]
+[00:01:13:51:020] ! Bidirectional. expansions: 2,697,791, time: 4,430,609 [ms], path length: 34 [edges], g_F: 17, g_B: 17, generated: {'F': 3,967,307, 'B': 3,799,578}, MM: 0, MMPER: -1.0%
+[00:01:13:51:020] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_6 ----------
+[00:00:00:15:608] Path of length 34 found: [0, 8, 9, 10, 2, 3, 4, 5, 6, 7, 15, 23, 22, 21, 20, 19, 27, 26, 25, 24, 32, 40, 48, 49, 50, 42, 43, 44, 36, 37, 38, 46, 54, 62, 63]
+[00:00:00:15:609] ! Unidirectional s-t. expansions: 5,415, time: 15,608 [ms], path length: 34 [edges], generated: 14,992
+[00:00:00:06:312] Path of length 34 found: [63, 62, 54, 46, 38, 37, 36, 44, 43, 42, 50, 49, 48, 40, 32, 24, 25, 26, 27, 19, 20, 21, 22, 23, 15, 7, 6, 5, 4, 3, 2, 10, 9, 8, 0]
+[00:00:00:06:313] ! Unidirectional t-s. expansions: 1,417, time: 6,312 [ms], path length: 34 [edges], generated: 5,201
+[00:00:00:00:006] Starting IDA* iteration with threshold: 41
+[00:00:00:00:007] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:014] Starting IDA* iteration with threshold: 40
+[00:00:00:00:072] Starting IDA* iteration with threshold: 39
+[00:00:00:00:215] Starting IDA* iteration with threshold: 38
+[00:00:00:00:520] Starting IDA* iteration with threshold: 37
+[00:00:00:01:113] Starting IDA* iteration with threshold: 36
+[00:00:00:02:238] Starting IDA* iteration with threshold: 35
+[00:00:00:04:433] Starting IDA* iteration with threshold: 34
+[00:00:00:08:138] Starting IDA* iteration with threshold: 33
+[00:00:00:13:598] Starting IDA* iteration with threshold: 32
+[00:00:00:21:843] Starting IDA* iteration with threshold: 31
+[00:00:00:34:142] Starting IDA* iteration with threshold: 30
+[00:00:00:49:386] Starting IDA* iteration with threshold: 29
+[00:00:01:08:050] Starting IDA* iteration with threshold: 28
+[00:00:01:29:120] Starting IDA* iteration with threshold: 27
+[00:00:01:55:677] Starting IDA* iteration with threshold: 26
+[00:00:02:25:937] Starting IDA* iteration with threshold: 25
+[00:00:03:01:408] Starting IDA* iteration with threshold: 24
+[00:00:03:43:185] Starting IDA* iteration with threshold: 23
+[00:00:04:29:714] Starting IDA* iteration with threshold: 22
+[00:00:04:30:469] Expansions: 100,000. Checks - state_vs_state: 24,579, state_vs_prefix: 0, prefix_vs_prefix: 277,290
+[00:00:04:30:469] Expansions: 100,000. Checks - state_vs_state: 24,579, state_vs_prefix: 0, prefix_vs_prefix: 277,291
+[00:00:04:30:469] Expansions: 100,000. Checks - state_vs_state: 24,579, state_vs_prefix: 0, prefix_vs_prefix: 277,292
+[00:00:05:29:173] Starting IDA* iteration with threshold: 21
+[00:00:06:31:923] Starting IDA* iteration with threshold: 20
+[00:00:07:53:031] Starting IDA* iteration with threshold: 19
+[00:00:09:15:908] Starting IDA* iteration with threshold: 18
+[00:00:10:43:030] Expansions: 300,000. Checks - state_vs_state: 54,294, state_vs_prefix: 0, prefix_vs_prefix: 696,858
+[00:00:11:20:465] Starting IDA* iteration with threshold: 17
+[00:00:13:28:790] Starting IDA* iteration with threshold: 16
+[00:00:13:38:623] Expansions: 400,000. Checks - state_vs_state: 64,486, state_vs_prefix: 0, prefix_vs_prefix: 888,594
+[00:00:13:38:624] Expansions: 400,000. Checks - state_vs_state: 64,486, state_vs_prefix: 0, prefix_vs_prefix: 888,595
+[00:00:17:54:511] Starting IDA* iteration with threshold: 15
+[00:00:21:56:241] Expansions: 700,000. Checks - state_vs_state: 77,932, state_vs_prefix: 0, prefix_vs_prefix: 1,386,963
+[00:00:22:23:025] Starting IDA* iteration with threshold: 14
+[00:00:24:37:929] Expansions: 800,000. Checks - state_vs_state: 81,623, state_vs_prefix: 0, prefix_vs_prefix: 1,542,401
+[00:00:24:37:930] Expansions: 800,000. Checks - state_vs_state: 81,623, state_vs_prefix: 0, prefix_vs_prefix: 1,542,402
+[00:00:27:21:752] Expansions: 900,000. Checks - state_vs_state: 84,333, state_vs_prefix: 0, prefix_vs_prefix: 1,700,257
+[00:00:29:31:666] Starting IDA* iteration with threshold: 12
+[00:00:30:04:080] Expansions: 1,000,000. Checks - state_vs_state: 87,176, state_vs_prefix: 0, prefix_vs_prefix: 1,845,788
+[00:00:30:04:082] Expansions: 1,000,000. Checks - state_vs_state: 87,176, state_vs_prefix: 0, prefix_vs_prefix: 1,845,789
+[00:00:30:04:083] Expansions: 1,000,000. Checks - state_vs_state: 87,176, state_vs_prefix: 0, prefix_vs_prefix: 1,845,790
+[00:00:30:04:085] Expansions: 1,000,000. Checks - state_vs_state: 87,176, state_vs_prefix: 0, prefix_vs_prefix: 1,845,791
+[00:00:30:04:086] Expansions: 1,000,000. Checks - state_vs_state: 87,176, state_vs_prefix: 0, prefix_vs_prefix: 1,845,792
+[00:00:30:04:087] Expansions: 1,000,000. Checks - state_vs_state: 87,176, state_vs_prefix: 0, prefix_vs_prefix: 1,845,793
+[00:00:32:43:461] Expansions: 1,100,000. Checks - state_vs_state: 89,918, state_vs_prefix: 0, prefix_vs_prefix: 1,998,261
+[00:00:32:43:462] Expansions: 1,100,000. Checks - state_vs_state: 89,918, state_vs_prefix: 0, prefix_vs_prefix: 1,998,262
+[00:00:35:26:297] Expansions: 1,200,000. Checks - state_vs_state: 92,516, state_vs_prefix: 0, prefix_vs_prefix: 2,155,571
+[00:00:36:39:396] Starting IDA* iteration with threshold: 10
+[00:00:38:10:243] Expansions: 1,300,000. Checks - state_vs_state: 96,588, state_vs_prefix: 0, prefix_vs_prefix: 2,310,267
+[00:00:43:47:939] Path of length 34 found: [0, 8, 9, 10, 2, 3, 4, 5, 6, 7, 15, 23, 22, 21, 20, 19, 27, 26, 25, 24, 32, 40, 48, 49, 50, 42, 43, 44, 36, 37, 38, 46, 54, 62, 63]
+[00:00:43:48:347] ! Bidirectional. expansions: 1,509,357, time: 2,627,939 [ms], path length: 34 [edges], g_F: 17, g_B: 17, generated: {'F': 1,882,745, 'B': 2,095,447}, MM: 0, MMPER: -1.0%
+[00:00:43:48:347] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_7 ----------
+[00:00:00:05:679] Path of length 36 found: [0, 8, 16, 24, 25, 26, 18, 19, 20, 12, 13, 5, 6, 7, 15, 23, 22, 30, 38, 37, 36, 35, 43, 42, 41, 40, 48, 56, 57, 58, 59, 60, 52, 53, 54, 62, 63]
+[00:00:00:05:680] ! Unidirectional s-t. expansions: 910, time: 5,679 [ms], path length: 36 [edges], generated: 4,234
+[00:00:00:07:525] Path of length 36 found: [63, 55, 47, 39, 38, 30, 22, 23, 15, 7, 6, 5, 13, 12, 20, 28, 27, 35, 43, 44, 45, 53, 61, 60, 59, 58, 57, 49, 48, 40, 32, 33, 25, 17, 9, 8, 0]
+[00:00:00:07:525] ! Unidirectional t-s. expansions: 1,441, time: 7,525 [ms], path length: 36 [edges], generated: 6,120
+[00:00:00:00:006] Starting IDA* iteration with threshold: 43
+[00:00:00:00:007] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:039] Starting IDA* iteration with threshold: 41
+[00:00:00:00:142] Starting IDA* iteration with threshold: 40
+[00:00:00:00:469] Starting IDA* iteration with threshold: 39
+[00:00:00:01:084] Starting IDA* iteration with threshold: 38
+[00:00:00:02:308] Starting IDA* iteration with threshold: 37
+[00:00:00:04:761] Starting IDA* iteration with threshold: 36
+[00:00:00:04:770] Optimal path of length 36 verified.
+[00:00:00:04:771] Path of length 36 found: [0, 8, 9, 17, 25, 24, 32, 40, 48, 56, 57, 58, 59, 60, 61, 53, 45, 44, 36, 35, 27, 19, 20, 12, 13, 5, 6, 7, 15, 23, 22, 30, 38, 39, 47, 55, 63]
+[00:00:00:05:176] ! Bidirectional. expansions: 604, time: 4,771 [ms], path length: 36 [edges], g_F: 18, g_B: 18, generated: {'F': 1,187, 'B': 991}, MM: 0, MMPER: -1.0%
+[00:00:00:05:176] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_8 ----------
+[00:00:00:05:342] Path of length 36 found: [0, 1, 2, 10, 18, 17, 16, 24, 32, 33, 41, 49, 57, 58, 59, 60, 52, 44, 43, 35, 27, 28, 20, 12, 4, 5, 6, 7, 15, 23, 22, 30, 38, 46, 47, 55, 63]
+[00:00:00:05:342] ! Unidirectional s-t. expansions: 799, time: 5,342 [ms], path length: 36 [edges], generated: 3,788
+[00:00:00:04:659] Path of length 36 found: [63, 55, 47, 39, 38, 30, 22, 23, 15, 7, 6, 5, 4, 12, 20, 28, 27, 35, 43, 44, 52, 60, 59, 58, 57, 49, 41, 33, 32, 24, 16, 17, 18, 10, 2, 1, 0]
+[00:00:00:04:659] ! Unidirectional t-s. expansions: 888, time: 4,659 [ms], path length: 36 [edges], generated: 3,718
+[00:00:00:00:006] Starting IDA* iteration with threshold: 43
+[00:00:00:00:007] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:033] Starting IDA* iteration with threshold: 42
+[00:00:00:00:119] Starting IDA* iteration with threshold: 41
+[00:00:00:00:277] Starting IDA* iteration with threshold: 40
+[00:00:00:00:606] Starting IDA* iteration with threshold: 39
+[00:00:00:01:249] Starting IDA* iteration with threshold: 38
+[00:00:00:02:577] Starting IDA* iteration with threshold: 37
+[00:00:00:04:984] Starting IDA* iteration with threshold: 36
+[00:00:00:07:528] Optimal path of length 36 verified.
+[00:00:00:07:528] Path of length 36 found: [0, 1, 2, 10, 18, 17, 16, 24, 32, 33, 41, 49, 57, 58, 59, 60, 52, 44, 43, 35, 27, 28, 20, 12, 4, 5, 6, 7, 15, 23, 22, 30, 38, 39, 47, 55, 63]
+[00:00:00:07:922] ! Bidirectional. expansions: 1,111, time: 7,528 [ms], path length: 36 [edges], g_F: 18, g_B: 18, generated: {'F': 1,879, 'B': 2,081}, MM: 0, MMPER: -1.0%
+[00:00:00:07:923] 
+---------- SM_Grids/8x8_grid_with_random_blocks_12per_9 ----------
+[00:00:00:13:193] Path of length 36 found: [0, 8, 9, 10, 18, 26, 25, 24, 32, 40, 48, 56, 57, 58, 50, 51, 43, 35, 36, 28, 20, 12, 4, 5, 6, 7, 15, 23, 31, 30, 38, 46, 45, 53, 61, 62, 63]
+[00:00:00:13:193] ! Unidirectional s-t. expansions: 3,087, time: 13,193 [ms], path length: 36 [edges], generated: 11,408
+[00:00:00:09:993] Path of length 36 found: [63, 55, 47, 46, 45, 53, 61, 60, 59, 51, 50, 49, 48, 40, 32, 24, 25, 26, 34, 35, 36, 28, 29, 30, 31, 23, 15, 7, 6, 5, 4, 12, 11, 10, 2, 1, 0]
+[00:00:00:09:993] ! Unidirectional t-s. expansions: 1,808, time: 9,993 [ms], path length: 36 [edges], generated: 7,384
+[00:00:00:00:006] Starting IDA* iteration with threshold: 44
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:020] Starting IDA* iteration with threshold: 41
+[00:00:00:00:219] Starting IDA* iteration with threshold: 40
+[00:00:00:00:954] Starting IDA* iteration with threshold: 39
+[00:00:00:02:361] Starting IDA* iteration with threshold: 38
+[00:00:00:04:973] Starting IDA* iteration with threshold: 37
+[00:00:00:09:515] Starting IDA* iteration with threshold: 36
+[00:00:00:13:282] Optimal path of length 36 verified.
+[00:00:00:13:282] Path of length 36 found: [0, 8, 9, 10, 11, 19, 20, 21, 13, 5, 6, 7, 15, 23, 31, 30, 38, 37, 36, 35, 34, 26, 25, 24, 32, 40, 48, 56, 57, 58, 50, 51, 52, 60, 61, 62, 63]
+[00:00:00:13:692] ! Bidirectional. expansions: 2,002, time: 13,282 [ms], path length: 36 [edges], g_F: 18, g_B: 18, generated: {'F': 3,671, 'B': 3,168}, MM: 0, MMPER: -1.0%
+[00:00:00:13:692] average expansions: (1,867, 1,667, 904,870, 0)
+[00:00:00:13:692] average time: (8,230, 8,237, 1,521,967, 0)
+[00:00:00:13:692] : 1,667 , 8,230 (expansions , time[ms])
+[00:00:00:13:692] : 904,870 , 1,521,967 (expansions , time[ms])
+

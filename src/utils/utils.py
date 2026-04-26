@@ -170,8 +170,11 @@ def calculate_averages(avgs, log_file_name=None, args=None):
             uni_algo_name = "A*"
             bi_algo_name = "XMM"
         elif args.algo == "DFBnB":
-            uni_algo_name = "X-DFBnB"
-            bi_algo_name = "BiX-DFBnB"
+            uni_algo_name = "XDFBnB"
+            bi_algo_name = "BiXDFBnB"
+        elif args.algo == "IDA":
+            uni_algo_name = "XIDA"
+            bi_algo_name = "BiXIDA"
         elif args.algo == "BHK":
             uni_algo_name = "BHK"
         line1 = f"{uni_algo_name}: {first_min_exp} , {first_min_time} (expansions , time[ms])"

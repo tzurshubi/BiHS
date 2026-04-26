@@ -1,0 +1,236 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 10
+graph_type: grid
+size_of_graphs: [7, 9]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['IDA']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_0 ----------
+[00:00:00:00:259] Path of length 28 found: [0, 9, 18, 19, 20, 29, 30, 39, 48, 57, 58, 59, 50, 41, 32, 23, 22, 13, 4, 5, 6, 7, 8, 17, 26, 35, 44, 53, 62]
+[00:00:00:00:259] ! Unidirectional s-t. expansions: 92, time: 259 [ms], path length: 28 [edges], generated: 147
+[00:00:00:00:248] Path of length 28 found: [62, 53, 44, 35, 26, 17, 8, 7, 6, 5, 4, 13, 22, 23, 32, 41, 50, 59, 58, 57, 48, 39, 30, 29, 20, 19, 10, 1, 0]
+[00:00:00:00:248] ! Unidirectional t-s. expansions: 86, time: 248 [ms], path length: 28 [edges], generated: 131
+[00:00:00:00:004] Starting IDA* iteration with threshold: 32
+[00:00:00:00:005] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:213] Starting IDA* iteration with threshold: 31
+[00:00:00:01:010] Starting IDA* iteration with threshold: 30
+[00:00:00:02:195] Starting IDA* iteration with threshold: 29
+[00:00:00:04:010] Starting IDA* iteration with threshold: 28
+[00:00:00:04:023] Optimal path of length 28 verified.
+[00:00:00:04:024] Path of length 28 found: [0, 9, 18, 19, 20, 29, 30, 39, 48, 57, 58, 59, 50, 41, 32, 23, 22, 13, 4, 5, 6, 7, 16, 25, 26, 35, 44, 53, 62]
+[00:00:00:04:531] ! Bidirectional. expansions: 548, time: 4,024 [ms], path length: 28 [edges], g_F: 13, g_B: 15, generated: {'F': 412, 'B': 447}, MM: 2, MMPER: 5.896551724137931%
+[00:00:00:04:531] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_1 ----------
+[00:00:00:00:712] Path of length 22 found: [0, 9, 10, 19, 20, 21, 30, 39, 38, 37, 36, 45, 54, 55, 56, 57, 58, 49, 50, 51, 60, 61, 62]
+[00:00:00:00:712] ! Unidirectional s-t. expansions: 216, time: 712 [ms], path length: 22 [edges], generated: 302
+[00:00:00:00:745] Path of length 22 found: [62, 53, 52, 51, 60, 59, 58, 57, 56, 55, 54, 45, 36, 37, 38, 29, 30, 21, 12, 11, 10, 1, 0]
+[00:00:00:00:745] ! Unidirectional t-s. expansions: 215, time: 745 [ms], path length: 22 [edges], generated: 326
+[00:00:00:00:005] Starting IDA* iteration with threshold: 35
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:083] Starting IDA* iteration with threshold: 34
+[00:00:00:00:539] Starting IDA* iteration with threshold: 33
+[00:00:00:01:337] Starting IDA* iteration with threshold: 24
+[00:00:00:02:529] Starting IDA* iteration with threshold: 23
+[00:00:00:04:358] Starting IDA* iteration with threshold: 22
+[00:00:00:07:242] Starting IDA* iteration with threshold: 21
+[00:00:00:13:498] Starting IDA* iteration with threshold: 20
+[00:00:00:21:548] Starting IDA* iteration with threshold: 19
+[00:00:00:38:237] Starting IDA* iteration with threshold: 18
+[00:00:00:56:063] Starting IDA* iteration with threshold: 17
+[00:00:01:21:648] Starting IDA* iteration with threshold: 16
+[00:00:01:51:199] Starting IDA* iteration with threshold: 15
+[00:00:02:25:901] Starting IDA* iteration with threshold: 14
+[00:00:03:11:353] Starting IDA* iteration with threshold: 13
+[00:00:04:02:527] Starting IDA* iteration with threshold: 12
+[00:00:04:14:845] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 221,009
+[00:00:04:14:846] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 221,010
+[00:00:04:14:847] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 221,011
+[00:00:05:02:776] Starting IDA* iteration with threshold: 11
+[00:00:06:07:552] Starting IDA* iteration with threshold: 10
+[00:00:07:41:936] Path of length 22 found: [0, 9, 10, 19, 20, 21, 30, 39, 38, 37, 36, 45, 54, 55, 56, 57, 58, 59, 60, 51, 52, 53, 62]
+[00:00:07:42:393] ! Bidirectional. expansions: 193,656, time: 461,936 [ms], path length: 22 [edges], g_F: 11, g_B: 11, generated: {'F': 113,766, 'B': 129,412}, MM: 0, MMPER: -1.0%
+[00:00:07:42:393] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_2 ----------
+[00:00:00:01:604] Path of length 30 found: [0, 9, 10, 19, 28, 27, 36, 45, 46, 47, 38, 39, 30, 21, 12, 3, 4, 5, 14, 15, 16, 25, 34, 33, 32, 41, 50, 51, 60, 61, 62]
+[00:00:00:01:604] ! Unidirectional s-t. expansions: 455, time: 1,604 [ms], path length: 30 [edges], generated: 809
+[00:00:00:01:769] Path of length 30 found: [62, 53, 52, 51, 50, 49, 40, 31, 32, 33, 34, 25, 16, 15, 14, 5, 4, 3, 12, 21, 20, 29, 38, 47, 46, 45, 36, 27, 18, 9, 0]
+[00:00:00:01:769] ! Unidirectional t-s. expansions: 508, time: 1,769 [ms], path length: 30 [edges], generated: 836
+[00:00:00:00:005] Starting IDA* iteration with threshold: 37
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:020] Starting IDA* iteration with threshold: 35
+[00:00:00:00:161] Starting IDA* iteration with threshold: 34
+[00:00:00:00:724] Starting IDA* iteration with threshold: 33
+[00:00:00:01:809] Starting IDA* iteration with threshold: 32
+[00:00:00:03:580] Starting IDA* iteration with threshold: 31
+[00:00:00:07:538] Starting IDA* iteration with threshold: 30
+[00:00:00:07:553] Optimal path of length 30 verified.
+[00:00:00:07:553] Path of length 30 found: [0, 1, 10, 19, 18, 27, 36, 45, 46, 47, 38, 29, 30, 21, 12, 3, 4, 5, 14, 15, 16, 25, 34, 33, 32, 41, 50, 51, 52, 53, 62]
+[00:00:00:08:001] ! Bidirectional. expansions: 865, time: 7,553 [ms], path length: 30 [edges], g_F: 27, g_B: 3, generated: {'F': 883, 'B': 649}, MM: 24, MMPER: 76.41935483870968%
+[00:00:00:08:001] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_3 ----------
+[00:00:00:02:639] Path of length 32 found: [0, 1, 10, 19, 28, 27, 36, 45, 46, 55, 56, 57, 58, 59, 50, 41, 40, 39, 30, 21, 22, 13, 4, 5, 6, 7, 16, 25, 34, 43, 52, 61, 62]
+[00:00:00:02:639] ! Unidirectional s-t. expansions: 1,528, time: 2,639 [ms], path length: 32 [edges], generated: 1,734
+[00:00:00:00:740] Path of length 32 found: [62, 53, 44, 43, 34, 25, 16, 7, 6, 5, 4, 13, 22, 21, 30, 39, 40, 41, 50, 59, 58, 57, 56, 47, 46, 45, 36, 27, 28, 19, 10, 1, 0]
+[00:00:00:00:740] ! Unidirectional t-s. expansions: 296, time: 740 [ms], path length: 32 [edges], generated: 386
+[00:00:00:00:005] Starting IDA* iteration with threshold: 37
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:064] Starting IDA* iteration with threshold: 36
+[00:00:00:00:283] Starting IDA* iteration with threshold: 35
+[00:00:00:00:591] Starting IDA* iteration with threshold: 34
+[00:00:00:01:149] Starting IDA* iteration with threshold: 33
+[00:00:00:02:104] Starting IDA* iteration with threshold: 32
+[00:00:00:04:216] Starting IDA* iteration with threshold: 31
+[00:00:00:08:941] Starting IDA* iteration with threshold: 30
+[00:00:00:17:328] Starting IDA* iteration with threshold: 29
+[00:00:00:31:552] Starting IDA* iteration with threshold: 28
+[00:00:00:50:469] Starting IDA* iteration with threshold: 27
+[00:00:01:14:691] Starting IDA* iteration with threshold: 26
+[00:00:01:47:323] Starting IDA* iteration with threshold: 25
+[00:00:02:25:293] Starting IDA* iteration with threshold: 24
+[00:00:03:08:598] Starting IDA* iteration with threshold: 23
+[00:00:03:58:380] Starting IDA* iteration with threshold: 22
+[00:00:04:54:288] Starting IDA* iteration with threshold: 21
+[00:00:05:15:837] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 251,968
+[00:00:05:15:837] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 251,969
+[00:00:05:57:847] Starting IDA* iteration with threshold: 20
+[00:00:07:06:441] Starting IDA* iteration with threshold: 19
+[00:00:08:23:408] Starting IDA* iteration with threshold: 18
+[00:00:09:24:131] Expansions: 200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 471,075
+[00:00:09:51:322] Starting IDA* iteration with threshold: 17
+[00:00:11:41:111] Starting IDA* iteration with threshold: 16
+[00:00:13:12:534] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 673,522
+[00:00:13:12:536] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 673,523
+[00:00:13:43:449] Starting IDA* iteration with threshold: 15
+[00:00:16:08:514] Starting IDA* iteration with threshold: 14
+[00:00:16:55:233] Expansions: 400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 860,612
+[00:00:19:13:726] Starting IDA* iteration with threshold: 13
+[00:00:20:32:486] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,034,746
+[00:00:20:32:487] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,034,747
+[00:00:22:53:203] Starting IDA* iteration with threshold: 12
+[00:00:26:42:261] Starting IDA* iteration with threshold: 11
+[00:00:30:48:765] Path of length 32 found: [0, 1, 10, 19, 28, 27, 36, 45, 46, 55, 56, 57, 58, 59, 50, 41, 40, 39, 30, 21, 22, 13, 4, 5, 6, 7, 16, 25, 34, 43, 44, 53, 62]
+[00:00:30:49:191] ! Bidirectional. expansions: 784,152, time: 1,848,765 [ms], path length: 32 [edges], g_F: 28, g_B: 4, generated: {'F': 374,340, 'B': 579,003}, MM: 24, MMPER: 71.72727272727273%
+[00:00:30:49:191] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_4 ----------
+[00:00:00:00:237] Path of length 28 found: [0, 9, 18, 27, 36, 45, 54, 55, 56, 57, 48, 39, 38, 29, 20, 21, 12, 3, 4, 5, 14, 23, 32, 41, 42, 51, 60, 61, 62]
+[00:00:00:00:237] ! Unidirectional s-t. expansions: 69, time: 237 [ms], path length: 28 [edges], generated: 117
+[00:00:00:01:576] Path of length 28 found: [62, 53, 44, 43, 34, 33, 32, 23, 14, 5, 4, 3, 12, 21, 20, 29, 38, 39, 48, 57, 56, 55, 54, 45, 36, 27, 18, 9, 0]
+[00:00:00:01:577] ! Unidirectional t-s. expansions: 486, time: 1,576 [ms], path length: 28 [edges], generated: 772
+[00:00:00:00:005] Starting IDA* iteration with threshold: 34
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:059] Starting IDA* iteration with threshold: 33
+[00:00:00:00:235] Starting IDA* iteration with threshold: 32
+[00:00:00:00:564] Starting IDA* iteration with threshold: 31
+[00:00:00:01:013] Starting IDA* iteration with threshold: 30
+[00:00:00:01:894] Starting IDA* iteration with threshold: 29
+[00:00:00:02:870] Starting IDA* iteration with threshold: 28
+[00:00:00:02:884] Optimal path of length 28 verified.
+[00:00:00:02:884] Path of length 28 found: [0, 9, 18, 27, 36, 45, 54, 55, 56, 57, 48, 39, 38, 29, 20, 21, 12, 3, 4, 5, 14, 23, 32, 33, 34, 43, 52, 61, 62]
+[00:00:00:03:312] ! Bidirectional. expansions: 343, time: 2,884 [ms], path length: 28 [edges], g_F: 28, g_B: 0, generated: {'F': 298, 'B': 281}, MM: 28, MMPER: 95.55172413793103%
+[00:00:00:03:312] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_5 ----------
+[00:00:00:02:518] Path of length 30 found: [0, 9, 10, 11, 20, 29, 28, 27, 36, 45, 46, 47, 48, 39, 40, 31, 32, 23, 14, 5, 6, 7, 16, 17, 26, 35, 34, 43, 52, 61, 62]
+[00:00:00:02:518] ! Unidirectional s-t. expansions: 763, time: 2,518 [ms], path length: 30 [edges], generated: 1,286
+[00:00:00:02:066] Path of length 30 found: [62, 61, 52, 43, 44, 35, 26, 17, 16, 7, 6, 5, 14, 23, 32, 41, 40, 39, 48, 47, 46, 45, 36, 27, 28, 29, 20, 11, 10, 1, 0]
+[00:00:00:02:066] ! Unidirectional t-s. expansions: 1,091, time: 2,066 [ms], path length: 30 [edges], generated: 1,264
+[00:00:00:00:006] Starting IDA* iteration with threshold: 36
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:090] Starting IDA* iteration with threshold: 35
+[00:00:00:00:593] Starting IDA* iteration with threshold: 34
+[00:00:00:01:677] Starting IDA* iteration with threshold: 33
+[00:00:00:03:474] Starting IDA* iteration with threshold: 32
+[00:00:00:06:868] Starting IDA* iteration with threshold: 31
+[00:00:00:11:977] Starting IDA* iteration with threshold: 30
+[00:00:00:11:988] Optimal path of length 30 verified.
+[00:00:00:11:988] Path of length 30 found: [0, 9, 10, 11, 20, 29, 28, 27, 36, 45, 46, 47, 48, 39, 40, 31, 32, 23, 14, 5, 6, 7, 16, 17, 26, 35, 44, 43, 52, 61, 62]
+[00:00:00:12:413] ! Bidirectional. expansions: 1,751, time: 11,988 [ms], path length: 30 [edges], g_F: 19, g_B: 11, generated: {'F': 1,692, 'B': 1,171}, MM: 8, MMPER: 24.806451612903224%
+[00:00:00:12:413] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_6 ----------
+[00:00:00:00:229] Path of length 32 found: [0, 1, 2, 3, 4, 5, 6, 7, 8, 17, 26, 35, 34, 33, 24, 23, 22, 31, 30, 29, 38, 37, 46, 55, 56, 57, 48, 49, 50, 51, 60, 61, 62]
+[00:00:00:00:229] ! Unidirectional s-t. expansions: 67, time: 229 [ms], path length: 32 [edges], generated: 107
+[00:00:00:00:873] Path of length 32 found: [62, 61, 60, 51, 50, 49, 48, 57, 56, 55, 46, 37, 38, 29, 30, 31, 22, 23, 24, 33, 34, 35, 26, 17, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+[00:00:00:00:873] ! Unidirectional t-s. expansions: 334, time: 873 [ms], path length: 32 [edges], generated: 487
+[00:00:00:00:005] Starting IDA* iteration with threshold: 39
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:048] Starting IDA* iteration with threshold: 37
+[00:00:00:00:171] Starting IDA* iteration with threshold: 36
+[00:00:00:00:558] Starting IDA* iteration with threshold: 35
+[00:00:00:01:013] Starting IDA* iteration with threshold: 34
+[00:00:00:01:515] Starting IDA* iteration with threshold: 33
+[00:00:00:02:587] Starting IDA* iteration with threshold: 32
+[00:00:00:03:684] Optimal path of length 32 verified.
+[00:00:00:03:684] Path of length 32 found: [0, 1, 2, 3, 4, 5, 6, 7, 8, 17, 26, 35, 34, 33, 24, 23, 22, 31, 30, 29, 38, 37, 46, 55, 56, 57, 48, 49, 50, 51, 60, 61, 62]
+[00:00:00:04:111] ! Bidirectional. expansions: 457, time: 3,684 [ms], path length: 32 [edges], g_F: 2, g_B: 30, generated: {'F': 30, 'B': 651}, MM: 28, MMPER: 83.84848484848484%
+[00:00:00:04:112] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_7 ----------
+[00:00:00:02:235] Path of length 32 found: [0, 9, 18, 27, 28, 37, 46, 55, 56, 57, 48, 39, 40, 31, 22, 21, 12, 3, 4, 5, 14, 15, 16, 25, 26, 35, 44, 43, 42, 51, 60, 61, 62]
+[00:00:00:02:236] ! Unidirectional s-t. expansions: 716, time: 2,235 [ms], path length: 32 [edges], generated: 1,207
+[00:00:00:02:479] Path of length 32 found: [62, 53, 44, 35, 26, 17, 16, 15, 6, 5, 4, 3, 12, 21, 22, 31, 32, 33, 42, 51, 50, 49, 48, 57, 56, 55, 46, 37, 28, 19, 18, 9, 0]
+[00:00:00:02:479] ! Unidirectional t-s. expansions: 707, time: 2,479 [ms], path length: 32 [edges], generated: 1,190
+[00:00:00:00:005] Starting IDA* iteration with threshold: 40
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:033] Starting IDA* iteration with threshold: 39
+[00:00:00:00:144] Starting IDA* iteration with threshold: 38
+[00:00:00:00:258] Starting IDA* iteration with threshold: 37
+[00:00:00:00:770] Starting IDA* iteration with threshold: 36
+[00:00:00:01:874] Starting IDA* iteration with threshold: 35
+[00:00:00:03:791] Starting IDA* iteration with threshold: 34
+[00:00:00:07:721] Starting IDA* iteration with threshold: 33
+[00:00:00:15:119] Starting IDA* iteration with threshold: 32
+[00:00:00:15:130] Optimal path of length 32 verified.
+[00:00:00:15:130] Path of length 32 found: [0, 9, 18, 27, 28, 37, 46, 55, 56, 57, 48, 49, 50, 51, 42, 33, 32, 31, 22, 21, 12, 3, 4, 5, 6, 15, 16, 17, 26, 35, 44, 53, 62]
+[00:00:00:15:556] ! Bidirectional. expansions: 2,095, time: 15,130 [ms], path length: 32 [edges], g_F: 14, g_B: 18, generated: {'F': 1,935, 'B': 1,479}, MM: 4, MMPER: 11.121212121212121%
+[00:00:00:15:556] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_8 ----------
+[00:00:00:01:326] Path of length 26 found: [0, 9, 10, 11, 2, 3, 4, 5, 14, 15, 24, 33, 32, 31, 30, 29, 38, 47, 48, 57, 58, 59, 50, 51, 52, 61, 62]
+[00:00:00:01:327] ! Unidirectional s-t. expansions: 503, time: 1,326 [ms], path length: 26 [edges], generated: 728
+[00:00:00:01:220] Path of length 26 found: [62, 53, 44, 43, 34, 33, 24, 15, 14, 13, 22, 31, 40, 41, 50, 59, 58, 57, 48, 47, 38, 29, 28, 19, 10, 1, 0]
+[00:00:00:01:220] ! Unidirectional t-s. expansions: 308, time: 1,220 [ms], path length: 26 [edges], generated: 536
+[00:00:00:00:005] Starting IDA* iteration with threshold: 33
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:027] Starting IDA* iteration with threshold: 32
+[00:00:00:00:073] Starting IDA* iteration with threshold: 31
+[00:00:00:00:299] Starting IDA* iteration with threshold: 30
+[00:00:00:00:883] Starting IDA* iteration with threshold: 29
+[00:00:00:01:830] Starting IDA* iteration with threshold: 28
+[00:00:00:03:444] Starting IDA* iteration with threshold: 27
+[00:00:00:06:235] Starting IDA* iteration with threshold: 26
+[00:00:00:06:249] Optimal path of length 26 verified.
+[00:00:00:06:250] Path of length 26 found: [0, 9, 10, 11, 2, 3, 4, 5, 14, 15, 24, 33, 32, 31, 30, 29, 38, 47, 48, 57, 58, 59, 60, 51, 52, 53, 62]
+[00:00:00:06:677] ! Bidirectional. expansions: 779, time: 6,250 [ms], path length: 26 [edges], g_F: 14, g_B: 12, generated: {'F': 518, 'B': 763}, MM: 2, MMPER: 6.407407407407407%
+[00:00:00:06:678] 
+---------- SM_Grids/7x9_grid_with_random_blocks_20per_9 ----------
+[00:00:00:00:347] Path of length 32 found: [0, 9, 18, 19, 28, 37, 36, 45, 54, 55, 56, 57, 48, 39, 30, 21, 12, 3, 4, 5, 14, 15, 24, 25, 26, 35, 44, 43, 42, 51, 60, 61, 62]
+[00:00:00:00:348] ! Unidirectional s-t. expansions: 109, time: 348 [ms], path length: 32 [edges], generated: 166
+[00:00:00:03:831] Path of length 32 found: [62, 61, 60, 51, 42, 43, 44, 35, 26, 25, 16, 7, 6, 5, 4, 3, 2, 11, 20, 21, 30, 39, 48, 57, 56, 55, 54, 45, 36, 27, 18, 9, 0]
+[00:00:00:03:831] ! Unidirectional t-s. expansions: 1,224, time: 3,831 [ms], path length: 32 [edges], generated: 2,197
+[00:00:00:00:005] Starting IDA* iteration with threshold: 39
+[00:00:00:00:006] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:080] Starting IDA* iteration with threshold: 38
+[00:00:00:00:313] Starting IDA* iteration with threshold: 37
+[00:00:00:00:694] Starting IDA* iteration with threshold: 36
+[00:00:00:01:471] Starting IDA* iteration with threshold: 35
+[00:00:00:02:971] Starting IDA* iteration with threshold: 34
+[00:00:00:04:872] Starting IDA* iteration with threshold: 33
+[00:00:00:07:405] Starting IDA* iteration with threshold: 32
+[00:00:00:07:419] Optimal path of length 32 verified.
+[00:00:00:07:420] Path of length 32 found: [0, 9, 18, 19, 28, 37, 36, 45, 54, 55, 56, 57, 48, 39, 30, 21, 12, 3, 4, 5, 6, 7, 16, 25, 26, 35, 44, 43, 42, 51, 60, 61, 62]
+[00:00:00:07:879] ! Bidirectional. expansions: 1,030, time: 7,420 [ms], path length: 32 [edges], g_F: 16, g_B: 16, generated: {'F': 701, 'B': 862}, MM: 0, MMPER: -1.0%
+[00:00:00:07:880] average expansions: (452, 526, 98,568, 0)
+[00:00:00:07:880] average time: (1,211, 1,555, 236,963, 0)
+[00:00:00:07:880] : 452 , 1,211 (expansions , time[ms])
+[00:00:00:07:880] : 98,568 , 236,963 (expansions , time[ms])
+

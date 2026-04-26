@@ -75,40 +75,42 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         is_b_in_f = is_vertex_in_bitmap(b.head, f.illegal)
         
         if is_f_in_b or is_b_in_f:
-            if graph.has_edge(f.head, b.head):
-                if snake:
-                    # Snake logic: They are adjacent, so they WILL trigger the illegal bitmap.
-                    # We must manually verify that there are no chords to the opposite tails.
-                    f_path = f.materialize_path()
-                    b_path = b.materialize_path()
-                    valid_snake_meet = True
-                    for v in b_path:
-                        if v != b.head and graph.has_edge(f.head, v):
-                            valid_snake_meet = False
-                            break
-                    if valid_snake_meet:
-                        for v in f_path:
-                            if v != f.head and graph.has_edge(b.head, v):
-                                valid_snake_meet = False
-                                break
+            stats["violations"]["intersection"][f.g] += 1
+            return False, False
+            # if graph.has_edge(f.head, b.head):
+            #     if snake:
+            #         # Snake logic: They are adjacent, so they WILL trigger the illegal bitmap.
+            #         # We must manually verify that there are no chords to the opposite tails.
+            #         f_path = f.materialize_path()
+            #         b_path = b.materialize_path()
+            #         valid_snake_meet = True
+            #         for v in b_path:
+            #             if v != b.head and graph.has_edge(f.head, v):
+            #                 valid_snake_meet = False
+            #                 break
+            #         if valid_snake_meet:
+            #             for v in f_path:
+            #                 if v != f.head and graph.has_edge(b.head, v):
+            #                     valid_snake_meet = False
+            #                     break
                     
-                    if valid_snake_meet:
-                        if f.g + 1 + b.g > len(global_longest_path) - 1:
-                            global_longest_path = f_path + [b.head] + b_path[::-1][1:]
-                            global_meet_point = b.head
-                            if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-                        return True, False # Valid snake meet, stop expanding
-                    else:
-                        stats["violations"]["intersection"][f.g] += 1
-                        return False, False # Invalid adjacent meet (has chord to tail)
-                else:
-                    # LSP logic: If it's adjacent but STILL triggered the illegal bitmap, it hit the tail.
-                    stats["violations"]["intersection"][f.g] += 1
-                    return False, False
-            else:
-                # No edge between heads; it is a pure intersection/chord.
-                stats["violations"]["intersection"][f.g] += 1
-                return False, False
+            #         if valid_snake_meet:
+            #             if f.g + 1 + b.g > len(global_longest_path) - 1:
+            #                 global_longest_path = f_path + [b.head] + b_path[::-1][1:]
+            #                 global_meet_point = b.head
+            #                 if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+            #             return True, False # Valid snake meet, stop expanding
+            #         else:
+            #             stats["violations"]["intersection"][f.g] += 1
+            #             return False, False # Invalid adjacent meet (has chord to tail)
+            #     else:
+            #         # LSP logic: If it's adjacent but STILL triggered the illegal bitmap, it hit the tail.
+            #         stats["violations"]["intersection"][f.g] += 1
+            #         return False, False
+            # else:
+            #     # No edge between heads; it is a pure intersection/chord.
+            #     stats["violations"]["intersection"][f.g] += 1
+            #     return False, False
 
         # 3. Check Adjacent Meet for LSP (snake=False)
         elif graph.has_edge(f.head, b.head):
