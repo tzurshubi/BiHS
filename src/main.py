@@ -42,19 +42,19 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
-DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_DATE = "mazes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
-DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,8]          # dimension of cube
+DEFAULT_GRAPH_TYPE = "maze"             # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [13, 13]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = [""]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
-DEFAULT_LOOKAHEAD = 4                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
+DEFAULT_ALGORITHMS = ["IDA"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
+DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
@@ -526,7 +526,7 @@ if __name__ == "__main__":
         if graph_type=="cube":
             log_file_name = f"results_{size_of_graphs[0]}d_cube_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         else:
-            log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}per_blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
+            log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}{"per_" if graph_type=="grid" else ""}blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         log_file_name += f"_{algorithms_str}"
         if cube_buffer_dim is not None:
             log_file_name += f"_buffDim{cube_buffer_dim}"
@@ -583,7 +583,7 @@ if __name__ == "__main__":
     for algorithm in args.algorithms:
         args.algo = algorithm
         avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
-        if graph_type=="maze": number_of_graphs = 21
+        if graph_type=="maze" and per_blocked==0: number_of_graphs = 1
         for i in list(range(0, number_of_graphs)):
         # for i in range(number_of_graphs, number_of_graphs+1):
             # try:
@@ -596,12 +596,10 @@ if __name__ == "__main__":
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
             elif graph_type=="maze":
-                if i==0:
-                    name_of_graph = f"13x13_maze_with_0_open_diamonds_0" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-                elif i<=10:
-                    name_of_graph = f"13x13_maze_with_1_open_diamonds_{i-1}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
-                else:
-                    name_of_graph = f"13x13_maze_with_2_open_diamonds_{i-10}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                if per_blocked==0:
+                    name_of_graph = f"13x13_maze_with_{per_blocked}_open_diamonds_0" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
+                else: # per_blocked = 1 or 2
+                    name_of_graph = f"13x13_maze_with_{per_blocked}_open_diamonds_{i}" # f"paper_graph_{i}" # f"{size_of_graphs[0]}x{size_of_graphs[1]}_grid_with_random_blocks_{i}"
                 start = 0  # 0 # "s"
                 goal = size_of_graphs[0] * size_of_graphs[1] - 1  # size_of_graphs[0] * size_of_graphs[1] - 1  # "t"
                 # log_file_name = "results_"+name_of_graph[:-2]+"_"+heuristic[:3]

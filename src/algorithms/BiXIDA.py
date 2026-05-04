@@ -65,7 +65,7 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
         if f.head == b.head: stats["state_vs_state_meeting_checks"] += 1
         else: stats["prefix_vs_prefix_meeting_checks"] += 1
         
-        if stats["expansions"] % 100_000 == 0:
+        if stats["expansions"] + 1 % 100_000 == 0:
             logger(f"Expansions: {stats['expansions']}. Checks - state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
 
         # 1. Check Exact Meet FIRST

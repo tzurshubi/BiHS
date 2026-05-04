@@ -1,0 +1,493 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 10
+graph_type: grid
+size_of_graphs: [8, 9]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['IDA']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/8x9_grid_with_random_blocks_8per_0 ----------
+[00:00:00:52:016] Path of length 43 found: [0, 9, 18, 27, 36, 45, 54, 63, 64, 65, 56, 47, 38, 39, 30, 21, 20, 11, 2, 3, 4, 13, 14, 15, 6, 7, 8, 17, 26, 25, 34, 33, 32, 41, 50, 49, 58, 67, 68, 69, 60, 61, 62, 71]
+[00:00:00:52:017] ! Unidirectional s-t. expansions: 10,324, time: 52,016 [ms], path length: 43 [edges], generated: 16,766
+[00:00:00:41:595] Path of length 43 found: [71, 62, 61, 60, 69, 68, 67, 58, 49, 50, 41, 42, 43, 34, 25, 26, 17, 8, 7, 6, 5, 14, 23, 22, 31, 30, 39, 38, 47, 56, 65, 64, 63, 54, 45, 36, 27, 18, 19, 20, 11, 2, 1, 0]
+[00:00:00:41:596] ! Unidirectional t-s. expansions: 7,702, time: 41,595 [ms], path length: 43 [edges], generated: 13,253
+[00:00:00:00:009] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:01:40:384] Path of length 43 found: [0, 9, 18, 27, 36, 45, 54, 63, 64, 65, 56, 47, 38, 39, 30, 21, 20, 11, 2, 3, 4, 13, 14, 15, 6, 7, 8, 17, 26, 25, 34, 33, 32, 41, 50, 49, 58, 67, 68, 69, 60, 61, 62, 71]
+[00:00:01:40:905] ! Bidirectional. expansions: 7,867, time: 100,384 [ms], path length: 43 [edges], g_F: 42, g_B: 1, generated: {'F': 6,054, 'B': 7,493}, MM: 41, MMPER: 92.18181818181819%
+[00:00:01:40:905] 
+---------- SM_Grids/8x9_grid_with_random_blocks_8per_1 ----------
+[00:00:02:07:493] Path of length 43 found: [0, 9, 18, 27, 36, 45, 54, 63, 64, 65, 56, 47, 38, 39, 30, 21, 20, 11, 2, 3, 4, 13, 14, 15, 6, 7, 8, 17, 26, 25, 34, 33, 32, 41, 50, 49, 58, 67, 68, 69, 60, 61, 62, 71]
+[00:00:02:07:493] ! Unidirectional s-t. expansions: 25,578, time: 127,493 [ms], path length: 43 [edges], generated: 42,789
+[00:00:02:01:497] Path of length 43 found: [71, 62, 61, 60, 69, 68, 67, 58, 49, 50, 41, 42, 43, 44, 35, 26, 17, 8, 7, 6, 15, 24, 23, 22, 31, 30, 39, 38, 47, 56, 65, 64, 63, 54, 45, 36, 27, 18, 19, 20, 11, 2, 1, 0]
+[00:00:02:01:497] ! Unidirectional t-s. expansions: 21,334, time: 121,497 [ms], path length: 43 [edges], generated: 38,983
+[00:00:00:00:008] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:03:10:403] Path of length 43 found: [0, 9, 18, 27, 36, 45, 54, 63, 64, 65, 56, 47, 38, 39, 30, 21, 20, 11, 2, 3, 4, 13, 14, 15, 6, 7, 8, 17, 26, 25, 34, 33, 32, 41, 50, 49, 58, 67, 68, 69, 60, 61, 62, 71]
+[00:00:03:10:903] ! Bidirectional. expansions: 16,599, time: 190,403 [ms], path length: 43 [edges], g_F: 30, g_B: 13, generated: {'F': 14,819, 'B': 14,259}, MM: 17, MMPER: 37.63636363636363%
+[00:00:03:10:903] 
+---------- SM_Grids/8x9_grid_with_random_blocks_8per_2 ----------
+[00:00:02:12:853] Path of length 37 found: [0, 9, 18, 19, 20, 11, 2, 3, 4, 13, 22, 31, 30, 39, 38, 47, 56, 57, 58, 49, 50, 41, 42, 33, 24, 15, 6, 7, 8, 17, 26, 35, 44, 53, 52, 61, 70, 71]
+[00:00:02:12:854] ! Unidirectional s-t. expansions: 21,555, time: 132,853 [ms], path length: 37 [edges], generated: 43,144
+[00:00:01:57:251] Path of length 37 found: [71, 70, 61, 52, 53, 44, 35, 26, 17, 8, 7, 6, 15, 24, 33, 42, 41, 50, 59, 58, 57, 56, 47, 38, 39, 30, 31, 22, 13, 4, 3, 2, 11, 20, 19, 18, 9, 0]
+[00:00:01:57:251] ! Unidirectional t-s. expansions: 20,825, time: 117,251 [ms], path length: 37 [edges], generated: 38,319
+[00:00:00:00:008] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:04:34:065] Path of length 37 found: [0, 1, 2, 11, 20, 19, 18, 27, 36, 37, 38, 47, 56, 57, 58, 49, 40, 41, 32, 23, 22, 13, 4, 5, 6, 7, 8, 17, 26, 35, 44, 53, 52, 51, 60, 69, 70, 71]
+[00:00:04:34:610] ! Bidirectional. expansions: 22,576, time: 274,065 [ms], path length: 37 [edges], g_F: 20, g_B: 17, generated: {'F': 22,444, 'B': 19,385}, MM: 3, MMPER: 6.894736842105263%
+[00:00:04:34:610] 
+---------- SM_Grids/8x9_grid_with_random_blocks_8per_3 ----------
+[00:00:01:42:920] Path of length 41 found: [0, 1, 2, 3, 12, 13, 14, 5, 6, 7, 16, 25, 24, 33, 32, 31, 40, 49, 48, 47, 38, 29, 20, 19, 18, 27, 36, 45, 54, 63, 64, 65, 66, 67, 68, 59, 60, 51, 52, 53, 62, 71]
+[00:00:01:42:920] ! Unidirectional s-t. expansions: 18,265, time: 102,920 [ms], path length: 41 [edges], generated: 32,227
+[00:00:01:12:836] Path of length 41 found: [71, 62, 53, 52, 51, 60, 59, 68, 67, 66, 65, 64, 63, 54, 45, 36, 27, 18, 19, 20, 29, 38, 47, 48, 49, 40, 41, 32, 33, 24, 25, 16, 7, 6, 5, 14, 13, 12, 3, 2, 1, 0]
+[00:00:01:12:836] ! Unidirectional t-s. expansions: 12,790, time: 72,836 [ms], path length: 41 [edges], generated: 23,043
+[00:00:00:00:009] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:16:15:770] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 388,271
+[00:00:16:15:772] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 388,272
+[00:00:16:15:774] Expansions: 100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 388,273
+[00:00:29:10:344] Expansions: 200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 772,654
+[00:00:29:10:347] Expansions: 200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 772,655
+[00:00:29:10:351] Expansions: 200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 772,656
+[00:00:40:33:730] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,155,020
+[00:00:40:33:732] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,155,021
+[00:00:40:33:735] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,155,022
+[00:00:40:33:738] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,155,023
+[00:00:40:33:740] Expansions: 300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,155,024
+[00:00:52:40:159] Expansions: 400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,542,738
+[00:00:52:40:160] Expansions: 400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,542,739
+[00:00:52:40:160] Expansions: 400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,542,740
+[00:01:02:21:982] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,907,211
+[00:01:02:21:984] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,907,212
+[00:01:02:21:986] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,907,213
+[00:01:02:21:989] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,907,214
+[00:01:02:21:989] Expansions: 500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1,907,215
+[00:01:12:24:144] Expansions: 600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,269,818
+[00:01:12:24:146] Expansions: 600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,269,819
+[00:01:12:24:149] Expansions: 600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,269,820
+[00:01:12:24:151] Expansions: 600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,269,821
+[00:01:22:29:393] Expansions: 700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,632,379
+[00:01:22:29:395] Expansions: 700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,632,380
+[00:01:22:29:398] Expansions: 700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 2,632,381
+[00:01:33:14:265] Expansions: 800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,005,244
+[00:01:33:14:266] Expansions: 800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,005,245
+[00:01:33:14:266] Expansions: 800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,005,246
+[00:01:42:33:495] Expansions: 900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,369,899
+[00:01:42:33:496] Expansions: 900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,369,900
+[00:01:42:33:496] Expansions: 900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,369,901
+[00:01:42:33:499] Expansions: 900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,369,902
+[00:01:42:33:500] Expansions: 900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,369,903
+[00:01:51:15:458] Expansions: 1,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,731,637
+[00:01:51:15:461] Expansions: 1,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,731,638
+[00:01:51:15:464] Expansions: 1,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,731,639
+[00:01:51:15:466] Expansions: 1,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 3,731,640
+[00:01:59:53:532] Expansions: 1,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,092,783
+[00:01:59:53:533] Expansions: 1,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,092,784
+[00:02:08:33:937] Expansions: 1,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,456,865
+[00:02:08:33:939] Expansions: 1,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,456,866
+[00:02:08:33:940] Expansions: 1,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,456,867
+[00:02:17:20:944] Expansions: 1,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,824,153
+[00:02:17:20:945] Expansions: 1,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,824,154
+[00:02:17:20:947] Expansions: 1,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,824,155
+[00:02:17:20:947] Expansions: 1,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 4,824,156
+[00:02:26:21:083] Expansions: 1,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,194,684
+[00:02:26:21:084] Expansions: 1,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,194,685
+[00:02:26:21:086] Expansions: 1,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,194,686
+[00:02:26:21:087] Expansions: 1,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,194,687
+[00:02:34:01:212] Expansions: 1,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,548,911
+[00:02:34:01:214] Expansions: 1,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,548,912
+[00:02:34:01:216] Expansions: 1,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,548,913
+[00:02:34:01:216] Expansions: 1,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,548,914
+[00:02:34:01:218] Expansions: 1,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,548,915
+[00:02:41:13:109] Expansions: 1,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,895,280
+[00:02:41:13:112] Expansions: 1,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,895,281
+[00:02:41:13:114] Expansions: 1,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,895,282
+[00:02:41:13:116] Expansions: 1,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 5,895,283
+[00:02:48:45:817] Expansions: 1,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,238,759
+[00:02:48:45:818] Expansions: 1,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,238,760
+[00:02:48:45:818] Expansions: 1,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,238,761
+[00:02:56:15:608] Expansions: 1,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,587,410
+[00:02:56:15:610] Expansions: 1,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,587,411
+[00:02:56:15:614] Expansions: 1,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,587,412
+[00:02:56:15:617] Expansions: 1,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,587,413
+[00:03:03:47:224] Expansions: 1,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,926,726
+[00:03:03:47:226] Expansions: 1,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,926,727
+[00:03:03:47:226] Expansions: 1,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,926,728
+[00:03:03:47:228] Expansions: 1,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 6,926,729
+[00:03:10:59:052] Expansions: 2,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,267,565
+[00:03:10:59:055] Expansions: 2,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,267,566
+[00:03:10:59:057] Expansions: 2,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,267,567
+[00:03:18:35:924] Expansions: 2,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,612,760
+[00:03:18:35:926] Expansions: 2,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,612,761
+[00:03:18:35:927] Expansions: 2,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,612,762
+[00:03:26:09:039] Expansions: 2,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,957,178
+[00:03:26:09:041] Expansions: 2,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,957,179
+[00:03:26:09:041] Expansions: 2,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,957,180
+[00:03:26:09:041] Expansions: 2,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 7,957,181
+[00:03:34:24:743] Expansions: 2,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,309,662
+[00:03:34:24:743] Expansions: 2,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,309,663
+[00:03:34:24:744] Expansions: 2,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,309,664
+[00:03:41:08:274] Expansions: 2,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,659,609
+[00:03:41:08:276] Expansions: 2,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,659,610
+[00:03:41:08:278] Expansions: 2,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,659,611
+[00:03:41:08:279] Expansions: 2,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,659,612
+[00:03:48:20:097] Expansions: 2,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 8,998,689
+[00:03:55:20:371] Expansions: 2,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,333,757
+[00:03:55:20:373] Expansions: 2,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,333,758
+[00:03:55:20:375] Expansions: 2,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,333,759
+[00:03:55:20:377] Expansions: 2,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,333,760
+[00:04:02:28:185] Expansions: 2,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,666,202
+[00:04:02:28:185] Expansions: 2,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,666,203
+[00:04:02:28:185] Expansions: 2,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,666,204
+[00:04:02:28:186] Expansions: 2,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 9,666,205
+[00:04:09:34:167] Expansions: 2,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,002,229
+[00:04:09:34:169] Expansions: 2,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,002,230
+[00:04:09:34:170] Expansions: 2,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,002,231
+[00:04:09:34:171] Expansions: 2,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,002,232
+[00:04:24:23:993] Expansions: 3,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,671,891
+[00:04:24:23:995] Expansions: 3,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,671,892
+[00:04:24:23:996] Expansions: 3,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 10,671,893
+[00:04:31:28:707] Expansions: 3,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,005,845
+[00:04:31:28:708] Expansions: 3,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,005,846
+[00:04:31:28:709] Expansions: 3,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,005,847
+[00:04:31:28:710] Expansions: 3,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,005,848
+[00:04:38:54:787] Expansions: 3,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,342,534
+[00:04:38:54:789] Expansions: 3,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,342,535
+[00:04:38:54:791] Expansions: 3,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,342,536
+[00:04:38:54:792] Expansions: 3,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,342,537
+[00:04:46:21:250] Expansions: 3,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,679,925
+[00:04:46:21:251] Expansions: 3,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,679,926
+[00:04:46:21:251] Expansions: 3,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 11,679,927
+[00:04:53:47:518] Expansions: 3,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,016,467
+[00:04:53:47:520] Expansions: 3,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,016,468
+[00:05:01:53:005] Expansions: 3,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,360,753
+[00:05:01:53:005] Expansions: 3,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,360,754
+[00:05:01:53:006] Expansions: 3,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,360,755
+[00:05:01:53:006] Expansions: 3,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,360,756
+[00:05:08:51:419] Expansions: 3,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,705,577
+[00:05:08:51:420] Expansions: 3,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,705,578
+[00:05:08:51:421] Expansions: 3,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,705,579
+[00:05:08:51:423] Expansions: 3,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 12,705,580
+[00:05:15:45:738] Expansions: 3,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,039,050
+[00:05:15:45:740] Expansions: 3,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,039,051
+[00:05:15:45:743] Expansions: 3,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,039,052
+[00:05:15:45:745] Expansions: 3,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,039,053
+[00:05:21:48:363] Expansions: 3,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,344,429
+[00:05:21:48:365] Expansions: 3,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,344,430
+[00:05:21:48:365] Expansions: 3,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,344,431
+[00:05:21:48:367] Expansions: 3,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,344,432
+[00:05:28:34:792] Expansions: 3,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,676,053
+[00:05:28:34:792] Expansions: 3,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,676,054
+[00:05:28:34:792] Expansions: 3,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,676,055
+[00:05:35:06:559] Expansions: 4,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 13,996,714
+[00:05:48:05:433] Expansions: 4,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 14,641,363
+[00:05:48:05:434] Expansions: 4,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 14,641,364
+[00:05:48:05:436] Expansions: 4,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 14,641,365
+[00:05:48:05:436] Expansions: 4,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 14,641,366
+[00:05:54:34:418] Expansions: 4,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 14,963,320
+[00:05:54:34:420] Expansions: 4,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 14,963,321
+[00:06:01:02:835] Expansions: 4,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,274,505
+[00:06:07:39:391] Expansions: 4,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,597,660
+[00:06:07:39:391] Expansions: 4,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,597,661
+[00:06:13:52:188] Expansions: 4,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,908,324
+[00:06:13:52:188] Expansions: 4,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,908,325
+[00:06:13:52:188] Expansions: 4,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,908,326
+[00:06:13:52:189] Expansions: 4,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 15,908,327
+[00:06:20:24:370] Expansions: 4,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,226,991
+[00:06:20:24:370] Expansions: 4,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,226,992
+[00:06:20:24:371] Expansions: 4,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,226,993
+[00:06:27:00:720] Expansions: 4,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,548,207
+[00:06:27:00:720] Expansions: 4,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,548,208
+[00:06:27:00:721] Expansions: 4,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,548,209
+[00:06:27:00:721] Expansions: 4,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,548,210
+[00:06:33:44:581] Expansions: 4,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,872,154
+[00:06:33:44:582] Expansions: 4,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,872,155
+[00:06:33:44:582] Expansions: 4,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,872,156
+[00:06:33:44:583] Expansions: 4,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 16,872,157
+[00:06:40:52:903] Expansions: 5,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,198,386
+[00:06:40:52:905] Expansions: 5,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,198,387
+[00:06:40:52:906] Expansions: 5,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,198,388
+[00:06:40:52:907] Expansions: 5,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,198,389
+[00:06:48:13:771] Expansions: 5,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,535,500
+[00:06:48:13:772] Expansions: 5,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,535,501
+[00:06:48:13:774] Expansions: 5,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,535,502
+[00:06:48:13:776] Expansions: 5,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,535,503
+[00:06:48:13:778] Expansions: 5,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,535,504
+[00:06:54:10:143] Expansions: 5,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,866,265
+[00:06:54:10:143] Expansions: 5,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,866,266
+[00:06:54:10:143] Expansions: 5,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,866,267
+[00:06:54:10:143] Expansions: 5,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,866,268
+[00:06:54:10:144] Expansions: 5,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 17,866,269
+[00:07:00:45:048] Expansions: 5,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,198,653
+[00:07:00:45:050] Expansions: 5,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,198,654
+[00:07:00:45:052] Expansions: 5,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,198,655
+[00:07:00:45:053] Expansions: 5,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,198,656
+[00:07:06:49:941] Expansions: 5,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,508,712
+[00:07:06:49:943] Expansions: 5,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,508,713
+[00:07:06:49:943] Expansions: 5,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,508,714
+[00:07:06:49:943] Expansions: 5,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,508,715
+[00:07:12:27:090] Expansions: 5,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 18,800,040
+[00:07:18:27:883] Expansions: 5,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 19,126,105
+[00:07:18:27:883] Expansions: 5,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 19,126,106
+[00:07:18:27:886] Expansions: 5,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 19,126,107
+[00:07:24:10:269] Expansions: 5,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 19,433,818
+[00:07:24:10:269] Expansions: 5,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 19,433,819
+[00:07:36:35:014] Expansions: 5,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,048,242
+[00:07:42:50:839] Expansions: 6,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,371,448
+[00:07:42:50:839] Expansions: 6,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,371,449
+[00:07:42:50:841] Expansions: 6,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,371,450
+[00:07:49:14:742] Expansions: 6,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,681,795
+[00:07:49:14:744] Expansions: 6,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,681,796
+[00:07:49:14:745] Expansions: 6,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,681,797
+[00:07:55:24:795] Expansions: 6,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,979,729
+[00:07:55:24:795] Expansions: 6,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,979,730
+[00:07:55:24:796] Expansions: 6,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 20,979,731
+[00:08:01:41:607] Expansions: 6,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,291,145
+[00:08:01:41:607] Expansions: 6,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,291,146
+[00:08:01:41:608] Expansions: 6,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,291,147
+[00:08:01:41:609] Expansions: 6,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,291,148
+[00:08:07:51:627] Expansions: 6,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,591,154
+[00:08:07:51:628] Expansions: 6,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,591,155
+[00:08:07:51:630] Expansions: 6,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,591,156
+[00:08:07:51:630] Expansions: 6,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,591,157
+[00:08:07:51:630] Expansions: 6,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,591,158
+[00:08:14:12:051] Expansions: 6,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,903,993
+[00:08:14:12:053] Expansions: 6,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 21,903,994
+[00:08:20:30:798] Expansions: 6,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 22,215,143
+[00:08:26:59:983] Expansions: 6,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 22,527,825
+[00:08:26:59:985] Expansions: 6,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 22,527,826
+[00:08:26:59:986] Expansions: 6,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 22,527,827
+[00:08:33:28:874] Expansions: 6,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 22,840,392
+[00:08:33:28:874] Expansions: 6,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 22,840,393
+[00:08:40:19:300] Expansions: 6,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,155,986
+[00:08:40:19:302] Expansions: 6,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,155,987
+[00:08:40:19:303] Expansions: 6,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,155,988
+[00:08:48:06:668] Expansions: 7,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,481,529
+[00:08:48:06:669] Expansions: 7,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,481,530
+[00:08:53:55:522] Expansions: 7,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,800,849
+[00:08:53:55:522] Expansions: 7,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,800,850
+[00:08:53:55:522] Expansions: 7,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,800,851
+[00:08:53:55:523] Expansions: 7,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,800,852
+[00:08:53:55:523] Expansions: 7,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,800,853
+[00:08:53:55:523] Expansions: 7,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 23,800,854
+[00:09:00:17:826] Expansions: 7,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,125,755
+[00:09:00:17:828] Expansions: 7,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,125,756
+[00:09:00:17:829] Expansions: 7,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,125,757
+[00:09:00:17:830] Expansions: 7,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,125,758
+[00:09:00:17:830] Expansions: 7,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,125,759
+[00:09:06:19:106] Expansions: 7,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,444,500
+[00:09:12:13:766] Expansions: 7,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,745,461
+[00:09:12:13:768] Expansions: 7,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,745,462
+[00:09:12:13:769] Expansions: 7,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,745,463
+[00:09:12:13:770] Expansions: 7,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 24,745,464
+[00:09:17:23:752] Expansions: 7,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,027,166
+[00:09:17:23:752] Expansions: 7,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,027,167
+[00:09:22:59:244] Expansions: 7,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,324,131
+[00:09:22:59:244] Expansions: 7,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,324,132
+[00:09:28:57:105] Expansions: 7,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,628,340
+[00:09:28:57:107] Expansions: 7,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,628,341
+[00:09:28:57:109] Expansions: 7,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,628,342
+[00:09:28:57:111] Expansions: 7,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,628,343
+[00:09:34:42:723] Expansions: 7,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,928,441
+[00:09:34:42:725] Expansions: 7,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,928,442
+[00:09:34:42:728] Expansions: 7,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,928,443
+[00:09:34:42:730] Expansions: 7,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,928,444
+[00:09:34:42:733] Expansions: 7,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 25,928,445
+[00:09:40:18:015] Expansions: 7,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 26,218,779
+[00:09:40:18:017] Expansions: 7,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 26,218,780
+[00:09:40:18:019] Expansions: 7,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 26,218,781
+[00:09:46:05:593] Expansions: 8,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 26,508,695
+[00:09:51:58:437] Expansions: 8,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 26,820,777
+[00:09:51:58:437] Expansions: 8,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 26,820,778
+[00:09:57:59:572] Expansions: 8,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,125,289
+[00:09:57:59:573] Expansions: 8,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,125,290
+[00:09:57:59:575] Expansions: 8,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,125,291
+[00:09:57:59:575] Expansions: 8,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,125,292
+[00:10:03:59:014] Expansions: 8,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,425,195
+[00:10:03:59:014] Expansions: 8,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,425,196
+[00:10:09:48:296] Expansions: 8,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,718,384
+[00:10:09:48:296] Expansions: 8,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,718,385
+[00:10:09:48:297] Expansions: 8,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 27,718,386
+[00:10:15:41:483] Expansions: 8,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,006,621
+[00:10:15:41:483] Expansions: 8,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,006,622
+[00:10:15:41:484] Expansions: 8,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,006,623
+[00:10:21:40:213] Expansions: 8,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,309,790
+[00:10:21:40:214] Expansions: 8,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,309,791
+[00:10:27:16:284] Expansions: 8,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,591,581
+[00:10:27:16:284] Expansions: 8,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,591,582
+[00:10:33:07:610] Expansions: 8,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,889,834
+[00:10:33:07:612] Expansions: 8,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,889,835
+[00:10:33:07:613] Expansions: 8,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 28,889,836
+[00:10:38:59:765] Expansions: 8,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,183,246
+[00:10:38:59:766] Expansions: 8,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,183,247
+[00:10:38:59:768] Expansions: 8,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,183,248
+[00:10:38:59:769] Expansions: 8,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,183,249
+[00:10:38:59:770] Expansions: 8,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,183,250
+[00:10:44:57:179] Expansions: 9,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,483,622
+[00:10:44:57:179] Expansions: 9,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,483,623
+[00:10:50:51:235] Expansions: 9,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,779,467
+[00:10:50:51:236] Expansions: 9,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,779,468
+[00:10:50:51:238] Expansions: 9,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 29,779,469
+[00:10:56:47:280] Expansions: 9,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,073,826
+[00:10:56:47:281] Expansions: 9,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,073,827
+[00:10:56:47:282] Expansions: 9,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,073,828
+[00:10:56:47:283] Expansions: 9,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,073,829
+[00:11:03:03:704] Expansions: 9,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,374,884
+[00:11:03:03:706] Expansions: 9,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,374,885
+[00:11:03:03:708] Expansions: 9,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,374,886
+[00:11:03:03:711] Expansions: 9,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,374,887
+[00:11:03:03:713] Expansions: 9,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,374,888
+[00:11:09:24:679] Expansions: 9,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,670,916
+[00:11:09:24:681] Expansions: 9,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,670,917
+[00:11:09:24:681] Expansions: 9,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,670,918
+[00:11:16:11:915] Expansions: 9,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,974,297
+[00:11:16:11:918] Expansions: 9,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,974,298
+[00:11:16:11:920] Expansions: 9,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 30,974,299
+[00:11:21:55:523] Expansions: 9,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,287,809
+[00:11:21:55:524] Expansions: 9,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,287,810
+[00:11:21:55:527] Expansions: 9,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,287,811
+[00:11:21:55:529] Expansions: 9,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,287,812
+[00:11:27:48:214] Expansions: 9,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,602,177
+[00:11:27:48:216] Expansions: 9,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,602,178
+[00:11:27:48:217] Expansions: 9,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,602,179
+[00:11:27:48:220] Expansions: 9,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,602,180
+[00:11:33:39:823] Expansions: 9,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,919,133
+[00:11:33:39:823] Expansions: 9,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,919,134
+[00:11:33:39:824] Expansions: 9,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,919,135
+[00:11:33:39:824] Expansions: 9,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 31,919,136
+[00:11:39:28:562] Expansions: 9,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,219,836
+[00:11:39:28:562] Expansions: 9,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,219,837
+[00:11:39:28:562] Expansions: 9,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,219,838
+[00:11:39:28:562] Expansions: 9,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,219,839
+[00:11:45:17:720] Expansions: 10,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,516,968
+[00:11:45:17:720] Expansions: 10,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,516,969
+[00:11:45:17:721] Expansions: 10,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,516,970
+[00:11:50:18:877] Expansions: 10,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,793,727
+[00:11:50:18:879] Expansions: 10,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,793,728
+[00:11:50:18:879] Expansions: 10,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,793,729
+[00:11:50:18:880] Expansions: 10,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 32,793,730
+[00:11:55:40:109] Expansions: 10,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,072,435
+[00:11:55:40:111] Expansions: 10,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,072,436
+[00:11:55:40:111] Expansions: 10,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,072,437
+[00:12:01:25:070] Expansions: 10,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,380,013
+[00:12:01:25:072] Expansions: 10,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,380,014
+[00:12:01:25:074] Expansions: 10,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,380,015
+[00:12:07:14:446] Expansions: 10,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,675,040
+[00:12:07:14:447] Expansions: 10,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,675,041
+[00:12:07:14:447] Expansions: 10,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,675,042
+[00:12:07:14:447] Expansions: 10,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,675,043
+[00:12:12:43:379] Expansions: 10,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,959,386
+[00:12:12:43:380] Expansions: 10,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,959,387
+[00:12:12:43:380] Expansions: 10,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 33,959,388
+[00:12:18:16:908] Expansions: 10,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,246,978
+[00:12:18:16:910] Expansions: 10,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,246,979
+[00:12:18:16:913] Expansions: 10,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,246,980
+[00:12:23:54:721] Expansions: 10,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,525,219
+[00:12:23:54:724] Expansions: 10,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,525,220
+[00:12:23:54:725] Expansions: 10,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,525,221
+[00:12:29:46:722] Expansions: 10,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,833,010
+[00:12:29:46:722] Expansions: 10,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 34,833,011
+[00:12:35:46:255] Expansions: 10,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,128,541
+[00:12:35:46:256] Expansions: 10,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,128,542
+[00:12:35:46:257] Expansions: 10,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,128,543
+[00:12:35:46:257] Expansions: 10,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,128,544
+[00:12:41:31:700] Expansions: 11,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,424,056
+[00:12:41:31:701] Expansions: 11,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,424,057
+[00:12:41:31:701] Expansions: 11,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,424,058
+[00:12:47:02:967] Expansions: 11,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,705,625
+[00:12:47:02:968] Expansions: 11,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,705,626
+[00:12:52:45:869] Expansions: 11,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,995,691
+[00:12:52:45:869] Expansions: 11,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 35,995,692
+[00:12:58:40:669] Expansions: 11,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,285,319
+[00:12:58:40:669] Expansions: 11,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,285,320
+[00:12:58:40:670] Expansions: 11,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,285,321
+[00:13:04:28:001] Expansions: 11,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,572,960
+[00:13:04:28:002] Expansions: 11,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,572,961
+[00:13:09:57:489] Expansions: 11,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,846,359
+[00:13:09:57:491] Expansions: 11,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,846,360
+[00:13:09:57:491] Expansions: 11,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 36,846,361
+[00:13:15:36:281] Expansions: 11,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,129,071
+[00:13:15:36:283] Expansions: 11,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,129,072
+[00:13:15:36:283] Expansions: 11,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,129,073
+[00:13:15:36:285] Expansions: 11,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,129,074
+[00:13:21:17:084] Expansions: 11,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,412,266
+[00:13:21:17:085] Expansions: 11,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,412,267
+[00:13:21:17:085] Expansions: 11,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,412,268
+[00:13:27:06:021] Expansions: 11,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,700,350
+[00:13:27:06:021] Expansions: 11,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,700,351
+[00:13:27:06:022] Expansions: 11,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,700,352
+[00:13:27:06:022] Expansions: 11,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,700,353
+[00:13:32:50:609] Expansions: 11,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,983,313
+[00:13:32:50:609] Expansions: 11,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,983,314
+[00:13:32:50:610] Expansions: 11,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,983,315
+[00:13:32:50:610] Expansions: 11,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 37,983,316
+[00:13:38:33:644] Expansions: 12,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,263,760
+[00:13:38:33:646] Expansions: 12,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,263,761
+[00:13:38:33:647] Expansions: 12,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,263,762
+[00:13:38:33:650] Expansions: 12,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,263,763
+[00:13:38:33:650] Expansions: 12,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,263,764
+[00:13:44:23:505] Expansions: 12,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,549,475
+[00:13:44:23:505] Expansions: 12,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,549,476
+[00:13:44:23:506] Expansions: 12,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,549,477
+[00:13:44:23:506] Expansions: 12,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 38,549,478
+[00:13:56:19:251] Expansions: 12,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,105,847
+[00:13:56:19:253] Expansions: 12,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,105,848
+[00:13:56:19:255] Expansions: 12,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,105,849
+[00:14:02:42:562] Expansions: 12,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,383,263
+[00:14:02:42:563] Expansions: 12,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,383,264
+[00:14:08:45:701] Expansions: 12,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,675,310
+[00:14:08:45:702] Expansions: 12,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,675,311
+[00:14:08:45:702] Expansions: 12,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,675,312
+[00:14:14:28:201] Expansions: 12,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,980,977
+[00:14:14:28:202] Expansions: 12,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,980,978
+[00:14:14:28:203] Expansions: 12,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 39,980,979
+[00:14:20:15:926] Expansions: 12,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,286,802
+[00:14:20:15:926] Expansions: 12,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,286,803
+[00:14:20:15:926] Expansions: 12,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,286,804
+[00:14:26:05:048] Expansions: 12,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,587,752
+[00:14:26:05:050] Expansions: 12,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,587,753
+[00:14:26:05:052] Expansions: 12,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,587,754
+[00:14:31:27:328] Expansions: 12,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,894,080
+[00:14:31:27:329] Expansions: 12,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 40,894,081
+[00:14:36:46:582] Expansions: 13,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,167,644
+[00:14:36:46:583] Expansions: 13,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,167,645
+[00:14:36:46:584] Expansions: 13,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,167,646
+[00:14:36:46:587] Expansions: 13,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,167,647
+[00:14:36:46:587] Expansions: 13,000,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,167,648
+[00:14:42:17:930] Expansions: 13,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,458,738
+[00:14:42:17:930] Expansions: 13,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,458,739
+[00:14:42:17:931] Expansions: 13,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,458,740
+[00:14:42:17:931] Expansions: 13,100,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,458,741
+[00:14:47:12:497] Expansions: 13,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,730,250
+[00:14:47:12:497] Expansions: 13,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,730,251
+[00:14:47:12:499] Expansions: 13,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,730,252
+[00:14:47:12:499] Expansions: 13,200,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,730,253
+[00:14:52:19:282] Expansions: 13,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,998,697
+[00:14:52:19:282] Expansions: 13,300,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 41,998,698
+[00:14:57:46:619] Expansions: 13,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,304,101
+[00:14:57:46:619] Expansions: 13,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,304,102
+[00:14:57:46:619] Expansions: 13,400,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,304,103
+[00:15:03:13:136] Expansions: 13,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,582,018
+[00:15:03:13:138] Expansions: 13,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,582,019
+[00:15:03:13:138] Expansions: 13,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,582,020
+[00:15:03:13:139] Expansions: 13,500,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,582,021
+[00:15:08:40:851] Expansions: 13,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,875,876
+[00:15:08:40:853] Expansions: 13,600,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 42,875,877
+[00:15:13:47:079] Expansions: 13,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,151,075
+[00:15:13:47:080] Expansions: 13,700,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,151,076
+[00:15:19:05:217] Expansions: 13,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,425,509
+[00:15:19:05:219] Expansions: 13,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,425,510
+[00:15:19:05:219] Expansions: 13,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,425,511
+[00:15:19:05:219] Expansions: 13,800,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,425,512
+[00:15:24:30:604] Expansions: 13,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,713,093
+[00:15:24:30:605] Expansions: 13,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,713,094
+[00:15:24:30:607] Expansions: 13,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,713,095
+[00:15:24:30:607] Expansions: 13,900,000. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 43,713,096

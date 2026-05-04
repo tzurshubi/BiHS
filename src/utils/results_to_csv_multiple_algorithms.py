@@ -9,7 +9,7 @@ from plotly.express import line
 # CONFIGURATION
 # ==========================================
 # Set this to the path where your results files are located
-results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_04_26/Snake_Grids/4la" 
+results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_04_27/IDA/Snake_Grids/4la" 
 
 def parse_and_check_results(directory):
     bug_reports = []
@@ -57,7 +57,7 @@ def parse_and_check_results(directory):
                 lengths_for_graph[current_graph_id].append(val)
 
             # 3. Extract the final summary stats for the CSV
-            summary_match = re.search(r"(A\*|XMM|X-DFBnB|BiX-DFBnB):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
+            summary_match = re.search(r"(A\*|XMM|XDFBnB|BiXDFBnB|XIDA|BiXIDA):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
             if summary_match:
                 alg = summary_match.group(1)
                 expansions = summary_match.group(2).replace(',', '')
@@ -75,7 +75,7 @@ def parse_and_check_results(directory):
 def write_csv(data, output_file):
     grids = ['6x6', '6x7', '6x8', '7x7', '7x8', '8x8'] if "snake" not in results_dir.lower() else ['7x7', '7x8', '7x9', '8x8', '8x9', '9x9']
     percents = ['20%', '16%', '12%', '8%', '4%']
-    algs = ['A*', 'XMM', 'X-DFBnB', 'BiX-DFBnB']
+    algs = ['A*', 'XMM', 'XDFBnB', 'BiXDFBnB', 'XIDA', 'BiXIDA']  # List all algorithms you want to include in the CSV
 
     with open(output_file, 'w', newline='') as f:
         writer = csv.writer(f)

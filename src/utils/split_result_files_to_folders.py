@@ -5,7 +5,7 @@ import shutil
 # CONFIGURATION
 # ==========================================
 # Set this to the path where your results files are located
-results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_04_26"
+results_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_04_27/DFBnB"
 
 def organize_results(base_path):
     # Define the lookahead depths we want to search for
