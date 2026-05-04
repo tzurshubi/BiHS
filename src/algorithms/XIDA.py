@@ -104,7 +104,7 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
                 all_leaves.append((0, succ, next_h_graph))
                 continue
 
-            if remaining == 1:
+            if remaining == 1 or remaining < 0:
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(succ, goal, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
@@ -120,7 +120,7 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
 
     def exp_n_check_states(state, h_graph):
         nonlocal global_longest_path, next_threshold, target_found
-        
+        # logger(f"Exp {stats["expansions"]}: Expanding state {state.materialize_path()} with g={state.g}")
         if target_found: return
         
         stats["expansions"] += 1
