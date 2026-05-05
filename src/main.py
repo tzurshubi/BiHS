@@ -583,7 +583,7 @@ if __name__ == "__main__":
     for algorithm in args.algorithms:
         args.algo = algorithm
         avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
-        if graph_type=="maze" and per_blocked==0: number_of_graphs = 1
+        if (graph_type=="maze" and per_blocked==0) or graph_type=="cube": number_of_graphs = 1
         for i in list(range(0, number_of_graphs)):
         # for i in range(number_of_graphs, number_of_graphs+1):
             # try:
