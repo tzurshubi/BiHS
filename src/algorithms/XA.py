@@ -40,7 +40,7 @@ def XA(graph, start, goal, heuristic_name, snake, args):
             if g_value > best_path_length:
                 best_path = current_state
                 best_path_length = g_value
-                logger(f"Expansion {stats['expansions']}: New longest path found with length {best_path_length}: {best_path.materialize_path()}")
+                if cube: logger(f"Expansion {stats['expansions']}: New longest path found with length {best_path_length}: {best_path.materialize_path()}")
             continue
 
         if f_value <= best_path_length:

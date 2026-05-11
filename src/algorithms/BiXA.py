@@ -298,7 +298,7 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
         # A* Optimal Termination: If the best possible upper-bound in the entire queue 
         # is less than or equal to the best path we've already found, stop.
         if global_longest_path and f_value <= len(global_longest_path) - 1:
-            logger(f"A* Optimal Termination at Expansion {stats['expansions']}. Best path proved optimal.")
+            # logger(f"A* Optimal Termination at Expansion {stats['expansions']}. Best path proved optimal.")
             break
 
         # Generate macro-step successors based on lookahead
