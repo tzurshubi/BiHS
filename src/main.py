@@ -12,8 +12,9 @@ import time
 import math
 import tracemalloc
 from models.graph import *
-from algorithms.unidirectional_search import *
-from algorithms.bidirectional_search import *
+from algorithms.XA import *
+from algorithms.BiXA import *
+from algorithms.XMM import *
 from algorithms.multidirectional_search import *
 from algorithms.multidirectional_search1 import *
 from algorithms.tbt_search import *
@@ -38,7 +39,6 @@ from utils.utils import *
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
 
-
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
@@ -53,7 +53,7 @@ DEFAULT_RUN_UNI = True                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["IDA"]          # "basic" # "light" # "cutoff" # "full" # "DFBnB" # "BHK" # "IDA"
+DEFAULT_ALGORITHMS = ["A"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
 DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -85,7 +85,7 @@ def parse_args():
     parser.add_argument("--run_bi", action="store_true", default=DEFAULT_RUN_BI, help="Enable snake mode.")
     parser.add_argument("--run_multi", action="store_true", default=DEFAULT_RUN_MULTI, help="Enable snake mode.")
     parser.add_argument("--solution_vertices", nargs='+', type=int, default=DEFAULT_SOLUTION_VERTICES, help="Solution vertices for multidirectional search.")
-    parser.add_argument("--algorithms", nargs='+', type=str, default=DEFAULT_ALGORITHMS, help="Algorithms to use: basic, light, full, DFBnB")
+    parser.add_argument("--algorithms", nargs='+', type=str, default=DEFAULT_ALGORITHMS, help="Algorithms to use: basic, light, XMM, DFBnB, IDA, BHK, etc.")
     parser.add_argument("--lookahead", type=int, default=DEFAULT_LOOKAHEAD, help="Lookahead level for DFBnB algorithms: 0 (no lookahead), 1 (1-step lookahead), 2 (2-step lookahead).")
     parser.add_argument("--bsd", action="store_true", default=DEFAULT_BSD, help="Basic Symmetry Detection")
     parser.add_argument("--cube_first_dims", type=int, default=DEFAULT_CUBE_FIRST_DIMENSIONS, help="Number of initial dimensions crossed.")
@@ -408,7 +408,7 @@ def search(
             elif args.algo=="IDA":
                 path, stats = XIDA(G, start, goal, heuristic, snake, args)
             else:
-                path, stats = unidirectional_search(G, start, goal, heuristic, snake, args)
+                path, stats = XA(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
             # path, stats = unidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = unidirectional_gradual_sym_coil(G, start, goal, heuristic, snake, args)
@@ -426,8 +426,10 @@ def search(
                 # path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args) # remove later
             elif args.algo=="IDA":
                 path, stats, meet_point = BiXIDA(G, start, goal, heuristic, snake, args)
+            elif args.algo=="A":
+                path, stats, meet_point = BiXA(G, start, goal, heuristic, snake, args)
             else:
-                path, stats, meet_point = bidirectional_search(G, start, goal, heuristic, snake, args)
+                path, stats, meet_point = XMM(G, start, goal, heuristic, snake, args)
         else: # if args.sym_coil:
             # path, stats, meet_point = bidirectional_search_sym_coil(G, start, goal, heuristic, snake, args)
             # path, stats = bidirectional_dfbnb_sym_coil(G, start, goal, heuristic, snake, args)

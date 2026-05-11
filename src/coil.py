@@ -12,8 +12,8 @@ import time
 import math
 import tracemalloc
 from models.graph import *
-from algorithms.unidirectional_search import *
-from algorithms.bidirectional_search import *
+from src.algorithms.XA import *
+from src.algorithms.XMM import *
 import pickle
 from models.open import Open
 from heuristics.heuristic import heuristic

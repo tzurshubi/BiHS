@@ -502,8 +502,8 @@ def F2F_bcc_snake_heuristic_paper(state_F, state_B):
     if calc_Y_heuristic: 
         Y = Y_heuristic(Qn_subgraph) 
 
-    # Add 2 (1 edge connecting F to its neighbor + 1 edge connecting B to its neighbor)
-    return Y + 2, info
+    # Add 3 (1 edge from F to its neighbor n_f , 1 edge from n_f into the Y nodes , Y-1 edges connecting the Y nodes together, 1 edge from the Y nodes to B's neighbor n_b, 1 edge from n_b to B. Total maximum edges = 1 + 1 + (Y - 1) + 1 + 1 = Y + 3
+    return Y + 3, info
 
 def F2F_bcc_heuristic_solVert(state_F, state_B, v, graph):
     """

@@ -1,0 +1,40 @@
+--------------------------
+date: SM_Grids
+number_of_graphs: 10
+graph_type: grid
+size_of_graphs: [5, 5]
+heuristic: bcc_heuristic
+snake: True
+run_uni: False
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['IDA']
+lookahead: 2
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- SM_Grids/5x5_grid_with_random_blocks_30per_5 ----------
+[00:00:00:00:011] Starting IDA* iteration with threshold: 10
+[00:00:00:01:420] Exp 0: Expanding state_F [0] and state_B [24]
+[00:00:00:01:427] Checking leaf_F [0, 1] and leaf_B [24, 19] with h=8, f=10, g_F=1, g_B=1
+[00:00:00:02:677] Exp 1: Expanding state_F [0, 1] and state_B [24, 19]
+[00:00:00:02:680] Checking leaf_F [0, 1, 6] and leaf_B [24, 19, 18] with h=7, f=11, g_F=2, g_B=2
+[00:00:00:04:139] Exp 2: Expanding state_F [0, 1, 6] and state_B [24, 19, 18]
+[00:00:00:04:140] Checking leaf_F [0, 1, 6, 11] and leaf_B [24, 19, 18, 17] with h=4, f=10, g_F=3, g_B=3
+[00:00:00:14:539] Exp 3: Expanding state_F [0, 1, 6, 11] and state_B [24, 19, 18, 17]
+[00:00:00:14:541] Checking leaf_F [0, 1] and leaf_B [24, 23] with h=8, f=10, g_F=1, g_B=1
+[00:00:00:17:885] Exp 4: Expanding state_F [0, 1] and state_B [24, 23]
+[00:00:00:17:890] Checking leaf_F [0, 1, 6] and leaf_B [24, 23, 18] with h=7, f=11, g_F=2, g_B=2
+[00:00:00:19:467] Exp 5: Expanding state_F [0, 1, 6] and state_B [24, 23, 18]
+[00:00:00:19:471] Checking leaf_F [0, 1, 6, 11] and leaf_B [24, 23, 18, 17] with h=4, f=10, g_F=3, g_B=3
+[00:00:00:41:101] Exp 6: Expanding state_F [0, 1, 6, 11] and state_B [24, 23, 18, 17]
+[00:00:01:17:244] Path of length 8 found: [0, 1, 6, 11, 16, 17, 18, 19, 24]
+[00:00:01:17:492] ! Bidirectional. expansions: 7, time: 77,245 [ms], path length: 8 [edges], g_F: 4, g_B: 4, generated: {'F': 11, 'B': 10}, MM: 0, MMPER: -1.0%
+[00:00:01:17:492] 
+---------- SM_Grids/5x5_grid_with_random_blocks_30per_6 ----------
+[00:00:00:00:010] Starting IDA* iteration with threshold: 11

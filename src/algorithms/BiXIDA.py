@@ -322,6 +322,7 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
     def exp_n_check_states(state_F, state_B, h_graph, expand_F_turn=True):
         nonlocal global_longest_path, global_meet_point, next_threshold, target_found
 
+        # logger(f"Exp {stats['expansions']}: Expanding state_F {state_F.materialize_path()} and state_B {state_B.materialize_path()}")
         # sol = [0, 7, 14, 21, 28, 29, 30, 23, 16, 9, 10, 3, 4, 5, 6, 13, 20, 19, 18, 25, 32, 33, 40, 47, 48]
         # f_path = state_F.materialize_path()
         # b_path = state_B.materialize_path()
@@ -340,7 +341,8 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
         for h_val, leaf_F, leaf_B, leaf_h_graph in leaves:
             if target_found: break
 
-            current_f_value = leaf_F.g + h_val + leaf_B.g + 1
+            current_f_value = leaf_F.g + h_val + leaf_B.g
+            # logger(f"Checking leaf_F {leaf_F.materialize_path()} and leaf_B {leaf_B.materialize_path()} with h={h_val}, f={current_f_value}, g_F={leaf_F.g}, g_B={leaf_B.g}")
 
             # --- IDA* Pruning Logic ---
             # If the branch cannot reach the current upper bound threshold, prune it.
