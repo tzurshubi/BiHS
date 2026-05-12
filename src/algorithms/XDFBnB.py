@@ -8,7 +8,7 @@ from models.state import State
 from utils.utils import *
 
 def XDFBnB(graph, start, goal, heuristic_name, snake, args):
-    logger = args.logger 
+    logger = args.logger    
     N = max(graph.nodes)
     V = len(graph.nodes)
 
@@ -116,7 +116,7 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
         stats["expansions"] += 1
         
         # Retrieve lookahead leaves (or immediate successors if args.lookahead == 1)
-        leaves = get_lookahead_successors(state, h_graph, args.lookahead)
+        leaves = get_lookahead_successors(state, h_graph, args.lookahead if args.lookahead > -1 else 1)
         
         if not leaves:
             stats["violations"]["no_successors"][state.g] += 1

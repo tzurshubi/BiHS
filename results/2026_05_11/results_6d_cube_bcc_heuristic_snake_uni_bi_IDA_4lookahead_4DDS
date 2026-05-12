@@ -1,0 +1,47 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['IDA']
+lookahead: 4
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:00:008] Expansion 1: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:474] Expansion 3: New longest path found with length 6: [15, 31, 27, 25, 24, 8, 0]
+[00:00:00:00:496] Expansion 3: New longest path found with length 8: [15, 31, 27, 25, 24, 56, 40, 32, 0]
+[00:00:00:10:781] Expansion 59: New longest path found with length 10: [15, 13, 12, 28, 20, 21, 53, 37, 36, 32, 0]
+[00:00:00:12:782] Expansion 71: New longest path found with length 12: [15, 13, 29, 21, 53, 37, 36, 44, 60, 56, 24, 8, 0]
+[00:00:01:01:858] Expansion 455: New longest path found with length 16: [15, 31, 29, 21, 20, 22, 18, 50, 48, 49, 57, 59, 43, 42, 10, 8, 0]
+[00:00:01:43:540] Expansion 1,004: New longest path found with length 20: [15, 14, 10, 26, 18, 22, 20, 21, 29, 25, 57, 49, 51, 55, 63, 62, 60, 44, 36, 32, 0]
+[00:00:03:33:361] Valid states checked so far: 200,000, Expansions: 3,035, Global best: 21
+[00:00:04:08:591] Expansion 3,735: New longest path found with length 22: [15, 31, 27, 25, 24, 28, 20, 22, 18, 50, 51, 49, 53, 61, 45, 41, 43, 42, 46, 38, 36, 32, 0]
+[00:00:04:08:598] Path of length 22 found: [15, 31, 27, 25, 24, 28, 20, 22, 18, 50, 51, 49, 53, 61, 45, 41, 43, 42, 46, 38, 36, 32, 0]
+[00:00:04:08:598] ! Unidirectional s-t. expansions: 3,735, time: 248,598 [ms], path length: 22 [edges], generated: 236,959
+[00:00:00:00:056] Expansion 1: New longest path found with length 4: [15, 13, 12, 8, 0]
+[00:00:00:00:783] Expansion 4: New longest path found with length 8: [15, 14, 10, 26, 24, 28, 20, 4, 0]
+[00:00:00:06:836] Expansion 69: New longest path found with length 10: [15, 14, 10, 26, 27, 25, 29, 28, 20, 4, 0]
+[00:00:00:06:843] Expansion 69: New longest path found with length 12: [15, 14, 10, 26, 27, 59, 57, 61, 29, 28, 20, 4, 0]
+[00:00:00:39:420] Expansion 534: New longest path found with length 14: [15, 13, 12, 28, 20, 22, 18, 50, 51, 55, 53, 37, 36, 32, 0]
+[00:00:00:39:423] Expansion 534: New longest path found with length 16: [15, 13, 12, 28, 20, 22, 18, 26, 58, 59, 51, 55, 53, 37, 36, 32, 0]
+[00:00:01:57:111] Expansion 2,835: New longest path found with length 20: [15, 31, 27, 26, 18, 22, 20, 21, 53, 49, 57, 41, 43, 42, 34, 38, 36, 44, 12, 8, 0]
+[00:00:02:28:871] Expansion 4,015: New longest path found with length 22: [15, 14, 10, 26, 24, 28, 29, 21, 53, 49, 48, 50, 54, 62, 63, 59, 43, 41, 40, 44, 36, 4, 0]
+[00:00:02:28:873] Path of length 22 found: [15, 14, 10, 26, 24, 28, 29, 21, 53, 49, 48, 50, 54, 62, 63, 59, 43, 41, 40, 44, 36, 4, 0]
+[00:00:02:29:209] ! Bidirectional. expansions: 4,015, time: 148,873 [ms], path length: 22 [edges], g_F: 11, g_B: 11, generated: {'F': 67,630, 'B': 68,164}, MM: 0, MMPER: -1.0%
+[00:00:02:29:209] average expansions: (3,735, 0, 4,015, 0)
+[00:00:02:29:209] average time: (248,598, 0, 148,873, 0)
+[00:00:02:29:210] XIDA: 3,735 , 248,598 (expansions , time[ms])
+[00:00:02:29:210] BiXIDA: 4,015 , 148,873 (expansions , time[ms])
+

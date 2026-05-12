@@ -1,0 +1,57 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: -1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:00:004] Expansion 1: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:13:646] Expansion 1: New longest path found with length 6: [15, 13, 12, 28, 20, 16, 0]
+[00:00:00:13:648] Expansion 1: New longest path found with length 8: [15, 13, 12, 28, 20, 52, 36, 32, 0]
+[00:00:00:14:838] Expansion 1: New longest path found with length 10: [15, 13, 12, 28, 20, 52, 54, 38, 34, 32, 0]
+[00:00:00:14:937] Expansion 1: New longest path found with length 12: [15, 13, 12, 28, 20, 52, 54, 38, 46, 42, 40, 32, 0]
+[00:00:00:15:006] Expansion 1: New longest path found with length 14: [15, 13, 12, 28, 20, 52, 54, 50, 18, 26, 10, 42, 40, 32, 0]
+[00:00:00:15:031] Expansion 1: New longest path found with length 16: [15, 13, 12, 28, 20, 52, 54, 50, 18, 26, 27, 25, 57, 41, 40, 32, 0]
+[00:00:00:15:183] Expansion 1: New longest path found with length 18: [15, 13, 12, 28, 20, 52, 54, 50, 51, 49, 57, 25, 27, 26, 10, 42, 40, 32, 0]
+[00:00:00:17:523] Expansion 1: New longest path found with length 20: [15, 13, 12, 28, 20, 22, 18, 50, 51, 55, 53, 61, 57, 41, 43, 42, 46, 38, 36, 32, 0]
+[00:00:00:18:446] Expansion 1: New longest path found with length 22: [15, 13, 12, 28, 20, 22, 18, 26, 27, 25, 57, 41, 43, 42, 46, 62, 63, 55, 53, 37, 36, 32, 0]
+[00:00:02:08:221] Valid states checked so far: 200,000, Expansions: 1, Global best: 23
+[00:00:04:16:796] Valid states checked so far: 400,000, Expansions: 1, Global best: 23
+[00:00:06:27:268] Valid states checked so far: 600,000, Expansions: 1, Global best: 23
+[00:00:08:39:658] Valid states checked so far: 800,000, Expansions: 1, Global best: 23
+[00:00:10:48:576] Valid states checked so far: 1,000,000, Expansions: 1, Global best: 23
+[00:00:12:57:475] Valid states checked so far: 1,200,000, Expansions: 1, Global best: 23
+[00:00:15:07:887] Valid states checked so far: 1,400,000, Expansions: 1, Global best: 23
+[00:00:17:19:932] Valid states checked so far: 1,600,000, Expansions: 1, Global best: 23
+[00:00:19:31:835] Valid states checked so far: 1,800,000, Expansions: 1, Global best: 23
+[00:00:21:35:837] Path of length 22 found: [15, 13, 12, 28, 20, 22, 18, 26, 27, 25, 57, 41, 43, 42, 46, 62, 63, 55, 53, 37, 36, 32, 0]
+[00:00:21:35:839] ! Unidirectional s-t. expansions: 1, time: 1,295,837 [ms], path length: 22 [edges], generated: 1,983,169
+[00:00:00:00:013] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:103] Expansion 3: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:184] Expansion 7: New longest path found with length 8: [15, 13, 29, 21, 53, 52, 36, 4, 0]
+[00:00:00:00:229] Expansion 12: New longest path found with length 12: [15, 13, 29, 21, 53, 49, 48, 56, 60, 44, 36, 4, 0]
+[00:00:00:00:244] Expansion 16: New longest path found with length 16: [15, 13, 29, 21, 53, 49, 51, 50, 18, 26, 24, 56, 60, 44, 36, 4, 0]
+[00:00:00:00:253] Expansion 18: New longest path found with length 18: [15, 13, 29, 21, 53, 49, 51, 50, 34, 42, 10, 26, 24, 56, 60, 44, 36, 4, 0]
+[00:00:00:00:298] Expansion 35: New longest path found with length 20: [15, 13, 29, 21, 53, 49, 48, 50, 34, 42, 43, 59, 27, 26, 30, 62, 60, 44, 36, 4, 0]
+[00:00:00:06:375] Expansion 1,529: New longest path found with length 22: [15, 13, 29, 25, 24, 26, 18, 50, 34, 38, 46, 44, 40, 41, 43, 59, 63, 55, 53, 52, 20, 4, 0]
+[00:00:00:38:494] Path of length 22 found: [15, 13, 29, 25, 24, 26, 18, 50, 34, 38, 46, 44, 40, 41, 43, 59, 63, 55, 53, 52, 20, 4, 0]
+[00:00:00:38:876] ! Bidirectional. expansions: 7,597, time: 38,494 [ms], path length: 22 [edges], g_F: 12, g_B: 10, generated: {'F': 12,591, 'B': 11,723}, MM: 2, MMPER: 7.695652173913043%
+[00:00:00:38:876] average expansions: (1, 0, 7,597, 0)
+[00:00:00:38:877] average time: (1,295,837, 0, 38,494, 0)
+[00:00:00:38:877] XDFBnB: 1 , 1,295,837 (expansions , time[ms])
+[00:00:00:38:877] BiXDFBnB: 7,597 , 38,494 (expansions , time[ms])
+

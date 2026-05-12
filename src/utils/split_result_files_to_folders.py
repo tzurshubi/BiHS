@@ -1,3 +1,4 @@
+import re
 import shutil
 from pathlib import Path
 
@@ -46,15 +47,11 @@ def organize_results(directory_path):
             continue
 
         # 3. Determine the lookahead folder
-        lookahead_folder = None
-        for i in range(1, 5):  # Checks 1 through 4
-            if f"{i}lookahead" in filename:
-                lookahead_folder = f"{i}_lookahead"
-                break
-
-        if not lookahead_folder:
+        m = re.search(r'(-?\d+)lookahead', filename)
+        if not m:
             print(f"Skipping file with no lookahead value: {filename}")
             continue
+        lookahead_folder = f"{m.group(1)}_lookahead"
 
         # 4. Construct target path: e.g., /your/path/DFBnB/LSP_Grids/1_lookahead/
         target_dir = base_path / algorithm / category / lookahead_folder
@@ -71,6 +68,6 @@ def organize_results(directory_path):
 
 if __name__ == "__main__":
     # DIRECTORY PATH
-    target_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_10" 
+    target_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_12" 
     
     organize_results(target_path)

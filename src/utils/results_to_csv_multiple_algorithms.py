@@ -10,9 +10,9 @@ from plotly.express import line
 # CONFIGURATION
 # ==========================================
 # Set this to the parent folder produced by split_result_files_to_folders.py
-base_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_10"
+base_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_12"
 
-ALGS = ['A*', 'XMM', 'XDFBnB', 'BiXDFBnB', 'XIDA', 'BiXIDA']
+ALGS = [ 'XMM', 'XA*', 'BiXA*', 'XDFBnB', 'BiXDFBnB', 'XIDA', 'BiXIDA']
 
 DOMAIN_ORDER = [
     ("grid",  "LSP Grids"),
@@ -42,7 +42,7 @@ def get_dir_type(directory):
 
 def get_lookahead(directory):
     for part in Path(directory).parts:
-        m = re.match(r'(\d+)_lookahead', part)
+        m = re.search(r'(-?\d+)_lookahead', part)
         if m:
             return int(m.group(1))
     return None
@@ -109,8 +109,8 @@ def parse_and_check_results(directory):
             find_acc = defaultdict(list)  # alg -> [(exp, time_ms), ...]
             last_finding = None    # (exp, time_ms) from last "New longest path found"
             pending_finding = None  # saved at "Path of length L found"
-            uni_alg = "XDFBnB" if "DFBnB" in filename else "XIDA"
-            bi_alg  = "BiXDFBnB" if "DFBnB" in filename else "BiXIDA"
+            uni_alg = "XDFBnB" if "DFBnB" in filename else "XIDA" if "IDA" in filename else "XMM" if "XMM" in filename else "XA*"
+            bi_alg  = "BiXDFBnB" if "DFBnB" in filename else "BiXIDA" if "IDA" in filename else "BiXA*"
 
         for line in lines:
             # 1. Identify the current graph block
@@ -154,7 +154,7 @@ def parse_and_check_results(directory):
 
             # 4. Extract final summary stats
             summary_match = re.search(
-                r"(A\*|XMM|XDFBnB|BiXDFBnB|XIDA|BiXIDA):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
+                r"(XA\*|XMM|XDFBnB|BiXA\*|BiXDFBnB|XIDA|BiXIDA):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
             if summary_match:
                 alg = summary_match.group(1)
                 expansions = summary_match.group(2).replace(',', '')
@@ -307,6 +307,7 @@ if __name__ == "__main__":
 
     # all_data[dir_type][lookahead] = merged parsed_data (across all run algorithms)
     all_data = defaultdict(dict)
+    all_bugs = []
 
     for directory in leaf_dirs:
         print(f"\n{'='*60}")
@@ -332,6 +333,7 @@ if __name__ == "__main__":
             for bug in bugs:
                 print(f"[!] {bug}")
             print("=====================================\n")
+            all_bugs.extend(bugs)
         else:
             print("====== BUG CHECK PASSED ======")
             print("All algorithms reported consistent path lengths across all graphs.\n")
@@ -343,3 +345,12 @@ if __name__ == "__main__":
         combined_path = os.path.join(base_dir, "bigoutput.csv")
         write_combined_csv(all_data, combined_path)
         print(f"\nCombined results saved to {combined_path}.")
+
+    print(f"\n{'='*60}")
+    if all_bugs:
+        print(f"FINAL SUMMARY: {len(all_bugs)} BUG(S) FOUND ACROSS ALL CHECKS")
+        for bug in all_bugs:
+            print(f"  [!] {bug}")
+    else:
+        print("FINAL SUMMARY: ALL CHECKS PASSED - No bugs found.")
+    print('='*60)

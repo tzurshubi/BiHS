@@ -1,0 +1,42 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:00:019] Expansion 3: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:034] Expansion 5: New longest path found with length 6: [15, 13, 12, 28, 20, 16, 0]
+[00:00:00:00:053] Expansion 9: New longest path found with length 10: [15, 13, 12, 28, 20, 21, 53, 37, 36, 32, 0]
+[00:00:00:00:987] Expansion 701: New longest path found with length 16: [15, 13, 12, 28, 20, 21, 53, 61, 63, 59, 27, 26, 10, 42, 40, 32, 0]
+[00:00:00:01:033] Expansion 713: New longest path found with length 20: [15, 13, 12, 28, 20, 21, 53, 61, 63, 59, 27, 26, 10, 42, 46, 38, 54, 50, 48, 32, 0]
+[00:00:00:01:388] Expansion 807: New longest path found with length 22: [15, 13, 12, 28, 20, 21, 53, 55, 51, 50, 18, 26, 27, 25, 57, 41, 43, 42, 46, 38, 36, 32, 0]
+[00:00:00:35:692] Path of length 22 found: [15, 13, 12, 28, 20, 21, 53, 55, 51, 50, 18, 26, 27, 25, 57, 41, 43, 42, 46, 38, 36, 32, 0]
+[00:00:00:35:692] ! Unidirectional s-t. expansions: 7,247, time: 35,692 [ms], path length: 22 [edges], generated: 16,545
+[00:00:00:00:004] Expansions: 0. Checks - state_vs_state: 0, state_vs_prefix: 0, prefix_vs_prefix: 1
+[00:00:00:00:177] Expansion 9: New longest path found with length 10: [15, 13, 12, 28, 20, 21, 53, 37, 36, 32, 0]
+[00:00:00:02:247] Expansion 826: New longest path found with length 16: [15, 13, 12, 28, 20, 21, 53, 49, 57, 59, 63, 62, 46, 38, 36, 32, 0]
+[00:00:00:02:289] Expansion 838: New longest path found with length 18: [15, 13, 12, 28, 20, 21, 53, 49, 57, 25, 27, 26, 58, 62, 46, 38, 36, 32, 0]
+[00:00:00:02:384] Expansion 857: New longest path found with length 20: [15, 13, 12, 28, 20, 21, 53, 49, 57, 41, 43, 42, 10, 26, 18, 50, 54, 38, 36, 32, 0]
+[00:00:00:02:792] Expansion 915: New longest path found with length 22: [15, 13, 12, 28, 20, 21, 53, 55, 63, 62, 46, 42, 43, 41, 57, 25, 27, 26, 18, 50, 48, 32, 0]
+[00:00:00:59:072] Path of length 22 found: [15, 13, 12, 28, 20, 21, 53, 55, 63, 62, 46, 42, 43, 41, 57, 25, 27, 26, 18, 50, 48, 32, 0]
+[00:00:00:59:433] ! Bidirectional. expansions: 6,163, time: 59,073 [ms], path length: 22 [edges], g_F: 17, g_B: 5, generated: {'F': 8,719, 'B': 9,665}, MM: 12, MMPER: 51.17391304347826%
+[00:00:00:59:433] average expansions: (7,247, 0, 6,163, 0)
+[00:00:00:59:433] average time: (35,692, 0, 59,073, 0)
+[00:00:00:59:433] XDFBnB: 7,247 , 35,692 (expansions , time[ms])
+[00:00:00:59:433] BiXDFBnB: 6,163 , 59,073 (expansions , time[ms])
+
