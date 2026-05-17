@@ -1,0 +1,39 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['A']
+lookahead: 4
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:33:674] Expansion 6,509: New longest path found with length 22: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
+[00:00:00:33:747] Path of length 22 found: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
+[00:00:00:33:748] ! Unidirectional s-t. expansions: 6,510, time: 33,747 [ms], path length: 22 [edges], generated: 15,739
+[00:00:00:00:058] Expansion 1: New longest path found with length 4: [15, 13, 12, 8, 0]
+[00:00:00:00:470] Expansion 3: New longest path found with length 8: [15, 14, 10, 26, 24, 28, 20, 4, 0]
+[00:00:00:03:898] Expansion 44: New longest path found with length 10: [15, 14, 10, 26, 27, 25, 29, 28, 20, 4, 0]
+[00:00:00:03:905] Expansion 44: New longest path found with length 12: [15, 14, 10, 26, 27, 59, 57, 61, 29, 28, 20, 4, 0]
+[00:00:00:16:575] Expansion 232: New longest path found with length 14: [15, 13, 12, 28, 20, 22, 18, 50, 51, 55, 53, 37, 36, 32, 0]
+[00:00:00:16:578] Expansion 232: New longest path found with length 16: [15, 13, 12, 28, 20, 22, 18, 26, 58, 59, 51, 55, 53, 37, 36, 32, 0]
+[00:00:00:37:226] Expansion 997: New longest path found with length 20: [15, 31, 27, 26, 18, 22, 20, 21, 53, 49, 57, 41, 43, 42, 34, 38, 36, 44, 12, 8, 0]
+[00:00:00:56:769] Expansion 1,999: New longest path found with length 22: [15, 14, 10, 26, 24, 56, 60, 44, 45, 41, 43, 59, 51, 49, 53, 21, 20, 22, 54, 38, 34, 32, 0]
+[00:00:00:57:289] Path of length 22 found: [15, 14, 10, 26, 24, 56, 60, 44, 45, 41, 43, 59, 51, 49, 53, 21, 20, 22, 54, 38, 34, 32, 0]
+[00:00:00:57:716] ! Bidirectional. expansions: 2,000, time: 57,289 [ms], path length: 22 [edges], g_F: 11, g_B: 11, generated: {'F': 30,183, 'B': 30,289}, MM: 0, MMPER: -1.0%
+[00:00:00:57:716] average expansions: (6,510, 0, 2,000, 0)
+[00:00:00:57:716] average time: (33,747, 0, 57,289, 0)
+[00:00:00:57:716] XA*: 6,510 , 33,747 (expansions , time[ms])
+[00:00:00:57:716] BiXA*: 2,000 , 57,289 (expansions , time[ms])
+

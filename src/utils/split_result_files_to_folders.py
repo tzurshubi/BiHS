@@ -68,6 +68,6 @@ def organize_results(directory_path):
 
 if __name__ == "__main__":
     # DIRECTORY PATH
-    target_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_12" 
+    target_path = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_13" 
     
     organize_results(target_path)

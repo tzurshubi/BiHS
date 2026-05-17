@@ -10,7 +10,7 @@ from plotly.express import line
 # CONFIGURATION
 # ==========================================
 # Set this to the parent folder produced by split_result_files_to_folders.py
-base_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_12"
+base_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_13"
 
 ALGS = [ 'XMM', 'XA*', 'BiXA*', 'XDFBnB', 'BiXDFBnB', 'XIDA', 'BiXIDA']
 
@@ -116,6 +116,12 @@ def parse_and_check_results(directory):
             # 1. Identify the current graph block
             header_match = re.search(r"^----------\s*(.*?)\s*----------", line)
             if header_match:
+                if dir_type == "cib" and last_finding is not None:
+                    # Algorithm didn't finish the previous graph block — use last finding
+                    if "_uni_" in filename:
+                        find_acc[uni_alg].append(last_finding)
+                    elif "_bi_" in filename:
+                        find_acc[bi_alg].append(last_finding)
                 current_graph_id = header_match.group(1)
                 if dir_type == "cib":
                     last_finding = None
@@ -163,6 +169,13 @@ def parse_and_check_results(directory):
                     data[row_key][alg]["prove"] = (expansions, time_ms)
                 else:
                     data[row_key][alg][col_key] = (expansions, time_ms)
+
+        # Handle last graph block if algorithm didn't finish
+        if dir_type == "cib" and last_finding is not None:
+            if "_uni_" in filename:
+                find_acc[uni_alg].append(last_finding)
+            elif "_bi_" in filename:
+                find_acc[bi_alg].append(last_finding)
 
         # Bug checker
         for graph_id, lengths in lengths_for_graph.items():

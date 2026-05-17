@@ -67,7 +67,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if f.g + b.g > len(global_longest_path) - 1:
                 global_longest_path = f.materialize_path() + b.materialize_path()[::-1][1:]
                 global_meet_point = f.head
-                if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+                if args.graph_type == "cube": 
+                    logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+                    logger(f"Stats: {stats}")
             return True, False # Valid, but met, do not expand
 
         # 2. Check Overlap / Chord Violations AND Snake Adjacent Meets
