@@ -403,7 +403,7 @@ def search(
     elif search_type == "unidirectional":
         # print(f"\nUnidirectional search on graph '{name_of_graph}' from {start} to {goal} with heuristic '{heuristic}' {'in SNAKE mode' if snake else ''}")
         if not args.sym_coil:
-            if args.algo=="DFBnB" or args.algo=="BiXDFBnB_F2E":
+            if args.algo=="DFBnB" or args.algo=="BiXDFBnB_F2E" or args.algo=="DFBnB_F2E":
                 path, stats = XDFBnB(G, start, goal, heuristic, snake, args)
             elif args.algo=="IDA":
                 path, stats = XIDA(G, start, goal, heuristic, snake, args)
