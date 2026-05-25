@@ -42,19 +42,19 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
-DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_DATE = "mazes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
-DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
-DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
+DEFAULT_GRAPH_TYPE = "maze"             # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [13,13]          # dimension of cube
+DEFAULT_PER_OF_BLOCKS = 1              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
-DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
 DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
-DEFAULT_LOOKAHEAD = 4                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
+DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
@@ -424,6 +424,8 @@ def search(
                 # path, stats, meet_point = BiXDFBnB_alternating(G, start, goal, heuristic, snake, args)
                 # path, stats, meet_point = BiXDFBnB_1lookahead(G, start, goal, heuristic, snake, args)
                 # path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args) # remove later
+            elif args.algo=="BiXDFBnB_F2E":
+                path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args)
             elif args.algo=="IDA":
                 path, stats, meet_point = BiXIDA(G, start, goal, heuristic, snake, args)
             elif args.algo=="A":

@@ -1,0 +1,301 @@
+
+<style>
+.wrap{padding:1rem 0;font-size:12px;}
+.domain-title{font-size:15px;font-weight:500;color:var(--color-text-primary);margin:1.8rem 0 0.6rem;}
+.domain-title:first-child{margin-top:0;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:16px;overflow-x:auto;}
+table{border-collapse:collapse;min-width:100%;}
+th{font-size:11px;font-weight:500;color:var(--color-text-secondary);padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap;background:var(--color-background-secondary);text-align:left;}
+th.center{text-align:center;}
+td{padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle;white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+td.grid{font-weight:500;font-size:12px;}
+.algo{font-weight:500;font-size:12px;}
+.lhval{font-size:10px;color:var(--color-text-secondary);display:block;margin-top:1px;}
+.badge-e{display:inline-block;font-size:9px;font-weight:500;padding:1px 5px;border-radius:3px;background:#E6F1FB;color:#0C447C;}
+.badge-t{display:inline-block;font-size:9px;font-weight:500;padding:1px 5px;border-radius:3px;background:#EAF3DE;color:#27500A;}
+.legend{display:flex;gap:14px;margin-bottom:10px;}
+.legend span{font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:4px;}
+.gh{background:var(--color-background-secondary);font-size:11px;font-weight:500;color:var(--color-text-secondary);text-align:center;border-bottom:0.5px solid var(--color-border-tertiary);}
+.sep{border-left:0.5px solid var(--color-border-tertiary);}
+</style>
+
+<div class="wrap">
+<div class="legend">
+  <span><span class="badge-e">E</span> Min expansions</span>
+  <span><span class="badge-t">T</span> Min runtime</span>
+</div>
+
+<!-- LSP GRIDS -->
+<div class="domain-title">LSP Grids</div>
+<div class="card"><table>
+<thead>
+<tr>
+  <th rowspan="3">Grid</th>
+  <th colspan="4" class="center gh">20% blocks</th>
+  <th colspan="4" class="center gh sep">16% blocks</th>
+  <th colspan="4" class="center gh sep">12% blocks</th>
+  <th colspan="4" class="center gh sep">8% blocks</th>
+</tr>
+<tr>
+  <th colspan="2" class="center gh"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+</tr>
+<tr>
+  <th>Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="grid">6×6</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">25</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">33</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">40</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">55</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">49</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">93</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">306</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=1</span></td><td style="color:var(--color-text-secondary);font-size:11px">658</td>
+</tr>
+<tr>
+  <td class="grid">6×7</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">24</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">54</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">38</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">76</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">80</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">215</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,902</td>
+  <td><span class="algo">XMM</span><span class="lhval">lh=−1</span></td><td style="color:var(--color-text-secondary);font-size:11px">3,631</td>
+</tr>
+<tr>
+  <td class="grid">6×8</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">29</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">59</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">236</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">658</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">286</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">567</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">8,973</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">16,220</td>
+</tr>
+<tr>
+  <td class="grid">7×7</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">35</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">85</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">260</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">704</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">408</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=−1</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,256</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">6,716</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">12,385</td>
+</tr>
+<tr>
+  <td class="grid">7×8</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">73</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">192</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">297</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=−1</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,050</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">4,251</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">9,893</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">18,242</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">42,639</td>
+</tr>
+<tr>
+  <td class="grid">8×8</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">549</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">2,185</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,610</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">4,721</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">11,785</td>
+  <td><span class="algo">XMM</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">34,499</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">64,134</td>
+  <td><span class="algo">BiXIDA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">234,111</td>
+</tr>
+</tbody>
+</table></div>
+
+<!-- SNAKE GRIDS -->
+<div class="domain-title">Snake Grids</div>
+<div class="card"><table>
+<thead>
+<tr>
+  <th rowspan="3">Grid</th>
+  <th colspan="4" class="center gh">20% blocks</th>
+  <th colspan="4" class="center gh sep">16% blocks</th>
+  <th colspan="4" class="center gh sep">12% blocks</th>
+  <th colspan="4" class="center gh sep">8% blocks</th>
+</tr>
+<tr>
+  <th colspan="2" class="center gh"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+</tr>
+<tr>
+  <th>Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="grid">7×7</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">33</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=3</span></td><td style="color:var(--color-text-secondary);font-size:11px">217</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">49</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">331</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">70</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">564</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">207</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,812</td>
+</tr>
+<tr>
+  <td class="grid">7×8</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">45</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">426</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">120</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,214</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">156</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,635</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">492</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">4,724</td>
+</tr>
+<tr>
+  <td class="grid">7×9</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">105</td>
+  <td><span class="algo">XA*</span><span class="lhval">lh=3</span></td><td style="color:var(--color-text-secondary);font-size:11px">848</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">197</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,570</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">574</td>
+  <td><span class="algo">XA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">5,934</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">531</td>
+  <td><span class="algo">XA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">6,127</td>
+</tr>
+<tr>
+  <td class="grid">8×8</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">93</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">803</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">154</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,880</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">534</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">6,506</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">847</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">10,934</td>
+</tr>
+<tr>
+  <td class="grid">8×9</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">187</td>
+  <td><span class="algo">XA*</span><span class="lhval">lh=−1</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,687</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">522</td>
+  <td><span class="algo">XA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">6,672</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,393</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">16,062</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">3,455</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">51,344</td>
+</tr>
+<tr>
+  <td class="grid">9×9</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">577</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">6,077</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,244</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">15,886</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">2,127</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">31,621</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">7,385</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">113,250</td>
+</tr>
+</tbody>
+</table></div>
+
+<!-- LSP MAZES -->
+<div class="domain-title">LSP Mazes</div>
+<div class="card"><table>
+<thead>
+<tr>
+  <th rowspan="3">Grid</th>
+  <th colspan="4" class="center gh">0 blocks</th>
+  <th colspan="4" class="center gh sep">1 block</th>
+</tr>
+<tr>
+  <th colspan="2" class="center gh"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+</tr>
+<tr>
+  <th>Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="grid">13×13</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">159</td>
+  <td><span class="algo">BiXA*</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">834</td>
+  <td class="sep"><span class="algo">BiXA*</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">5,518</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">26,241</td>
+</tr>
+</tbody>
+</table></div>
+
+<!-- CIB -->
+<div class="domain-title">CIB</div>
+<div class="card"><table>
+<thead>
+<tr>
+  <th rowspan="3">Dim</th>
+  <th colspan="4" class="center gh">Finding</th>
+  <th colspan="4" class="center gh sep">Proving</th>
+</tr>
+<tr>
+  <th colspan="2" class="center gh"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+  <th colspan="2" class="center gh sep"><span class="badge-e">E</span></th>
+  <th colspan="2" class="center gh"><span class="badge-t">T</span></th>
+</tr>
+<tr>
+  <th>Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+  <th class="sep">Algo (lh)</th><th>Val</th><th>Algo (lh)</th><th>Val</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="grid">5</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=3</span></td><td style="color:var(--color-text-secondary);font-size:11px">3</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=−1</span></td><td style="color:var(--color-text-secondary);font-size:11px">13</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=3</span></td><td style="color:var(--color-text-secondary);font-size:11px">14</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">43</td>
+</tr>
+<tr>
+  <td class="grid">6</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">8</td>
+  <td><span class="algo">XDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">121</td>
+  <td class="sep"><span class="algo">XDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">1,929</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=2</span></td><td style="color:var(--color-text-secondary);font-size:11px">31,557</td>
+</tr>
+<tr>
+  <td class="grid">7</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">543</td>
+  <td><span class="algo">BiXDFBnB</span><span class="lhval">lh=4</span></td><td style="color:var(--color-text-secondary);font-size:11px">16,301</td>
+  <td class="sep" colspan="2" style="color:var(--color-text-secondary);font-size:11px;text-align:center">—</td>
+  <td colspan="2" style="color:var(--color-text-secondary);font-size:11px;text-align:center">—</td>
+</tr>
+</tbody>
+</table></div>
+
+</div>

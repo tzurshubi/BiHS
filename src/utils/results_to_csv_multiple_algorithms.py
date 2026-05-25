@@ -10,7 +10,7 @@ from plotly.express import line
 # CONFIGURATION
 # ==========================================
 # Set this to the parent folder produced by split_result_files_to_folders.py
-base_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_13"
+base_dir = "/home/tzur-shubi/Documents/Programming/BiHS/results/2026_05_25"
 
 ALGS = [ 'XMM', 'XA*', 'BiXA*', 'XDFBnB', 'BiXDFBnB', 'XIDA', 'BiXIDA']
 
