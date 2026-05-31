@@ -338,7 +338,7 @@ def create_graphs(args):
         os.makedirs(folder_path)
 
     for percent_of_blocks in percentages_of_blocks:
-        for i in range(number_of_graphs if percent_of_blocks > 0 else 1):
+        for i in range(8,number_of_graphs if percent_of_blocks > 0 else 1):
             if graph_type == "grid":
                 name_of_graph = f"{dimension_of_graphs[0]}x{dimension_of_graphs[1]}_grid_with_random_blocks_{percent_of_blocks}per_{i}"
                 num_of_blocks = math.floor((dimension_of_graphs[0] * dimension_of_graphs[1]) * percent_of_blocks / 100)
@@ -387,7 +387,7 @@ if __name__ == "__main__":
     args.number_of_graphs = 10
     args.graph_type = "maze" # "grid" # "cube" # "manual" # maze"
     args.dimension_of_graphs = [13,13] # dimension for cube
-    args.percentages_of_blocks = [0,1,2]  # percentages of blocks to remove
+    args.percentages_of_blocks = [2]  # percentages of blocks to remove # [0,1,2]
 
     create_graphs(args)
 
