@@ -1,0 +1,48 @@
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+SLURM_JOBID:		17966597
+SLURM_JOB_NODELIST:	ise-cpu256-31
+SLURM_SCRATCH_DIR:	/scratch/shubit/17966597
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+
+SLURM_JOBID:		 17966597
+SLURM_JOB_NODELIST:	 ise-cpu256-31 
+
+--------------------------
+date: mazes
+number_of_graphs: 1
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: False
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_2_open_diamonds_5 ----------
+[00:00:04:22:475] Valid states checked so far: 200,000, Expansions: 127,627, Global best: 103
+[00:00:05:49:443] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 110, 97, 98, 111, 124, 125, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 21, 34, 35, 36, 23, 22, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 48, 47, 60, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:05:49:443] ! Unidirectional s-t. expansions: 163,339, time: 349,443 [ms], path length: 102 [edges], generated: 262,152
+[00:00:04:20:882] Valid states checked so far: 200,000, Expansions: 124,108, Global best: 103
+[00:00:08:17:752] Valid states checked so far: 400,000, Expansions: 248,420, Global best: 103
+[00:00:10:09:638] Path of length 102 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 48, 35, 22, 23, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 33, 34, 47, 60, 59, 58, 71, 84, 97, 110, 111, 98, 85, 86, 99, 112, 125, 124, 123, 136, 137, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:10:09:639] ! Unidirectional t-s. expansions: 304,549, time: 609,639 [ms], path length: 102 [edges], generated: 490,638
+
+[00:00:10:09:639] average expansions: (163,339, 304,549, 0, 0)
+[00:00:10:09:639] average time: (349,443, 609,639, 0, 0)
+[00:00:10:09:640] XDFBnB: 163,339 , 349,443 (expansions , time[ms])
+[00:00:10:09:640] BiXDFBnB: 0 , 0 (expansions , time[ms])
+

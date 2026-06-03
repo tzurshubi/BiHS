@@ -1,0 +1,46 @@
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+SLURM_JOBID:		17966591
+SLURM_JOB_NODELIST:	ise-cpu256-31
+SLURM_SCRATCH_DIR:	/scratch/shubit/17966591
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+
+SLURM_JOBID:		 17966591
+SLURM_JOB_NODELIST:	 ise-cpu256-31 
+
+--------------------------
+date: mazes
+number_of_graphs: 1
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: False
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_1_open_diamonds_9 ----------
+[00:00:01:42:049] Path of length 92 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 110, 111, 124, 125, 126, 113, 112, 99, 98, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:01:42:049] ! Unidirectional s-t. expansions: 52,354, time: 102,049 [ms], path length: 92 [edges], generated: 78,887
+[00:00:04:38:862] Valid states checked so far: 200,000, Expansions: 143,780, Global best: 93
+[00:00:09:18:874] Path of length 92 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 85, 86, 99, 98, 111, 112, 113, 126, 125, 138, 137, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 136, 123, 110, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:09:18:875] ! Unidirectional t-s. expansions: 283,435, time: 558,875 [ms], path length: 92 [edges], generated: 394,440
+
+[00:00:09:18:876] average expansions: (52,354, 283,435, 0, 0)
+[00:00:09:18:876] average time: (102,049, 558,875, 0, 0)
+[00:00:09:18:876] XDFBnB: 52,354 , 102,049 (expansions , time[ms])
+[00:00:09:18:876] BiXDFBnB: 0 , 0 (expansions , time[ms])
+

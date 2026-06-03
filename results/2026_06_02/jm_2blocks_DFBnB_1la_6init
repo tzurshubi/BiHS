@@ -1,0 +1,53 @@
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+SLURM_JOBID:		17966598
+SLURM_JOB_NODELIST:	ise-cpu256-31
+SLURM_SCRATCH_DIR:	/scratch/shubit/17966598
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+
+SLURM_JOBID:		 17966598
+SLURM_JOB_NODELIST:	 ise-cpu256-31 
+
+--------------------------
+date: mazes
+number_of_graphs: 1
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: False
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_2_open_diamonds_6 ----------
+[00:00:04:39:453] Valid states checked so far: 200,000, Expansions: 130,233, Global best: 101
+[00:00:09:18:520] Valid states checked so far: 400,000, Expansions: 261,091, Global best: 101
+[00:00:14:02:683] Valid states checked so far: 600,000, Expansions: 393,460, Global best: 101
+[00:00:18:40:931] Valid states checked so far: 800,000, Expansions: 524,617, Global best: 101
+[00:00:19:48:088] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 81, 80, 67, 68, 69, 70, 83, 84, 85, 86, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 127, 114, 113, 100, 87, 74, 61, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 75, 88, 101, 102, 89, 90, 103, 116, 129, 142, 155, 168]
+[00:00:19:48:088] ! Unidirectional s-t. expansions: 552,253, time: 1,188,088 [ms], path length: 100 [edges], generated: 844,970
+[00:00:03:53:975] Valid states checked so far: 200,000, Expansions: 129,043, Global best: 101
+[00:00:07:51:978] Valid states checked so far: 400,000, Expansions: 248,093, Global best: 101
+[00:00:11:48:558] Valid states checked so far: 600,000, Expansions: 368,276, Global best: 101
+[00:00:16:10:789] Valid states checked so far: 800,000, Expansions: 492,498, Global best: 101
+[00:00:21:28:411] Path of length 100 found: [168, 167, 166, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 110, 111, 112, 99, 86, 85, 84, 71, 70, 83, 82, 95, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 67, 80, 81, 68, 55, 56, 57, 58, 59, 60, 61, 74, 87, 100, 113, 114, 127, 140, 141, 142, 129, 116, 115, 102, 103, 90, 89, 88, 75, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 31, 30, 17, 4, 3, 2, 1, 0]
+[00:00:21:28:416] ! Unidirectional t-s. expansions: 608,788, time: 1,288,413 [ms], path length: 100 [edges], generated: 991,120
+
+[00:00:21:28:419] average expansions: (552,253, 608,788, 0, 0)
+[00:00:21:28:419] average time: (1,188,088, 1,288,413, 0, 0)
+[00:00:21:28:419] XDFBnB: 552,253 , 1,188,088 (expansions , time[ms])
+[00:00:21:28:419] BiXDFBnB: 0 , 0 (expansions , time[ms])
+

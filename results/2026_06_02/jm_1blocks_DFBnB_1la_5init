@@ -1,0 +1,45 @@
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+SLURM_JOBID:		17966587
+SLURM_JOB_NODELIST:	ise-cpu256-31
+SLURM_SCRATCH_DIR:	/scratch/shubit/17966587
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Tue 02 Jun 2026 17:15:01 IDT
+
+SLURM_JOBID:		 17966587
+SLURM_JOB_NODELIST:	 ise-cpu256-31 
+
+--------------------------
+date: mazes
+number_of_graphs: 1
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: False
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_1_open_diamonds_5 ----------
+[00:00:01:43:372] Path of length 92 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 94, 107, 106, 105, 118, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 135, 134, 133, 132, 119, 120, 121, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:01:43:372] ! Unidirectional s-t. expansions: 50,100, time: 103,372 [ms], path length: 92 [edges], generated: 74,947
+[00:00:03:45:194] Path of length 92 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 85, 86, 99, 112, 111, 110, 109, 108, 121, 122, 135, 136, 137, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 118, 105, 106, 119, 132, 133, 120, 107, 94, 81, 80, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:03:45:196] ! Unidirectional t-s. expansions: 108,336, time: 225,195 [ms], path length: 92 [edges], generated: 156,535
+
+[00:00:03:45:196] average expansions: (50,100, 108,336, 0, 0)
+[00:00:03:45:196] average time: (103,372, 225,195, 0, 0)
+[00:00:03:45:196] XDFBnB: 50,100 , 103,372 (expansions , time[ms])
+[00:00:03:45:196] BiXDFBnB: 0 , 0 (expansions , time[ms])
+
