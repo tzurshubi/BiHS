@@ -18,37 +18,7 @@ def BiXDFBnB_1lookahead(graph, start, goal, heuristic_name, snake, args):
     V = len(graph.nodes)
     # g_h_buckets = [[0 for _ in range(V + 1)] for _ in range(V + 1)]
 
-    violation_reasons = {
-        "intersection": 0,
-        "meet_adjacent": 0,
-        "illegal_vertex": 0,
-        "heuristic": 0,
-        "no_successors": 0,
-    }
-    stats = {
-        "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
-        "symmetric_states_removed": 0,
-        "dominated_states_removed": 0,
-        "valid_meeting_checks": 0,
-        "state_vs_state_meeting_checks": 0,
-        "state_vs_prefix_meeting_checks": 0,
-        "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_states_per_g": {
-            'F': {g: 0 for g in range(0, N)},
-            'B': {g: 0 for g in range(0, N)}
-        },
-        "violations": {reason: {g: 0 for g in range(0, N)} for reason in violation_reasons.keys()},
-        "prefix_set_mean_size": {'F': 0, 'B': 0},
-        "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
-        "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
-        "valid_meeting_check_time": 0,
-        "calc_h_time": 0,
-        "moved_OPEN_to_AUXOPEN": 0,
-        "g_values": [],
-        "BF_values": [],
-        "must_checks": 0,
-    }
+    stats = args.stats
 
     # Initial states
     initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)

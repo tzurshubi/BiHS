@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 
 def XA(graph, start, goal, heuristic_name, snake, args):
-    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0}
+    stats = args.stats
     logger = args.logger
     cube = args.graph_type == "cube"
     buffer_dim = args.cube_buffer_dim if cube else None

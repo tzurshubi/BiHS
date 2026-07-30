@@ -9,7 +9,7 @@ from utils.utils import *
 
 
 def tbt_search(graph, start, goal, heuristic_name, snake, args):
-    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0}
+    stats = args.stats
     logger = args.logger 
     cube = args.graph_type == "cube"
     d = args.size_of_graphs[0] if cube else None

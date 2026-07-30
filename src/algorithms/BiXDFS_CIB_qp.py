@@ -18,40 +18,8 @@ def BiXDFS_CIB_qp(graph, start, goal, heuristic_name, snake, args):
     if (shortest_path_length_start_goal % 2) != (half_coil_upper_bound % 2):
         logger(f"start ({start}) and goal ({goal}) are at odd distance {shortest_path_length_start_goal} in Q_{args.size_of_graphs[0]}, so a path of length {half_coil_upper_bound} doesn't exist between them, so no symmetric coil of length {c_star} exists.")
         return None, None
-    violation_reasons = {
-        "wrong_distance_from_qp": 0,
-        "dont_meet_at_qp": 0,
-        "meet_early": 0,
-        "meet_adjacent": 0,
-        "illegal_vertex": 0,
-        "heuristic": 0,
-        "no_successors": 0,
-    }
-    stats = {
-        "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
-        "symmetric_states_removed": 0,
-        "dominated_states_removed": 0,
-        "valid_meeting_checks": 0,
-        "state_vs_state_meeting_checks": 0,
-        "state_vs_prefix_meeting_checks": 0,
-        "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_states_per_g": {
-            'F': {g: 0 for g in range(0, math.ceil(g_upper_cutoff) + 1)},
-            'B': {g: 0 for g in range(0, math.ceil(g_upper_cutoff) + 1)},
-        },
-        "violations": {reason: {g: 0 for g in range(0, math.ceil(g_upper_cutoff) + 1)} for reason in violation_reasons.keys()},
-        "prefix_set_mean_size": {'F': 0, 'B': 0},
-        "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
-        "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
-        "valid_meeting_check_time": 0,
-        "calc_h_time": 0,
-        "moved_OPEN_to_AUXOPEN": 0,
-        "g_values": [],
-        "BF_values": [],
-        "must_checks": 0,
-        "g_upper_cutoff": g_upper_cutoff,
-    }
+    
+    stats = args.stats
 
     
     # Initial states

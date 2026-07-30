@@ -1,6 +1,6 @@
 import math
 
-STORE_PATH = False  # Set to False to save memory in snake mode
+STORE_PATH = True  # Set to False to save memory in snake mode
 STORE_SUCCESSORS = True  # Set to True to cache successors in each state
 
 class State:

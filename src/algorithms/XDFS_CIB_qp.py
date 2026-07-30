@@ -23,27 +23,8 @@ def XDFS_CIB_qp(graph, start, goal, heuristic_name, snake, args):
     if (shortest_path_length_start_goal % 2) != (max_g % 2):
         logger(f"start ({start}) and goal ({goal}) are at odd distance {shortest_path_length_start_goal} in Q_{args.size_of_graphs[0]}, so a path of length {max_g} doesn't exist between them, so no symmetric coil of length {c_star} exists.")
         return None, None
-        
-    violation_reasons = {
-        "wrong_distance_from_qp": 0,
-        "dont_meet_at_qp": 0,
-        "wrong_distance_from_mp": 0,
-        "dont_meet_at_mp": 0,
-        "heuristic": 0,
-        "no_successors": 0,
-    }
     
-    stats = {
-        "expansions": 0,
-        "generated": 0,
-        "valid_meeting_checks": 0,
-        "num_of_states_per_g": {g: 0 for g in range(0, max_g + 1)},
-        "violations": {reason: {g: 0 for g in range(0, max_g + 1)} for reason in violation_reasons.keys()},
-        "calc_h_time": 0,
-        "must_checks": 0,
-        "max_g": max_g,
-        "g_upper_cutoff": g_upper_cutoff,
-    }
+    stats = args.stats
 
     # Initial state
     graph_init = graph.copy()

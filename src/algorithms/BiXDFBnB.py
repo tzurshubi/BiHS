@@ -3,45 +3,15 @@ from models.state import State
 from utils.utils import *
 
 def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
-    logger = args.logger 
+    logger = args.logger
+    stats = args.stats 
     N = max(graph.nodes)
     V = len(graph.nodes)
 
-    violation_reasons = {
-        "intersection": 0,
-        "meet_adjacent": 0,
-        "illegal_vertex": 0,
-        "heuristic": 0,
-        "no_successors": 0,
-    }
-    
-    stats = {
-        "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
-        "symmetric_states_removed": 0,
-        "dominated_states_removed": 0,
-        "valid_meeting_checks": 0,
-        "state_vs_state_meeting_checks": 0,
-        "state_vs_prefix_meeting_checks": 0,
-        "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_states_per_g": {
-            'F': {g: 0 for g in range(0, N + 1)},
-            'B': {g: 0 for g in range(0, N + 1)}
-        },
-        "violations": {reason: {g: 0 for g in range(0, N + 1)} for reason in violation_reasons.keys()},
-        "prefix_set_mean_size": {'F': 0, 'B': 0},
-        "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
-        "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
-        "valid_meeting_check_time": 0,
-        "calc_h_time": 0,
-        "moved_OPEN_to_AUXOPEN": 0,
-        "g_values": [],
-        "BF_values": [],
-        "must_checks": 0,
-    }
-
     initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
+    stats['num_of_states_per_g']['F'][0] += 1
+    stats['num_of_states_per_g']['B'][0] += 1
 
     if args.bsd:
         double_state_key = (initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices, initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)
@@ -119,7 +89,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if f.g + 1 + b.g > len(global_longest_path) - 1:
                 global_longest_path = f.materialize_path() + [b.head] + b.materialize_path()[::-1][1:]
                 global_meet_point = b.head
-                if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+                if args.graph_type == "cube": 
+                    logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+                    # logger(f"Stats: {stats}")
             if not snake:
                 return True, True # Valid LSP meet, continue expanding
             else:
@@ -131,7 +103,8 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
 
     def get_lookahead_successors(cur_F, cur_B, cur_h_graph, remaining, expand_F_turn=True):
         """Recursively advances frontiers while strictly enforcing mutual validity."""
-        
+        leaves = []
+        all_leaves = []
         # --- Smallest Branching Factor Mode (lookahead = -2) ---
         if remaining == -2:
             # We must generate both to count them, but we only "keep" the smaller set
@@ -234,7 +207,6 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
             if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
 
-            # --- OPTIMIZATION 1: Move graph copy OUTSIDE the cross-product loop ---
             # The parents' heads are consumed identically for all successor combinations
             next_h_graph = cur_h_graph.copy()
             if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -321,7 +293,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         stats["expansions"] += 1
         
         # Pass the turn variable into the successor generator
-        leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)
+        # leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)
+        leaves = get_lookahead_successors(state_F, state_B, h_graph, step_function(state_F.g, k_step_dict), expand_F_turn)
+        # if leaves: print((lambda nums, st=__import__('statistics'), ct=__import__('collections').Counter: f"Count: {len(nums)} | Min: {min(nums)} | Max: {max(nums)} | Mean: {st.mean(nums):.2f} | Median: {st.median(nums)} | STD: {st.stdev(nums) if len(nums) > 1 else 0.0:.2f}\nFrequencies: {dict(sorted(ct(nums).items(), reverse=True))}")([item[0] for item in leaves]))
         leaves.sort(key=lambda item: item[0], reverse=True)
 
         for h_val, leaf_F, leaf_B, leaf_h_graph in leaves:

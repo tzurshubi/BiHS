@@ -23,30 +23,7 @@ def bidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, ar
     g_upper_cutoff_F, g_upper_cutoff_B = half_coil_upper_bound // 2, (half_coil_upper_bound + 1) // 2
     g_lower_cutoff = 2
     best_path = None
-    stats = {
-        "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
-        "symmetric_states_removed": 0,
-        "dominated_states_removed": 0,
-        "valid_meeting_checks": 0,
-        "state_vs_state_meeting_checks": 0,
-        "state_vs_prefix_meeting_checks": 0,
-        "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_prefix_sets": {
-            'F': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
-            'B': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))}
-        },
-        "prefix_set_mean_size": {'F': 0, 'B': 0},
-        "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
-        "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
-        "valid_meeting_check_time": 0,
-        "calc_h_time": 0,
-        "moved_OPEN_to_AUXOPEN": 0,
-        "g_values": [],
-        "BF_values": [],
-        "must_checks": 0
-    }
-
+    stats = args.stats
     
     # Initial states
     graph_F, graph_B = graph.copy(), graph.copy()

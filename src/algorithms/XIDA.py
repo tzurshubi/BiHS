@@ -11,21 +11,8 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
     logger = args.logger 
     N = max(graph.nodes)
     V = len(graph.nodes)
-
-    violation_reasons = {
-        "heuristic": 0,
-        "no_successors": 0,
-    }
     
-    stats = {
-        "expansions": 0,
-        "generated": 0,
-        "valid_meeting_checks": 0,
-        "num_of_states_per_g": {g: 0 for g in range(0, N + 1)},
-        "violations": {reason: {g: 0 for g in range(0, N + 1)} for reason in violation_reasons.keys()},
-        "calc_h_time": 0,
-        "symmetric_states_removed": 0,
-    }
+    stats = args.stats
     
     # Initial state
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)

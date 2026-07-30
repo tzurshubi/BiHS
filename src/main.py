@@ -32,6 +32,7 @@ from algorithms.BiXDFBnB import *
 from algorithms.BiXDFBnB_F2E import *
 from algorithms.BiXDFBnB_alternating import *
 from algorithms.BiXDFBnB_1lookahead import *
+from algorithms.BiXDFBnB_dovetailing import *
 from algorithms.BiXIDA import *
 from algorithms.XIDA import *
 from algorithms.BHK import *
@@ -42,22 +43,22 @@ from utils.utils import *
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
-DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
-DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
+DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
+DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = False                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_SNAKE = True                    # True # False
+DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
 DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
-DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
+DEFAULT_LOOKAHEAD = 4                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
-DEFAULT_CUBE_BUFFER_DIMENSION = None    # None # 3 # 4 # 5 # 6 # 7
+DEFAULT_CUBE_BUFFER_DIMENSION = None    # seNone # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COIL = False                # True # False
 DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
@@ -170,6 +171,7 @@ def save_table_as_png(
     plt.savefig(filename, bbox_inches="tight", pad_inches=0)
     plt.close(fig)
 
+
 # This function is only a copy! the original is in create_graph.py
 def display_graph_with_path_and_points(
     graph, title="Graph", filename=None, path=None, points=None
@@ -253,7 +255,8 @@ def search(
     # Load the graph
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
     args.graph_image_path = current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + "_solved.png"
-    
+    args.stats = init_search_stats(max(G.nodes))
+
     # Remove nodes and edges from the graph
     G_original = G.copy()
     args.original_graph = G_original
@@ -426,6 +429,8 @@ def search(
                 # path, stats, meet_point = BiXDFBnB_alternating(G, start, goal, heuristic, snake, args)
                 # path, stats, meet_point = BiXDFBnB_1lookahead(G, start, goal, heuristic, snake, args)
                 # path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args) # remove later
+            elif args.algo=="BiXDFBnB_dovetailing":
+                path, stats, meet_point = BiXDFBnB_dovetailing(G, start, goal, heuristic, snake, args)
             elif args.algo=="BiXDFBnB_F2E" or args.algo=="DFBnB_F2E":
                 path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args)
             elif args.algo=="IDA":
@@ -466,9 +471,9 @@ def search(
 
 
     # print logs
-    # excluded = {"g_values", "BF_values"}
-    # filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
-    # args.logger(f"LOGS: {format_stats(filtered_logs)}")
+    excluded = {"g_values", "BF_values"}
+    filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
+    args.logger(f"LOGS: {format_stats(filtered_logs)}")
 
 
     # Save the graph as PNG with the path if found

@@ -11,10 +11,7 @@ from utils.utils import *
 
 
 def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, args):
-    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0,
-             "valid_meeting_checks": 0, "state_vs_state_meeting_checks": 0, "state_vs_prefix_meeting_checks": 0, 
-             "num_of_prefix_sets": {'F': 0, 'B': 0}, "prefix_set_mean_size": {'F': 0, 'B': 0},
-             "valid_meeting_check_time": 0, "calc_h_time": 0, "moved_OPEN_to_AUXOPEN": 0, "g_values": [], "BF_values": []}
+    stats = args.stats
     logger = args.logger 
     cube = args.graph_type == "cube"
     if not cube or not args.sym_coil:

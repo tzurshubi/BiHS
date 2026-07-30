@@ -200,6 +200,52 @@ def calculate_averages(avgs, log_file_name=None, args=None):
         #         f.write(line2 + "\n")
         #         # f.write(line3 + "\n")
 
+
+def init_search_stats(N):
+    """
+    Initializes and returns a dictionary for tracking search statistics.
+    
+    Args:
+        N (int): The maximum g-value for initializing the nested dictionaries.
+        violation_reasons (dict or list): Iterable of violation reasons to use as keys. 
+                                          Defaults to an empty dict if not provided.
+    """
+    violation_reasons = {
+        "intersection": 0,
+        "meet_adjacent": 0,
+        "illegal_vertex": 0,
+        "heuristic": 0,
+        "no_successors": 0,
+    }
+
+    return {
+        "expansions": 0,
+        "generated": {'F': 0, 'B': 0},
+        "symmetric_states_removed": 0,
+        "dominated_states_removed": 0,
+        "valid_meeting_checks": 0,
+        "state_vs_state_meeting_checks": 0,
+        "state_vs_prefix_meeting_checks": 0,
+        "prefix_vs_prefix_meeting_checks": 0,
+        "num_of_states_per_g": {
+            'F': {g: 0 for g in range(0, N + 1)},
+            'B': {g: 0 for g in range(0, N + 1)}
+        },
+        "violations": {
+            reason: {g: 0 for g in range(0, N + 1)} 
+            for reason in violation_reasons.keys()
+        },
+        "prefix_set_mean_size": {'F': 0, 'B': 0},
+        "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
+        "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
+        "valid_meeting_check_time": 0,
+        "calc_h_time": 0,
+        "moved_OPEN_to_AUXOPEN": 0,
+        "g_values": [],
+        "BF_values": [],
+        "must_checks": 0,
+    }
+
 def print_stats(d, indent=0, parent_key=""):
     """
     Recursively prints a dictionary in a readable row-based format.
@@ -328,7 +374,6 @@ def matrix_to_sparse_string(l : list) -> str:
 # ---------------------------
 # Coil utilities
 # ---------------------------
-
 
 def check_2_st_paths_form_coil(s1, s2, d: int) -> bool:
     """
@@ -921,3 +966,68 @@ def parse_results_file(input_file, output_file):
         writer = csv.writer(f)
         writer.writerow(["grid number", "Direction", "Expansions", "Time [ms]"])
         writer.writerows(rows)
+
+# ---------------------------
+# Algebraic utilities
+# ---------------------------
+
+def linear_function(x, a=-0.8, b=14):
+    """
+    Calculates y = a * x + b.
+    x and y are forced to be natural numbers (integers >= 0) by rounding.
+    """
+    # Ensure x is a natural number (round and cast to integer, minimum 0)
+    x = max(0, int(round(x)))
+    
+    # Calculate y
+    y_float = a * x + b
+    
+    # Ensure y is a natural number 
+    y = max(0, int(round(y_float)))
+    
+    return y
+
+def heaviside(val):
+    """Standard discrete Heaviside step function."""
+    return 1 if val >= 0 else 0
+
+def step_function(x, TH):
+    """
+    Generalized step function using a threshold dictionary.
+    TH format: {return_value: threshold_upper_bound}
+    Example: {6: 20, 4: 90, 2: 355}
+    """
+    # 1. Validate that x is a natural number
+    if not isinstance(x, int) or x < 0:
+        raise ValueError("x must be a natural number")
+        
+    if not TH:
+        return 0
+
+    # 2. Sort the dictionary items by their thresholds (ascending order)
+    # item[0] is the return value, item[1] is the threshold
+    sorted_th = sorted(TH.items(), key=lambda item: item[1])
+    
+    # Validate that thresholds are strictly increasing (no duplicates)
+    for i in range(len(sorted_th) - 1):
+        if sorted_th[i][1] >= sorted_th[i+1][1]:
+            raise ValueError("Thresholds must be unique and strictly increasing.")
+
+    # 3. Calculate using dynamic Heaviside steps
+    # Base value is the return value of the smallest threshold
+    result = sorted_th[0][0]
+    
+    for i in range(len(sorted_th)):
+        threshold = sorted_th[i][1]
+        current_val = sorted_th[i][0]
+        
+        # If we are at the last threshold, the next value drops to 0
+        next_val = sorted_th[i+1][0] if i + 1 < len(sorted_th) else 0
+        
+        # Calculate the shift required when this threshold is crossed
+        shift = next_val - current_val
+        result += shift * heaviside(x - threshold)
+        
+    return result
+    
+    return result

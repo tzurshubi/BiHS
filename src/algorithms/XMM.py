@@ -15,7 +15,7 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
     # h_MIS = []
     # h_BCC = []
     # max_f = []
-    stats = {"expansions": 0, "generated": 0, "symmetric_states_removed": 0, "dominated_states_removed": 0, "valid_meeting_checks": 0, "valid_meeting_checks_sum_g_under_f_max": 0, "valid_meeting_check_time": 0, "calc_h_time": 0, "moved_OPEN_to_AUXOPEN": 0, "g_values": [], "BF_values": []}
+    stats = args.stats
     logger = args.logger 
     cube = args.graph_type == "cube"
     buffer_dim = args.cube_buffer_dim if cube else None

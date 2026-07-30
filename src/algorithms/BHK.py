@@ -16,11 +16,7 @@ def BHK(graph, start, goal, args=None):
     - stats: A dictionary containing search statistics.
     """
         
-    stats = {
-        'expansions': 0,
-        'states_generated': 0,
-        'max_depth_reached': 0
-    }
+    stats = args.stats
     
     # State tracking: 
     # dp[(visited_mask, current_vertex)] = length_of_longest_path

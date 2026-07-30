@@ -26,32 +26,7 @@ def BiXDFS_CIB(graph, start, goal, heuristic_name, snake, args):
     if (shortest_path_length_start_goal % 2) != (half_coil_upper_bound % 2):
         logger(f"start ({start}) and goal ({goal}) are at odd distance {shortest_path_length_start_goal} in Q_{args.size_of_graphs[0]}, so a path of length {half_coil_upper_bound} doesn't exist between them, so no symmetric coil of length {c_star} exists.")
         return None, None
-    stats = {
-        "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
-        "symmetric_states_removed": 0,
-        "dominated_states_removed": 0,
-        "valid_meeting_checks": 0,
-        "state_vs_state_meeting_checks": 0,
-        "state_vs_prefix_meeting_checks": 0,
-        "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_states_per_g": {
-            'F': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
-            'B': {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))}
-        },
-        "violations_per_g": {g: 0 for g in range(0, math.ceil(half_coil_upper_bound))},
-        "prefix_set_mean_size": {'F': 0, 'B': 0},
-        "paths_with_g_upper_cutoff": {'F': 0, 'B': 0},
-        "paths_with_g_lower_cutoff": {'F': 0, 'B': 0},
-        "valid_meeting_check_time": 0,
-        "calc_h_time": 0,
-        "moved_OPEN_to_AUXOPEN": 0,
-        "g_values": [],
-        "BF_values": [],
-        "must_checks": 0,
-        "g_upper_cutoff": {'F': g_upper_cutoff_F, 'B': g_upper_cutoff_B},
-    }
-
+    stats = args.stats
     
     # Initial states
     graph_F, graph_B = graph.copy(), graph.copy()
