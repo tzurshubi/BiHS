@@ -33,6 +33,7 @@ from algorithms.BiXDFBnB_F2E import *
 from algorithms.BiXDFBnB_alternating import *
 from algorithms.BiXDFBnB_1lookahead import *
 from algorithms.BiXDFBnB_dovetailing import *
+from algorithms.BiXDFBnB_strict_dovetailing import *
 from algorithms.BiXIDA import *
 from algorithms.XIDA import *
 from algorithms.BHK import *
@@ -54,7 +55,7 @@ DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
+DEFAULT_ALGORITHMS = ["DFBnB_strict_dovetailing"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
 DEFAULT_LOOKAHEAD = 4                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -431,6 +432,8 @@ def search(
                 # path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args) # remove later
             elif args.algo=="DFBnB_dovetailing":
                 path, stats, meet_point = BiXDFBnB_dovetailing(G, start, goal, heuristic, snake, args)
+            elif args.algo=="DFBnB_strict_dovetailing":
+                path, stats, meet_point = BiXDFBnB_strict_dovetailing(G, start, goal, heuristic, snake, args)
             elif args.algo=="BiXDFBnB_F2E" or args.algo=="DFBnB_F2E":
                 path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args)
             elif args.algo=="IDA":
