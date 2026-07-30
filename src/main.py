@@ -429,7 +429,7 @@ def search(
                 # path, stats, meet_point = BiXDFBnB_alternating(G, start, goal, heuristic, snake, args)
                 # path, stats, meet_point = BiXDFBnB_1lookahead(G, start, goal, heuristic, snake, args)
                 # path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args) # remove later
-            elif args.algo=="BiXDFBnB_dovetailing":
+            elif args.algo=="DFBnB_dovetailing":
                 path, stats, meet_point = BiXDFBnB_dovetailing(G, start, goal, heuristic, snake, args)
             elif args.algo=="BiXDFBnB_F2E" or args.algo=="DFBnB_F2E":
                 path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args)

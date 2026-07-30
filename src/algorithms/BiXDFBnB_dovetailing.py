@@ -3,6 +3,7 @@ from models.state import State
 from utils.utils import *
 
 def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
+    k_step_dict = {4:8, 2:1000}
     logger = args.logger
     stats = args.stats
     N = max(graph.nodes)
