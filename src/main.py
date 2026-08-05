@@ -34,6 +34,7 @@ from algorithms.BiXDFBnB_alternating import *
 from algorithms.BiXDFBnB_1lookahead import *
 from algorithms.BiXDFBnB_dovetailing import *
 from algorithms.BiXDFBnB_strict_dovetailing import *
+from algorithms.BiXABnB import *
 from algorithms.BiXIDA import *
 from algorithms.XIDA import *
 from algorithms.BHK import *
@@ -47,7 +48,7 @@ DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [8,8]          # dimension of cube
+DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
@@ -55,8 +56,8 @@ DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["DFBnB_strict_dovetailing"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
-DEFAULT_LOOKAHEAD = 4                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
+DEFAULT_ALGORITHMS = ["ABnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
+DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
 DEFAULT_CUBE_BUFFER_DIMENSION = None    # seNone # 3 # 4 # 5 # 6 # 7
@@ -434,6 +435,8 @@ def search(
                 path, stats, meet_point = BiXDFBnB_dovetailing(G, start, goal, heuristic, snake, args)
             elif args.algo=="DFBnB_strict_dovetailing":
                 path, stats, meet_point = BiXDFBnB_strict_dovetailing(G, start, goal, heuristic, snake, args)
+            elif args.algo=="ABnB":
+                path, stats, meet_point = BiXABnB(G, start, goal, heuristic, snake, args)
             elif args.algo=="BiXDFBnB_F2E" or args.algo=="DFBnB_F2E":
                 path, stats, meet_point = BiXDFBnB_F2E(G, start, goal, heuristic, snake, args)
             elif args.algo=="IDA":
