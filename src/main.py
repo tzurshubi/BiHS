@@ -65,6 +65,7 @@ DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COIL = False                # True # False
 DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
 DEFAULT_INIT_GRAPH_NUM = 0
+DEFAULT_MEMORY_LIMIT = 1_200_000               # Memory limit for A* phase in BiXABnB algorithm
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -98,6 +99,7 @@ def parse_args():
     parser.add_argument("--backward_sym_generation", type=str, default=DEFAULT_BACKWARD_SYM_GENERATION, help="Symmetrical generation in other frontier.")
     parser.add_argument("--sym_coil", type=str, default=DEFAULT_SYM_COIL, help="Find symmetrical coil.")
     parser.add_argument("--prefix_set", type=int, default=DEFAULT_PREFIX_SET, help="Comparing sets of states with same prefix of length k-3.")
+    parser.add_argument("--memory_limit", type=int, default=DEFAULT_MEMORY_LIMIT, help="Memory limit for A* phase in BiXABnB algorithm.")
     return parser.parse_args()
 
 
@@ -536,6 +538,7 @@ if __name__ == "__main__":
     backward_sym_generation = args.backward_sym_generation
     sym_coil = args.sym_coil
     prefix_set = args.prefix_set
+    memory_limit = args.memory_limit
 
     if log:
         log_file_name = "logs"
@@ -545,6 +548,7 @@ if __name__ == "__main__":
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}{"per_" if graph_type=="grid" else ""}blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         log_file_name += f"_{algorithms_str}"
+        log_file_name += f"_{args.memory_limit / 1_000_000}mMemLim"
         if cube_buffer_dim is not None:
             log_file_name += f"_buffDim{cube_buffer_dim}"
         if backward_sym_generation:

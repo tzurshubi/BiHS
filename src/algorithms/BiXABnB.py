@@ -5,13 +5,14 @@ from utils.utils import *
 import matplotlib.pyplot as plt
 from collections import defaultdict
 
-def BiXABnB(graph, start, goal, heuristic_name, snake, args, memory_limit=1_000_000):
+def BiXABnB(graph, start, goal, heuristic_name, snake, args):
     """
     Hybrid A* -> DFBnB Algorithm.
     Runs A* until len(open_set) >= memory_limit, then switches to DFBnB.
     """
     stats = args.stats
     logger = args.logger
+    memory_limit = args.memory_limit
     N = max(graph.nodes)
     V = len(graph.nodes)
 
@@ -281,7 +282,7 @@ def BiXABnB(graph, start, goal, heuristic_name, snake, args, memory_limit=1_000_
             exp_n_check_states(leaf_F, leaf_B, leaf_h_graph, next_turn)
 
     if len(open_set) >= memory_limit:
-        logger(f"Memory limit of {memory_limit} reached. Switching to DFBnB.")
+        logger(f"Memory limit of {memory_limit} reached. {stats['expansions']} expansions. OPEN list length: {len(open_set)}. Switching to DFBnB.")
 
     # Sort the remaining frontier to expand the best nodes first. 
     # Because items are stored as (-priority, ...), sorting normally puts the most promising nodes at index 0.
