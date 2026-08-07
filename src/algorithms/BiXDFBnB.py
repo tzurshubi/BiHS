@@ -30,9 +30,6 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         if f.head == b.head: stats["state_vs_state_meeting_checks"] += 1
         else: stats["prefix_vs_prefix_meeting_checks"] += 1
         
-        if stats["expansions"] % 100_000 == 0:
-            logger(f"Expansions: {stats['expansions']}. Checks - state_vs_state: {stats['state_vs_state_meeting_checks']}, state_vs_prefix: {stats['state_vs_prefix_meeting_checks']}, prefix_vs_prefix: {stats['prefix_vs_prefix_meeting_checks']}")
-
         # 1. Check Exact Meet FIRST
         if f.head == b.head:
             if f.g + b.g > len(global_longest_path) - 1:
@@ -292,6 +289,8 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         nonlocal global_longest_path, global_meet_point
         
         stats["expansions"] += 1
+        if stats["expansions"] % 50_000 == 0:
+            logger(f"Expansions: {stats['expansions']}. F states: {stats['generated']['F']}, B states: {stats['generated']['B']}. Checks: {stats['valid_meeting_checks']})")
         
         # Pass the turn variable into the successor generator
         # leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)

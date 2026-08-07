@@ -26,8 +26,8 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
         if f.head == b.head: stats["state_vs_state_meeting_checks"] += 1
         else: stats["prefix_vs_prefix_meeting_checks"] += 1
         
-        if stats["expansions"] % 100_000 == 0 and stats["expansions"] > 0:
-            logger(f"Expansions: {stats['expansions']}. Checks - state_vs_state: {stats['state_vs_state_meeting_checks']}, prefix: {stats['prefix_vs_prefix_meeting_checks']}")
+        # if stats["expansions"] % 100_000 == 0 and stats["expansions"] > 0:
+        #     logger(f"Expansions: {stats['expansions']}. Checks - state_vs_state: {stats['state_vs_state_meeting_checks']}, prefix: {stats['prefix_vs_prefix_meeting_checks']}")
 
         # 1. Check Exact Meet FIRST
         if f.head == b.head:
@@ -277,9 +277,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
         g_value = -neg_g
 
         stats["expansions"] += 1
-        if stats["expansions"] % 10_000 == 0:
-            logger(f"Expansion {stats['expansions']}: F {current_F.materialize_path()}, B {current_B.materialize_path()}, f={f_value}, g={g_value}")
-
+        if stats["expansions"] % 50_000 == 0:
+            logger(f"Expansions: {stats['expansions']}. F states: {stats['generated']['F']}, B states: {stats['generated']['B']}. Checks: {stats['valid_meeting_checks']})")
+                
         # A* Optimal Termination: If the best possible upper-bound in the entire queue 
         # is less than or equal to the best path we've already found, stop.
         if global_longest_path and f_value <= len(global_longest_path) - 1:
