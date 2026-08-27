@@ -1,7 +1,7 @@
 import networkx as nx
-# from sage.all import *
-# from sage.graphs.connectivity import TriconnectivitySPQR
-# from sage.graphs.graph import Graph
+from sage.all import *
+from sage.graphs.connectivity import TriconnectivitySPQR
+from sage.graphs.graph import Graph
 from .h_mis import *
 from models.state import State
 from utils.utils import *
@@ -563,6 +563,1008 @@ def F2F_bcc_snake_heuristic_solVert(state_F, state_B, v, graph):
             # return max(0, len(comp) - 1)
     return 0
 
+
+
+
+
+
+from collections import defaultdict
+from itertools import combinations
+import networkx as nx
+
+
+# ============================================================
+# Small helper functions
+# ============================================================
+
+def _illegal_contains(illegal, v):
+    if isinstance(illegal, int):
+        return bool((illegal >> v) & 1)
+    return v in illegal
+
+
+def _common_remaining_graph(state_F, state_B):
+    """
+    Vertices that are still available to BOTH frontiers.
+    The two current heads are explicitly retained.
+    """
+    G = state_F.graph
+    s = state_F.head
+    t = state_B.head
+
+    if isinstance(state_F.illegal, int):
+        illegal_mask = state_F.illegal | state_B.illegal
+
+        Qn = {
+            v for v in G.nodes
+            if not (illegal_mask & (1 << v))
+        }
+
+    else:
+        Qn = (
+            set(G.nodes)
+            - set(state_F.illegal)
+            - set(state_B.illegal)
+        )
+
+    return G.subgraph(Qn | {s, t}).copy()
+
+
+# ============================================================
+# Block-cut path
+# ============================================================
+
+def _block_cut_path(G, s, t):
+    """
+    Find the biconnected blocks on the block-cut-tree path
+    from s to t.
+
+    Returns:
+        [
+            (block_graph, entry_vertex, exit_vertex),
+            ...
+        ]
+
+    or None if s and t are disconnected.
+    """
+
+    if s == t:
+        return []
+
+    if s not in G or t not in G:
+        return None
+
+    if not nx.has_path(G, s, t):
+        return None
+
+    components = [
+        set(c)
+        for c in nx.biconnected_components(G)
+    ]
+
+    if not components:
+        return None
+
+    # Record which blocks contain each vertex
+    membership = defaultdict(list)
+
+    for i, comp in enumerate(components):
+        for v in comp:
+            membership[v].append(i)
+
+    articulation = set(nx.articulation_points(G))
+
+    # Construct block-cut tree.
+    #
+    # ('B', i) = biconnected block i
+    # ('A', v) = articulation vertex v
+
+    T = nx.Graph()
+
+    for i, comp in enumerate(components):
+
+        block_node = ("B", i)
+        T.add_node(block_node)
+
+        for v in comp & articulation:
+            T.add_edge(
+                block_node,
+                ("A", v)
+            )
+
+    def endpoint_node(v):
+
+        if v in articulation:
+            return ("A", v)
+
+        if not membership[v]:
+            return None
+
+        return ("B", membership[v][0])
+
+    src = endpoint_node(s)
+    dst = endpoint_node(t)
+
+    if src is None or dst is None:
+        return None
+
+    # Special case: both endpoints belong to one block
+    shared = set(membership[s]) & set(membership[t])
+
+    if shared:
+        i = next(iter(shared))
+
+        return [
+            (
+                G.subgraph(components[i]).copy(),
+                s,
+                t
+            )
+        ]
+
+    if src not in T or dst not in T:
+        return None
+
+    path = nx.shortest_path(T, src, dst)
+
+    result = []
+
+    for pos, node in enumerate(path):
+
+        if node[0] != "B":
+            continue
+
+        block_index = node[1]
+        comp = components[block_index]
+
+        # Entry into this block
+        if pos == 0:
+            entry = s
+
+        else:
+            previous = path[pos - 1]
+
+            if previous[0] == "A":
+                entry = previous[1]
+            else:
+                entry = s
+
+        # Exit from this block
+        if pos == len(path) - 1:
+            exit_ = t
+
+        else:
+            next_node = path[pos + 1]
+
+            if next_node[0] == "A":
+                exit_ = next_node[1]
+            else:
+                exit_ = t
+
+        B = G.subgraph(comp).copy()
+
+        result.append(
+            (B, entry, exit_)
+        )
+
+    return result
+
+
+# ============================================================
+# Sage/SPQR helper functions
+# ============================================================
+
+def _sage_edges(H):
+    """
+    Return Sage skeleton edges as:
+        (u, v, label)
+    """
+
+    try:
+        return list(
+            H.edges(sort=False, labels=True)
+        )
+
+    except TypeError:
+        # Older Sage versions
+        return list(
+            H.edges(labels=True)
+        )
+
+
+def _spqr_kind(node):
+    """
+    Normalize Sage SPQR component names.
+    """
+
+    kind = str(node[0]).upper()
+
+    aliases = {
+        "POLYGON": "S",
+        "BOND": "P",
+        "TRICONNECTED": "R",
+    }
+
+    return aliases.get(kind, kind)
+
+
+def _other_spqr_node(
+    label_to_nodes,
+    label,
+    current
+):
+    """
+    A virtual edge occurs in exactly two SPQR skeletons.
+    Return the component on the other side.
+    """
+
+    nodes = label_to_nodes[label]
+
+    others = [
+        node
+        for node in nodes
+        if node != current
+    ]
+
+    if len(others) != 1:
+
+        raise RuntimeError(
+            f"Virtual edge {label!r} should occur "
+            f"in exactly two SPQR components."
+        )
+
+    return others[0]
+
+
+# ============================================================
+# 2-edge cut helper
+# ============================================================
+
+def _two_virtual_edges_disconnect(
+    cminus_edges,
+    vertices,
+    edge1,
+    edge2
+):
+    """
+    Test whether edge1 and edge2 form a 2-edge cut.
+
+    The paper uses FIND2EDGECUTS in linear time.
+    This implementation checks pairs directly.
+
+    Therefore it is simpler, but slower than the paper's
+    optimized implementation.
+    """
+
+    H = nx.MultiGraph()
+
+    H.add_nodes_from(vertices)
+
+    edge_key = {}
+
+    for i, (u, v, label) in enumerate(cminus_edges):
+
+        H.add_edge(
+            u,
+            v,
+            key=i
+        )
+
+        if label is not None:
+            edge_key[label] = i
+
+    for edge in (edge1, edge2):
+
+        u, v, label = edge
+
+        key = edge_key[label]
+
+        H.remove_edge(
+            u,
+            v,
+            key=key
+        )
+
+    if H.number_of_nodes() <= 1:
+        return False
+
+    return not nx.is_connected(H)
+
+
+# ============================================================
+# Exact h_MIS for ONE biconnected block
+# ============================================================
+
+def _hmis_spqr_block_sage(
+    B,
+    s,
+    t,
+    opt_constraint=None
+):
+    """
+    Compute the 2024 exact SPQR/MIS heuristic h_MIS
+    for one biconnected block.
+
+    The returned value is an upper bound on the number
+    of remaining EDGES from s to t inside B.
+
+    For LSP:
+        opt_constraint = None
+
+    For Snake:
+        opt_constraint(u, v) should be True when u-v is
+        a real edge of B.
+
+    Based on Algorithm 1 of:
+        Dahan, Tabib, Shimony & Dinitz.
+    """
+
+    if s == t:
+        return 0
+
+    # For Snake, adjacent endpoints imply that the only legal
+    # connection is the direct edge.
+    if (
+        opt_constraint is not None
+        and B.has_edge(s, t)
+        and opt_constraint(s, t)
+    ):
+        return 1
+
+    # --------------------------------------------------------
+    # Sage is needed for SPQR decomposition
+    # --------------------------------------------------------
+
+    try:
+
+        from sage.all import Graph as SageGraph
+        from sage.graphs.connectivity import spqr_tree
+
+    except ImportError as e:
+
+        raise ImportError(
+            "This heuristic requires SageMath for the SPQR "
+            "decomposition. Run the program with Sage's Python, "
+            "for example:\n\n"
+            "    sage -python your_script.py"
+        ) from e
+
+    # --------------------------------------------------------
+    # Build Sage graph
+    # --------------------------------------------------------
+
+    SG = SageGraph(
+        multiedges=True,
+        loops=False
+    )
+
+    SG.add_vertices(
+        list(B.nodes)
+    )
+
+    for u, v in B.edges:
+        SG.add_edge(u, v, None)
+
+    # --------------------------------------------------------
+    # Add auxiliary (s,t) edge
+    #
+    # This is the key construction from the 2024 paper.
+    # --------------------------------------------------------
+
+    AUX = "__F2F_SPQR_AUX_EDGE__"
+
+    SG.add_edge(
+        s,
+        t,
+        AUX
+    )
+
+    # --------------------------------------------------------
+    # SPQR decomposition
+    # --------------------------------------------------------
+
+    T = spqr_tree(SG)
+
+    spqr_nodes = list(T)
+
+    # Map every virtual edge label to the two components
+    # in which it occurs.
+
+    label_to_nodes = defaultdict(list)
+
+    for node in spqr_nodes:
+
+        skeleton = node[1]
+
+        for u, v, label in _sage_edges(skeleton):
+
+            if (
+                label is not None
+                and label != AUX
+            ):
+                label_to_nodes[label].append(node)
+
+    # --------------------------------------------------------
+    # Root the SPQR tree at the component containing
+    # the auxiliary (s,t) edge.
+    # --------------------------------------------------------
+
+    root = None
+
+    for node in spqr_nodes:
+
+        skeleton = node[1]
+
+        for u, v, label in _sage_edges(skeleton):
+
+            if (
+                label == AUX
+                and (
+                    (u == s and v == t)
+                    or
+                    (u == t and v == s)
+                )
+            ):
+
+                root = node
+                break
+
+        if root is not None:
+            break
+
+    if root is None:
+
+        raise RuntimeError(
+            "Could not find the auxiliary (s,t) "
+            "edge in the SPQR tree."
+        )
+
+    # ========================================================
+    # Recursive TRAVERSE from Algorithm 1
+    # ========================================================
+
+    def traverse(
+        node,
+        parent,
+        incoming_label,
+        incoming_uv
+    ):
+
+        s0, t0 = incoming_uv
+
+        # ----------------------------------------------------
+        # OPTCONSTRAINT
+        #
+        # For Snake:
+        # if s0 and t0 are adjacent by a REAL graph edge,
+        # this subtree contributes no internal vertices.
+        # ----------------------------------------------------
+
+        if (
+            opt_constraint is not None
+            and opt_constraint(s0, t0)
+        ):
+            return 0
+
+        skeleton = node[1]
+
+        all_edges = _sage_edges(skeleton)
+
+        # ----------------------------------------------------
+        # C^- = C minus the incoming edge
+        # ----------------------------------------------------
+
+        cminus_edges = []
+
+        removed = False
+
+        for edge in all_edges:
+
+            u, v, label = edge
+
+            if incoming_label == AUX:
+
+                is_incoming = (
+                    label == AUX
+                    and (
+                        (u == s0 and v == t0)
+                        or
+                        (u == t0 and v == s0)
+                    )
+                )
+
+            else:
+
+                is_incoming = (
+                    label == incoming_label
+                )
+
+            if is_incoming and not removed:
+
+                removed = True
+                continue
+
+            cminus_edges.append(edge)
+
+        if not removed:
+
+            raise RuntimeError(
+                "Incoming edge not found in "
+                "SPQR skeleton."
+            )
+
+        # ----------------------------------------------------
+        # Virtual edges belonging to child subtrees
+        # ----------------------------------------------------
+
+        virtual_edges = [
+
+            edge
+
+            for edge in cminus_edges
+
+            if (
+                edge[2] is not None
+                and edge[2] != AUX
+                and edge[2] in label_to_nodes
+            )
+        ]
+
+        # Recursively compute the MIS contribution
+        # hanging from every virtual edge.
+
+        child_value = {}
+
+        for u, v, label in virtual_edges:
+
+            child = _other_spqr_node(
+                label_to_nodes,
+                label,
+                node
+            )
+
+            if child == parent:
+                continue
+
+            child_value[label] = traverse(
+                child,
+                node,
+                label,
+                (u, v)
+            )
+
+        component_type = _spqr_kind(node)
+
+        vertices = list(
+            skeleton.vertices()
+        )
+
+        # ----------------------------------------------------
+        # Q component
+        # ----------------------------------------------------
+
+        if component_type == "Q":
+            return 0
+
+        # ----------------------------------------------------
+        # P component
+        #
+        # Only ONE parallel subtree can contribute.
+        # ----------------------------------------------------
+
+        if component_type == "P":
+
+            return max(
+                child_value.values(),
+                default=0
+            )
+
+        # ----------------------------------------------------
+        # S component
+        #
+        # All subtrees can contribute.
+        # ----------------------------------------------------
+
+        if component_type == "S":
+
+            return (
+                max(0, len(vertices) - 2)
+                +
+                sum(child_value.values())
+            )
+
+        # ----------------------------------------------------
+        # R component
+        # ----------------------------------------------------
+
+        if component_type != "R":
+
+            raise RuntimeError(
+                f"Unknown SPQR component type: "
+                f"{node[0]!r}"
+            )
+
+        # All ordinary internal vertices of C
+        total = max(
+            0,
+            len(vertices) - 2
+        )
+
+        remaining_labels = set(
+            child_value
+        )
+
+        edge_by_label = {
+            edge[2]: edge
+            for edge in virtual_edges
+            if edge[2] in child_value
+        }
+
+        def incident(edge, x):
+            return (
+                edge[0] == x
+                or edge[1] == x
+            )
+
+        # ====================================================
+        # R CASE 1
+        #
+        # Virtual edges all incident on s0 or on t0
+        # form an exclusion clique.
+        #
+        # Therefore only the largest subtree contributes.
+        # ====================================================
+
+        for x in (s0, t0):
+
+            group = [
+
+                label
+
+                for label in list(
+                    remaining_labels
+                )
+
+                if incident(
+                    edge_by_label[label],
+                    x
+                )
+            ]
+
+            if len(group) >= 2:
+
+                total += max(
+                    child_value[label]
+                    for label in group
+                )
+
+                remaining_labels.difference_update(
+                    group
+                )
+
+        # ====================================================
+        # R CASE 2
+        #
+        # Pairs of virtual edges forming a 2-edge cut.
+        # ====================================================
+
+        labels = list(
+            remaining_labels
+        )
+
+        cut_pairs = []
+
+        for a, b in combinations(
+            labels,
+            2
+        ):
+
+            edge_a = edge_by_label[a]
+            edge_b = edge_by_label[b]
+
+            both_at_s = (
+                incident(edge_a, s0)
+                and incident(edge_b, s0)
+            )
+
+            both_at_t = (
+                incident(edge_a, t0)
+                and incident(edge_b, t0)
+            )
+
+            # These belong to case 1 instead.
+            if both_at_s or both_at_t:
+                continue
+
+            if _two_virtual_edges_disconnect(
+                cminus_edges,
+                vertices,
+                edge_a,
+                edge_b
+            ):
+
+                cut_pairs.append(
+                    (a, b)
+                )
+
+        # The relevant 2-edge cuts in an R component
+        # are edge-disjoint.
+
+        for a, b in cut_pairs:
+
+            if (
+                a in remaining_labels
+                and b in remaining_labels
+            ):
+
+                total += max(
+                    child_value[a],
+                    child_value[b]
+                )
+
+                remaining_labels.remove(a)
+                remaining_labels.remove(b)
+
+        # ====================================================
+        # Everything not involved in an exclusion clique
+        # contributes additively.
+        # ====================================================
+
+        total += sum(
+            child_value[label]
+            for label in remaining_labels
+        )
+
+        return total
+
+    # h_MIS = alpha(G_ex) + 1
+    return (
+        traverse(
+            root,
+            None,
+            AUX,
+            (s, t)
+        )
+        + 1
+    )
+
+
+# ============================================================
+# FRONT-TO-FRONT SPQR HEURISTIC
+# ============================================================
+
+def F2F_spqr_snake_heuristic_paper(
+    state_F,
+    state_B,
+    *,
+    combine_with_bcc_y=True
+):
+    """
+    Front-to-front SPQR heuristic for Snake.
+
+    Returns:
+        heuristic_value, info
+
+    Interpretation:
+        The two current heads are the temporary endpoints
+        s' and t'.
+
+    The heuristic:
+        1. combines the illegal footprints of F and B,
+        2. keeps only the common remaining graph,
+        3. finds the biconnected blocks on the s'-t' path,
+        4. computes exact SPQR h_MIS for every block,
+        5. sums the block bounds.
+
+    If combine_with_bcc_y=True, it also takes the minimum
+    with F2F_bcc_snake_heuristic_paper().  This is a safe
+    way to retain your Y-pattern bound without double
+    counting it with SPQR exclusion pairs.
+    """
+
+    info = {}
+
+    G = state_F.graph
+
+    head_F = state_F.head
+    head_B = state_B.head
+
+    # ========================================================
+    # 1. Heads have met
+    # ========================================================
+
+    if head_F == head_B:
+        return 0, info
+
+    # ========================================================
+    # 2. Intersection / illegal-footprint test
+    # ========================================================
+
+    if (
+        _illegal_contains(
+            state_F.illegal,
+            head_B
+        )
+        or
+        _illegal_contains(
+            state_B.illegal,
+            head_F
+        )
+    ):
+        return -1, info
+
+    # ========================================================
+    # 3. Adjacent heads
+    #
+    # For Snake this really IS exactly one edge:
+    #
+    # if we leave head_F through another vertex, then
+    # head_B becomes illegal because it is a neighbor of
+    # head_F.
+    # ========================================================
+
+    if G.has_edge(
+        head_F,
+        head_B
+    ):
+        return 1, info
+
+    # ========================================================
+    # 4. Graph available to both search directions
+    # ========================================================
+
+    remaining_graph = _common_remaining_graph(
+        state_F,
+        state_B
+    )
+
+    if (
+        head_F not in remaining_graph
+        or
+        head_B not in remaining_graph
+        or
+        not nx.has_path(
+            remaining_graph,
+            head_F,
+            head_B
+        )
+    ):
+        return -1, info
+
+    # ========================================================
+    # 5. Biconnected blocks on the front-to-front path
+    #
+    # This corresponds to Algorithm 1 in the 2022 paper.
+    # ========================================================
+
+    block_path = _block_cut_path(
+        remaining_graph,
+        head_F,
+        head_B
+    )
+
+    if not block_path:
+        return -1, info
+
+    info["num_blocks"] = len(
+        block_path
+    )
+
+    info["block_sizes"] = [
+        len(B)
+        for B, _, _ in block_path
+    ]
+
+    # ========================================================
+    # 6. SPQR bound in every block
+    # ========================================================
+
+    block_bounds = []
+
+    for B, entry, exit_ in block_path:
+
+        if entry == exit_:
+
+            h_block = 0
+
+        elif B.has_edge(
+            entry,
+            exit_
+        ):
+
+            # Snake OPTCONSTRAINT:
+            # adjacent entry/exit means internal vertices
+            # of this block cannot be used.
+            h_block = 1
+
+        elif len(B) <= 2:
+
+            h_block = 1
+
+        else:
+
+            h_block = _hmis_spqr_block_sage(
+
+                B,
+                entry,
+                exit_,
+
+                # For Snake:
+                # OPTCONSTRAINT(G,x,y) is true exactly
+                # when (x,y) is an edge of the graph.
+                opt_constraint=(
+                    lambda u, v, _B=B:
+                    _B.has_edge(u, v)
+                )
+            )
+
+        block_bounds.append(
+            h_block
+        )
+
+    # The paper sums the heuristic over blocks.
+    h_spqr = sum(
+        block_bounds
+    )
+
+    info["SPQR_blocks"] = (
+        block_bounds
+    )
+
+    info["SPQR"] = h_spqr
+
+    # ========================================================
+    # 7. Optionally combine with your current BCC + Y bound
+    #
+    # For MAX search, both are UPPER bounds.
+    #
+    # min(upper_bound_1, upper_bound_2)
+    #
+    # is therefore still an admissible upper bound.
+    # ========================================================
+
+    if combine_with_bcc_y:
+
+        bcc_function = globals().get(
+            "F2F_bcc_snake_heuristic_paper"
+        )
+
+        if bcc_function is not None:
+
+            h_bcc_y, bcc_info = (
+                bcc_function(
+                    state_F,
+                    state_B
+                )
+            )
+
+            info["BCC_Y"] = h_bcc_y
+            info["BCC_Y_info"] = bcc_info
+
+            if h_bcc_y == -1:
+                return -1, info
+
+            h_combined = min(
+                h_spqr,
+                h_bcc_y
+            )
+
+            info["combined"] = (
+                h_combined
+            )
+
+            return (
+                h_combined,
+                info
+            )
+
+    return h_spqr, info
+
+
+
+
+
+
 def bcc_heuristic(state, goal):
     graph = state.graph.copy()  # Clone the graph to avoid modifying the original
     tail_nodes = state.tail()  # Nodes to be removed
@@ -772,7 +1774,14 @@ def heuristic(state, goal, heuristic_name, snake, args=None, h_graph=None):
                     # return F2F_bcc_snake_heuristic(state, goal, h_graph)
                     # print(f"F2F_bcc_snake_heuristic: {h}")
                     # return h
-                else: return F2F_bcc_heuristic(state, goal, h_graph)    
+                else: return F2F_bcc_heuristic(state, goal, h_graph)
+        elif heuristic_name == "mis_heuristic":
+            if snake: 
+                spqr_heuristic = F2F_spqr_snake_heuristic_paper(state, goal)[0]
+                # bcc_heuristic = F2F_bcc_snake_heuristic_paper(state, goal)[0]
+                # args.stats['h_values'].append((2*state.g, spqr_heuristic, bcc_heuristic, bcc_heuristic - spqr_heuristic))
+                return spqr_heuristic
+            else: return mis_heuristic(state,goal)
         
     if not isinstance(goal,int):
         if not snake: goal = max(goal)

@@ -243,6 +243,7 @@ def init_search_stats(N):
         "moved_OPEN_to_AUXOPEN": 0,
         "g_values": [],
         "BF_values": [],
+        "h_values": [],
         "must_checks": 0,
     }
 

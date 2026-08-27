@@ -7,6 +7,8 @@ import random
 import traceback
 import numpy as np
 import matplotlib.patches as patches
+import matplotlib
+matplotlib.use('TkAgg')  # Forces the Tkinter interactive backend
 import matplotlib.pyplot as plt
 import time
 import math
@@ -50,13 +52,13 @@ DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
 DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
-DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
+DEFAULT_HEURISTIC = "mis_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = True                    # True # False
 DEFAULT_RUN_UNI = False                 # True # False
 DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["ABnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A"
+DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A" # "ABnB"
 DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -740,5 +742,19 @@ if __name__ == "__main__":
                 
         print()
         calculate_averages(avgs, log_file_name, args)
+
+        # x_vals, y1_vals, y2_vals, y_diff_vals = zip(*args.stats['h_values'])
+        # plt.figure()
+        # # plt.plot(x_vals, y1_vals, label='h_mis', color='blue', marker='*', linestyle='', markersize=10, alpha=0.7)
+        # # plt.plot(x_vals, y2_vals, label='h_bcc', color='red', marker='o', linestyle='', markersize=4, alpha=0.7)
+        # plt.plot(x_vals, y_diff_vals, label='h_bcc - h_mis', color='green', marker='x', linestyle='', markersize=6, alpha=0.7)
+        # plt.axis('on')
+        # plt.xlabel('2*g')
+        # plt.ylabel('h')
+        # plt.title('H-Values Over Iterations')
+        # plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
+        # plt.legend()
+        # plt.show()
+
     # parse_results_file(log_file_name, log_file_name+".csv")
     args.logger.close()
