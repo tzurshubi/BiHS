@@ -69,6 +69,9 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
         successors = current_state.generate_successors(args, snake, True)
         # stats["g_values"].append(current_state.g)
         # stats["BF_values"].append(len(successors))
+
+        gui_successors = [] if args.gui_logger.video else None
+
         for successor in successors:
             stats["generated"] += 1
 
@@ -101,9 +104,15 @@ def unidirectional_gradual_sym_coil(graph, start, goal, heuristic_name, snake, a
             #     # logger(f"symmetric states removed: {stats['symmetric_states_removed']}")
             #     continue
 
+            if gui_successors is not None:
+                gui_successors.append((successor, successor.g, 0))
+
             # Insert successor into the stack and FNV set
             stack.append(successor)
             # FNV_D.add((successor.head, successor.path_vertices_and_neighbors))
+
+        if gui_successors is not None:
+            args.gui_logger.gui_log_expansion(current_state, current_state.g, 0, gui_successors)
 
     # Print stats
     excluded = {"g_values", "BF_values"}

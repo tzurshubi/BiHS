@@ -180,6 +180,9 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
             h_target = v
 
         # if log: print(f"Generated {len(successors)} successors for {'0F' if i==0 and D=='F' else '0B' if i==0 and D=='B' else '1F' if i==1 and D=='F' else '1B'}: {[st.path for st in successors]}")
+
+        gui_successors = [] if args.gui_logger.video else None
+
         for Np in successors:
             generated += 1
             # If expanding from OPEN_0B or OPEN_1F, insert successors
@@ -192,6 +195,8 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
                     # Do NOT rely on Np.h staying as h_to_s; just push with key.
                     OPEN_0B.push(Np, f_to_s)
                     OPENvOPEN0.insert_state(Np, False)
+                    if gui_successors is not None:
+                        gui_successors.append((Np, f_to_s, h_to_s))
 
                 # Heuristic for OPEN_1F (target = t)
                 h_to_t = heuristic(Np, t, heuristic_name, snake)
@@ -199,6 +204,8 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
                     f_to_t = Np.g + h_to_t
                     OPEN_1F.push(Np, f_to_t)
                     OPENvOPEN1.insert_state(Np, True)
+                    if gui_successors is not None:
+                        gui_successors.append((Np, f_to_t, h_to_t))
 
                 continue
 
@@ -209,5 +216,11 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
             f_single = Np.g + h_single
             OPEN.push(Np, f_single)
             OPENvOPEN0.insert_state(Np, True) if i == 0 else OPENvOPEN1.insert_state(Np, False)
+
+            if gui_successors is not None:
+                gui_successors.append((Np, f_single, h_single))
+
+        if gui_successors is not None:
+            args.gui_logger.gui_log_expansion(N, fN, fN - N.g, gui_successors)
 
     return S, generated, expansions, None

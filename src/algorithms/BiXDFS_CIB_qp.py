@@ -136,10 +136,15 @@ def BiXDFS_CIB_qp(graph, start, goal, heuristic_name, snake, args):
             state_B_successors = state_B.generate_successors(args, snake, False)
             # print(f"state_F_successors: {[succ.materialize_path() for succ in state_F_successors]}") # for debug
             # print(f"state_B_successors: {[succ.materialize_path() for succ in state_B_successors]}") # for debug
-            stats["generated"]['F'] += len(state_F_successors)
-            stats["generated"]['B'] += len(state_B_successors)
-            stats["num_of_states_per_g"]['F'][g+1] += len(state_F_successors)
-            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
+            stats["generated_by_frontier"]['F'] += len(state_F_successors)
+            stats["generated_by_frontier"]['B'] += len(state_B_successors)
+            stats['num_of_states_per_g_by_frontier']['F'][g+1] += len(state_F_successors)
+            stats['num_of_states_per_g_by_frontier']['B'][state_B.g+1] += len(state_B_successors)
+
+            if args.gui_logger.video:
+                args.gui_logger.gui_log_expansion(state_F, state_F.g, 0, [(succ, succ.g, 0) for succ in state_F_successors])
+                args.gui_logger.gui_log_expansion(state_B, state_B.g, 0, [(succ, succ.g, 0) for succ in state_B_successors])
+
             if len(state_F_successors) == 0 or len(state_B_successors) == 0:
                 # violation: one frontier cannot advance
                 stats["violations"]["no_successors"][g] += 1

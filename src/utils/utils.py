@@ -220,14 +220,16 @@ def init_search_stats(N):
 
     return {
         "expansions": 0,
-        "generated": {'F': 0, 'B': 0},
+        "generated": 0, 
+        "generated_by_frontier": {'F': 0, 'B': 0},
         "symmetric_states_removed": 0,
         "dominated_states_removed": 0,
         "valid_meeting_checks": 0,
         "state_vs_state_meeting_checks": 0,
         "state_vs_prefix_meeting_checks": 0,
         "prefix_vs_prefix_meeting_checks": 0,
-        "num_of_states_per_g": {
+        "num_of_states_per_g": {g: 0 for g in range(0, N + 1)},
+        "num_of_states_per_g_by_frontier": {
             'F': {g: 0 for g in range(0, N + 1)},
             'B': {g: 0 for g in range(0, N + 1)}
         },

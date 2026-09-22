@@ -119,30 +119,39 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
             return
             
         leaves.sort(key=lambda item: item[0], reverse=True)
-                
+
+        if args.gui_logger.video:
+            # Logged before recursing (not after), so the trace records this
+            # expansion in the order it actually happened - recursing first and
+            # logging afterwards would record deep/late expansions before their
+            # own parents, in effect showing the search in reverse.
+            state_h = getattr(state, 'h', 0)
+            gui_successors = [(leaf, leaf.g + h_val, h_val) for h_val, leaf, _ in leaves]
+            args.gui_logger.gui_log_expansion(state, state.g + state_h, state_h, gui_successors)
+
         for h_val, leaf, leaf_h_graph in leaves:
             if target_found: break
-            
+
             leaf.h = h_val
             f_val = leaf.g + h_val
-            
+
             if args.bsd:
                 state_key = (leaf.head, leaf.path_vertices_and_neighbors if snake else leaf.path_vertices)
                 if state_key in FNV and FNV[state_key] >= leaf.g:
                     stats["symmetric_states_removed"] += 1
                     continue
-            
+
             # --- IDA* Pruning ---
             # Prune if the branch's f_val falls below the required threshold
-            if f_val < threshold: 
+            if f_val < threshold:
                 stats["violations"]["heuristic"][state.g] += 1
                 # Track the highest failing f_val to become the next iteration's threshold
                 if f_val > next_threshold:
                     next_threshold = f_val
                 break # Since leaves are sorted descending, all subsequent leaves will also fail
-                
+
             if args.bsd: FNV[state_key] = leaf.g
-                
+
             exp_n_check_states(leaf, leaf_h_graph)
 
     # --- IDA* Iterative Loop ---

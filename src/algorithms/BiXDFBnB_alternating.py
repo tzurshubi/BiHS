@@ -87,9 +87,13 @@ def BiXDFBnB_alternating(graph, start, goal, heuristic_name, snake, args):
                     successors_with_h.append((V, succ_F))
             
             stats["expansions"] += 1
-            stats["generated"]['F'] += len(state_F_successors)
-            stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-            
+            stats["generated_by_frontier"]['F'] += len(state_F_successors)
+            stats['num_of_states_per_g_by_frontier']['F'][state_F.g+1] += len(state_F_successors)
+
+            if args.gui_logger.video:
+                gui_successors_F = [(succ_F, succ_F.g + h_val, h_val) for h_val, succ_F in successors_with_h]
+                args.gui_logger.gui_log_expansion(state_F, state_F.g + getattr(state_F, 'h', 0), getattr(state_F, 'h', 0), gui_successors_F)
+
             for h_val, succ_F in successors_with_h:
                 if args.bsd:
                     double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, state_B.head, state_B.path_vertices_and_neighbors if snake else state_B.path_vertices)
@@ -122,9 +126,13 @@ def BiXDFBnB_alternating(graph, start, goal, heuristic_name, snake, args):
                     successors_with_h.append((V, succ_B))
             
             stats["expansions"] += 1
-            stats["generated"]['B'] += len(state_B_successors)
-            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
-            
+            stats["generated_by_frontier"]['B'] += len(state_B_successors)
+            stats['num_of_states_per_g_by_frontier']['B'][state_B.g+1] += len(state_B_successors)
+
+            if args.gui_logger.video:
+                gui_successors_B = [(succ_B, succ_B.g + h_val, h_val) for h_val, succ_B in successors_with_h]
+                args.gui_logger.gui_log_expansion(state_B, state_B.g + getattr(state_B, 'h', 0), getattr(state_B, 'h', 0), gui_successors_B)
+
             for h_val, succ_B in successors_with_h:
                 if args.bsd:
                     double_state_key = (state_F.head, state_F.path_vertices_and_neighbors if snake else state_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)

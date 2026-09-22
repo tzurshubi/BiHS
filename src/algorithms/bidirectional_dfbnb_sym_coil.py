@@ -88,6 +88,9 @@ def bidirectional_dfbnb_sym_coil(graph, start, goal, heuristic_name, snake, args
         successors = current_state.generate_successors(args, snake, directionF)
         stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
+
+        gui_successors = [] if args.gui_logger.video else None
+
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV_D:
                 stats["symmetric_states_removed"] += 1
@@ -97,11 +100,17 @@ def bidirectional_dfbnb_sym_coil(graph, start, goal, heuristic_name, snake, args
 
             stats["generated"] += 1
 
+            if gui_successors is not None:
+                gui_successors.append((successor, successor.g, 0))
+
             # Insert successor into the stack and FNV set
             stack_D.append(successor)
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors))
-            # if successor.g == g_cutoff: 
+            # if successor.g == g_cutoff:
             #     OPENvOPEN.insert_state(successor, directionF, stats)
+
+        if gui_successors is not None:
+            args.gui_logger.gui_log_expansion(current_state, current_state.g, 0, gui_successors)
 
     stats['all_paths_with_g_cutoff'] = stats['paths_with_g_cutoff']['F'] + stats['paths_with_g_cutoff']['B']
     logger(f"Number of paths with g_cutoff({g_cutoff_F}/{g_cutoff_B}): {stats['all_paths_with_g_cutoff']} (F:{stats['paths_with_g_cutoff']['F']}, B:{stats['paths_with_g_cutoff']['B']})")

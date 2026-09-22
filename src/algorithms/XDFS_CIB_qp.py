@@ -138,7 +138,10 @@ def XDFS_CIB_qp(graph, start, goal, heuristic_name, snake, args):
         
         stats["generated"] += len(successors)
         stats["num_of_states_per_g"][g+1] += len(successors)
-        
+
+        if args.gui_logger.video:
+            args.gui_logger.gui_log_expansion(state, state.g, 0, [(succ, succ.g, 0) for succ in successors])
+
         if len(successors) == 0:
             stats["violations"]["no_successors"][g] += 1
             return False, None

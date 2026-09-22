@@ -248,6 +248,9 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                 # Generate successors
                 successors = current_state.generate_successors(args, snake, directionF)
                 # print(f"Generated {len(successors)} successors: {[s.path for s in successors]}")
+
+                gui_successors = [] if args.gui_logger.video else None
+
                 for successor in successors:
                     # Handle symmetric states removal
                     if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV_D:
@@ -267,7 +270,10 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                         else: OPEN_D.push(successor, min(f_value, f_successor))
                         FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
                         OPENvOPEN.insert_state(successor,directionF)
-                    
+
+                        if gui_successors is not None:
+                            gui_successors.append((successor, f_successor, h_successor))
+
                     # If this is not Forward from start or Backward from goal, we need to add this state to another OPEN list
                     if additional_frontier:
                         additional_segment = additional_frontier["segment"]
@@ -281,7 +287,10 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                             else: additional_frontier["OPEN"].push(successor, min(f_value, f_successor))
                             additional_frontier["FNV"].add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
                             additional_segment["OPENvOPEN"].insert_state(successor,not directionF)
-                        
+
+                if gui_successors is not None:
+                    args.gui_logger.gui_log_expansion(current_state, f_value, f_value - g_value, gui_successors)
+
                 # Update the segment and frontier structures
                 segment.update({
                     "OPENvOPEN": OPENvOPEN,

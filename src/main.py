@@ -41,24 +41,25 @@ from algorithms.BiXIDA import *
 from algorithms.XIDA import *
 from algorithms.BHK import *
 from utils.utils import *
+from utils.gui_logger import GuiLogger
 # from sage.graphs.connectivity import TriconnectivitySPQR
 # from sage.graphs.graph import Graph
 
 # Define default input values
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
-DEFAULT_DATE = "cubes"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
+DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
 DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
-DEFAULT_GRAPH_TYPE = "cube"             # "grid" / "cube" / "manual" / "maze"
-DEFAULT_SIZE_OF_GRAPHS = [7,7]          # dimension of cube
+DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
+DEFAULT_SIZE_OF_GRAPHS = [6,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
-DEFAULT_HEURISTIC = "mis_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
-DEFAULT_SNAKE = True                    # True # False
-DEFAULT_RUN_UNI = False                 # True # False
-DEFAULT_RUN_BI = True                   # True # False
+DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
+DEFAULT_SNAKE = False                    # True # False
+DEFAULT_RUN_UNI = True                 # True # False
+DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["DFBnB"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A" # "ABnB"
+DEFAULT_ALGORITHMS = ["A"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A" # "ABnB"
 DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -66,8 +67,9 @@ DEFAULT_CUBE_BUFFER_DIMENSION = None    # seNone # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COIL = False                # True # False
 DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
-DEFAULT_INIT_GRAPH_NUM = 0
+DEFAULT_INIT_GRAPH_NUM = 5
 DEFAULT_MEMORY_LIMIT = 1_200_000               # Memory limit for A* phase in BiXABnB algorithm
+DEFAULT_VIDEO = True                   # True # False -- record a GuiLogger trace for GuiViewer
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -102,6 +104,7 @@ def parse_args():
     parser.add_argument("--sym_coil", type=str, default=DEFAULT_SYM_COIL, help="Find symmetrical coil.")
     parser.add_argument("--prefix_set", type=int, default=DEFAULT_PREFIX_SET, help="Comparing sets of states with same prefix of length k-3.")
     parser.add_argument("--memory_limit", type=int, default=DEFAULT_MEMORY_LIMIT, help="Memory limit for A* phase in BiXABnB algorithm.")
+    parser.add_argument("--video", action="store_true", default=DEFAULT_VIDEO, help="Record a GuiLogger JSON trace of the search for playback with GuiViewer.")
     return parser.parse_args()
 
 
@@ -256,7 +259,8 @@ def search(
     search_type,
     heuristic,
     snake,
-    args
+    args,
+    direction=None
 ):
     # Load the graph
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
@@ -399,6 +403,31 @@ def search(
             while start not in G:
                 start += 1
 
+    gui_meta = {
+        "algorithm": args.algo,
+        "search_type": search_type,
+        "start": start,
+        "goal": goal,
+        "heuristic": heuristic,
+        "snake": snake,
+        "graph_type": args.graph_type,
+    }
+    if direction:
+        gui_meta["direction"] = direction
+    if args.graph_type in ("grid", "maze"):
+        gui_meta["rows"] = args.size_of_graphs[0]
+        gui_meta["cols"] = args.size_of_graphs[1]
+        gui_meta["blocked_cells"] = blocks
+    args.gui_logger = GuiLogger(
+        video=args.video,
+        graph=G_original,
+        graph_name=name_of_graph,
+        algo_name=args.algo,
+        search_type=search_type,
+        direction=direction,
+        meta=gui_meta,
+    )
+
     meet_point = None
     meet_points = None
     tracemalloc.start()
@@ -474,6 +503,10 @@ def search(
     if not path: args.logger("No path found.")
     else: args.logger(f"Path of length {len(path)-1} found: {path}")
 
+    if args.video:
+        trace_path = args.gui_logger.save()
+        # if trace_path: args.logger(f"GUI trace saved to {trace_path}")
+
     # Collect logs
     end_time = time.time()
     logs["time[ms]"] = math.floor(1000 * (end_time - start_time))
@@ -481,9 +514,9 @@ def search(
 
 
     # print logs
-    excluded = {"g_values", "BF_values"}
-    filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
-    args.logger(f"LOGS: {format_stats(filtered_logs)}")
+    # excluded = {"g_values", "BF_values"}
+    # filtered_logs = {k: v for k, v in logs.items() if k not in excluded}
+    # args.logger(f"LOGS: {format_stats(filtered_logs)}")
 
 
     # Save the graph as PNG with the path if found
@@ -647,7 +680,7 @@ if __name__ == "__main__":
             if run_uni:
                 # unidirectional s-t
                 logs, path, _ = search(
-                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args
+                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args, direction="s_to_t"
                 )
                 avgs["uni_st"]["expansions"].append(logs['expansions'])
                 avgs["uni_st"]["time"].append(logs['time[ms]'])
@@ -667,7 +700,7 @@ if __name__ == "__main__":
                 # unidirectional t-s
                 if graph_type!="cube":
                     logs, path, _ = search(
-                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args
+                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args, direction="t_to_s"
                     )
                     avgs["uni_ts"]["expansions"].append(logs['expansions'])
                     avgs["uni_ts"]["time"].append(logs['time[ms]'])

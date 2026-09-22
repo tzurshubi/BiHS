@@ -72,6 +72,8 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
         # Generate successors
         successors = current_state.generate_successors(args, snake, True)
 
+        gui_successors = [] if args.gui_logger.video else None
+
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV:
                 # print(f"symmetric state removed: {successor.path}")
@@ -102,8 +104,15 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
             g_successor = successor.g
             # Calculate the f_value
             f_successor = g_successor + h_successor
+
+            if gui_successors is not None:
+                gui_successors.append((successor, f_successor, h_successor))
+
             # Push the successor to the priority queue with the priority as - (g(N) + h(N))
             open_set.push(successor, min(f_successor, f_value))
             FNV.add((successor.head, successor.path_vertices_and_neighbors))
+
+        if gui_successors is not None:
+            args.gui_logger.gui_log_expansion(current_state, f_value, f_value - g_value, gui_successors)
 
     return best_path.path, stats

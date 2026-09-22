@@ -111,30 +111,42 @@ def BiXDFBnB_1lookahead(graph, start, goal, heuristic_name, snake, args):
         # Expand one frontier at a time, alternating between F and B
         if expand_F:
             stats["expansions"] += 1
-            stats["generated"]['F'] += len(state_F_successors)
-            stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-            
+            stats["generated_by_frontier"]['F'] += len(state_F_successors)
+            stats['num_of_states_per_g_by_frontier']['F'][state_F.g+1] += len(state_F_successors)
+
+            if args.gui_logger.video:
+                # Logged before recursing (not after), so the trace records this
+                # expansion in the order it actually happened.
+                gui_successors_F = [(succ_F, succ_F.g + h_val, h_val) for h_val, succ_F in F_successors_with_h]
+                args.gui_logger.gui_log_expansion(state_F, state_F.g + max_h_val_succ_F, max_h_val_succ_F, gui_successors_F)
+
             for h_val, succ_F in F_successors_with_h:
                 if args.bsd:
                     double_state_key = (succ_F.head, succ_F.path_vertices_and_neighbors if snake else succ_F.path_vertices, state_B.head, state_B.path_vertices_and_neighbors if snake else state_B.path_vertices)
                     if double_state_key in FNV and FNV[double_state_key] >= succ_F.g + state_B.g:
                         stats["symmetric_states_removed"] += 1
                         continue
-                    
+
                 # Compare against global bound
                 # print(f"{succ_F.g} + {h_val} + {state_B.g} <= {len(global_longest_path) - 1}")
-                if succ_F.g + h_val + state_B.g <= len(global_longest_path) - 1: 
+                if succ_F.g + h_val + state_B.g <= len(global_longest_path) - 1:
                     stats["violations"]["heuristic"][state_F.g] += 1
                     break # Prune this and all subsequent sorted successors
 
                 if args.bsd: FNV[double_state_key] = succ_F.g + state_B.g
 
-                exp_n_check_states(succ_F, state_B, h_graph_for_succ_F)    
+                exp_n_check_states(succ_F, state_B, h_graph_for_succ_F)
         else:
             stats["expansions"] += 1
-            stats["generated"]['B'] += len(state_B_successors)
-            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
-            
+            stats["generated_by_frontier"]['B'] += len(state_B_successors)
+            stats['num_of_states_per_g_by_frontier']['B'][state_B.g+1] += len(state_B_successors)
+
+            if args.gui_logger.video:
+                # Logged before recursing (not after), so the trace records this
+                # expansion in the order it actually happened.
+                gui_successors_B = [(succ_B, succ_B.g + h_val, h_val) for h_val, succ_B in B_successors_with_h]
+                args.gui_logger.gui_log_expansion(state_B, state_B.g + max_h_val_succ_B, max_h_val_succ_B, gui_successors_B)
+
             for h_val, succ_B in B_successors_with_h:
                 if args.bsd:
                     double_state_key = (state_F.head, state_F.path_vertices_and_neighbors if snake else state_F.path_vertices, succ_B.head, succ_B.path_vertices_and_neighbors if snake else succ_B.path_vertices)
@@ -144,12 +156,12 @@ def BiXDFBnB_1lookahead(graph, start, goal, heuristic_name, snake, args):
 
                 # Compare against global bound
                 # print(f"{state_F.g} + {h_val} + {succ_B.g} <= {len(globaly_longest_path) - 1}")
-                if state_F.g + h_val + succ_B.g <= len(global_longest_path) - 1: 
+                if state_F.g + h_val + succ_B.g <= len(global_longest_path) - 1:
                     stats["violations"]["heuristic"][state_B.g] += 1
                     break # Prune this and all subsequent sorted successors
 
                 if args.bsd: FNV[double_state_key] = state_F.g + succ_B.g
-                    
+
                 exp_n_check_states(state_F, succ_B, h_graph_for_succ_B)
                 
     h_graph = graph.copy()

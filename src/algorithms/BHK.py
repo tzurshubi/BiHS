@@ -27,10 +27,23 @@ def BHK(graph, start, goal, args=None):
     
     # Process layer by layer (BFS style based on path length)
     current_layer = { (start_mask, start): 0 }
-    
+
     longest_path_length = -1
     best_end_state = None
-    
+
+    def _gui_path(mask, u):
+        # Only used for GUI/video logging: reconstructs the vertex path for a
+        # (mask, u) state from the parent map as it stands so far.
+        p = []
+        curr = (mask, u)
+        while curr is not None:
+            m, node = curr
+            p.append(node)
+            prev_u = parent.get(curr)
+            curr = (m ^ (1 << node), prev_u) if prev_u is not None else None
+        p.reverse()
+        return p
+
     depth = 0
     while current_layer:
         next_layer = {}
@@ -46,22 +59,30 @@ def BHK(graph, start, goal, args=None):
                     longest_path_length = length
                     best_end_state = (mask, u)
                 continue
-                
+
+            gui_successors = [] if args.gui_logger.video else None
+
             for v in graph.neighbors(u):
                 # Check if neighbor 'v' has already been visited using bitwise AND
                 if not (mask & (1 << v)):
                     new_mask = mask | (1 << v)
                     new_state = (new_mask, v)
                     new_length = length + 1
-                    
+
                     stats['states_generated'] += 1
-                    
+
                     # If this is a newly discovered state, or we found a longer path to it
                     if new_state not in dp or new_length > dp[new_state]:
                         dp[new_state] = new_length
                         parent[new_state] = u
                         next_layer[new_state] = new_length
-                        
+
+                        if gui_successors is not None:
+                            gui_successors.append((_gui_path(new_mask, v), new_length, 0))
+
+            if gui_successors is not None:
+                args.gui_logger.gui_log_expansion(_gui_path(mask, u), length, 0, gui_successors)
+
         current_layer = next_layer
         depth += 1
 

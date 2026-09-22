@@ -373,6 +373,7 @@ def bcc_heuristic_paper(state, goal, graph=None):
     if not s_t_edge_existed: G.remove_edge(head, goal)
     return 0
 
+
 def F2F_bcc_heuristic(state_F, state_B, graph):
     """
     Heuristic: add an edge between head (=state.head) and goal to form Q.

@@ -115,8 +115,8 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
             expand_F = len(succs_F) <= len(succs_B)
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -133,8 +133,8 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
                 return leaves
                 
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
@@ -155,8 +155,8 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
             # Determine which side to expand based on the turn
             if expand_F_turn:
                 succs_F = cur_F.generate_successors(args, snake, True)
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -174,8 +174,8 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
                 
             else:
                 succs_B = cur_B.generate_successors(args, snake, False)
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
@@ -202,10 +202,10 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
             succs_F = cur_F.generate_successors(args, snake, True)
             succs_B = cur_B.generate_successors(args, snake, False)
             
-            stats["generated"]['F'] += len(succs_F)
-            stats["generated"]['B'] += len(succs_B)
-            if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
-            if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+            stats["generated_by_frontier"]['F'] += len(succs_F)
+            stats["generated_by_frontier"]['B'] += len(succs_B)
+            if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+            if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
 
             # --- OPTIMIZATION 1: Move graph copy OUTSIDE the cross-product loop ---
             # The parents' heads are consumed identically for all successor combinations
@@ -279,12 +279,12 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
                 expand_F = False
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 return F_leaves
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 return B_leaves
  
 
@@ -307,6 +307,30 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
         leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)
         leaves.sort(key=lambda item: item[0], reverse=True)
 
+        if args.gui_logger.video and leaves:
+            # Logged before recursing (not after), so the trace records this
+            # expansion in the order it actually happened - recursing first and
+            # logging afterwards would record deep/late expansions before their
+            # own parents, in effect showing the search in reverse.
+            gui_successors_F, gui_successors_B = [], []
+            seen_F, seen_B = set(), set()
+            for h_val, leaf_F, leaf_B, _ in leaves:
+                leaf_f_value = leaf_F.g + h_val + leaf_B.g
+                if leaf_F is not state_F and id(leaf_F) not in seen_F:
+                    seen_F.add(id(leaf_F))
+                    gui_successors_F.append((leaf_F, leaf_f_value, h_val))
+                if leaf_B is not state_B and id(leaf_B) not in seen_B:
+                    seen_B.add(id(leaf_B))
+                    gui_successors_B.append((leaf_B, leaf_f_value, h_val))
+            gui_parent_h = V
+            if heuristic_name:
+                gui_parent_h = heuristic(state_F, state_B, heuristic_name, snake, args, h_graph.copy() if snake else h_graph)
+            gui_parent_f = state_F.g + state_B.g + gui_parent_h
+            if gui_successors_F:
+                args.gui_logger.gui_log_expansion(state_F, gui_parent_f, gui_parent_h, gui_successors_F)
+            if gui_successors_B:
+                args.gui_logger.gui_log_expansion(state_B, gui_parent_f, gui_parent_h, gui_successors_B)
+
         for h_val, leaf_F, leaf_B, leaf_h_graph in leaves:
             if target_found: break
 
@@ -315,7 +339,7 @@ def BiXIDA(graph, start, goal, heuristic_name, snake, args):
 
             # --- IDA* Pruning Logic ---
             # If the branch cannot reach the current upper bound threshold, prune it.
-            if current_f_value < threshold: 
+            if current_f_value < threshold:
                 stats["violations"]["heuristic"][state_F.g] += 1
                 # Track the next best upper bound for the next IDA* iteration
                 if current_f_value > next_threshold:

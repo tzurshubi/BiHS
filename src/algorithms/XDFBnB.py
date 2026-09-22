@@ -109,24 +109,33 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
             return
             
         leaves.sort(key=lambda item: item[0], reverse=True)
-                
+
+        if args.gui_logger.video:
+            # Logged before recursing (not after), so the trace records this
+            # expansion in the order it actually happened - recursing first and
+            # logging afterwards would record deep/late expansions before their
+            # own parents, in effect showing the search in reverse.
+            state_h = getattr(state, 'h', 0)
+            gui_successors = [(leaf, leaf.g + h_val, h_val) for h_val, leaf, _ in leaves]
+            args.gui_logger.gui_log_expansion(state, state.g + state_h, state_h, gui_successors)
+
         for h_val, leaf, leaf_h_graph in leaves:
             leaf.h = h_val
-            
+
             if args.bsd:
                 state_key = (leaf.head, leaf.path_vertices_and_neighbors if snake else leaf.path_vertices)
                 if state_key in FNV and FNV[state_key] >= leaf.g:
                     stats["symmetric_states_removed"] += 1
                     continue
-            
+
             # DFBnB Pruning
-            if leaf.g + h_val <= len(global_longest_path) - 1: 
+            if leaf.g + h_val <= len(global_longest_path) - 1:
                 stats["violations"]["heuristic"][state.g] += 1
-                break 
-                
+                break
+
             # Update BSD tracker with the new longest arrival to this footprint
             if args.bsd: FNV[state_key] = leaf.g
-                
+
             exp_n_check_states(leaf, leaf_h_graph)
                 
     h_graph = graph.copy()

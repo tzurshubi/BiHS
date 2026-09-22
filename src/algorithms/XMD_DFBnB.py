@@ -139,14 +139,24 @@ def XMD_DFBnB(graph, start, goal, heuristic_name, snake, args):
             state_B_successors = state_B.generate_successors(args, snake, False)
             state_VF_successors = state_VF.generate_successors(args, snake, True)
             state_VB_successors = state_VB.generate_successors(args, snake, False)
-            stats["generated"]['F'] += len(state_F_successors)
-            stats["generated"]['B'] += len(state_B_successors)
+            stats["generated_by_frontier"]['F'] += len(state_F_successors)
+            stats["generated_by_frontier"]['B'] += len(state_B_successors)
             stats["generated"]['VF'] += len(state_VF_successors)
             stats["generated"]['VB'] += len(state_VB_successors)
-            stats["num_of_states_per_g"]['F'][g+1] += len(state_F_successors)
-            stats["num_of_states_per_g"]['B'][g+1] += len(state_B_successors)
+            stats['num_of_states_per_g_by_frontier']['F'][g+1] += len(state_F_successors)
+            stats['num_of_states_per_g_by_frontier']['B'][g+1] += len(state_B_successors)
             stats["num_of_states_per_g"]['VF'][g+1] += len(state_VF_successors)
             stats["num_of_states_per_g"]['VB'][g+1] += len(state_VB_successors)
+
+            # No per-successor heuristic is computed anywhere in this algorithm (only a
+            # joint heuristic on the (state_F, state_B) pair at the top of this function),
+            # so we log g as f and h=0 for each of the 4 frontiers being expanded together.
+            if args.gui_logger.video:
+                args.gui_logger.gui_log_expansion(state_F, state_F.g, 0, [(s, s.g, 0) for s in state_F_successors])
+                args.gui_logger.gui_log_expansion(state_B, state_B.g, 0, [(s, s.g, 0) for s in state_B_successors])
+                args.gui_logger.gui_log_expansion(state_VF, state_VF.g, 0, [(s, s.g, 0) for s in state_VF_successors])
+                args.gui_logger.gui_log_expansion(state_VB, state_VB.g, 0, [(s, s.g, 0) for s in state_VB_successors])
+
             for succ_F in state_F_successors:
                 for succ_B in state_B_successors:
                     for succ_VF in state_VF_successors:

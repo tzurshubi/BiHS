@@ -73,8 +73,8 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
             expand_F = len(succs_F) <= len(succs_B)
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -91,8 +91,8 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                 return leaves
                 
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
@@ -113,8 +113,8 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
             # Determine which side to expand based on the turn
             if expand_F_turn:
                 succs_F = cur_F.generate_successors(args, snake, True)
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -132,8 +132,8 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                 
             else:
                 succs_B = cur_B.generate_successors(args, snake, False)
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
@@ -160,10 +160,10 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
             succs_F = cur_F.generate_successors(args, snake, True)
             succs_B = cur_B.generate_successors(args, snake, False)
             
-            stats["generated"]['F'] += len(succs_F)
-            stats["generated"]['B'] += len(succs_B)
-            if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
-            if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+            stats["generated_by_frontier"]['F'] += len(succs_F)
+            stats["generated_by_frontier"]['B'] += len(succs_B)
+            if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+            if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
 
             # --- OPTIMIZATION 1: Move graph copy OUTSIDE the cross-product loop ---
             # The parents' heads are consumed identically for all successor combinations
@@ -237,12 +237,12 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                 expand_F = False
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 return F_leaves
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 return B_leaves
  
 
@@ -278,7 +278,7 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
 
         stats["expansions"] += 1
         if stats["expansions"] % 50_000 == 0:
-            logger(f"Expansions: {stats['expansions']}. F states: {stats['generated']['F']}, B states: {stats['generated']['B']}. Checks: {stats['valid_meeting_checks']})")
+            logger(f"Expansions: {stats['expansions']}. F states: {stats['generated_by_frontier']['F']}, B states: {stats['generated_by_frontier']['B']}. Checks: {stats['valid_meeting_checks']})")
                 
         # A* Optimal Termination: If the best possible upper-bound in the entire queue 
         # is less than or equal to the best path we've already found, stop.
@@ -288,6 +288,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
 
         # Generate macro-step successors based on lookahead
         leaves = get_lookahead_successors(current_F, current_B, h_graph, args.lookahead, expand_F_turn)
+
+        gui_successors_F = [] if args.gui_logger.video else None
+        gui_successors_B = [] if args.gui_logger.video else None
 
         for h_val, leaf_F, leaf_B, leaf_h_graph in leaves:
             current_f_value = leaf_F.g + leaf_B.g + h_val
@@ -299,20 +302,31 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
 
             # BSD duplicate detection
             if args.bsd:
-                double_state_key = (leaf_F.head, leaf_F.path_vertices_and_neighbors if snake else leaf_F.path_vertices, 
+                double_state_key = (leaf_F.head, leaf_F.path_vertices_and_neighbors if snake else leaf_F.path_vertices,
                                     leaf_B.head, leaf_B.path_vertices_and_neighbors if snake else leaf_B.path_vertices)
                 if double_state_key in FNV and FNV[double_state_key] >= leaf_F.g + leaf_B.g:
                     stats["symmetric_states_removed"] += 1
                     continue
                 FNV[double_state_key] = leaf_F.g + leaf_B.g
 
+            if gui_successors_F is not None:
+                if leaf_F is not current_F:
+                    gui_successors_F.append((leaf_F, current_f_value, h_val))
+                if leaf_B is not current_B:
+                    gui_successors_B.append((leaf_B, current_f_value, h_val))
+
             # For alternating mode (-1, -2), invert the turn. Otherwise, F always goes first.
             next_turn = not expand_F_turn if args.lookahead in [-1, -2] else True
-            
+
             # min(current_f_value, f_value) enforces pathmax/monotonicity inherited from parent
             priority = min(current_f_value, f_value)
 
-            heapq.heappush(open_set, (-priority, -(leaf_F.g + leaf_B.g), next(tie_breaker), 
+            heapq.heappush(open_set, (-priority, -(leaf_F.g + leaf_B.g), next(tie_breaker),
                                       (leaf_F, leaf_B, leaf_h_graph, next_turn)))
+
+        if gui_successors_F:
+            args.gui_logger.gui_log_expansion(current_F, f_value, f_value - g_value, gui_successors_F)
+        if gui_successors_B:
+            args.gui_logger.gui_log_expansion(current_B, f_value, f_value - g_value, gui_successors_B)
 
     return global_longest_path, stats, global_meet_point

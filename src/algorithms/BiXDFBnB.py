@@ -11,8 +11,8 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
 
     initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
-    stats['num_of_states_per_g']['F'][0] += 1
-    stats['num_of_states_per_g']['B'][0] += 1
+    stats['num_of_states_per_g_by_frontier']['F'][0] += 1
+    stats['num_of_states_per_g_by_frontier']['B'][0] += 1
 
     if args.bsd:
         double_state_key = (initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices, initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)
@@ -113,39 +113,45 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             expand_F = len(succs_F) <= len(succs_B)
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
-                
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
-                
+
                 leaves = []
                 for f in succs_F:
                     is_valid, should_continue = evaluate_pair(f, cur_B) # B is frozen
                     if not is_valid or not should_continue: continue
-                    
+
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
                     leaves.append((h_val, f, cur_B, next_h_graph))
+                if args.gui_logger.video:
+                    gui_leaves_F = [(f, f.g + h_val, h_val) for h_val, f, _, _ in leaves]
+                    args.gui_logger.gui_log_expansion(cur_F, cur_F.g + getattr(cur_F, 'h', 0), getattr(cur_F, 'h', 0), gui_leaves_F)
                 return leaves
-                
+
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
-                
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
+
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
-                
+
                 leaves = []
                 for b in succs_B:
                     is_valid, should_continue = evaluate_pair(cur_F, b) # F is frozen
                     if not is_valid or not should_continue: continue
-                    
+
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
                     leaves.append((h_val, cur_F, b, next_h_graph))
+                if args.gui_logger.video:
+                    gui_leaves_B = [(b, b.g + h_val, h_val) for h_val, _, b, _ in leaves]
+                    args.gui_logger.gui_log_expansion(cur_B, cur_B.g + getattr(cur_B, 'h', 0), getattr(cur_B, 'h', 0), gui_leaves_B)
                 return leaves
 
         # --- Alternating Mode (lookahead = -1) ---
@@ -153,40 +159,46 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             # Determine which side to expand based on the turn
             if expand_F_turn:
                 succs_F = cur_F.generate_successors(args, snake, True)
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
-                
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
-                
+
                 leaves = []
                 for f in succs_F:
                     is_valid, should_continue = evaluate_pair(f, cur_B) # B is frozen
                     if not is_valid or not should_continue: continue
-                    
+
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
                     leaves.append((h_val, f, cur_B, next_h_graph))
+                if args.gui_logger.video:
+                    gui_leaves_F = [(f, f.g + h_val, h_val) for h_val, f, _, _ in leaves]
+                    args.gui_logger.gui_log_expansion(cur_F, cur_F.g + getattr(cur_F, 'h', 0), getattr(cur_F, 'h', 0), gui_leaves_F)
                 return leaves
-                
+
             else:
                 succs_B = cur_B.generate_successors(args, snake, False)
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
-                
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
+
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
-                
+
                 leaves = []
                 for b in succs_B:
                     is_valid, should_continue = evaluate_pair(cur_F, b) # F is frozen
                     if not is_valid or not should_continue: continue
-                    
+
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
                     leaves.append((h_val, cur_F, b, next_h_graph))
+                if args.gui_logger.video:
+                    gui_leaves_B = [(b, b.g + h_val, h_val) for h_val, _, b, _ in leaves]
+                    args.gui_logger.gui_log_expansion(cur_B, cur_B.g + getattr(cur_B, 'h', 0), getattr(cur_B, 'h', 0), gui_leaves_B)
                 return leaves
 
         # --- Standard Lookahead (remaining >= 0) ---
@@ -199,11 +211,11 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         if remaining >= 2:
             succs_F = cur_F.generate_successors(args, snake, True)
             succs_B = cur_B.generate_successors(args, snake, False)
-            
-            stats["generated"]['F'] += len(succs_F)
-            stats["generated"]['B'] += len(succs_B)
-            if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
-            if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+
+            stats["generated_by_frontier"]['F'] += len(succs_F)
+            stats["generated_by_frontier"]['B'] += len(succs_B)
+            if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+            if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
 
             # The parents' heads are consumed identically for all successor combinations
             next_h_graph = cur_h_graph.copy()
@@ -227,6 +239,23 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                         all_leaves.append((h_val, f, b, next_h_graph))
                     else:
                         all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
+
+            if args.gui_logger.video:
+                # all_leaves are the (possibly several-steps-ahead) leaves of this lookahead
+                # cone; log both frontiers' expansions against those finalized leaves, deduping
+                # by identity since a given one-step successor can recur across many leaves.
+                gui_seen_F, gui_leaves_F = set(), []
+                gui_seen_B, gui_leaves_B = set(), []
+                for leaf_h_val, leaf_F, leaf_B, _ in all_leaves:
+                    if id(leaf_F) not in gui_seen_F:
+                        gui_seen_F.add(id(leaf_F))
+                        gui_leaves_F.append((leaf_F, leaf_F.g + leaf_h_val, leaf_h_val))
+                    if id(leaf_B) not in gui_seen_B:
+                        gui_seen_B.add(id(leaf_B))
+                        gui_leaves_B.append((leaf_B, leaf_B.g + leaf_h_val, leaf_h_val))
+                args.gui_logger.gui_log_expansion(cur_F, cur_F.g + getattr(cur_F, 'h', 0), getattr(cur_F, 'h', 0), gui_leaves_F)
+                args.gui_logger.gui_log_expansion(cur_B, cur_B.g + getattr(cur_B, 'h', 0), getattr(cur_B, 'h', 0), gui_leaves_B)
+
             return all_leaves
 
         if remaining == 1:
@@ -276,12 +305,18 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 expand_F = False
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+                if args.gui_logger.video:
+                    gui_leaves_F = [(f, f.g + h_val, h_val) for h_val, f, _, _ in F_leaves]
+                    args.gui_logger.gui_log_expansion(cur_F, cur_F.g + getattr(cur_F, 'h', 0), getattr(cur_F, 'h', 0), gui_leaves_F)
                 return F_leaves
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
+                if args.gui_logger.video:
+                    gui_leaves_B = [(b, b.g + h_val, h_val) for h_val, _, b, _ in B_leaves]
+                    args.gui_logger.gui_log_expansion(cur_B, cur_B.g + getattr(cur_B, 'h', 0), getattr(cur_B, 'h', 0), gui_leaves_B)
                 return B_leaves
             
 
@@ -290,7 +325,7 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
         
         stats["expansions"] += 1
         if stats["expansions"] % 50_000 == 0:
-            logger(f"Expansions: {stats['expansions']}. F states: {stats['generated']['F']}, B states: {stats['generated']['B']}. Checks: {stats['valid_meeting_checks']})")
+            logger(f"Expansions: {stats['expansions']}. F states: {stats['generated_by_frontier']['F']}, B states: {stats['generated_by_frontier']['B']}. Checks: {stats['valid_meeting_checks']})")
         
         # Pass the turn variable into the successor generator
         # leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)

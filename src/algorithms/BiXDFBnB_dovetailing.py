@@ -11,8 +11,8 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
 
     initial_state_F = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
-    stats['num_of_states_per_g']['F'][0] += 1
-    stats['num_of_states_per_g']['B'][0] += 1
+    stats['num_of_states_per_g_by_frontier']['F'][0] += 1
+    stats['num_of_states_per_g_by_frontier']['B'][0] += 1
 
     if args.bsd:
         double_state_key = (initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices, initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)
@@ -116,8 +116,8 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
             expand_F = len(succs_F) <= len(succs_B)
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
 
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -134,8 +134,8 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
                 return leaves
 
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
 
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
@@ -156,8 +156,8 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
             # Determine which side to expand based on the turn
             if expand_F_turn:
                 succs_F = cur_F.generate_successors(args, snake, True)
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
 
                 next_h_graph = cur_h_graph.copy()
                 if cur_F.head in next_h_graph: next_h_graph.remove_node(cur_F.head)
@@ -175,8 +175,8 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
 
             else:
                 succs_B = cur_B.generate_successors(args, snake, False)
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
 
                 next_h_graph = cur_h_graph.copy()
                 if cur_B.head in next_h_graph: next_h_graph.remove_node(cur_B.head)
@@ -203,10 +203,10 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
             succs_F = cur_F.generate_successors(args, snake, True)
             succs_B = cur_B.generate_successors(args, snake, False)
 
-            stats["generated"]['F'] += len(succs_F)
-            stats["generated"]['B'] += len(succs_B)
-            if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
-            if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+            stats["generated_by_frontier"]['F'] += len(succs_F)
+            stats["generated_by_frontier"]['B'] += len(succs_B)
+            if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
+            if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
 
             # The parents' heads are consumed identically for all successor combinations
             next_h_graph = cur_h_graph.copy()
@@ -279,12 +279,12 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
                 expand_F = False
 
             if expand_F:
-                stats["generated"]['F'] += len(succs_F)
-                if len(succs_F) > 0: stats["num_of_states_per_g"]['F'][cur_F.g+1] += len(succs_F)
+                stats["generated_by_frontier"]['F'] += len(succs_F)
+                if len(succs_F) > 0: stats['num_of_states_per_g_by_frontier']['F'][cur_F.g+1] += len(succs_F)
                 return F_leaves
             else:
-                stats["generated"]['B'] += len(succs_B)
-                if len(succs_B) > 0: stats["num_of_states_per_g"]['B'][cur_B.g+1] += len(succs_B)
+                stats["generated_by_frontier"]['B'] += len(succs_B)
+                if len(succs_B) > 0: stats['num_of_states_per_g_by_frontier']['B'][cur_B.g+1] += len(succs_B)
                 return B_leaves
 
 
@@ -307,6 +307,25 @@ def BiXDFBnB_dovetailing(graph, start, goal, heuristic_name, snake, args):
         leaves = get_lookahead_successors(state_F, state_B, h_graph, step_function(state_F.g, k_step_dict), expand_F_turn)
         # if leaves: print((lambda nums, st=__import__('statistics'), ct=__import__('collections').Counter: f"Count: {len(nums)} | Min: {min(nums)} | Max: {max(nums)} | Mean: {st.mean(nums):.2f} | Median: {st.median(nums)} | STD: {st.stdev(nums) if len(nums) > 1 else 0.0:.2f}\nFrequencies: {dict(sorted(ct(nums).items(), reverse=True))}")([item[0] for item in leaves]))
         leaves.sort(key=lambda item: item[0], reverse=True)
+
+        # --- GUI trace hook: leaves are the (possibly multi-hop) lookahead successors
+        # finalized for this expansion of the (state_F, state_B) pair. Log each frontier
+        # that actually advanced (leaf differs from its parent) as its own expansion event.
+        if args.gui_logger.video:
+            gui_succ_F, gui_succ_B = [], []
+            seen_F_ids, seen_B_ids = set(), set()
+            for leaf_h, leaf_F, leaf_B, _ in leaves:
+                if leaf_F is not state_F and id(leaf_F) not in seen_F_ids:
+                    seen_F_ids.add(id(leaf_F))
+                    gui_succ_F.append((leaf_F, leaf_F.g + leaf_h, leaf_h))
+                if leaf_B is not state_B and id(leaf_B) not in seen_B_ids:
+                    seen_B_ids.add(id(leaf_B))
+                    gui_succ_B.append((leaf_B, leaf_B.g + leaf_h, leaf_h))
+            gui_parent_h = leaves[0][0] if leaves else 0
+            if gui_succ_F:
+                args.gui_logger.gui_log_expansion(state_F, state_F.g + gui_parent_h, gui_parent_h, gui_succ_F)
+            if gui_succ_B:
+                args.gui_logger.gui_log_expansion(state_B, state_B.g + gui_parent_h, gui_parent_h, gui_succ_B)
 
         i = 0
         n = len(leaves)

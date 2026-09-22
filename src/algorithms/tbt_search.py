@@ -150,6 +150,9 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
         # Generate successors
         successors = current_state.generate_successors(args, snake, directionF)
         BF_values.append(len(successors))
+
+        gui_successors = [] if args.gui_logger.video else None
+
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
@@ -180,6 +183,9 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
 
+            if gui_successors is not None:
+                gui_successors.append((successor, f_successor, h_successor))
+
             # The state symmetric to successor should be inserted to OPEN_D_hat
             if cube and backward_sym_generation: 
                 successor_symmetric = symmetric_state_transform(successor, args.dim_flips_F_B_symmetry, args.dim_swaps_F_B_symmetry)
@@ -196,9 +202,12 @@ def tbt_search(graph, start, goal, heuristic_name, snake, args):
             
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
             OPENvOPEN.insert_state(successor,directionF)
-            if cube and backward_sym_generation: 
+            if cube and backward_sym_generation:
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)
-    
+
+        if gui_successors is not None:
+            args.gui_logger.gui_log_expansion(current_state, f_value, f_value - g_value, gui_successors)
+
     # for st_state in st_states:
     #     print(st_state.path[::-1])
     #     if st_state.path[::-1] == [0,1,3,19,18,22,20,21,29,31]:

@@ -140,6 +140,9 @@ def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, arg
         successors = current_state.generate_successors(args, snake, directionF)
         stats["g_values"].append(current_state.g)
         stats["BF_values"].append(len(successors))
+
+        gui_successors = [] if args.gui_logger.video else None
+
         for successor in successors:
             if args.bsd and (successor.head, successor.path_vertices_and_neighbors) in FNV_D:
                 # logger(f"symmetric state removed: {successor.path}")
@@ -163,6 +166,9 @@ def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, arg
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
 
+            if gui_successors is not None:
+                gui_successors.append((successor, f_successor, h_successor))
+
             # The state symmetric to successor should be inserted to OPEN_D_hat
             if cube and args.backward_sym_generation: 
                 successor_symmetric = symmetric_state_transform(successor, args.dim_flips_F_B_symmetry, args.dim_swaps_F_B_symmetry)
@@ -180,8 +186,11 @@ def bidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, arg
             FNV_D.add((successor.head, successor.path_vertices_and_neighbors))
             if successor.g == g_cutoff: 
                 OPENvOPEN.insert_state(successor, directionF, stats)
-            if cube and args.backward_sym_generation: 
+            if cube and args.backward_sym_generation:
                 OPENvOPEN.insert_state(successor_symmetric, not directionF, stats)
+
+        if gui_successors is not None:
+            args.gui_logger.gui_log_expansion(current_state, f_value, f_value - g_value, gui_successors)
 
     # Statistics logging
     # bidirectional_stats = f"valid meeting checks (g+g<f_max): {valid_meeting_checks_sum_g_under_f_max} out of {valid_meeting_checks}. time: {1000*valid_meeting_check_time:.1f} [ms]. time for heuristic calculations: {1000*calc_h_time:.1f} [ms]. # of states in OPENvOPEN: {OPENvOPEN.counter}."

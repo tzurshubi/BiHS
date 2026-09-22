@@ -109,10 +109,15 @@ def BiXDFS_CIB(graph, start, goal, heuristic_name, snake, args):
             stats["expansions"] += 2
             state_F_successors = state_F.generate_successors(args, snake, True)
             state_B_successors = state_B.generate_successors(args, snake, False)
-            stats["generated"]['F'] += len(state_F_successors)
-            stats["generated"]['B'] += len(state_B_successors)
-            stats["num_of_states_per_g"]['F'][state_F.g+1] += len(state_F_successors)
-            stats["num_of_states_per_g"]['B'][state_B.g+1] += len(state_B_successors)
+            stats["generated_by_frontier"]['F'] += len(state_F_successors)
+            stats["generated_by_frontier"]['B'] += len(state_B_successors)
+            stats['num_of_states_per_g_by_frontier']['F'][state_F.g+1] += len(state_F_successors)
+            stats['num_of_states_per_g_by_frontier']['B'][state_B.g+1] += len(state_B_successors)
+
+            if args.gui_logger.video:
+                args.gui_logger.gui_log_expansion(state_F, state_F.g, 0, [(succ, succ.g, 0) for succ in state_F_successors])
+                args.gui_logger.gui_log_expansion(state_B, state_B.g, 0, [(succ, succ.g, 0) for succ in state_B_successors])
+
             for succ_F in state_F_successors:
                 for succ_B in state_B_successors:
                     is_sym_coil, sym_coil = exp_n_check_states(succ_F, succ_B)
