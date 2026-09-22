@@ -7,8 +7,7 @@ import random
 import traceback
 import numpy as np
 import matplotlib.patches as patches
-import matplotlib
-matplotlib.use('TkAgg')  # Forces the Tkinter interactive backend
+# Let Matplotlib select a usable backend, including Agg on headless nodes.
 import matplotlib.pyplot as plt
 import time
 import math
