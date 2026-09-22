@@ -20,7 +20,18 @@ def XA(graph, start, goal, heuristic_name, snake, args):
     open_set = HeapqState()
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
+    if buffer_dim is not None:
+        # A supplied starting path may already have crossed the buffer.
+        prefix = initial_state.materialize_path()
+        crossings = sum((u ^ v) == (1 << buffer_dim) for u, v in zip(prefix, prefix[1:]))
+        if crossings > 1:
+            return None, stats
+        initial_state.traversed_buffer_dimension = crossings == 1
+
     initial_h_value = heuristic(initial_state, goal, heuristic_name, snake, args) if heuristic_name else V
+    if initial_h_value == -1:
+        stats["violations"]["heuristic"][initial_state.g] += 1
+        return None, stats
     initial_f_value = initial_state.g + initial_h_value
     open_set.push(initial_state, initial_f_value, initial_f_value)
 
@@ -49,6 +60,9 @@ def XA(graph, start, goal, heuristic_name, snake, args):
             h_val = V
             if heuristic_name:
                 h_val = heuristic(cur_state, goal, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            if h_val == -1:
+                stats["violations"]["heuristic"][cur_state.g] += 1
+                return []
             return [(h_val, cur_state, cur_h_graph)]
 
         succs = cur_state.generate_successors(args, snake, True)
@@ -62,9 +76,12 @@ def XA(graph, start, goal, heuristic_name, snake, args):
 
         all_leaves = []
         for succ in succs:
-            if buffer_dim is not None and has_bridge_edge_across_dim(cur_state, succ, buffer_dim):
-                if succ.traversed_buffer_dimension: continue
-                succ.traversed_buffer_dimension = True
+            if buffer_dim is not None:
+                # Preserve history even on edges in other dimensions.
+                succ.traversed_buffer_dimension = cur_state.traversed_buffer_dimension
+                if has_bridge_edge_across_dim(cur_state, succ, buffer_dim):
+                    if cur_state.traversed_buffer_dimension: continue
+                    succ.traversed_buffer_dimension = True
 
             if succ.head == goal:
                 # Reaching the goal ends this branch immediately (it's the only
@@ -81,6 +98,9 @@ def XA(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(succ, goal, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][succ.g] += 1
+                    continue
                 all_leaves.append((h_val, succ, next_h_graph))
             else:
                 all_leaves.extend(get_lookahead_successors(succ, next_h_graph, remaining - 1))
@@ -89,10 +109,6 @@ def XA(graph, start, goal, heuristic_name, snake, args):
 
     while len(open_set) > 0:
         priority, f_value, g_value, current_state = open_set.pop()
-
-        stats["expansions"] += 1
-        if stats["expansions"] % 10_000 == 0:
-            logger(f"Expansion {stats['expansions']}: state {current_state.path}, f={f_value}, g={g_value}")
 
         if current_state.head == goal:
             if g_value > best_path_length:
@@ -111,6 +127,11 @@ def XA(graph, start, goal, heuristic_name, snake, args):
         # lookahead recursion below.
         h_graph = graph.copy()
         h_graph.remove_nodes_from(current_state.tail())
+
+        # Count only states whose successors are actually explored.
+        stats["expansions"] += 1
+        if stats["expansions"] % 10_000 == 0:
+            logger(f"Expansion {stats['expansions']}: state {current_state.path}, f={f_value}, g={g_value}")
 
         leaves = get_lookahead_successors(current_state, h_graph, lookahead)
 

@@ -16,6 +16,12 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
     # Initial state
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
+    # Reject a dead root before generating its lookahead subtree.
+    initial_h = heuristic(initial_state, goal, heuristic_name, snake, args) if heuristic_name else V
+    if initial_h == -1:
+        stats["violations"]["heuristic"][initial_state.g] += 1
+        return [], stats
+
     if args.bsd:
         state_key = (initial_state.head, initial_state.path_vertices_and_neighbors if snake else initial_state.path_vertices)
         FNV = {state_key: initial_state.g}
@@ -38,15 +44,16 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
                 if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
             return True, False # Reached the goal, stop exploring this specific branch
 
-        # Reached adjacent to goal
-        elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
-            if is_vertex_in_bitmap(goal, state.illegal): 
-                return False, False 
-            global_longest_path = state.materialize_path() + [goal]
-            if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
-            if snake:
-                return True, False # For snake, treat adjacent as a valid solution, but do not continue expanding
-            return True, True # Found better path via adjacent edge, but continue expanding as per original logic
+        # Optional adjacent-goal shortcut disabled: like XA*, record a solution
+        # only when the exact goal is reached through normal successor generation.
+        # elif graph.has_edge(state.head, goal) and state.g + 1 > len(global_longest_path) - 1:
+        #     if is_vertex_in_bitmap(goal, state.illegal):
+        #         return False, False
+        #     global_longest_path = state.materialize_path() + [goal]
+        #     if args.graph_type == "cube": logger(f"Expansion {stats['expansions']}: New longest path found with length {len(global_longest_path) - 1}: {global_longest_path}")
+        #     if snake:
+        #         return True, False # For snake, treat adjacent as a valid solution, but do not continue expanding
+        #     return True, True # Found better path via adjacent edge, but continue expanding as per original logic
         
         return True, True # Valid intermediate state, continue expanding
 
@@ -57,6 +64,9 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
             h_val = V
             if heuristic_name:
                 h_val = heuristic(cur_state, goal, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            if h_val == -1:
+                stats["violations"]["heuristic"][cur_state.g] += 1
+                return []
             return [(h_val, cur_state, cur_h_graph)]
             
         succs = cur_state.generate_successors(args, snake, True)
@@ -85,6 +95,9 @@ def XDFBnB(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(succ, goal, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][succ.g] += 1
+                    continue
                 all_leaves.append((h_val, succ, next_h_graph))
             else:
                 all_leaves.extend(get_lookahead_successors(succ, next_h_graph, remaining - 1))

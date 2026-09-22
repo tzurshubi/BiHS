@@ -87,6 +87,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][f.g] += 1
+                        continue
                     leaves.append((h_val, f, cur_B, next_h_graph))
                 return leaves
                 
@@ -105,6 +108,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][cur_F.g] += 1
+                        continue
                     leaves.append((h_val, cur_F, b, next_h_graph))
                 return leaves
 
@@ -127,6 +133,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][f.g] += 1
+                        continue
                     leaves.append((h_val, f, cur_B, next_h_graph))
                 return leaves
                 
@@ -146,6 +155,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][cur_F.g] += 1
+                        continue
                     leaves.append((h_val, cur_F, b, next_h_graph))
                 return leaves
 
@@ -154,6 +166,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
             h_val = V
             if heuristic_name:
                 h_val = heuristic(cur_F, cur_B, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            if h_val == -1:
+                stats["violations"]["heuristic"][cur_F.g] += 1
+                return []
             return [(h_val, cur_F, cur_B, cur_h_graph)]
         
         if remaining >= 2:
@@ -185,6 +200,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                         h_val = V
                         if heuristic_name:
                             h_val = heuristic(f, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                        if h_val == -1:
+                            stats["violations"]["heuristic"][f.g] += 1
+                            continue
                         all_leaves.append((h_val, f, b, next_h_graph))
                     else:
                         all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
@@ -206,6 +224,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph_F.copy() if snake else next_h_graph_F)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][f.g] += 1
+                    continue
                 F_leaves.append((h_val, f, cur_B, next_h_graph_F))
             
             F_leaves.sort(key=lambda item: item[0], reverse=True)
@@ -226,6 +247,9 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph_B.copy() if snake else next_h_graph_B)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][cur_F.g] += 1
+                    continue
                 B_leaves.append((h_val, cur_F, b, next_h_graph_B))
             
             B_leaves.sort(key=lambda item: item[0], reverse=True)
@@ -254,6 +278,10 @@ def BiXA(graph, start, goal, heuristic_name, snake, args):
     if heuristic_name:
         initial_h_value = heuristic(initial_state_F, initial_state_B, heuristic_name, snake, args, graph.copy())
     
+    if initial_h_value == -1:
+        stats["violations"]["heuristic"][initial_state_F.g] += 1
+        return [], stats, None
+
     initial_f_value = initial_state_F.g + initial_state_B.g + initial_h_value
     
     # Push format: (-priority, -g_value, unique_id, (state_F, state_B, h_graph, expand_F_turn))

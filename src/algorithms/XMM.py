@@ -37,9 +37,15 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
 
     # Initial f_values
-    initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake)
+    initial_state_F.h = heuristic(initial_state_F, goal, heuristic_name, snake, args) if heuristic_name else len(graph)
+    if initial_state_F.h == -1:
+        stats["violations"]["heuristic"][initial_state_F.g] += 1
+        return None, stats, None
     initial_f_value_F = initial_state_F.g + initial_state_F.h
-    initial_state_B.h = heuristic(initial_state_B, start, heuristic_name, snake)
+    initial_state_B.h = heuristic(initial_state_B, start, heuristic_name, snake, args) if heuristic_name else len(graph)
+    if initial_state_B.h == -1:
+        stats["violations"]["heuristic"][initial_state_B.g] += 1
+        return None, stats, None
     initial_f_value_B = initial_state_B.g + initial_state_B.h
 
     # Push initial states with priority based on f_value
@@ -58,6 +64,7 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
     stats["expansions"] = 0
     stats["generated"] = 0
     stats["moved_OPEN_to_AUXOPEN"] = 0
+    stats.setdefault("valid_meeting_checks_sum_g_under_f_max", 0)
 
     # Closed sets for forward and backward searches
     CLOSED_F = set()
@@ -93,18 +100,22 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
 
         # Check against OPEN of the other direction, for a valid meeting point
         curr_time = time.time()
-        state, _, _, _, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_longest_non_overlapping_state(current_state, directionF, best_path_length, f_value, snake)
+        state, _, solution, solution_length, num_checks, num_checks_sum_g_under_f_max = OPENvOPEN.find_longest_non_overlapping_state(current_state, directionF, best_path_length, f_value, snake)
         stats["valid_meeting_check_time"] += time.time() - curr_time
         stats["valid_meeting_checks"] += num_checks
         stats["valid_meeting_checks_sum_g_under_f_max"] += num_checks_sum_g_under_f_max
-        if state:
-            total_length = current_path_length + state.g
+        if solution is not None:
+            # OPENvOPEN also returns a completed path when no opposite state
+            # is needed (including a zero-length solution with h == 0).
+            total_length = solution_length
             if total_length > best_path_length:
                 best_path_length = total_length
-                best_path = current_state.materialize_path()[:-1] + state.materialize_path()[::-1]
+                best_path = solution.materialize_path()
+                if not directionF:
+                    best_path.reverse()
                 best_path_meet_point = current_state.head
                 if snake:
-                    logger(f"Expansion {stats['expansions']}: New longest path found with length {total_length}: {best_path}. g_F={current_path_length}, g_B={state.g}, f_max={f_value}, generated={stats['generated']}")
+                    logger(f"Expansion {stats['expansions']}: New longest path found with length {total_length}: {best_path}. g_current={current_path_length}, g_opposite={state.g if state is not None else 0}, f_max={f_value}, generated={stats['generated']}")
                     
         # Termination Condition: check if U is the largest it will ever be
         if best_path_length >= min(
@@ -163,8 +174,11 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
 
             # Calculate g, h, f values for successor
             curr_time = time.time()
-            h_successor = heuristic(successor, goal if directionF else start, heuristic_name, snake)
+            h_successor = heuristic(successor, goal if directionF else start, heuristic_name, snake, args) if heuristic_name else len(graph)
             stats["calc_h_time"] += time.time() - curr_time
+            if h_successor == -1:
+                stats["violations"]["heuristic"][successor.g] += 1
+                continue
             g_successor = current_path_length + 1
             f_successor = g_successor + h_successor
 

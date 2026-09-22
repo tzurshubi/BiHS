@@ -24,6 +24,10 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
     if heuristic_name:
         initial_h = heuristic(initial_state, goal, heuristic_name, snake, args, graph.copy() if snake else graph)
     
+    if initial_h == -1:
+        stats["violations"]["heuristic"][initial_state.g] += 1
+        return [], stats
+
     threshold = initial_state.g + initial_h
     next_threshold = -1
     target_found = False
@@ -70,6 +74,9 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
             h_val = V
             if heuristic_name:
                 h_val = heuristic(cur_state, goal, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            if h_val == -1:
+                stats["violations"]["heuristic"][cur_state.g] += 1
+                return []
             return [(h_val, cur_state, cur_h_graph)]
             
         succs = cur_state.generate_successors(args, snake, True)
@@ -95,6 +102,9 @@ def XIDA(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(succ, goal, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][succ.g] += 1
+                    continue
                 all_leaves.append((h_val, succ, next_h_graph))
             else:
                 all_leaves.extend(get_lookahead_successors(succ, next_h_graph, remaining - 1))

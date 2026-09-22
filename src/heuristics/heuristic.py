@@ -337,70 +337,117 @@ def Y_heuristic(graph):
 
     return counter + len(graph)
 
-
 def bcc_heuristic_paper(state, goal, graph=None):
     """
-    Heuristic: add an edge between head (=state.head) and goal to form Q.
-    Let B be the biconnected component in Q that contains both head and goal.
-    Return |V(B)| - 1. If head/goal are absent or no such B exists, return 0.
+    BCC upper bound on the remaining number of edges.
+
+    Returns:
+        -1: Goal is unreachable without revisiting a vertex.
+         0: The current head is already the goal.
+        >0: Admissible upper bound |V(B)| - 1.
+
+    Uses State.path_vertices: a bitmap of visited vertices
+    excluding the head, with nonnegative integer vertex IDs.
+
+    `graph` may be the original graph or an already-pruned
+    remaining graph. Neither it nor state.graph is modified.
     """
-
     head = getattr(state, "head", None)
-    if head is None or goal is None or head == goal:
-        return 0
+    if head is None or goal is None:
+        return -1
 
-    # Copy graph and remove tail nodes
-    G = state.graph if graph is None else graph
-    tail_nodes = set(state.tail())
-    if head in tail_nodes or goal in tail_nodes:
-        return 0
-    if graph is None: G.remove_nodes_from(tail_nodes)
+    # Construct Gr by removing every previously visited vertex,
+    # except the current head. Use the bitmap to preserve the
+    # full history even when the initial state contains a prefix.
+    G = (state.graph if graph is None else graph).copy()
+    tail_mask = state.path_vertices
+    G.remove_nodes_from([
+        v for v in G if tail_mask & (1 << v)
+    ])
 
     if head not in G or goal not in G:
+        return -1
+
+    if head == goal:
         return 0
 
-    # Add the probe edge
-    s_t_edge_existed = G.has_edge(head, goal)
-    if not s_t_edge_existed:
+    # Construct G+r.
+    edge_existed = G.has_edge(head, goal)
+    if not edge_existed:
         G.add_edge(head, goal)
 
-    # Find all biconnected components
-    for comp in nx.biconnected_components(G):
-        if head in comp and goal in comp:
-            if not s_t_edge_existed: G.remove_edge(head, goal)
-            return max(0, len(comp) - 1)
-        
-    if not s_t_edge_existed: G.remove_edge(head, goal)
-    return 0
+    for block in nx.biconnected_components(G):
+        if head in block and goal in block:
+            # NetworkX includes bridges as two-vertex blocks.
+            # If this block is only the artificial edge, there
+            # was no head-to-goal path in Gr.
+            if not edge_existed and len(block) == 2:
+                return -1
+
+            return len(block) - 1
+
+    return -1
+
+import networkx as nx
 
 
 def F2F_bcc_heuristic(state_F, state_B, graph):
     """
-    Heuristic: add an edge between head (=state.head) and goal to form Q.
-    Let B be the biconnected component in Q that contains both head and goal.
-    Return |V(B)| - 1. If head/goal are absent or no such B exists, return 0.
+    F2F BCC upper bound for undirected, unweighted LSP.
+
+    Returns:
+        -1: Invalid paired state or no connection between heads.
+         0: Valid meeting at a shared head.
+        >0: Upper bound on the remaining gap: |V(B)| - 1.
+
+    Uses State.path_vertices: a bitmap of visited vertices
+    excluding the head, with nonnegative integer vertex IDs.
+
+    The input graph is not modified. For additional GLSP
+    constraints, it must already exclude their forbidden elements.
     """
     s = getattr(state_F, "head", None)
     t = getattr(state_B, "head", None)
-    if s not in graph or t not in graph:
+    if s is None or t is None:
+        return -1
+
+    tail_F = state_F.path_vertices
+    tail_B = state_B.path_vertices
+
+    # Shared tail vertices would repeat vertices in the full path.
+    if tail_F & tail_B:
+        return -1
+
+    # Construct Gr by removing both tails.
+    G = graph.copy()
+    tail_mask = tail_F | tail_B
+    G.remove_nodes_from([
+        v for v in G if tail_mask & (1 << v)
+    ])
+
+    # Also rejects a head lying in the opposite path's tail.
+    if s not in G or t not in G:
+        return -1
+
+    # The paths meet legally; no connecting edges remain.
+    if s == t:
         return 0
 
-    # Add the probe edge
-    s_t_edge_existed = graph.has_edge(s, t)
-    if not s_t_edge_existed:
-        graph.add_edge(s, t)
-    
-    # Find all biconnected components
-    # bccs = list(nx.biconnected_components(G)) # for debug
-    # print(f"graph has {len(bccs)} biconnected components")
-    for bcc in nx.biconnected_components(graph):
-        if s in bcc and t in bcc:
-            # h = max(0, len(comp) - 1) # for debug
-            if not s_t_edge_existed: graph.remove_edge(s, t)
-            return max(0, len(bcc) - 1)
-        
-    if not s_t_edge_existed: graph.remove_edge(s, t)
-    return 0
+    # Construct G+r.
+    edge_existed = G.has_edge(s, t)
+    if not edge_existed:
+        G.add_edge(s, t)
+
+    for block in nx.biconnected_components(G):
+        if s in block and t in block:
+            # A two-vertex block consisting only of the added
+            # edge means the heads were disconnected in Gr.
+            if not edge_existed and len(block) == 2:
+                return -1
+
+            return len(block) - 1
+
+    return -1
 
 def F2F_bcc_snake_heuristic(state_F, state_B, graph):
     """

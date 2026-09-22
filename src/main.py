@@ -49,17 +49,17 @@ from utils.gui_logger import GuiLogger
 # --date 4_8_24 --number_of_graphs 1 --graph_type grid --size_of_graphs 6 6 --run_uni
 DEFAULT_LOG = True                      # True # False
 DEFAULT_DATE = "SM_Grids"                  # "SM_Grids" / "cubes" / "mazes" / "Check_Sparse_Grids"
-DEFAULT_NUMBER_OF_GRAPHS = 1            # 10
+DEFAULT_NUMBER_OF_GRAPHS = 10            # 10
 DEFAULT_GRAPH_TYPE = "grid"             # "grid" / "cube" / "manual" / "maze"
 DEFAULT_SIZE_OF_GRAPHS = [6,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
 DEFAULT_RUN_UNI = True                 # True # False
-DEFAULT_RUN_BI = False                   # True # False
+DEFAULT_RUN_BI = True                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
-DEFAULT_ALGORITHMS = ["A"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A" # "ABnB"
+DEFAULT_ALGORITHMS = ["IDA"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A" # "ABnB"
 DEFAULT_LOOKAHEAD = 2                   # -2 (Smallest BF) # -1 (alternating)  # 0 (no lookahead) / 1 (1-step lookahead) / 2 (2-step lookahead) - only for DFBnB algorithms
 DEFAULT_BSD = False                      # True # False
 DEFAULT_CUBE_FIRST_DIMENSIONS = 4       # 3 # 4 # 5 # 6 # 7
@@ -67,9 +67,9 @@ DEFAULT_CUBE_BUFFER_DIMENSION = None    # seNone # 3 # 4 # 5 # 6 # 7
 DEFAULT_BACKWARD_SYM_GENERATION = False # True # False
 DEFAULT_SYM_COIL = False                # True # False
 DEFAULT_PREFIX_SET = None               # None # 2 # 3 # 4 # comparing sets of states with same prefix of length k-3
-DEFAULT_INIT_GRAPH_NUM = 5
+DEFAULT_INIT_GRAPH_NUM = 0
 DEFAULT_MEMORY_LIMIT = 1_200_000               # Memory limit for A* phase in BiXABnB algorithm
-DEFAULT_VIDEO = True                   # True # False -- record a GuiLogger trace for GuiViewer
+DEFAULT_VIDEO = False                   # True # False -- record a GuiLogger trace for GuiViewer
 
 base_dir = "/"
 current_directory = os.getcwd()
@@ -259,8 +259,7 @@ def search(
     search_type,
     heuristic,
     snake,
-    args,
-    direction=None
+    args
 ):
     # Load the graph
     G = load_graph_from_file(current_directory+base_dir+"data/graphs/" + name_of_graph.replace(" ", "_") + ".json")
@@ -412,8 +411,6 @@ def search(
         "snake": snake,
         "graph_type": args.graph_type,
     }
-    if direction:
-        gui_meta["direction"] = direction
     if args.graph_type in ("grid", "maze"):
         gui_meta["rows"] = args.size_of_graphs[0]
         gui_meta["cols"] = args.size_of_graphs[1]
@@ -424,7 +421,6 @@ def search(
         graph_name=name_of_graph,
         algo_name=args.algo,
         search_type=search_type,
-        direction=direction,
         meta=gui_meta,
     )
 
@@ -680,7 +676,7 @@ if __name__ == "__main__":
             if run_uni:
                 # unidirectional s-t
                 logs, path, _ = search(
-                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args, direction="s_to_t"
+                    name_of_graph, start, goal, "unidirectional", heuristic, snake, args
                 )
                 avgs["uni_st"]["expansions"].append(logs['expansions'])
                 avgs["uni_st"]["time"].append(logs['time[ms]'])
@@ -700,7 +696,7 @@ if __name__ == "__main__":
                 # unidirectional t-s
                 if graph_type!="cube":
                     logs, path, _ = search(
-                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args, direction="t_to_s"
+                        name_of_graph, goal, start, "unidirectional", heuristic, snake, args
                     )
                     avgs["uni_ts"]["expansions"].append(logs['expansions'])
                     avgs["uni_ts"]["time"].append(logs['time[ms]'])

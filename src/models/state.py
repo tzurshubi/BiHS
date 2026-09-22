@@ -1,7 +1,7 @@
 import math
 
 STORE_PATH = False  # Set to False to save memory in snake mode
-STORE_SUCCESSORS = True  # Set to True to cache successors in each state
+STORE_SUCCESSORS = False  # Set to True to cache successors in each state
 
 class State:
     __slots__ = [
@@ -180,10 +180,13 @@ class State:
         if self.path is not None:
             return list(self.path)
 
-        # Walk back through parents
+        # Walk back to a stored path, which may contain a multi-vertex prefix.
         nodes = []
         cur = self
         while cur is not None:
+            if cur.path is not None:
+                nodes.extend(reversed(cur.path))
+                break
             nodes.append(cur.head)
             cur = cur.parent
         nodes.reverse()
@@ -412,5 +415,4 @@ class State:
         else:
             illegal_bitmap = int(self.illegal)
             self.graph = self.graph.subgraph(v for v in self.graph.nodes if (illegal_bitmap >> v) & 1 == 0).copy()
-
 

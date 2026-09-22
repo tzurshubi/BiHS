@@ -3,7 +3,7 @@ from models.state import State
 from utils.utils import *
 
 def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
-    k_step_dict = {4:8, 2:1000}
+    # k_step_dict = {4:8, 2:1000}
     logger = args.logger
     stats = args.stats 
     N = max(graph.nodes)
@@ -13,6 +13,12 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
     initial_state_B = State(graph, [goal], [], snake, args) if isinstance(goal, int) else State(graph, goal, [], snake, args)
     stats['num_of_states_per_g_by_frontier']['F'][0] += 1
     stats['num_of_states_per_g_by_frontier']['B'][0] += 1
+
+    # Reject a dead pair before generating its lookahead subtree.
+    initial_h = heuristic(initial_state_F, initial_state_B, heuristic_name, snake, args, graph.copy()) if heuristic_name else V
+    if initial_h == -1:
+        stats["violations"]["heuristic"][initial_state_F.g] += 1
+        return [], stats, None
 
     if args.bsd:
         double_state_key = (initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices, initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)
@@ -127,6 +133,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][f.g] += 1
+                        continue
                     leaves.append((h_val, f, cur_B, next_h_graph))
                 if args.gui_logger.video:
                     gui_leaves_F = [(f, f.g + h_val, h_val) for h_val, f, _, _ in leaves]
@@ -148,6 +157,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][cur_F.g] += 1
+                        continue
                     leaves.append((h_val, cur_F, b, next_h_graph))
                 if args.gui_logger.video:
                     gui_leaves_B = [(b, b.g + h_val, h_val) for h_val, _, b, _ in leaves]
@@ -173,6 +185,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][f.g] += 1
+                        continue
                     leaves.append((h_val, f, cur_B, next_h_graph))
                 if args.gui_logger.video:
                     gui_leaves_F = [(f, f.g + h_val, h_val) for h_val, f, _, _ in leaves]
@@ -195,6 +210,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                     h_val = V
                     if heuristic_name:
                         h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                    if h_val == -1:
+                        stats["violations"]["heuristic"][cur_F.g] += 1
+                        continue
                     leaves.append((h_val, cur_F, b, next_h_graph))
                 if args.gui_logger.video:
                     gui_leaves_B = [(b, b.g + h_val, h_val) for h_val, _, b, _ in leaves]
@@ -206,6 +224,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             h_val = V
             if heuristic_name:
                 h_val = heuristic(cur_F, cur_B, heuristic_name, snake, args, cur_h_graph.copy() if snake else cur_h_graph)
+            if h_val == -1:
+                stats["violations"]["heuristic"][cur_F.g] += 1
+                return []
             return [(h_val, cur_F, cur_B, cur_h_graph)]
         
         if remaining >= 2:
@@ -236,6 +257,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                         h_val = V
                         if heuristic_name:
                             h_val = heuristic(f, b, heuristic_name, snake, args, next_h_graph.copy() if snake else next_h_graph)
+                        if h_val == -1:
+                            stats["violations"]["heuristic"][f.g] += 1
+                            continue
                         all_leaves.append((h_val, f, b, next_h_graph))
                     else:
                         all_leaves.extend(get_lookahead_successors(f, b, next_h_graph, remaining - 2))
@@ -274,6 +298,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(f, cur_B, heuristic_name, snake, args, next_h_graph_F.copy() if snake else next_h_graph_F)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][f.g] += 1
+                    continue
                 F_leaves.append((h_val, f, cur_B, next_h_graph_F))
             
             F_leaves.sort(key=lambda item: item[0], reverse=True)
@@ -294,6 +321,9 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
                 h_val = V
                 if heuristic_name:
                     h_val = heuristic(cur_F, b, heuristic_name, snake, args, next_h_graph_B.copy() if snake else next_h_graph_B)
+                if h_val == -1:
+                    stats["violations"]["heuristic"][cur_F.g] += 1
+                    continue
                 B_leaves.append((h_val, cur_F, b, next_h_graph_B))
             
             B_leaves.sort(key=lambda item: item[0], reverse=True)
@@ -328,8 +358,8 @@ def BiXDFBnB(graph, start, goal, heuristic_name, snake, args):
             logger(f"Expansions: {stats['expansions']}. F states: {stats['generated_by_frontier']['F']}, B states: {stats['generated_by_frontier']['B']}. Checks: {stats['valid_meeting_checks']})")
         
         # Pass the turn variable into the successor generator
-        # leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)
-        leaves = get_lookahead_successors(state_F, state_B, h_graph, step_function(state_F.g, k_step_dict), expand_F_turn)
+        leaves = get_lookahead_successors(state_F, state_B, h_graph, args.lookahead, expand_F_turn)
+        # leaves = get_lookahead_successors(state_F, state_B, h_graph, step_function(state_F.g, k_step_dict), expand_F_turn)
         # if leaves: print((lambda nums, st=__import__('statistics'), ct=__import__('collections').Counter: f"Count: {len(nums)} | Min: {min(nums)} | Max: {max(nums)} | Mean: {st.mean(nums):.2f} | Median: {st.median(nums)} | STD: {st.stdev(nums) if len(nums) > 1 else 0.0:.2f}\nFrequencies: {dict(sorted(ct(nums).items(), reverse=True))}")([item[0] for item in leaves]))
         leaves.sort(key=lambda item: item[0], reverse=True)
 
