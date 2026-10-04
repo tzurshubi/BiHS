@@ -54,8 +54,8 @@ DEFAULT_SIZE_OF_GRAPHS = [6,7]          # dimension of cube
 DEFAULT_PER_OF_BLOCKS = 20              # 4 / 8 / 12 / 16
 DEFAULT_HEURISTIC = "bcc_heuristic"     # None / "bcc_heuristic" / "heuristic0" / "mis_heuristic" / "reachable_heuristic" / "bct_is_heuristic" /
 DEFAULT_SNAKE = False                    # True # False
-DEFAULT_RUN_UNI = True                 # True # False
-DEFAULT_RUN_BI = True                   # True # False
+DEFAULT_RUN_UNI = False                 # True # False
+DEFAULT_RUN_BI = False                   # True # False
 DEFAULT_RUN_MULTI = False               # True # False
 DEFAULT_SOLUTION_VERTICES = []        # [] #  # 60 is good mean for 7d cube symcoil # [68, 111]
 DEFAULT_ALGORITHMS = ["IDA"]          # "basic" # "light" # "cutoff" # "XMM" # "DFBnB" # "BHK" # "IDA" # "A" # "ABnB"
@@ -578,7 +578,8 @@ if __name__ == "__main__":
         else:
             log_file_name = f"results_{size_of_graphs[0]}x{size_of_graphs[1]}_{graph_type}_{per_blocked}{"per_" if graph_type=="grid" else ""}blocked_{heuristic}{"_snake" if snake else ""}{"_uni" if run_uni else ""}{"_bi" if run_bi else ""}{"_multi" if run_multi else ""}"
         log_file_name += f"_{algorithms_str}"
-        log_file_name += f"_{args.memory_limit / 1_000_000}mMemLim"
+        if args.memory_limit != -1:
+            log_file_name += f"_{args.memory_limit / 1_000_000}mMemLim"
         if cube_buffer_dim is not None:
             log_file_name += f"_buffDim{cube_buffer_dim}"
         if backward_sym_generation:

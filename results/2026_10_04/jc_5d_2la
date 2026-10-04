@@ -1,0 +1,52 @@
+------------------------------------
+Thu 01 Oct 2026 18:38:16 IDT
+SLURM_JOBID:		21955291
+SLURM_JOB_NODELIST:	ise-cpu256-02
+SLURM_SCRATCH_DIR:	/scratch/shubit/21955291
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Thu 01 Oct 2026 18:38:16 IDT
+
+SLURM_JOBID:		 21955291
+SLURM_JOB_NODELIST:	 ise-cpu256-02 
+
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [5, 5]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['XMM']
+lookahead: 2
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/5d_cube ----------
+[00:00:00:00:013] Expansion 2: New longest path found with length 4: [15, 14, 12, 4, 0]
+[00:00:00:00:033] Expansion 7: New longest path found with length 6: [15, 13, 29, 21, 20, 4, 0]
+[00:00:00:00:038] Expansion 9: New longest path found with length 10: [15, 13, 29, 21, 20, 22, 18, 26, 10, 8, 0]
+[00:00:00:00:078] Path of length 10 found: [15, 13, 29, 21, 20, 22, 18, 26, 10, 8, 0]
+[00:00:00:00:078] ! Unidirectional s-t. expansions: 26, time: 78 [ms], path length: 10 [edges], generated: 155
+[00:00:00:00:017] Expansion 4: New longest path found with length 4: [15, 13, 12, 4, 0]. g_current=2, g_opposite=2, f_max=12, generated=10
+[00:00:00:00:058] Expansion 23: New longest path found with length 6: [15, 14, 30, 22, 20, 4, 0]. g_current=4, g_opposite=2, f_max=11, generated=58
+[00:00:00:00:081] Expansion 37: New longest path found with length 8: [15, 13, 12, 28, 30, 22, 18, 16, 0]. g_current=3, g_opposite=5, f_max=11, generated=88
+[00:00:00:00:087] Expansion 39: New longest path found with length 10: [15, 14, 10, 26, 27, 25, 29, 21, 20, 4, 0]. g_current=4, g_opposite=6, f_max=11, generated=94
+[00:00:00:00:124] Path of length 10 found: [15, 14, 10, 26, 27, 25, 29, 21, 20, 4, 0]
+[00:00:00:00:418] ! Bidirectional. expansions: 55, time: 124 [ms], path length: 10 [edges], g_F: 4, g_B: 6, generated: 128, MM: 2, MMPER: 17.181818181818183%
+
+[00:00:00:00:418] average expansions: (26, 0, 55, 0)
+[00:00:00:00:418] average time: (78, 0, 124, 0)
+[00:00:00:00:418] XA*: 26 , 78 (expansions , time[ms])
+[00:00:00:00:418] XMM: 55 , 124 (expansions , time[ms])
+

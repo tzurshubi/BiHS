@@ -13,6 +13,9 @@ def BiXABnB(graph, start, goal, heuristic_name, snake, args):
     stats = args.stats
     logger = args.logger
     memory_limit = args.memory_limit
+    if memory_limit == -1:
+        # -1 means the memory limit is disregarded: never switch to DFBnB.
+        memory_limit = float('inf')
     N = max(graph.nodes)
     V = len(graph.nodes)
 

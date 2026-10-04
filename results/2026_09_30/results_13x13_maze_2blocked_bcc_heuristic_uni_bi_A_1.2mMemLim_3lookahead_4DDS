@@ -1,0 +1,881 @@
+--------------------------
+date: mazes
+number_of_graphs: 10
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['A']
+lookahead: 3
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_2_open_diamonds_0 ----------
+[00:00:02:33:957] Expansion 10,000: state None, f=103, g=27
+[00:00:04:39:756] Expansion 20,000: state None, f=101, g=63
+[00:00:06:42:742] Expansion 30,000: state None, f=100, g=45
+[00:00:08:18:907] Expansion 40,000: state None, f=99, g=51
+[00:00:09:36:520] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 83, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 98, 111, 124, 137, 136, 123, 110, 97, 96, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 148, 149, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:09:36:520] ! Unidirectional s-t. expansions: 45,404, time: 576,520 [ms], path length: 98 [edges], generated: 356,721
+[00:00:02:21:727] Expansion 10,000: state None, f=109, g=45
+[00:00:04:38:493] Expansion 20,000: state None, f=107, g=54
+[00:00:06:47:305] Expansion 30,000: state None, f=106, g=57
+[00:00:08:43:679] Expansion 40,000: state None, f=106, g=42
+[00:00:10:39:037] Expansion 50,000: state None, f=105, g=48
+[00:00:12:33:420] Expansion 60,000: state None, f=105, g=45
+[00:00:14:17:084] Expansion 70,000: state None, f=104, g=57
+[00:00:15:57:057] Expansion 80,000: state None, f=104, g=48
+[00:00:18:00:515] Expansion 90,000: state None, f=103, g=69
+[00:00:19:38:558] Expansion 100,000: state None, f=103, g=54
+[00:00:21:23:850] Expansion 110,000: state None, f=103, g=54
+[00:00:23:15:394] Expansion 120,000: state None, f=102, g=63
+[00:00:24:43:615] Expansion 130,000: state None, f=102, g=54
+[00:00:26:08:984] Expansion 140,000: state None, f=102, g=48
+[00:00:27:59:127] Expansion 150,000: state None, f=102, g=36
+[00:00:29:48:451] Expansion 160,000: state None, f=101, g=66
+[00:00:31:11:138] Expansion 170,000: state None, f=101, g=54
+[00:00:32:48:750] Expansion 180,000: state None, f=101, g=48
+[00:00:34:50:963] Expansion 190,000: state None, f=101, g=30
+[00:00:36:26:926] Expansion 200,000: state None, f=100, g=72
+[00:00:37:43:043] Expansion 210,000: state None, f=100, g=57
+[00:00:39:12:642] Expansion 220,000: state None, f=100, g=72
+[00:00:40:52:229] Expansion 230,000: state None, f=100, g=69
+[00:00:42:30:955] Expansion 240,000: state None, f=100, g=48
+[00:00:44:13:827] Expansion 250,000: state None, f=100, g=54
+[00:00:45:59:641] Expansion 260,000: state None, f=100, g=42
+[00:00:48:11:193] Expansion 270,000: state None, f=100, g=24
+[00:00:49:51:119] Expansion 280,000: state None, f=99, g=63
+[00:00:51:41:294] Expansion 290,000: state None, f=99, g=48
+[00:00:53:30:442] Expansion 300,000: state None, f=99, g=42
+[00:00:55:14:694] Path of length 98 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 148, 149, 150, 137, 136, 123, 122, 109, 110, 111, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 85, 86, 99, 98, 97, 96, 83, 82, 95, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:55:14:695] ! Unidirectional t-s. expansions: 305,959, time: 3,314,694 [ms], path length: 98 [edges], generated: 1,823,000
+[00:00:15:07:626] Expansions: 50,000. F states: 245,625, B states: 112,328. Checks: 575,166)
+[00:00:19:45:167] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 60, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 148, 149, 136, 123, 110, 97, 96, 95, 82, 83, 84, 85, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 98, 111, 124, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:19:45:167] ! Bidirectional. expansions: 63,693, time: 1,185,167 [ms], path length: 98 [edges], g_F: 60, g_B: 38, generated: 0, MM: 22, MMPER: 21.22222222222222%
+[00:00:19:45:168] 
+---------- mazes/13x13_maze_with_2_open_diamonds_1 ----------
+[00:00:02:53:769] Expansion 10,000: state None, f=112, g=42
+[00:00:05:31:273] Expansion 20,000: state None, f=111, g=39
+[00:00:08:02:204] Expansion 30,000: state None, f=110, g=51
+[00:00:10:36:284] Expansion 40,000: state None, f=110, g=27
+[00:00:12:47:093] Expansion 50,000: state None, f=109, g=39
+[00:00:15:11:293] Expansion 60,000: state None, f=109, g=33
+[00:00:17:45:111] Expansion 70,000: state None, f=108, g=54
+[00:00:19:37:270] Expansion 80,000: state None, f=108, g=45
+[00:00:22:07:590] Expansion 90,000: state None, f=108, g=39
+[00:00:24:59:004] Expansion 100,000: state None, f=107, g=60
+[00:00:27:09:567] Expansion 110,000: state None, f=107, g=45
+[00:00:29:18:381] Expansion 120,000: state None, f=107, g=42
+[00:00:31:24:839] Expansion 130,000: state None, f=107, g=36
+[00:00:33:54:056] Expansion 140,000: state None, f=107, g=33
+[00:00:36:45:291] Expansion 150,000: state None, f=106, g=54
+[00:00:39:11:512] Expansion 160,000: state None, f=106, g=54
+[00:00:41:24:700] Expansion 170,000: state None, f=106, g=48
+[00:00:43:25:115] Expansion 180,000: state None, f=106, g=51
+[00:00:45:48:137] Expansion 190,000: state None, f=106, g=39
+[00:00:48:25:026] Expansion 200,000: state None, f=106, g=36
+[00:00:51:18:871] Expansion 210,000: state None, f=106, g=24
+[00:00:53:23:845] Expansion 220,000: state None, f=105, g=60
+[00:00:55:03:084] Expansion 230,000: state None, f=105, g=54
+[00:00:57:29:039] Expansion 240,000: state None, f=105, g=45
+[00:00:59:55:805] Expansion 250,000: state None, f=105, g=42
+[00:01:02:00:945] Expansion 260,000: state None, f=105, g=39
+[00:01:04:26:996] Expansion 270,000: state None, f=105, g=39
+[00:01:06:45:584] Expansion 280,000: state None, f=105, g=33
+[00:01:09:44:932] Expansion 290,000: state None, f=105, g=27
+[00:01:12:35:517] Expansion 300,000: state None, f=104, g=69
+[00:01:14:20:930] Expansion 310,000: state None, f=104, g=57
+[00:01:16:24:227] Expansion 320,000: state None, f=104, g=57
+[00:01:18:26:716] Expansion 330,000: state None, f=104, g=51
+[00:01:20:26:690] Expansion 340,000: state None, f=104, g=48
+[00:01:22:49:299] Expansion 350,000: state None, f=104, g=51
+[00:01:24:35:240] Expansion 360,000: state None, f=104, g=45
+[00:01:26:56:885] Expansion 370,000: state None, f=104, g=42
+[00:01:29:24:228] Expansion 380,000: state None, f=104, g=45
+[00:01:32:03:093] Expansion 390,000: state None, f=104, g=33
+[00:01:34:35:509] Expansion 400,000: state None, f=104, g=33
+[00:01:37:24:403] Expansion 410,000: state None, f=104, g=24
+[00:01:39:58:130] Expansion 420,000: state None, f=103, g=69
+[00:01:41:30:534] Expansion 430,000: state None, f=103, g=63
+[00:01:43:13:722] Expansion 440,000: state None, f=103, g=57
+[00:01:44:47:089] Expansion 450,000: state None, f=103, g=60
+[00:01:46:33:556] Expansion 460,000: state None, f=103, g=57
+[00:01:48:42:707] Expansion 470,000: state None, f=103, g=57
+[00:01:50:45:123] Expansion 480,000: state None, f=103, g=63
+[00:01:52:49:670] Expansion 490,000: state None, f=103, g=51
+[00:01:55:07:526] Expansion 500,000: state None, f=103, g=54
+[00:01:57:42:658] Expansion 510,000: state None, f=103, g=45
+[00:02:00:07:427] Expansion 520,000: state None, f=103, g=42
+[00:02:02:41:178] Expansion 530,000: state None, f=103, g=42
+[00:02:05:03:308] Expansion 540,000: state None, f=103, g=42
+[00:02:07:07:690] Expansion 550,000: state None, f=103, g=36
+[00:02:09:43:414] Expansion 560,000: state None, f=103, g=36
+[00:02:11:49:902] Expansion 570,000: state None, f=103, g=36
+[00:02:14:25:295] Expansion 580,000: state None, f=103, g=33
+[00:02:17:03:151] Expansion 590,000: state None, f=103, g=24
+[00:02:19:23:100] Expansion 600,000: state None, f=102, g=72
+[00:02:20:40:559] Expansion 610,000: state None, f=102, g=69
+[00:02:22:38:455] Expansion 620,000: state None, f=102, g=66
+[00:02:24:14:474] Expansion 630,000: state None, f=102, g=63
+[00:02:26:04:008] Expansion 640,000: state None, f=102, g=60
+[00:02:28:07:583] Expansion 650,000: state None, f=102, g=60
+[00:02:30:17:473] Expansion 660,000: state None, f=102, g=57
+[00:02:32:27:162] Expansion 670,000: state None, f=102, g=51
+[00:02:34:58:891] Expansion 680,000: state None, f=102, g=48
+[00:02:37:30:622] Expansion 690,000: state None, f=102, g=48
+[00:02:40:07:660] Expansion 700,000: state None, f=102, g=51
+[00:02:42:44:600] Expansion 710,000: state None, f=102, g=45
+[00:02:45:17:984] Expansion 720,000: state None, f=102, g=48
+[00:02:47:50:289] Expansion 730,000: state None, f=102, g=45
+[00:02:50:21:995] Expansion 740,000: state None, f=102, g=54
+[00:02:52:57:408] Expansion 750,000: state None, f=102, g=42
+[00:02:54:45:123] Expansion 760,000: state None, f=102, g=45
+[00:02:56:50:749] Expansion 770,000: state None, f=102, g=42
+[00:02:59:29:800] Expansion 780,000: state None, f=102, g=51
+[00:03:02:00:111] Expansion 790,000: state None, f=102, g=36
+[00:03:04:41:854] Expansion 800,000: state None, f=102, g=33
+[00:03:07:15:636] Expansion 810,000: state None, f=102, g=33
+[00:03:09:53:485] Expansion 820,000: state None, f=102, g=27
+[00:03:13:03:999] Expansion 830,000: state None, f=102, g=27
+[00:03:14:50:806] Expansion 840,000: state None, f=101, g=72
+[00:03:16:38:329] Expansion 850,000: state None, f=101, g=69
+[00:03:18:14:285] Expansion 860,000: state None, f=101, g=66
+[00:03:19:40:542] Expansion 870,000: state None, f=101, g=63
+[00:03:21:11:790] Expansion 880,000: state None, f=101, g=60
+[00:03:22:39:713] Expansion 890,000: state None, f=101, g=69
+[00:03:24:18:784] Expansion 900,000: state None, f=101, g=60
+[00:03:26:04:412] Expansion 910,000: state None, f=101, g=57
+[00:03:27:46:939] Expansion 920,000: state None, f=101, g=57
+[00:03:29:29:088] Expansion 930,000: state None, f=101, g=57
+[00:03:31:19:923] Expansion 940,000: state None, f=101, g=57
+[00:03:33:18:900] Expansion 950,000: state None, f=101, g=51
+[00:03:34:56:435] Expansion 960,000: state None, f=101, g=51
+[00:03:36:44:370] Expansion 970,000: state None, f=101, g=51
+[00:03:38:49:169] Expansion 980,000: state None, f=101, g=54
+[00:03:41:18:400] Expansion 990,000: state None, f=101, g=45
+[00:03:43:17:468] Expansion 1,000,000: state None, f=101, g=45
+[00:03:45:48:945] Expansion 1,010,000: state None, f=101, g=42
+[00:03:49:12:043] Expansion 1,020,000: state None, f=101, g=54
+[00:03:52:09:860] Expansion 1,030,000: state None, f=101, g=42
+[00:03:54:49:576] Expansion 1,040,000: state None, f=101, g=42
+[00:03:57:36:268] Expansion 1,050,000: state None, f=101, g=39
+[00:04:00:15:714] Expansion 1,060,000: state None, f=101, g=45
+[00:04:02:50:257] Expansion 1,070,000: state None, f=101, g=39
+[00:04:04:49:487] Expansion 1,080,000: state None, f=101, g=39
+[00:04:07:14:898] Expansion 1,090,000: state None, f=101, g=33
+[00:04:09:31:041] Expansion 1,100,000: state None, f=101, g=39
+[00:04:11:49:070] Expansion 1,110,000: state None, f=101, g=30
+[00:04:14:32:238] Expansion 1,120,000: state None, f=101, g=24
+[00:04:16:21:370] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 57, 70, 83, 82, 69, 68, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 94, 95, 108, 107, 120, 133, 132, 119, 106, 105, 118, 131, 130, 143, 156, 157, 144, 145, 146, 159, 160, 161, 162, 163, 150, 137, 136, 135, 122, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:04:16:21:372] ! Unidirectional s-t. expansions: 1,123,323, time: 15,381,370 [ms], path length: 100 [edges], generated: 8,429,836
+[00:00:03:06:103] Expansion 10,000: state None, f=109, g=45
+[00:00:05:48:873] Expansion 20,000: state None, f=108, g=54
+[00:00:07:55:742] Expansion 30,000: state None, f=108, g=45
+[00:00:10:33:984] Expansion 40,000: state None, f=108, g=39
+[00:00:12:47:676] Expansion 50,000: state None, f=107, g=69
+[00:00:14:54:495] Expansion 60,000: state None, f=107, g=48
+[00:00:17:10:425] Expansion 70,000: state None, f=107, g=42
+[00:00:19:25:263] Expansion 80,000: state None, f=107, g=45
+[00:00:21:48:560] Expansion 90,000: state None, f=107, g=39
+[00:00:24:46:077] Expansion 100,000: state None, f=107, g=24
+[00:00:26:36:222] Expansion 110,000: state None, f=106, g=57
+[00:00:28:19:804] Expansion 120,000: state None, f=106, g=54
+[00:00:30:10:380] Expansion 130,000: state None, f=106, g=54
+[00:00:32:24:090] Expansion 140,000: state None, f=106, g=51
+[00:00:34:39:451] Expansion 150,000: state None, f=106, g=51
+[00:00:37:08:682] Expansion 160,000: state None, f=106, g=42
+[00:00:39:48:586] Expansion 170,000: state None, f=106, g=36
+[00:00:42:34:097] Expansion 180,000: state None, f=106, g=39
+[00:00:45:03:327] Expansion 190,000: state None, f=105, g=72
+[00:00:46:54:737] Expansion 200,000: state None, f=105, g=63
+[00:00:48:33:797] Expansion 210,000: state None, f=105, g=57
+[00:00:50:29:918] Expansion 220,000: state None, f=105, g=63
+[00:00:52:37:400] Expansion 230,000: state None, f=105, g=51
+[00:00:54:42:051] Expansion 240,000: state None, f=105, g=51
+[00:00:56:52:752] Expansion 250,000: state None, f=105, g=51
+[00:00:58:56:103] Expansion 260,000: state None, f=105, g=54
+[00:01:00:41:812] Expansion 270,000: state None, f=105, g=45
+[00:01:02:51:420] Expansion 280,000: state None, f=105, g=45
+[00:01:05:06:724] Expansion 290,000: state None, f=105, g=51
+[00:01:07:28:845] Expansion 300,000: state None, f=105, g=51
+[00:01:09:38:017] Expansion 310,000: state None, f=105, g=36
+[00:01:11:51:954] Expansion 320,000: state None, f=105, g=48
+[00:01:14:21:905] Expansion 330,000: state None, f=105, g=36
+[00:01:16:56:635] Expansion 340,000: state None, f=105, g=33
+[00:01:19:47:419] Expansion 350,000: state None, f=105, g=42
+[00:01:22:33:433] Expansion 360,000: state None, f=104, g=63
+[00:01:23:57:782] Expansion 370,000: state None, f=104, g=63
+[00:01:26:07:745] Expansion 380,000: state None, f=104, g=63
+[00:01:27:57:540] Expansion 390,000: state None, f=104, g=60
+[00:01:29:27:119] Expansion 400,000: state None, f=104, g=60
+[00:01:31:29:574] Expansion 410,000: state None, f=104, g=54
+[00:01:33:08:205] Expansion 420,000: state None, f=104, g=54
+[00:01:34:57:652] Expansion 430,000: state None, f=104, g=51
+[00:01:36:35:616] Expansion 440,000: state None, f=104, g=63
+[00:01:38:26:408] Expansion 450,000: state None, f=104, g=48
+[00:01:40:17:854] Expansion 460,000: state None, f=104, g=51
+[00:01:42:10:473] Expansion 470,000: state None, f=104, g=48
+[00:01:44:08:271] Expansion 480,000: state None, f=104, g=48
+[00:01:46:36:618] Expansion 490,000: state None, f=104, g=45
+[00:01:49:00:756] Expansion 500,000: state None, f=104, g=42
+[00:01:51:18:162] Expansion 510,000: state None, f=104, g=42
+[00:01:53:30:812] Expansion 520,000: state None, f=104, g=42
+[00:01:56:13:841] Expansion 530,000: state None, f=104, g=42
+[00:01:58:49:823] Expansion 540,000: state None, f=104, g=45
+[00:02:01:17:536] Expansion 550,000: state None, f=104, g=36
+[00:02:04:19:096] Expansion 560,000: state None, f=103, g=78
+[00:02:05:36:758] Expansion 570,000: state None, f=103, g=66
+[00:02:07:00:045] Expansion 580,000: state None, f=103, g=66
+[00:02:08:36:400] Expansion 590,000: state None, f=103, g=60
+[00:02:10:03:648] Expansion 600,000: state None, f=103, g=60
+[00:02:11:55:289] Expansion 610,000: state None, f=103, g=57
+[00:02:13:42:372] Expansion 620,000: state None, f=103, g=57
+[00:02:15:31:333] Expansion 630,000: state None, f=103, g=57
+[00:02:17:31:263] Expansion 640,000: state None, f=103, g=63
+[00:02:19:28:661] Expansion 650,000: state None, f=103, g=66
+[00:02:21:26:040] Expansion 660,000: state None, f=103, g=54
+[00:02:23:45:799] Expansion 670,000: state None, f=103, g=51
+[00:02:25:59:673] Expansion 680,000: state None, f=103, g=54
+[00:02:27:59:408] Expansion 690,000: state None, f=103, g=51
+[00:02:30:18:302] Expansion 700,000: state None, f=103, g=51
+[00:02:32:41:984] Expansion 710,000: state None, f=103, g=51
+[00:02:34:46:354] Expansion 720,000: state None, f=103, g=51
+[00:02:36:47:132] Expansion 730,000: state None, f=103, g=48
+[00:02:39:13:978] Expansion 740,000: state None, f=103, g=63
+[00:02:41:48:890] Expansion 750,000: state None, f=103, g=54
+[00:02:44:30:506] Expansion 760,000: state None, f=103, g=51
+[00:02:46:53:825] Expansion 770,000: state None, f=103, g=45
+[00:02:48:48:012] Expansion 780,000: state None, f=103, g=45
+[00:02:50:56:218] Expansion 790,000: state None, f=103, g=45
+[00:02:53:16:199] Expansion 800,000: state None, f=103, g=45
+[00:02:55:17:818] Expansion 810,000: state None, f=103, g=45
+[00:02:58:05:219] Expansion 820,000: state None, f=103, g=42
+[00:03:00:23:233] Expansion 830,000: state None, f=103, g=51
+[00:03:02:29:011] Expansion 840,000: state None, f=103, g=39
+[00:03:05:06:106] Expansion 850,000: state None, f=103, g=45
+[00:03:07:24:329] Expansion 860,000: state None, f=103, g=42
+[00:03:09:48:866] Expansion 870,000: state None, f=103, g=54
+[00:03:12:17:327] Expansion 880,000: state None, f=103, g=45
+[00:03:15:22:569] Expansion 890,000: state None, f=103, g=33
+[00:03:18:08:356] Expansion 900,000: state None, f=103, g=36
+[00:03:21:17:105] Expansion 910,000: state None, f=103, g=33
+[00:03:24:05:157] Expansion 920,000: state None, f=103, g=27
+[00:03:27:36:315] Expansion 930,000: state None, f=102, g=72
+[00:03:28:50:511] Expansion 940,000: state None, f=102, g=69
+[00:03:30:52:848] Expansion 950,000: state None, f=102, g=72
+[00:03:32:52:953] Expansion 960,000: state None, f=102, g=63
+[00:03:34:28:846] Expansion 970,000: state None, f=102, g=63
+[00:03:36:13:724] Expansion 980,000: state None, f=102, g=63
+[00:03:37:59:048] Expansion 990,000: state None, f=102, g=60
+[00:03:39:41:909] Expansion 1,000,000: state None, f=102, g=63
+[00:03:41:34:511] Expansion 1,010,000: state None, f=102, g=63
+[00:03:43:33:006] Expansion 1,020,000: state None, f=102, g=60
+[00:03:45:17:615] Expansion 1,030,000: state None, f=102, g=57
+[00:03:47:15:034] Expansion 1,040,000: state None, f=102, g=57
+[00:03:48:58:790] Expansion 1,050,000: state None, f=102, g=60
+[00:03:50:33:172] Expansion 1,060,000: state None, f=102, g=57
+[00:03:52:06:355] Expansion 1,070,000: state None, f=102, g=63
+[00:03:54:17:898] Expansion 1,080,000: state None, f=102, g=54
+[00:03:56:17:135] Expansion 1,090,000: state None, f=102, g=60
+[00:03:58:18:084] Expansion 1,100,000: state None, f=102, g=54
+[00:04:00:12:930] Expansion 1,110,000: state None, f=102, g=60
+[00:04:02:12:506] Expansion 1,120,000: state None, f=102, g=66
+[00:04:04:05:337] Expansion 1,130,000: state None, f=102, g=54
+[00:04:05:57:165] Expansion 1,140,000: state None, f=102, g=51
+[00:04:07:38:788] Expansion 1,150,000: state None, f=102, g=54
+[00:04:09:21:876] Expansion 1,160,000: state None, f=102, g=51
+[00:04:11:28:231] Expansion 1,170,000: state None, f=102, g=54
+[00:04:13:32:495] Expansion 1,180,000: state None, f=102, g=48
+[00:04:15:39:671] Expansion 1,190,000: state None, f=102, g=51
+[00:04:18:02:221] Expansion 1,200,000: state None, f=102, g=48
+[00:04:20:15:333] Expansion 1,210,000: state None, f=102, g=51
+[00:04:22:29:942] Expansion 1,220,000: state None, f=102, g=45
+[00:04:24:20:578] Expansion 1,230,000: state None, f=102, g=48
+[00:04:26:36:582] Expansion 1,240,000: state None, f=102, g=48
+[00:04:28:48:610] Expansion 1,250,000: state None, f=102, g=48
+[00:04:31:19:816] Expansion 1,260,000: state None, f=102, g=42
+[00:04:33:54:697] Expansion 1,270,000: state None, f=102, g=45
+[00:04:37:01:850] Expansion 1,280,000: state None, f=102, g=45
+[00:04:39:28:724] Expansion 1,290,000: state None, f=102, g=39
+[00:04:41:47:077] Expansion 1,300,000: state None, f=102, g=39
+[00:04:44:04:744] Expansion 1,310,000: state None, f=102, g=45
+[00:04:46:47:030] Expansion 1,320,000: state None, f=102, g=36
+[00:04:49:14:676] Expansion 1,330,000: state None, f=102, g=33
+[00:04:51:57:528] Expansion 1,340,000: state None, f=102, g=45
+[00:04:55:02:417] Expansion 1,350,000: state None, f=102, g=33
+[00:04:58:00:612] Expansion 1,360,000: state None, f=102, g=30
+[00:05:00:46:739] Expansion 1,370,000: state None, f=101, g=78
+[00:05:01:52:992] Expansion 1,380,000: state None, f=101, g=78
+[00:05:03:22:135] Expansion 1,390,000: state None, f=101, g=66
+[00:05:04:50:263] Expansion 1,400,000: state None, f=101, g=66
+[00:05:06:28:492] Expansion 1,410,000: state None, f=101, g=63
+[00:05:07:51:030] Expansion 1,420,000: state None, f=101, g=66
+[00:05:09:29:425] Expansion 1,430,000: state None, f=101, g=63
+[00:05:11:26:727] Expansion 1,440,000: state None, f=101, g=60
+[00:05:13:31:277] Expansion 1,450,000: state None, f=101, g=60
+[00:05:15:14:701] Expansion 1,460,000: state None, f=101, g=57
+[00:05:17:05:493] Expansion 1,470,000: state None, f=101, g=57
+[00:05:18:33:907] Expansion 1,480,000: state None, f=101, g=57
+[00:05:20:02:613] Expansion 1,490,000: state None, f=101, g=57
+[00:05:21:46:822] Expansion 1,500,000: state None, f=101, g=54
+[00:05:23:55:099] Expansion 1,510,000: state None, f=101, g=60
+[00:05:25:58:398] Expansion 1,520,000: state None, f=101, g=54
+[00:05:28:09:422] Expansion 1,530,000: state None, f=101, g=51
+[00:05:30:19:471] Expansion 1,540,000: state None, f=101, g=51
+[00:05:31:52:693] Expansion 1,550,000: state None, f=101, g=51
+[00:05:33:24:836] Expansion 1,560,000: state None, f=101, g=57
+[00:05:35:07:541] Expansion 1,570,000: state None, f=101, g=57
+[00:05:36:45:150] Expansion 1,580,000: state None, f=101, g=51
+[00:05:38:17:859] Expansion 1,590,000: state None, f=101, g=51
+[00:05:39:47:041] Expansion 1,600,000: state None, f=101, g=51
+[00:05:42:17:134] Expansion 1,610,000: state None, f=101, g=51
+[00:05:44:18:161] Expansion 1,620,000: state None, f=101, g=54
+[00:05:46:27:809] Expansion 1,630,000: state None, f=101, g=51
+[00:05:48:36:342] Expansion 1,640,000: state None, f=101, g=60
+[00:05:50:42:290] Expansion 1,650,000: state None, f=101, g=63
+[00:05:52:43:998] Expansion 1,660,000: state None, f=101, g=48
+[00:05:55:16:214] Expansion 1,670,000: state None, f=101, g=48
+[00:05:57:56:299] Expansion 1,680,000: state None, f=101, g=60
+[00:06:00:21:299] Expansion 1,690,000: state None, f=101, g=51
+[00:06:02:34:067] Expansion 1,700,000: state None, f=101, g=54
+[00:06:04:49:909] Expansion 1,710,000: state None, f=101, g=45
+[00:06:07:36:589] Expansion 1,720,000: state None, f=101, g=51
+[00:06:10:11:161] Expansion 1,730,000: state None, f=101, g=51
+[00:06:12:46:801] Expansion 1,740,000: state None, f=101, g=42
+[00:06:15:16:205] Expansion 1,750,000: state None, f=101, g=42
+[00:06:17:24:248] Expansion 1,760,000: state None, f=101, g=48
+[00:06:19:40:914] Expansion 1,770,000: state None, f=101, g=48
+[00:06:21:39:692] Expansion 1,780,000: state None, f=101, g=48
+[00:06:23:51:599] Expansion 1,790,000: state None, f=101, g=39
+[00:06:26:19:612] Expansion 1,800,000: state None, f=101, g=51
+[00:06:29:00:636] Expansion 1,810,000: state None, f=101, g=54
+[00:06:31:20:675] Expansion 1,820,000: state None, f=101, g=51
+[00:06:33:46:941] Expansion 1,830,000: state None, f=101, g=42
+[00:06:36:24:654] Expansion 1,840,000: state None, f=101, g=42
+[00:06:39:04:645] Expansion 1,850,000: state None, f=101, g=39
+[00:06:41:29:317] Expansion 1,860,000: state None, f=101, g=36
+[00:06:43:52:629] Expansion 1,870,000: state None, f=101, g=36
+[00:06:46:16:264] Expansion 1,880,000: state None, f=101, g=36
+[00:06:48:41:264] Expansion 1,890,000: state None, f=101, g=39
+[00:06:51:05:897] Expansion 1,900,000: state None, f=101, g=36
+[00:06:53:55:288] Expansion 1,910,000: state None, f=101, g=33
+[00:06:56:21:190] Expansion 1,920,000: state None, f=101, g=51
+[00:06:58:56:436] Expansion 1,930,000: state None, f=101, g=39
+[00:07:01:27:188] Expansion 1,940,000: state None, f=101, g=33
+[00:07:04:40:870] Expansion 1,950,000: state None, f=101, g=36
+[00:07:07:31:603] Expansion 1,960,000: state None, f=101, g=39
+[00:07:10:28:984] Expansion 1,970,000: state None, f=101, g=27
+[00:07:13:45:507] Path of length 100 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 57, 70, 71, 84, 85, 86, 99, 112, 111, 110, 109, 108, 95, 96, 83, 82, 69, 68, 81, 94, 107, 120, 133, 134, 135, 136, 137, 150, 163, 162, 161, 160, 159, 146, 145, 158, 157, 156, 143, 130, 131, 132, 119, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:07:13:45:510] ! Unidirectional t-s. expansions: 1,976,791, time: 26,025,508 [ms], path length: 100 [edges], generated: 14,057,456
+[00:00:22:42:200] Expansions: 50,000. F states: 284,352, B states: 148,040. Checks: 739,073)
+[00:00:45:41:571] Expansions: 100,000. F states: 573,466, B states: 296,318. Checks: 1,484,005)
+[00:01:03:02:231] Expansions: 150,000. F states: 835,716, B states: 415,077. Checks: 2,125,746)
+[00:01:21:59:304] Expansions: 200,000. F states: 1,099,027, B states: 547,020. Checks: 2,777,344)
+[00:01:42:02:115] Expansions: 250,000. F states: 1,380,160, B states: 675,684. Checks: 3,472,736)
+[00:01:57:00:690] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 57, 70, 69, 82, 83, 96, 95, 94, 81, 68, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 118, 131, 130, 143, 156, 157, 144, 145, 146, 159, 160, 161, 162, 163, 150, 137, 136, 135, 134, 133, 132, 119, 106, 107, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:01:57:00:692] ! Bidirectional. expansions: 275,926, time: 7,020,690 [ms], path length: 100 [edges], g_F: 60, g_B: 40, generated: 0, MM: 20, MMPER: 18.801980198019802%
+[00:01:57:00:693] 
+---------- mazes/13x13_maze_with_2_open_diamonds_2 ----------
+[00:00:02:02:179] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 70, 71, 84, 85, 86, 73, 72, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 98, 111, 110, 109, 122, 121, 108, 107, 120, 133, 132, 131, 130, 143, 156, 157, 158, 159, 146, 147, 160, 161, 148, 135, 136, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:02:02:179] ! Unidirectional s-t. expansions: 9,550, time: 122,179 [ms], path length: 106 [edges], generated: 74,196
+[00:00:02:09:934] Expansion 10,000: state None, f=109, g=42
+[00:00:04:15:170] Expansion 20,000: state None, f=108, g=42
+[00:00:06:46:650] Expansion 30,000: state None, f=108, g=60
+[00:00:08:29:465] Expansion 40,000: state None, f=107, g=63
+[00:00:10:21:648] Path of length 106 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 150, 137, 136, 135, 148, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 146, 147, 134, 121, 120, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 60, 59, 46, 33, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 57, 70, 71, 72, 73, 86, 99, 98, 85, 84, 83, 82, 81, 80, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:10:21:649] ! Unidirectional t-s. expansions: 48,517, time: 621,648 [ms], path length: 106 [edges], generated: 337,269
+[00:00:02:40:514] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 73, 72, 71, 70, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 98, 111, 110, 109, 108, 107, 120, 121, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 146, 147, 160, 161, 148, 135, 136, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:02:40:514] ! Bidirectional. expansions: 8,324, time: 160,514 [ms], path length: 106 [edges], g_F: 71, g_B: 35, generated: 0, MM: 36, MMPER: 32.64485981308411%
+[00:00:02:40:515] 
+---------- mazes/13x13_maze_with_2_open_diamonds_3 ----------
+[00:00:02:52:884] Expansion 10,000: state None, f=109, g=30
+[00:00:05:30:476] Expansion 20,000: state None, f=108, g=27
+[00:00:07:47:026] Expansion 30,000: state None, f=107, g=33
+[00:00:09:49:730] Expansion 40,000: state None, f=106, g=45
+[00:00:12:19:735] Expansion 50,000: state None, f=106, g=27
+[00:00:14:19:969] Expansion 60,000: state None, f=105, g=36
+[00:00:16:49:854] Expansion 70,000: state None, f=104, g=45
+[00:00:18:38:217] Expansion 80,000: state None, f=104, g=39
+[00:00:20:19:249] Expansion 90,000: state None, f=104, g=39
+[00:00:22:00:841] Expansion 100,000: state None, f=104, g=30
+[00:00:25:11:817] Expansion 110,000: state None, f=103, g=54
+[00:00:27:36:936] Expansion 120,000: state None, f=103, g=33
+[00:00:29:35:753] Expansion 130,000: state None, f=103, g=33
+[00:00:31:48:175] Expansion 140,000: state None, f=103, g=45
+[00:00:33:45:510] Expansion 150,000: state None, f=102, g=45
+[00:00:35:35:920] Expansion 160,000: state None, f=102, g=39
+[00:00:37:25:177] Expansion 170,000: state None, f=102, g=39
+[00:00:39:07:437] Expansion 180,000: state None, f=102, g=36
+[00:00:41:58:562] Expansion 190,000: state None, f=102, g=30
+[00:00:43:48:859] Expansion 200,000: state None, f=101, g=51
+[00:00:45:50:260] Expansion 210,000: state None, f=101, g=39
+[00:00:48:05:563] Expansion 220,000: state None, f=101, g=33
+[00:00:50:16:815] Expansion 230,000: state None, f=101, g=30
+[00:00:52:59:160] Expansion 240,000: state None, f=100, g=57
+[00:00:54:20:693] Expansion 250,000: state None, f=100, g=51
+[00:00:56:08:141] Expansion 260,000: state None, f=100, g=60
+[00:00:57:51:905] Expansion 270,000: state None, f=100, g=42
+[00:00:59:38:988] Expansion 280,000: state None, f=100, g=39
+[00:01:01:52:936] Expansion 290,000: state None, f=100, g=36
+[00:01:03:43:120] Expansion 300,000: state None, f=100, g=45
+[00:01:05:53:944] Expansion 310,000: state None, f=100, g=42
+[00:01:08:40:079] Expansion 320,000: state None, f=99, g=66
+[00:01:09:55:097] Expansion 330,000: state None, f=99, g=63
+[00:01:11:20:729] Expansion 340,000: state None, f=99, g=51
+[00:01:13:03:041] Expansion 350,000: state None, f=99, g=48
+[00:01:14:36:551] Expansion 360,000: state None, f=99, g=48
+[00:01:16:40:050] Expansion 370,000: state None, f=99, g=42
+[00:01:18:48:588] Expansion 380,000: state None, f=99, g=36
+[00:01:21:16:940] Expansion 390,000: state None, f=99, g=30
+[00:01:23:48:869] Expansion 400,000: state None, f=99, g=30
+[00:01:26:13:662] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 33, 34, 21, 20, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 50, 37, 36, 35, 48, 47, 60, 59, 46, 45, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:01:26:13:663] ! Unidirectional s-t. expansions: 407,695, time: 5,173,662 [ms], path length: 98 [edges], generated: 2,452,332
+[00:00:01:55:339] Expansion 10,000: state None, f=101, g=48
+[00:00:03:36:303] Expansion 20,000: state None, f=100, g=51
+[00:00:05:18:777] Expansion 30,000: state None, f=99, g=72
+[00:00:06:12:788] Path of length 98 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 57, 58, 71, 84, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 75, 62, 49, 36, 37, 50, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 20, 21, 34, 35, 48, 61, 60, 47, 46, 33, 32, 31, 30, 17, 4, 3, 2, 1, 0]
+[00:00:06:12:789] ! Unidirectional t-s. expansions: 33,876, time: 372,788 [ms], path length: 98 [edges], generated: 280,684
+[00:00:12:48:578] Expansions: 50,000. F states: 206,203, B states: 92,913. Checks: 430,383)
+[00:00:25:04:945] Expansions: 100,000. F states: 410,193, B states: 180,457. Checks: 847,560)
+[00:00:32:31:130] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 45, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 61, 48, 47, 60, 59, 46, 33, 20, 19, 6, 7, 8, 21, 34, 35, 36, 23, 10, 11, 12, 25, 38, 37, 50, 51, 64, 63, 62, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:32:31:131] ! Bidirectional. expansions: 130,651, time: 1,951,130 [ms], path length: 98 [edges], g_F: 59, g_B: 39, generated: 0, MM: 20, MMPER: 19.2020202020202%
+[00:00:32:31:132] 
+---------- mazes/13x13_maze_with_2_open_diamonds_4 ----------
+[00:00:02:20:169] Expansion 10,000: state None, f=108, g=60
+[00:00:04:05:721] Expansion 20,000: state None, f=107, g=60
+[00:00:05:49:173] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 110, 111, 112, 99, 98, 85, 84, 83, 70, 71, 72, 59, 60, 61, 74, 73, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 126, 125, 124, 137, 136, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 151, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:05:49:176] ! Unidirectional s-t. expansions: 26,655, time: 349,173 [ms], path length: 106 [edges], generated: 211,101
+[00:00:02:54:522] Expansion 10,000: state None, f=112, g=42
+[00:00:05:35:922] Expansion 20,000: state None, f=111, g=45
+[00:00:08:07:197] Expansion 30,000: state None, f=110, g=66
+[00:00:10:00:893] Expansion 40,000: state None, f=110, g=45
+[00:00:12:15:504] Expansion 50,000: state None, f=110, g=42
+[00:00:14:31:141] Expansion 60,000: state None, f=109, g=84
+[00:00:16:22:816] Expansion 70,000: state None, f=109, g=48
+[00:00:18:53:093] Expansion 80,000: state None, f=109, g=51
+[00:00:20:46:894] Expansion 90,000: state None, f=109, g=42
+[00:00:22:42:456] Expansion 100,000: state None, f=108, g=78
+[00:00:24:31:751] Expansion 110,000: state None, f=108, g=66
+[00:00:26:19:588] Expansion 120,000: state None, f=108, g=54
+[00:00:28:13:419] Expansion 130,000: state None, f=108, g=63
+[00:00:30:05:717] Expansion 140,000: state None, f=108, g=66
+[00:00:32:07:345] Expansion 150,000: state None, f=108, g=51
+[00:00:34:19:424] Expansion 160,000: state None, f=108, g=45
+[00:00:36:43:826] Expansion 170,000: state None, f=108, g=60
+[00:00:38:46:785] Expansion 180,000: state None, f=108, g=45
+[00:00:40:48:547] Expansion 190,000: state None, f=108, g=27
+[00:00:42:04:246] Expansion 200,000: state None, f=107, g=75
+[00:00:43:42:071] Expansion 210,000: state None, f=107, g=60
+[00:00:45:36:053] Expansion 220,000: state None, f=107, g=60
+[00:00:47:39:700] Expansion 230,000: state None, f=107, g=60
+[00:00:49:35:581] Expansion 240,000: state None, f=107, g=51
+[00:00:52:05:788] Expansion 250,000: state None, f=107, g=42
+[00:00:54:17:173] Expansion 260,000: state None, f=107, g=36
+[00:00:56:03:855] Expansion 270,000: state None, f=107, g=42
+[00:00:57:43:642] Path of length 106 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 151, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 136, 137, 124, 125, 126, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 60, 59, 46, 33, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 57, 70, 83, 84, 71, 72, 73, 86, 85, 98, 99, 112, 111, 110, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:57:43:643] ! Unidirectional t-s. expansions: 276,858, time: 3,463,642 [ms], path length: 106 [edges], generated: 1,790,284
+[00:00:15:02:305] Expansions: 50,000. F states: 238,162, B states: 118,624. Checks: 563,805)
+[00:00:15:52:626] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 71, 72, 59, 60, 61, 74, 73, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 126, 125, 138, 137, 124, 111, 112, 99, 98, 85, 84, 83, 70, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 151, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:15:52:627] ! Bidirectional. expansions: 51,921, time: 952,626 [ms], path length: 106 [edges], g_F: 69, g_B: 37, generated: 0, MM: 32, MMPER: 28.906542056074766%
+[00:00:15:52:628] 
+---------- mazes/13x13_maze_with_2_open_diamonds_5 ----------
+[00:00:02:34:144] Expansion 10,000: state None, f=105, g=42
+[00:00:05:00:621] Expansion 20,000: state None, f=103, g=69
+[00:00:06:56:544] Expansion 30,000: state None, f=103, g=36
+[00:00:07:37:334] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 21, 34, 35, 36, 23, 22, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 48, 47, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 125, 124, 111, 110, 97, 98, 99, 86, 85, 84, 71, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 123, 136, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:07:37:335] ! Unidirectional s-t. expansions: 31,768, time: 457,334 [ms], path length: 102 [edges], generated: 243,707
+[00:00:02:22:115] Expansion 10,000: state None, f=107, g=39
+[00:00:04:29:366] Expansion 20,000: state None, f=105, g=63
+[00:00:06:38:083] Expansion 30,000: state None, f=104, g=72
+[00:00:08:34:877] Expansion 40,000: state None, f=104, g=63
+[00:00:10:28:493] Expansion 50,000: state None, f=103, g=66
+[00:00:12:31:455] Expansion 60,000: state None, f=103, g=60
+[00:00:13:50:641] Path of length 102 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 136, 137, 124, 125, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 60, 47, 34, 21, 22, 23, 36, 35, 48, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 85, 86, 99, 98, 97, 110, 123, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:13:50:641] ! Unidirectional t-s. expansions: 65,168, time: 830,641 [ms], path length: 102 [edges], generated: 483,530
+[00:00:11:17:274] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 110, 97, 98, 111, 124, 125, 112, 99, 86, 85, 84, 71, 58, 59, 60, 47, 48, 49, 36, 23, 22, 21, 34, 33, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:11:17:275] ! Bidirectional. expansions: 32,085, time: 677,274 [ms], path length: 102 [edges], g_F: 66, g_B: 36, generated: 0, MM: 30, MMPER: 28.12621359223301%
+[00:00:11:17:275] 
+---------- mazes/13x13_maze_with_2_open_diamonds_6 ----------
+[00:00:02:45:653] Expansion 10,000: state None, f=105, g=66
+[00:00:05:14:993] Expansion 20,000: state None, f=104, g=48
+[00:00:07:25:777] Expansion 30,000: state None, f=103, g=75
+[00:00:09:26:756] Expansion 40,000: state None, f=103, g=54
+[00:00:12:18:235] Expansion 50,000: state None, f=102, g=84
+[00:00:14:01:686] Expansion 60,000: state None, f=102, g=51
+[00:00:15:52:639] Expansion 70,000: state None, f=102, g=42
+[00:00:17:57:096] Expansion 80,000: state None, f=101, g=72
+[00:00:19:18:070] Expansion 90,000: state None, f=101, g=72
+[00:00:21:20:730] Expansion 100,000: state None, f=101, g=57
+[00:00:23:37:142] Expansion 110,000: state None, f=101, g=54
+[00:00:26:30:347] Expansion 120,000: state None, f=101, g=30
+[00:00:27:12:090] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 81, 80, 67, 68, 69, 70, 83, 84, 85, 86, 87, 74, 61, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 75, 88, 89, 90, 103, 116, 115, 102, 101, 114, 113, 100, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:27:12:091] ! Unidirectional s-t. expansions: 121,770, time: 1,632,090 [ms], path length: 100 [edges], generated: 876,196
+[00:00:02:22:265] Expansion 10,000: state None, f=107, g=60
+[00:00:04:41:981] Expansion 20,000: state None, f=106, g=51
+[00:00:07:10:790] Expansion 30,000: state None, f=104, g=75
+[00:00:09:22:881] Expansion 40,000: state None, f=104, g=51
+[00:00:11:34:450] Expansion 50,000: state None, f=103, g=69
+[00:00:14:15:397] Expansion 60,000: state None, f=103, g=45
+[00:00:16:08:584] Expansion 70,000: state None, f=102, g=63
+[00:00:18:15:829] Expansion 80,000: state None, f=102, g=57
+[00:00:20:52:540] Expansion 90,000: state None, f=102, g=42
+[00:00:22:42:735] Expansion 100,000: state None, f=101, g=63
+[00:00:24:40:738] Expansion 110,000: state None, f=101, g=57
+[00:00:27:01:170] Expansion 120,000: state None, f=101, g=54
+[00:00:29:41:459] Path of length 100 found: [168, 155, 142, 129, 116, 115, 114, 127, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 110, 111, 112, 113, 100, 101, 102, 103, 90, 89, 88, 75, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 59, 60, 61, 74, 87, 86, 85, 84, 71, 70, 83, 82, 95, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 67, 80, 81, 68, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:29:41:460] ! Unidirectional t-s. expansions: 129,041, time: 1,781,459 [ms], path length: 100 [edges], generated: 1,041,817
+[00:00:21:35:213] Expansions: 50,000. F states: 241,042, B states: 113,930. Checks: 564,791)
+[00:00:36:12:288] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 81, 80, 67, 68, 69, 70, 83, 84, 85, 86, 99, 100, 87, 74, 61, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 75, 88, 89, 90, 103, 102, 115, 116, 129, 142, 141, 140, 127, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168]
+[00:00:36:12:289] ! Bidirectional. expansions: 82,359, time: 2,172,288 [ms], path length: 100 [edges], g_F: 59, g_B: 41, generated: 0, MM: 18, MMPER: 16.821782178217823%
+[00:00:36:12:290] 
+---------- mazes/13x13_maze_with_2_open_diamonds_7 ----------
+[00:00:03:03:812] Expansion 10,000: state None, f=110, g=21
+[00:00:05:53:884] Expansion 20,000: state None, f=108, g=54
+[00:00:08:28:811] Expansion 30,000: state None, f=107, g=51
+[00:00:11:26:703] Expansion 40,000: state None, f=107, g=36
+[00:00:14:10:157] Expansion 50,000: state None, f=106, g=51
+[00:00:16:57:683] Expansion 60,000: state None, f=106, g=48
+[00:00:19:45:909] Expansion 70,000: state None, f=105, g=60
+[00:00:22:21:306] Expansion 80,000: state None, f=105, g=45
+[00:00:25:35:068] Expansion 90,000: state None, f=105, g=39
+[00:00:28:04:781] Expansion 100,000: state None, f=104, g=51
+[00:00:30:05:789] Expansion 110,000: state None, f=104, g=51
+[00:00:32:54:553] Expansion 120,000: state None, f=104, g=42
+[00:00:35:48:880] Expansion 130,000: state None, f=103, g=69
+[00:00:37:39:837] Expansion 140,000: state None, f=103, g=60
+[00:00:39:55:580] Expansion 150,000: state None, f=103, g=48
+[00:00:42:35:717] Expansion 160,000: state None, f=103, g=45
+[00:00:45:16:896] Expansion 170,000: state None, f=103, g=39
+[00:00:48:18:226] Expansion 180,000: state None, f=103, g=42
+[00:00:50:23:410] Expansion 190,000: state None, f=102, g=66
+[00:00:52:21:008] Expansion 200,000: state None, f=102, g=57
+[00:00:55:00:370] Expansion 210,000: state None, f=102, g=45
+[00:00:58:15:467] Expansion 220,000: state None, f=102, g=42
+[00:01:01:02:141] Expansion 230,000: state None, f=102, g=33
+[00:01:03:47:298] Expansion 240,000: state None, f=101, g=69
+[00:01:05:48:698] Expansion 250,000: state None, f=101, g=69
+[00:01:07:56:051] Expansion 260,000: state None, f=101, g=57
+[00:01:09:50:117] Expansion 270,000: state None, f=101, g=51
+[00:01:12:03:555] Expansion 280,000: state None, f=101, g=45
+[00:01:14:41:424] Expansion 290,000: state None, f=101, g=39
+[00:01:17:56:061] Expansion 300,000: state None, f=101, g=42
+[00:01:20:19:890] Expansion 310,000: state None, f=100, g=75
+[00:01:21:45:705] Expansion 320,000: state None, f=100, g=69
+[00:01:23:33:605] Expansion 330,000: state None, f=100, g=63
+[00:01:24:44:536] Expansion 340,000: state None, f=100, g=63
+[00:01:26:32:889] Expansion 350,000: state None, f=100, g=54
+[00:01:29:06:721] Expansion 360,000: state None, f=100, g=51
+[00:01:31:47:812] Expansion 370,000: state None, f=100, g=48
+[00:01:34:20:204] Expansion 380,000: state None, f=100, g=45
+[00:01:36:59:387] Expansion 390,000: state None, f=100, g=48
+[00:01:40:11:187] Expansion 400,000: state None, f=100, g=39
+[00:01:43:22:447] Expansion 410,000: state None, f=100, g=36
+[00:01:45:43:573] Expansion 420,000: state None, f=99, g=72
+[00:01:47:27:312] Expansion 430,000: state None, f=99, g=75
+[00:01:49:21:400] Expansion 440,000: state None, f=99, g=69
+[00:01:51:19:007] Expansion 450,000: state None, f=99, g=60
+[00:01:53:15:464] Expansion 460,000: state None, f=99, g=60
+[00:01:55:17:640] Expansion 470,000: state None, f=99, g=54
+[00:01:57:23:486] Expansion 480,000: state None, f=99, g=54
+[00:01:59:20:073] Expansion 490,000: state None, f=99, g=54
+[00:02:01:17:888] Expansion 500,000: state None, f=99, g=45
+[00:02:04:30:939] Expansion 510,000: state None, f=99, g=42
+[00:02:07:24:477] Expansion 520,000: state None, f=99, g=42
+[00:02:10:33:624] Expansion 530,000: state None, f=99, g=36
+[00:02:14:00:512] Expansion 540,000: state None, f=99, g=27
+[00:02:14:41:368] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 60, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 93, 92, 105, 106, 107, 108, 95, 82, 83, 84, 85, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 97, 96, 109, 122, 123, 136, 135, 134, 121, 120, 133, 132, 119, 118, 117, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:02:14:41:369] ! Unidirectional s-t. expansions: 541,362, time: 8,081,368 [ms], path length: 98 [edges], generated: 4,220,248
+[00:00:03:21:966] Expansion 10,000: state None, f=109, g=48
+[00:00:06:15:818] Expansion 20,000: state None, f=109, g=27
+[00:00:08:37:747] Expansion 30,000: state None, f=108, g=36
+[00:00:11:59:379] Expansion 40,000: state None, f=107, g=57
+[00:00:14:27:393] Expansion 50,000: state None, f=107, g=39
+[00:00:17:10:591] Expansion 60,000: state None, f=107, g=42
+[00:00:20:03:799] Expansion 70,000: state None, f=107, g=30
+[00:00:22:17:128] Expansion 80,000: state None, f=106, g=57
+[00:00:24:17:345] Expansion 90,000: state None, f=106, g=48
+[00:00:26:31:378] Expansion 100,000: state None, f=106, g=39
+[00:00:28:44:655] Expansion 110,000: state None, f=106, g=33
+[00:00:32:10:612] Expansion 120,000: state None, f=106, g=21
+[00:00:34:30:990] Expansion 130,000: state None, f=105, g=51
+[00:00:36:09:765] Expansion 140,000: state None, f=105, g=45
+[00:00:38:33:533] Expansion 150,000: state None, f=105, g=42
+[00:00:41:12:700] Expansion 160,000: state None, f=105, g=33
+[00:00:43:40:578] Expansion 170,000: state None, f=105, g=33
+[00:00:46:51:795] Expansion 180,000: state None, f=104, g=66
+[00:00:48:24:630] Expansion 190,000: state None, f=104, g=54
+[00:00:50:05:198] Expansion 200,000: state None, f=104, g=57
+[00:00:51:39:830] Expansion 210,000: state None, f=104, g=54
+[00:00:53:24:175] Expansion 220,000: state None, f=104, g=48
+[00:00:55:14:429] Expansion 230,000: state None, f=104, g=48
+[00:00:57:08:924] Expansion 240,000: state None, f=104, g=54
+[00:00:59:45:067] Expansion 250,000: state None, f=104, g=42
+[00:01:02:13:311] Expansion 260,000: state None, f=104, g=42
+[00:01:04:40:449] Expansion 270,000: state None, f=104, g=39
+[00:01:07:12:549] Expansion 280,000: state None, f=104, g=42
+[00:01:10:14:140] Expansion 290,000: state None, f=104, g=27
+[00:01:13:02:179] Expansion 300,000: state None, f=103, g=60
+[00:01:14:33:354] Expansion 310,000: state None, f=103, g=60
+[00:01:16:42:047] Expansion 320,000: state None, f=103, g=54
+[00:01:18:59:302] Expansion 330,000: state None, f=103, g=45
+[00:01:20:51:381] Expansion 340,000: state None, f=103, g=45
+[00:01:22:36:889] Expansion 350,000: state None, f=103, g=45
+[00:01:24:19:449] Expansion 360,000: state None, f=103, g=51
+[00:01:26:22:998] Expansion 370,000: state None, f=103, g=42
+[00:01:29:03:767] Expansion 380,000: state None, f=103, g=36
+[00:01:31:44:477] Expansion 390,000: state None, f=103, g=33
+[00:01:34:40:173] Expansion 400,000: state None, f=103, g=30
+[00:01:37:57:412] Expansion 410,000: state None, f=102, g=72
+[00:01:39:32:175] Expansion 420,000: state None, f=102, g=66
+[00:01:41:02:858] Expansion 430,000: state None, f=102, g=69
+[00:01:42:45:570] Expansion 440,000: state None, f=102, g=54
+[00:01:44:28:126] Expansion 450,000: state None, f=102, g=54
+[00:01:46:11:566] Expansion 460,000: state None, f=102, g=51
+[00:01:47:52:437] Expansion 470,000: state None, f=102, g=51
+[00:01:49:42:634] Expansion 480,000: state None, f=102, g=54
+[00:01:51:29:578] Expansion 490,000: state None, f=102, g=51
+[00:01:53:24:631] Expansion 500,000: state None, f=102, g=45
+[00:01:54:57:674] Expansion 510,000: state None, f=102, g=48
+[00:01:57:00:451] Expansion 520,000: state None, f=102, g=42
+[00:01:59:14:222] Expansion 530,000: state None, f=102, g=42
+[00:02:01:18:190] Expansion 540,000: state None, f=102, g=39
+[00:02:03:26:570] Expansion 550,000: state None, f=102, g=39
+[00:02:05:39:100] Expansion 560,000: state None, f=102, g=36
+[00:02:07:54:567] Expansion 570,000: state None, f=102, g=30
+[00:02:11:13:339] Expansion 580,000: state None, f=102, g=21
+[00:02:12:52:520] Expansion 590,000: state None, f=101, g=63
+[00:02:14:16:313] Expansion 600,000: state None, f=101, g=57
+[00:02:15:41:523] Expansion 610,000: state None, f=101, g=57
+[00:02:17:10:799] Expansion 620,000: state None, f=101, g=57
+[00:02:18:54:859] Expansion 630,000: state None, f=101, g=54
+[00:02:20:32:007] Expansion 640,000: state None, f=101, g=51
+[00:02:22:46:725] Expansion 650,000: state None, f=101, g=48
+[00:02:24:29:697] Expansion 660,000: state None, f=101, g=48
+[00:02:26:30:404] Expansion 670,000: state None, f=101, g=51
+[00:02:28:29:283] Expansion 680,000: state None, f=101, g=42
+[00:02:30:23:439] Expansion 690,000: state None, f=101, g=42
+[00:02:32:11:940] Expansion 700,000: state None, f=101, g=42
+[00:02:33:57:316] Expansion 710,000: state None, f=101, g=48
+[00:02:35:49:376] Expansion 720,000: state None, f=101, g=45
+[00:02:37:39:000] Expansion 730,000: state None, f=101, g=51
+[00:02:39:48:071] Expansion 740,000: state None, f=101, g=39
+[00:02:42:26:871] Expansion 750,000: state None, f=101, g=36
+[00:02:45:48:557] Expansion 760,000: state None, f=101, g=36
+[00:02:48:39:271] Expansion 770,000: state None, f=101, g=33
+[00:02:51:47:214] Expansion 780,000: state None, f=101, g=36
+[00:02:54:54:097] Expansion 790,000: state None, f=101, g=27
+[00:02:57:01:915] Expansion 800,000: state None, f=100, g=69
+[00:02:58:24:205] Expansion 810,000: state None, f=100, g=66
+[00:02:59:46:644] Expansion 820,000: state None, f=100, g=60
+[00:03:01:07:809] Expansion 830,000: state None, f=100, g=60
+[00:03:02:29:252] Expansion 840,000: state None, f=100, g=60
+[00:03:03:52:281] Expansion 850,000: state None, f=100, g=60
+[00:03:05:24:739] Expansion 860,000: state None, f=100, g=66
+[00:03:06:42:361] Expansion 870,000: state None, f=100, g=60
+[00:03:08:17:271] Expansion 880,000: state None, f=100, g=60
+[00:03:10:15:631] Expansion 890,000: state None, f=100, g=57
+[00:03:11:58:254] Expansion 900,000: state None, f=100, g=51
+[00:03:14:00:602] Expansion 910,000: state None, f=100, g=54
+[00:03:15:52:436] Expansion 920,000: state None, f=100, g=54
+[00:03:17:43:220] Expansion 930,000: state None, f=100, g=54
+[00:03:19:52:061] Expansion 940,000: state None, f=100, g=51
+[00:03:22:08:959] Expansion 950,000: state None, f=100, g=51
+[00:03:24:27:616] Expansion 960,000: state None, f=100, g=51
+[00:03:26:37:441] Expansion 970,000: state None, f=100, g=51
+[00:03:28:45:350] Expansion 980,000: state None, f=100, g=51
+[00:03:31:08:590] Expansion 990,000: state None, f=100, g=48
+[00:03:33:15:142] Expansion 1,000,000: state None, f=100, g=48
+[00:03:35:27:672] Expansion 1,010,000: state None, f=100, g=51
+[00:03:37:28:124] Expansion 1,020,000: state None, f=100, g=45
+[00:03:39:33:712] Expansion 1,030,000: state None, f=100, g=45
+[00:03:41:34:788] Expansion 1,040,000: state None, f=100, g=54
+[00:03:43:45:055] Expansion 1,050,000: state None, f=100, g=54
+[00:03:46:00:628] Expansion 1,060,000: state None, f=100, g=42
+[00:03:48:26:166] Expansion 1,070,000: state None, f=100, g=39
+[00:03:50:58:361] Expansion 1,080,000: state None, f=100, g=36
+[00:03:53:16:237] Expansion 1,090,000: state None, f=100, g=33
+[00:03:55:28:887] Expansion 1,100,000: state None, f=100, g=30
+[00:03:58:29:224] Expansion 1,110,000: state None, f=100, g=24
+[00:04:00:11:767] Expansion 1,120,000: state None, f=99, g=75
+[00:04:01:50:553] Expansion 1,130,000: state None, f=99, g=66
+[00:04:03:53:330] Expansion 1,140,000: state None, f=99, g=66
+[00:04:05:41:458] Expansion 1,150,000: state None, f=99, g=63
+[00:04:07:48:854] Expansion 1,160,000: state None, f=99, g=60
+[00:04:09:46:693] Expansion 1,170,000: state None, f=99, g=51
+[00:04:12:06:880] Expansion 1,180,000: state None, f=99, g=48
+[00:04:14:37:461] Expansion 1,190,000: state None, f=99, g=42
+[00:04:16:25:308] Expansion 1,200,000: state None, f=99, g=48
+[00:04:18:08:486] Expansion 1,210,000: state None, f=99, g=45
+[00:04:19:50:211] Expansion 1,220,000: state None, f=99, g=39
+[00:04:21:37:247] Expansion 1,230,000: state None, f=99, g=51
+[00:04:23:32:859] Expansion 1,240,000: state None, f=99, g=39
+[00:04:25:11:937] Expansion 1,250,000: state None, f=99, g=51
+[00:04:26:52:718] Expansion 1,260,000: state None, f=99, g=39
+[00:04:28:34:787] Expansion 1,270,000: state None, f=99, g=39
+[00:04:30:15:085] Expansion 1,280,000: state None, f=99, g=48
+[00:04:31:53:981] Expansion 1,290,000: state None, f=99, g=39
+[00:04:33:40:352] Expansion 1,300,000: state None, f=99, g=39
+[00:04:36:12:548] Expansion 1,310,000: state None, f=99, g=33
+[00:04:38:46:656] Expansion 1,320,000: state None, f=99, g=33
+[00:04:41:50:715] Expansion 1,330,000: state None, f=99, g=30
+[00:04:44:39:666] Expansion 1,340,000: state None, f=99, g=21
+[00:04:45:38:099] Path of length 98 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 85, 86, 99, 112, 111, 110, 97, 96, 109, 108, 95, 82, 81, 80, 93, 106, 107, 120, 121, 134, 135, 122, 123, 136, 137, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 119, 118, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:04:45:38:101] ! Unidirectional t-s. expansions: 1,341,214, time: 17,138,099 [ms], path length: 98 [edges], generated: 8,389,547
+[00:00:20:47:570] Expansions: 50,000. F states: 272,067, B states: 119,970. Checks: 649,664)
+[00:00:38:29:465] Expansions: 100,000. F states: 539,786, B states: 235,444. Checks: 1,284,402)
+[00:00:53:40:614] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 60, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 93, 80, 81, 82, 83, 84, 97, 96, 95, 108, 107, 120, 133, 132, 119, 106, 105, 118, 117, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 135, 134, 121, 122, 109, 110, 111, 112, 99, 86, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:53:40:617] ! Bidirectional. expansions: 142,166, time: 3,220,615 [ms], path length: 98 [edges], g_F: 59, g_B: 39, generated: 0, MM: 20, MMPER: 19.2020202020202%
+[00:00:53:40:617] 
+---------- mazes/13x13_maze_with_2_open_diamonds_8 ----------
+[00:00:02:40:299] Expansion 10,000: state None, f=110, g=33
+[00:00:05:17:789] Expansion 20,000: state None, f=109, g=18
+[00:00:07:35:099] Expansion 30,000: state None, f=108, g=27
+[00:00:10:07:860] Expansion 40,000: state None, f=107, g=45
+[00:00:12:28:356] Expansion 50,000: state None, f=107, g=30
+[00:00:14:45:095] Expansion 60,000: state None, f=106, g=51
+[00:00:16:33:676] Expansion 70,000: state None, f=106, g=36
+[00:00:19:08:629] Expansion 80,000: state None, f=106, g=24
+[00:00:21:40:042] Expansion 90,000: state None, f=105, g=69
+[00:00:23:41:970] Expansion 100,000: state None, f=105, g=39
+[00:00:25:49:056] Expansion 110,000: state None, f=105, g=33
+[00:00:28:13:204] Expansion 120,000: state None, f=105, g=42
+[00:00:30:28:043] Path of length 104 found: [0, 1, 2, 3, 4, 17, 30, 29, 16, 15, 28, 27, 26, 39, 52, 53, 54, 41, 42, 55, 56, 43, 44, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 70, 71, 72, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 84, 83, 82, 81, 80, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:30:28:044] ! Unidirectional s-t. expansions: 127,410, time: 1,828,044 [ms], path length: 104 [edges], generated: 801,103
+[00:00:00:04:801] Path of length 104 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 80, 81, 82, 83, 84, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 60, 59, 72, 71, 70, 57, 58, 45, 46, 33, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 31, 44, 43, 56, 55, 42, 41, 54, 53, 52, 39, 26, 27, 28, 15, 16, 29, 30, 17, 4, 3, 2, 1, 0]
+[00:00:00:04:802] ! Unidirectional t-s. expansions: 288, time: 4,801 [ms], path length: 104 [edges], generated: 2,582
+[00:00:03:56:571] Path of length 104 found: [0, 1, 2, 15, 16, 3, 4, 17, 30, 29, 28, 27, 26, 39, 52, 53, 54, 41, 42, 55, 56, 43, 44, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 70, 71, 72, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 84, 83, 82, 81, 80, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:03:56:571] ! Bidirectional. expansions: 12,031, time: 236,571 [ms], path length: 104 [edges], g_F: 68, g_B: 36, generated: 0, MM: 32, MMPER: 29.476190476190474%
+[00:00:03:56:572] 
+---------- mazes/13x13_maze_with_2_open_diamonds_9 ----------
+[00:00:03:10:650] Expansion 10,000: state None, f=109, g=51
+[00:00:05:57:722] Expansion 20,000: state None, f=108, g=48
+[00:00:08:29:508] Expansion 30,000: state None, f=107, g=48
+[00:00:11:02:171] Expansion 40,000: state None, f=107, g=42
+[00:00:13:27:203] Expansion 50,000: state None, f=106, g=48
+[00:00:16:07:928] Expansion 60,000: state None, f=105, g=72
+[00:00:17:53:349] Expansion 70,000: state None, f=105, g=69
+[00:00:19:44:180] Expansion 80,000: state None, f=105, g=54
+[00:00:21:41:153] Expansion 90,000: state None, f=105, g=45
+[00:00:24:17:508] Expansion 100,000: state None, f=105, g=45
+[00:00:26:45:256] Expansion 110,000: state None, f=104, g=69
+[00:00:28:44:367] Expansion 120,000: state None, f=104, g=63
+[00:00:30:45:205] Expansion 130,000: state None, f=104, g=54
+[00:00:32:51:033] Expansion 140,000: state None, f=104, g=48
+[00:00:35:18:170] Expansion 150,000: state None, f=104, g=42
+[00:00:37:31:960] Expansion 160,000: state None, f=103, g=78
+[00:00:38:45:881] Expansion 170,000: state None, f=103, g=72
+[00:00:40:07:202] Expansion 180,000: state None, f=103, g=72
+[00:00:41:45:323] Expansion 190,000: state None, f=103, g=66
+[00:00:43:31:528] Expansion 200,000: state None, f=103, g=75
+[00:00:45:23:625] Expansion 210,000: state None, f=103, g=72
+[00:00:47:09:263] Expansion 220,000: state None, f=103, g=75
+[00:00:48:39:850] Expansion 230,000: state None, f=103, g=66
+[00:00:50:39:037] Expansion 240,000: state None, f=103, g=69
+[00:00:52:39:692] Expansion 250,000: state None, f=103, g=51
+[00:00:54:44:300] Expansion 260,000: state None, f=103, g=75
+[00:00:57:00:875] Expansion 270,000: state None, f=103, g=57
+[00:00:59:15:382] Expansion 280,000: state None, f=103, g=75
+[00:01:01:55:733] Expansion 290,000: state None, f=103, g=39
+[00:01:04:54:384] Expansion 300,000: state None, f=103, g=42
+[00:01:05:16:166] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 47, 60, 61, 74, 73, 72, 59, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 103, 116, 129, 128, 127, 126, 113, 114, 115, 102, 101, 100, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:01:05:16:167] ! Unidirectional s-t. expansions: 300,732, time: 3,916,166 [ms], path length: 102 [edges], generated: 2,354,932
+[00:00:03:39:852] Expansion 10,000: state None, f=112, g=42
+[00:00:06:27:339] Expansion 20,000: state None, f=111, g=24
+[00:00:09:20:140] Expansion 30,000: state None, f=110, g=27
+[00:00:11:43:094] Expansion 40,000: state None, f=109, g=42
+[00:00:14:26:694] Expansion 50,000: state None, f=109, g=21
+[00:00:17:14:438] Expansion 60,000: state None, f=108, g=39
+[00:00:20:18:914] Expansion 70,000: state None, f=108, g=36
+[00:00:22:25:861] Expansion 80,000: state None, f=108, g=24
+[00:00:24:43:856] Expansion 90,000: state None, f=107, g=45
+[00:00:27:38:815] Expansion 100,000: state None, f=107, g=36
+[00:00:30:14:375] Expansion 110,000: state None, f=107, g=21
+[00:00:32:13:433] Expansion 120,000: state None, f=106, g=57
+[00:00:34:44:786] Expansion 130,000: state None, f=106, g=48
+[00:00:37:33:561] Expansion 140,000: state None, f=106, g=45
+[00:00:40:23:271] Expansion 150,000: state None, f=106, g=45
+[00:00:43:18:564] Expansion 160,000: state None, f=106, g=36
+[00:00:46:08:853] Expansion 170,000: state None, f=106, g=30
+[00:00:48:06:053] Expansion 180,000: state None, f=106, g=27
+[00:00:50:19:683] Expansion 190,000: state None, f=105, g=60
+[00:00:53:06:472] Expansion 200,000: state None, f=105, g=60
+[00:00:55:29:701] Expansion 210,000: state None, f=105, g=60
+[00:00:57:49:803] Expansion 220,000: state None, f=105, g=57
+[00:01:00:15:393] Expansion 230,000: state None, f=105, g=51
+[00:01:02:28:316] Expansion 240,000: state None, f=105, g=48
+[00:01:05:12:022] Expansion 250,000: state None, f=105, g=39
+[00:01:08:07:582] Expansion 260,000: state None, f=105, g=36
+[00:01:10:39:242] Expansion 270,000: state None, f=105, g=33
+[00:01:12:47:716] Expansion 280,000: state None, f=104, g=78
+[00:01:14:10:261] Expansion 290,000: state None, f=104, g=66
+[00:01:15:26:949] Expansion 300,000: state None, f=104, g=78
+[00:01:17:09:624] Expansion 310,000: state None, f=104, g=60
+[00:01:18:53:912] Expansion 320,000: state None, f=104, g=63
+[00:01:20:09:964] Expansion 330,000: state None, f=104, g=60
+[00:01:22:08:216] Expansion 340,000: state None, f=104, g=63
+[00:01:24:41:062] Expansion 350,000: state None, f=104, g=57
+[00:01:27:36:704] Expansion 360,000: state None, f=104, g=51
+[00:01:30:50:025] Expansion 370,000: state None, f=104, g=45
+[00:01:33:38:940] Expansion 380,000: state None, f=104, g=45
+[00:01:36:37:225] Expansion 390,000: state None, f=104, g=39
+[00:01:39:36:517] Expansion 400,000: state None, f=104, g=48
+[00:01:42:47:584] Expansion 410,000: state None, f=104, g=45
+[00:01:45:52:023] Expansion 420,000: state None, f=104, g=48
+[00:01:49:04:566] Expansion 430,000: state None, f=104, g=45
+[00:01:51:25:046] Expansion 440,000: state None, f=104, g=24
+[00:01:53:02:508] Expansion 450,000: state None, f=103, g=75
+[00:01:54:03:163] Expansion 460,000: state None, f=103, g=72
+[00:01:55:04:361] Expansion 470,000: state None, f=103, g=75
+[00:01:56:47:897] Expansion 480,000: state None, f=103, g=63
+[00:01:58:27:717] Expansion 490,000: state None, f=103, g=60
+[00:02:00:22:061] Expansion 500,000: state None, f=103, g=60
+[00:02:02:39:070] Expansion 510,000: state None, f=103, g=57
+[00:02:04:59:762] Expansion 520,000: state None, f=103, g=57
+[00:02:07:16:578] Expansion 530,000: state None, f=103, g=66
+[00:02:09:19:487] Expansion 540,000: state None, f=103, g=54
+[00:02:11:13:645] Expansion 550,000: state None, f=103, g=54
+[00:02:13:20:344] Expansion 560,000: state None, f=103, g=57
+[00:02:14:52:069] Expansion 570,000: state None, f=103, g=54
+[00:02:16:53:493] Expansion 580,000: state None, f=103, g=60
+[00:02:18:57:542] Expansion 590,000: state None, f=103, g=60
+[00:02:21:24:151] Expansion 600,000: state None, f=103, g=54
+[00:02:23:07:675] Expansion 610,000: state None, f=103, g=51
+[00:02:24:52:752] Expansion 620,000: state None, f=103, g=51
+[00:02:27:04:337] Expansion 630,000: state None, f=103, g=45
+[00:02:29:09:200] Expansion 640,000: state None, f=103, g=60
+[00:02:31:16:813] Expansion 650,000: state None, f=103, g=45
+[00:02:33:20:830] Expansion 660,000: state None, f=103, g=42
+[00:02:35:46:720] Expansion 670,000: state None, f=103, g=36
+[00:02:38:35:686] Expansion 680,000: state None, f=103, g=39
+[00:02:40:59:523] Path of length 102 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 110, 111, 112, 113, 126, 127, 128, 129, 116, 115, 114, 101, 102, 103, 90, 89, 88, 87, 100, 99, 86, 73, 74, 61, 60, 47, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 33, 46, 45, 58, 59, 72, 71, 84, 83, 82, 81, 80, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:02:40:59:525] ! Unidirectional t-s. expansions: 687,439, time: 9,659,524 [ms], path length: 102 [edges], generated: 5,037,846
+[00:00:22:53:144] Expansions: 50,000. F states: 283,407, B states: 133,694. Checks: 701,381)
+[00:00:44:06:942] Expansions: 100,000. F states: 559,526, B states: 263,249. Checks: 1,361,757)
+[00:01:07:06:916] Expansions: 150,000. F states: 843,395, B states: 405,810. Checks: 2,060,642)
+[00:01:22:22:825] Expansions: 200,000. F states: 1,065,727, B states: 515,454. Checks: 2,567,512)
+[00:01:43:42:931] Expansions: 250,000. F states: 1,340,741, B states: 645,612. Checks: 3,221,182)
+[00:01:59:44:788] Expansions: 300,000. F states: 1,580,057, B states: 750,161. Checks: 3,737,576)
+[00:02:23:35:364] Expansions: 350,000. F states: 1,862,889, B states: 899,148. Checks: 4,452,160)
+[00:02:38:09:401] Expansions: 400,000. F states: 2,084,105, B states: 997,470. Checks: 4,927,330)
+[00:02:53:35:858] Expansions: 450,000. F states: 2,307,855, B states: 1,102,116. Checks: 5,418,186)
+[00:03:14:28:453] Expansions: 500,000. F states: 2,579,640, B states: 1,229,762. Checks: 6,051,371)
+[00:03:35:53:440] Expansions: 550,000. F states: 2,860,080, B states: 1,361,557. Checks: 6,720,644)
+[00:03:45:20:908] Expansions: 600,000. F states: 3,031,857, B states: 1,435,297. Checks: 7,050,450)
+[00:03:59:39:237] Expansions: 650,000. F states: 3,250,857, B states: 1,529,816. Checks: 7,510,789)
+[00:04:19:13:522] Expansions: 700,000. F states: 3,511,014, B states: 1,653,158. Checks: 8,101,517)
+[00:04:43:25:075] Expansions: 750,000. F states: 3,801,874, B states: 1,800,724. Checks: 8,818,513)
+[00:04:57:30:884] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 73, 72, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 59, 60, 61, 74, 87, 100, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 128, 127, 126, 113, 114, 115, 102, 101, 88, 89, 90, 103, 116, 129, 142, 155, 168]
+[00:04:57:30:886] ! Bidirectional. expansions: 767,660, time: 17,850,884 [ms], path length: 102 [edges], g_F: 64, g_B: 38, generated: 0, MM: 26, MMPER: 24.24271844660194%
+[00:04:57:30:887] average expansions: (273,567, 486,515, 156,682, 0)
+[00:04:57:30:887] average time: (3,751,791, 6,321,280, 3,542,776, 0)
+[00:04:57:30:887] XA*: 273,567 , 3,751,791 (expansions , time[ms])
+[00:04:57:30:887] BiXA*: 156,682 , 3,542,776 (expansions , time[ms])
+

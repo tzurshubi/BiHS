@@ -1,0 +1,629 @@
+--------------------------
+date: mazes
+number_of_graphs: 10
+graph_type: maze
+size_of_graphs: [13, 13]
+heuristic: bcc_heuristic
+snake: False
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['DFBnB']
+lookahead: 3
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- mazes/13x13_maze_with_2_open_diamonds_0 ----------
+[00:00:05:49:401] Valid states checked so far: 200,000, Expansions: 27,960, Global best: 99
+[00:00:11:23:765] Valid states checked so far: 400,000, Expansions: 55,091, Global best: 99
+[00:00:13:56:986] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 83, 96, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 148, 149, 136, 123, 110, 97, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 98, 111, 124, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:13:56:987] ! Unidirectional s-t. expansions: 62,842, time: 836,986 [ms], path length: 98 [edges], generated: 468,913
+[00:00:05:51:470] Valid states checked so far: 200,000, Expansions: 35,914, Global best: 97
+[00:00:11:40:128] Valid states checked so far: 400,000, Expansions: 71,444, Global best: 97
+[00:00:17:51:558] Valid states checked so far: 600,000, Expansions: 107,141, Global best: 97
+[00:00:23:37:310] Valid states checked so far: 800,000, Expansions: 142,539, Global best: 97
+[00:00:29:48:952] Valid states checked so far: 1,000,000, Expansions: 177,561, Global best: 97
+[00:00:35:41:910] Valid states checked so far: 1,200,000, Expansions: 212,691, Global best: 97
+[00:00:41:43:443] Valid states checked so far: 1,400,000, Expansions: 248,280, Global best: 97
+[00:00:47:41:734] Valid states checked so far: 1,600,000, Expansions: 283,172, Global best: 97
+[00:00:53:33:509] Valid states checked so far: 1,800,000, Expansions: 319,123, Global best: 97
+[00:00:59:37:029] Valid states checked so far: 2,000,000, Expansions: 353,796, Global best: 97
+[00:01:05:42:433] Valid states checked so far: 2,200,000, Expansions: 388,837, Global best: 97
+[00:01:11:31:109] Valid states checked so far: 2,400,000, Expansions: 422,899, Global best: 97
+[00:01:17:31:973] Valid states checked so far: 2,600,000, Expansions: 457,401, Global best: 97
+[00:01:23:42:160] Valid states checked so far: 2,800,000, Expansions: 493,078, Global best: 97
+[00:01:29:53:377] Valid states checked so far: 3,000,000, Expansions: 528,436, Global best: 97
+[00:01:35:48:330] Valid states checked so far: 3,200,000, Expansions: 564,109, Global best: 99
+[00:01:41:35:208] Valid states checked so far: 3,400,000, Expansions: 599,574, Global best: 99
+[00:01:47:20:168] Valid states checked so far: 3,600,000, Expansions: 635,248, Global best: 99
+[00:01:53:12:623] Valid states checked so far: 3,800,000, Expansions: 670,768, Global best: 99
+[00:01:59:24:731] Valid states checked so far: 4,000,000, Expansions: 705,764, Global best: 99
+[00:02:05:42:551] Valid states checked so far: 4,200,000, Expansions: 741,193, Global best: 99
+[00:02:12:11:923] Valid states checked so far: 4,400,000, Expansions: 774,785, Global best: 99
+[00:02:14:40:971] Path of length 98 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 150, 137, 124, 111, 98, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 97, 110, 123, 136, 149, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 96, 83, 82, 95, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:02:14:40:971] ! Unidirectional t-s. expansions: 786,548, time: 8,080,971 [ms], path length: 98 [edges], generated: 4,473,496
+[00:00:16:57:787] Expansions: 50,000. F states: 227,560, B states: 104,551. Checks: 526,237)
+[00:00:36:03:453] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 83, 96, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 148, 149, 136, 123, 110, 97, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 98, 111, 124, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:36:03:454] ! Bidirectional. expansions: 99,867, time: 2,163,454 [ms], path length: 98 [edges], g_F: 60, g_B: 38, generated: 0, MM: 22, MMPER: 21.22222222222222%
+[00:00:36:03:454] 
+---------- mazes/13x13_maze_with_2_open_diamonds_1 ----------
+[00:00:06:05:429] Valid states checked so far: 200,000, Expansions: 29,286, Global best: 101
+[00:00:12:17:887] Valid states checked so far: 400,000, Expansions: 56,397, Global best: 101
+[00:00:18:29:491] Valid states checked so far: 600,000, Expansions: 81,435, Global best: 101
+[00:00:24:49:636] Valid states checked so far: 800,000, Expansions: 108,481, Global best: 101
+[00:00:31:03:761] Valid states checked so far: 1,000,000, Expansions: 134,785, Global best: 101
+[00:00:37:11:252] Valid states checked so far: 1,200,000, Expansions: 160,699, Global best: 101
+[00:00:43:22:713] Valid states checked so far: 1,400,000, Expansions: 192,539, Global best: 101
+[00:00:49:36:476] Valid states checked so far: 1,600,000, Expansions: 218,627, Global best: 101
+[00:00:56:08:493] Valid states checked so far: 1,800,000, Expansions: 248,172, Global best: 101
+[00:01:02:51:790] Valid states checked so far: 2,000,000, Expansions: 272,037, Global best: 101
+[00:01:09:36:406] Valid states checked so far: 2,200,000, Expansions: 294,643, Global best: 101
+[00:01:16:26:682] Valid states checked so far: 2,400,000, Expansions: 323,442, Global best: 101
+[00:01:23:45:075] Valid states checked so far: 2,600,000, Expansions: 351,632, Global best: 101
+[00:01:30:35:872] Valid states checked so far: 2,800,000, Expansions: 381,387, Global best: 101
+[00:01:36:51:591] Valid states checked so far: 3,000,000, Expansions: 407,877, Global best: 101
+[00:01:43:00:883] Valid states checked so far: 3,200,000, Expansions: 434,932, Global best: 101
+[00:01:49:10:471] Valid states checked so far: 3,400,000, Expansions: 465,974, Global best: 101
+[00:01:55:55:171] Valid states checked so far: 3,600,000, Expansions: 489,951, Global best: 101
+[00:02:02:30:488] Valid states checked so far: 3,800,000, Expansions: 519,628, Global best: 101
+[00:02:08:55:247] Valid states checked so far: 4,000,000, Expansions: 551,400, Global best: 101
+[00:02:15:01:807] Valid states checked so far: 4,200,000, Expansions: 579,872, Global best: 101
+[00:02:21:47:106] Valid states checked so far: 4,400,000, Expansions: 610,488, Global best: 101
+[00:02:28:33:227] Valid states checked so far: 4,600,000, Expansions: 642,159, Global best: 101
+[00:02:34:49:923] Valid states checked so far: 4,800,000, Expansions: 674,037, Global best: 101
+[00:02:41:25:518] Valid states checked so far: 5,000,000, Expansions: 706,231, Global best: 101
+[00:02:48:24:911] Valid states checked so far: 5,200,000, Expansions: 740,326, Global best: 101
+[00:02:54:58:409] Valid states checked so far: 5,400,000, Expansions: 774,280, Global best: 101
+[00:03:01:43:816] Valid states checked so far: 5,600,000, Expansions: 808,170, Global best: 101
+[00:03:08:34:247] Valid states checked so far: 5,800,000, Expansions: 844,496, Global best: 101
+[00:03:14:15:486] Valid states checked so far: 6,000,000, Expansions: 871,805, Global best: 101
+[00:03:19:34:328] Valid states checked so far: 6,200,000, Expansions: 897,567, Global best: 101
+[00:03:25:05:944] Valid states checked so far: 6,400,000, Expansions: 926,148, Global best: 101
+[00:03:30:35:701] Valid states checked so far: 6,600,000, Expansions: 954,487, Global best: 101
+[00:03:36:04:393] Valid states checked so far: 6,800,000, Expansions: 983,414, Global best: 101
+[00:03:41:21:707] Valid states checked so far: 7,000,000, Expansions: 1,010,172, Global best: 101
+[00:03:47:05:135] Valid states checked so far: 7,200,000, Expansions: 1,038,600, Global best: 101
+[00:03:52:29:306] Valid states checked so far: 7,400,000, Expansions: 1,062,608, Global best: 101
+[00:03:58:07:147] Valid states checked so far: 7,600,000, Expansions: 1,091,414, Global best: 101
+[00:04:03:34:866] Valid states checked so far: 7,800,000, Expansions: 1,120,074, Global best: 101
+[00:04:09:11:661] Valid states checked so far: 8,000,000, Expansions: 1,148,868, Global best: 101
+[00:04:14:29:172] Valid states checked so far: 8,200,000, Expansions: 1,175,550, Global best: 101
+[00:04:20:11:043] Valid states checked so far: 8,400,000, Expansions: 1,204,325, Global best: 101
+[00:04:26:12:305] Valid states checked so far: 8,600,000, Expansions: 1,228,357, Global best: 101
+[00:04:33:03:916] Valid states checked so far: 8,800,000, Expansions: 1,253,553, Global best: 101
+[00:04:39:54:692] Valid states checked so far: 9,000,000, Expansions: 1,278,741, Global best: 101
+[00:04:46:56:541] Valid states checked so far: 9,200,000, Expansions: 1,302,778, Global best: 101
+[00:04:53:50:419] Valid states checked so far: 9,400,000, Expansions: 1,327,445, Global best: 101
+[00:05:01:04:079] Valid states checked so far: 9,600,000, Expansions: 1,351,053, Global best: 101
+[00:05:07:52:494] Valid states checked so far: 9,800,000, Expansions: 1,374,927, Global best: 101
+[00:05:14:46:646] Valid states checked so far: 10,000,000, Expansions: 1,398,670, Global best: 101
+[00:05:21:31:899] Valid states checked so far: 10,200,000, Expansions: 1,422,027, Global best: 101
+[00:05:28:29:224] Valid states checked so far: 10,400,000, Expansions: 1,445,141, Global best: 101
+[00:05:35:21:974] Valid states checked so far: 10,600,000, Expansions: 1,469,455, Global best: 101
+[00:05:42:07:292] Valid states checked so far: 10,800,000, Expansions: 1,492,489, Global best: 101
+[00:05:48:50:158] Valid states checked so far: 11,000,000, Expansions: 1,515,285, Global best: 101
+[00:05:55:59:303] Valid states checked so far: 11,200,000, Expansions: 1,546,827, Global best: 101
+[00:06:02:47:351] Valid states checked so far: 11,400,000, Expansions: 1,569,979, Global best: 101
+[00:06:09:42:941] Valid states checked so far: 11,600,000, Expansions: 1,598,074, Global best: 101
+[00:06:16:42:766] Valid states checked so far: 11,800,000, Expansions: 1,628,139, Global best: 101
+[00:06:24:02:781] Valid states checked so far: 12,000,000, Expansions: 1,654,340, Global best: 101
+[00:06:31:32:476] Valid states checked so far: 12,200,000, Expansions: 1,680,304, Global best: 101
+[00:06:39:18:597] Valid states checked so far: 12,400,000, Expansions: 1,712,678, Global best: 101
+[00:06:47:14:650] Valid states checked so far: 12,600,000, Expansions: 1,738,822, Global best: 101
+[00:06:54:48:664] Valid states checked so far: 12,800,000, Expansions: 1,758,155, Global best: 101
+[00:07:02:27:727] Valid states checked so far: 13,000,000, Expansions: 1,777,960, Global best: 101
+[00:07:10:19:689] Valid states checked so far: 13,200,000, Expansions: 1,805,327, Global best: 101
+[00:07:17:43:809] Valid states checked so far: 13,400,000, Expansions: 1,829,422, Global best: 101
+[00:07:25:12:903] Valid states checked so far: 13,600,000, Expansions: 1,856,326, Global best: 101
+[00:07:33:02:274] Valid states checked so far: 13,800,000, Expansions: 1,888,558, Global best: 101
+[00:07:37:19:803] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 118, 131, 130, 143, 156, 157, 144, 145, 158, 159, 160, 161, 162, 163, 150, 137, 136, 135, 134, 133, 132, 119, 106, 107, 94, 81, 68, 69, 82, 83, 96, 95, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 70, 57, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:07:37:19:803] ! Unidirectional s-t. expansions: 1,904,080, time: 27,439,803 [ms], path length: 100 [edges], generated: 13,905,937
+[00:00:04:40:879] Valid states checked so far: 200,000, Expansions: 26,073, Global best: 101
+[00:00:09:45:020] Valid states checked so far: 400,000, Expansions: 54,228, Global best: 101
+[00:00:14:56:868] Valid states checked so far: 600,000, Expansions: 81,518, Global best: 101
+[00:00:20:11:861] Valid states checked so far: 800,000, Expansions: 106,636, Global best: 101
+[00:00:25:35:623] Valid states checked so far: 1,000,000, Expansions: 132,293, Global best: 101
+[00:00:31:01:444] Valid states checked so far: 1,200,000, Expansions: 157,937, Global best: 101
+[00:00:36:38:748] Valid states checked so far: 1,400,000, Expansions: 182,565, Global best: 101
+[00:00:42:14:264] Valid states checked so far: 1,600,000, Expansions: 207,331, Global best: 101
+[00:00:47:42:349] Valid states checked so far: 1,800,000, Expansions: 232,764, Global best: 101
+[00:00:53:24:837] Valid states checked so far: 2,000,000, Expansions: 256,834, Global best: 101
+[00:00:58:46:422] Valid states checked so far: 2,200,000, Expansions: 286,094, Global best: 101
+[00:01:04:01:161] Valid states checked so far: 2,400,000, Expansions: 312,331, Global best: 101
+[00:01:10:06:797] Valid states checked so far: 2,600,000, Expansions: 344,049, Global best: 101
+[00:01:16:00:330] Valid states checked so far: 2,800,000, Expansions: 373,492, Global best: 101
+[00:01:21:52:514] Valid states checked so far: 3,000,000, Expansions: 403,764, Global best: 101
+[00:01:27:48:289] Valid states checked so far: 3,200,000, Expansions: 429,373, Global best: 101
+[00:01:33:50:762] Valid states checked so far: 3,400,000, Expansions: 457,249, Global best: 101
+[00:01:39:38:732] Valid states checked so far: 3,600,000, Expansions: 482,326, Global best: 101
+[00:01:45:35:157] Valid states checked so far: 3,800,000, Expansions: 506,872, Global best: 101
+[00:01:51:29:149] Valid states checked so far: 4,000,000, Expansions: 531,499, Global best: 101
+[00:01:57:25:483] Valid states checked so far: 4,200,000, Expansions: 556,070, Global best: 101
+[00:02:03:21:419] Valid states checked so far: 4,400,000, Expansions: 580,483, Global best: 101
+[00:02:09:28:846] Valid states checked so far: 4,600,000, Expansions: 604,274, Global best: 101
+[00:02:15:36:241] Valid states checked so far: 4,800,000, Expansions: 627,966, Global best: 101
+[00:02:21:46:781] Valid states checked so far: 5,000,000, Expansions: 655,654, Global best: 101
+[00:02:27:29:446] Valid states checked so far: 5,200,000, Expansions: 681,176, Global best: 101
+[00:02:33:13:927] Valid states checked so far: 5,400,000, Expansions: 708,600, Global best: 101
+[00:02:38:51:690] Valid states checked so far: 5,600,000, Expansions: 733,709, Global best: 101
+[00:02:44:36:094] Valid states checked so far: 5,800,000, Expansions: 758,597, Global best: 101
+[00:02:50:31:329] Valid states checked so far: 6,000,000, Expansions: 787,374, Global best: 101
+[00:02:56:35:673] Valid states checked so far: 6,200,000, Expansions: 818,654, Global best: 101
+[00:03:02:34:316] Valid states checked so far: 6,400,000, Expansions: 848,670, Global best: 101
+[00:03:08:38:540] Valid states checked so far: 6,600,000, Expansions: 874,980, Global best: 101
+[00:03:14:41:746] Valid states checked so far: 6,800,000, Expansions: 900,591, Global best: 101
+[00:03:21:14:477] Valid states checked so far: 7,000,000, Expansions: 930,910, Global best: 101
+[00:03:28:19:121] Valid states checked so far: 7,200,000, Expansions: 958,559, Global best: 101
+[00:03:35:31:728] Valid states checked so far: 7,400,000, Expansions: 985,758, Global best: 101
+[00:03:42:54:606] Valid states checked so far: 7,600,000, Expansions: 1,012,202, Global best: 101
+[00:03:50:23:113] Valid states checked so far: 7,800,000, Expansions: 1,041,277, Global best: 101
+[00:03:57:31:918] Valid states checked so far: 8,000,000, Expansions: 1,070,389, Global best: 101
+[00:04:04:32:574] Valid states checked so far: 8,200,000, Expansions: 1,099,267, Global best: 101
+[00:04:11:35:374] Valid states checked so far: 8,400,000, Expansions: 1,127,861, Global best: 101
+[00:04:18:47:847] Valid states checked so far: 8,600,000, Expansions: 1,155,976, Global best: 101
+[00:04:25:58:471] Valid states checked so far: 8,800,000, Expansions: 1,184,116, Global best: 101
+[00:04:33:09:671] Valid states checked so far: 9,000,000, Expansions: 1,212,481, Global best: 101
+[00:04:40:19:825] Valid states checked so far: 9,200,000, Expansions: 1,240,723, Global best: 101
+[00:04:47:36:499] Valid states checked so far: 9,400,000, Expansions: 1,268,748, Global best: 101
+[00:04:54:52:072] Valid states checked so far: 9,600,000, Expansions: 1,296,886, Global best: 101
+[00:05:02:26:368] Valid states checked so far: 9,800,000, Expansions: 1,323,613, Global best: 101
+[00:05:08:41:503] Valid states checked so far: 10,000,000, Expansions: 1,354,396, Global best: 101
+[00:05:14:11:241] Valid states checked so far: 10,200,000, Expansions: 1,383,376, Global best: 101
+[00:05:20:41:260] Valid states checked so far: 10,400,000, Expansions: 1,416,359, Global best: 101
+[00:05:27:09:543] Valid states checked so far: 10,600,000, Expansions: 1,447,382, Global best: 101
+[00:05:33:33:756] Valid states checked so far: 10,800,000, Expansions: 1,479,391, Global best: 101
+[00:05:39:59:797] Valid states checked so far: 11,000,000, Expansions: 1,510,490, Global best: 101
+[00:05:46:28:031] Valid states checked so far: 11,200,000, Expansions: 1,542,161, Global best: 101
+[00:05:52:53:078] Valid states checked so far: 11,400,000, Expansions: 1,573,864, Global best: 101
+[00:05:59:10:344] Valid states checked so far: 11,600,000, Expansions: 1,605,141, Global best: 101
+[00:06:05:15:064] Valid states checked so far: 11,800,000, Expansions: 1,637,069, Global best: 101
+[00:06:11:37:830] Valid states checked so far: 12,000,000, Expansions: 1,667,749, Global best: 101
+[00:06:17:45:112] Valid states checked so far: 12,200,000, Expansions: 1,699,306, Global best: 101
+[00:06:23:57:911] Valid states checked so far: 12,400,000, Expansions: 1,730,585, Global best: 101
+[00:06:30:06:310] Valid states checked so far: 12,600,000, Expansions: 1,762,246, Global best: 101
+[00:06:36:12:049] Valid states checked so far: 12,800,000, Expansions: 1,793,930, Global best: 101
+[00:06:42:23:806] Valid states checked so far: 13,000,000, Expansions: 1,825,195, Global best: 101
+[00:06:48:46:942] Valid states checked so far: 13,200,000, Expansions: 1,855,667, Global best: 101
+[00:06:55:13:750] Valid states checked so far: 13,400,000, Expansions: 1,885,944, Global best: 101
+[00:07:01:38:297] Valid states checked so far: 13,600,000, Expansions: 1,916,251, Global best: 101
+[00:07:08:16:742] Valid states checked so far: 13,800,000, Expansions: 1,945,745, Global best: 101
+[00:07:14:58:972] Valid states checked so far: 14,000,000, Expansions: 1,974,708, Global best: 101
+[00:07:21:23:779] Valid states checked so far: 14,200,000, Expansions: 2,005,112, Global best: 101
+[00:07:27:51:477] Valid states checked so far: 14,400,000, Expansions: 2,035,250, Global best: 101
+[00:07:34:24:950] Valid states checked so far: 14,600,000, Expansions: 2,065,009, Global best: 101
+[00:07:40:56:808] Valid states checked so far: 14,800,000, Expansions: 2,095,013, Global best: 101
+[00:07:47:39:883] Valid states checked so far: 15,000,000, Expansions: 2,124,197, Global best: 101
+[00:07:54:07:735] Valid states checked so far: 15,200,000, Expansions: 2,153,872, Global best: 101
+[00:08:00:20:801] Valid states checked so far: 15,400,000, Expansions: 2,186,058, Global best: 101
+[00:08:06:53:832] Valid states checked so far: 15,600,000, Expansions: 2,215,755, Global best: 101
+[00:08:13:27:256] Valid states checked so far: 15,800,000, Expansions: 2,245,517, Global best: 101
+[00:08:20:11:817] Valid states checked so far: 16,000,000, Expansions: 2,274,475, Global best: 101
+[00:08:26:19:225] Valid states checked so far: 16,200,000, Expansions: 2,306,727, Global best: 101
+[00:08:32:35:893] Valid states checked so far: 16,400,000, Expansions: 2,338,246, Global best: 101
+[00:08:38:51:518] Valid states checked so far: 16,600,000, Expansions: 2,369,748, Global best: 101
+[00:08:45:01:924] Valid states checked so far: 16,800,000, Expansions: 2,401,738, Global best: 101
+[00:08:51:21:440] Valid states checked so far: 17,000,000, Expansions: 2,432,919, Global best: 101
+[00:08:57:36:938] Valid states checked so far: 17,200,000, Expansions: 2,464,523, Global best: 101
+[00:09:03:47:047] Valid states checked so far: 17,400,000, Expansions: 2,496,323, Global best: 101
+[00:09:10:06:195] Valid states checked so far: 17,600,000, Expansions: 2,527,572, Global best: 101
+[00:09:16:22:425] Valid states checked so far: 17,800,000, Expansions: 2,559,219, Global best: 101
+[00:09:22:31:847] Valid states checked so far: 18,000,000, Expansions: 2,590,995, Global best: 101
+[00:09:28:52:627] Valid states checked so far: 18,200,000, Expansions: 2,622,051, Global best: 101
+[00:09:35:28:260] Valid states checked so far: 18,400,000, Expansions: 2,652,412, Global best: 101
+[00:09:42:01:192] Valid states checked so far: 18,600,000, Expansions: 2,682,915, Global best: 101
+[00:09:48:35:390] Valid states checked so far: 18,800,000, Expansions: 2,713,339, Global best: 101
+[00:09:55:24:770] Valid states checked so far: 19,000,000, Expansions: 2,742,798, Global best: 101
+[00:10:01:57:502] Valid states checked so far: 19,200,000, Expansions: 2,773,771, Global best: 101
+[00:10:08:06:920] Valid states checked so far: 19,400,000, Expansions: 2,805,497, Global best: 101
+[00:10:14:28:726] Valid states checked so far: 19,600,000, Expansions: 2,836,423, Global best: 101
+[00:10:21:00:511] Valid states checked so far: 19,800,000, Expansions: 2,866,741, Global best: 101
+[00:10:27:38:174] Valid states checked so far: 20,000,000, Expansions: 2,896,652, Global best: 101
+[00:10:34:36:504] Valid states checked so far: 20,200,000, Expansions: 2,925,451, Global best: 101
+[00:10:40:42:372] Valid states checked so far: 20,400,000, Expansions: 2,956,524, Global best: 101
+[00:10:46:58:152] Valid states checked so far: 20,600,000, Expansions: 2,987,435, Global best: 101
+[00:10:53:19:221] Valid states checked so far: 20,800,000, Expansions: 3,018,197, Global best: 101
+[00:10:59:42:471] Valid states checked so far: 21,000,000, Expansions: 3,049,030, Global best: 101
+[00:11:06:01:592] Valid states checked so far: 21,200,000, Expansions: 3,079,798, Global best: 101
+[00:11:12:24:152] Valid states checked so far: 21,400,000, Expansions: 3,110,724, Global best: 101
+[00:11:18:45:830] Valid states checked so far: 21,600,000, Expansions: 3,141,663, Global best: 101
+[00:11:25:03:726] Valid states checked so far: 21,800,000, Expansions: 3,172,449, Global best: 101
+[00:11:31:24:621] Valid states checked so far: 22,000,000, Expansions: 3,203,376, Global best: 101
+[00:11:37:47:377] Valid states checked so far: 22,200,000, Expansions: 3,234,318, Global best: 101
+[00:11:43:59:774] Valid states checked so far: 22,400,000, Expansions: 3,265,080, Global best: 101
+[00:11:50:24:705] Valid states checked so far: 22,600,000, Expansions: 3,295,566, Global best: 101
+[00:11:56:49:465] Valid states checked so far: 22,800,000, Expansions: 3,326,179, Global best: 101
+[00:12:03:12:536] Valid states checked so far: 23,000,000, Expansions: 3,356,225, Global best: 101
+[00:12:09:33:929] Valid states checked so far: 23,200,000, Expansions: 3,386,429, Global best: 101
+[00:12:16:15:269] Valid states checked so far: 23,400,000, Expansions: 3,415,940, Global best: 101
+[00:12:23:08:115] Valid states checked so far: 23,600,000, Expansions: 3,444,691, Global best: 101
+[00:12:29:52:554] Valid states checked so far: 23,800,000, Expansions: 3,471,641, Global best: 101
+[00:12:37:01:459] Valid states checked so far: 24,000,000, Expansions: 3,496,231, Global best: 101
+[00:12:40:44:132] Path of length 100 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 57, 70, 71, 84, 85, 86, 99, 112, 111, 110, 109, 96, 83, 82, 69, 68, 81, 94, 95, 108, 107, 106, 119, 120, 133, 134, 135, 136, 137, 150, 163, 162, 161, 160, 159, 146, 145, 158, 157, 156, 143, 130, 131, 118, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:12:40:44:133] ! Unidirectional t-s. expansions: 3,508,652, time: 45,644,132 [ms], path length: 100 [edges], generated: 24,100,740
+[00:00:22:53:683] Expansions: 50,000. F states: 249,680, B states: 119,203. Checks: 588,809)
+[00:00:48:19:518] Expansions: 100,000. F states: 539,136, B states: 257,739. Checks: 1,315,895)
+[00:01:15:10:746] Expansions: 150,000. F states: 826,440, B states: 409,523. Checks: 2,089,112)
+[00:01:37:41:184] Expansions: 200,000. F states: 1,098,929, B states: 540,359. Checks: 2,764,670)
+[00:02:05:00:920] Expansions: 250,000. F states: 1,378,010, B states: 675,629. Checks: 3,456,316)
+[00:02:22:15:446] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 118, 131, 130, 143, 156, 157, 144, 145, 158, 159, 160, 161, 162, 163, 150, 137, 136, 135, 134, 133, 132, 119, 106, 107, 94, 81, 68, 69, 82, 83, 96, 95, 108, 109, 110, 111, 112, 99, 86, 85, 84, 71, 70, 57, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:02:22:15:447] ! Bidirectional. expansions: 275,943, time: 8,535,446 [ms], path length: 100 [edges], g_F: 63, g_B: 37, generated: 0, MM: 26, MMPER: 24.742574257425744%
+[00:02:22:15:447] 
+---------- mazes/13x13_maze_with_2_open_diamonds_2 ----------
+[00:00:04:04:444] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 70, 57, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 59, 72, 71, 84, 85, 98, 99, 86, 73, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 120, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 148, 147, 134, 121, 122, 135, 136, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:04:04:445] ! Unidirectional s-t. expansions: 21,147, time: 244,444 [ms], path length: 106 [edges], generated: 159,362
+[00:00:05:27:469] Valid states checked so far: 200,000, Expansions: 33,704, Global best: 105
+[00:00:11:04:675] Valid states checked so far: 400,000, Expansions: 65,530, Global best: 105
+[00:00:16:38:329] Valid states checked so far: 600,000, Expansions: 96,906, Global best: 105
+[00:00:22:09:447] Valid states checked so far: 800,000, Expansions: 125,798, Global best: 105
+[00:00:28:00:508] Valid states checked so far: 1,000,000, Expansions: 157,629, Global best: 107
+[00:00:33:40:834] Path of length 106 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 150, 137, 136, 135, 122, 121, 134, 147, 148, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 120, 107, 108, 109, 110, 111, 98, 85, 72, 73, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 60, 59, 46, 33, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 57, 70, 71, 84, 83, 82, 81, 80, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:33:40:834] ! Unidirectional t-s. expansions: 185,715, time: 2,020,834 [ms], path length: 106 [edges], generated: 1,186,068
+[00:00:04:55:249] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 70, 57, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 59, 72, 71, 84, 85, 98, 99, 86, 73, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 120, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 148, 147, 134, 121, 122, 135, 136, 137, 150, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:04:55:250] ! Bidirectional. expansions: 11,969, time: 295,249 [ms], path length: 106 [edges], g_F: 66, g_B: 40, generated: 0, MM: 26, MMPER: 23.299065420560748%
+[00:00:04:55:250] 
+---------- mazes/13x13_maze_with_2_open_diamonds_3 ----------
+[00:00:06:27:421] Valid states checked so far: 200,000, Expansions: 39,195, Global best: 99
+[00:00:13:11:853] Valid states checked so far: 400,000, Expansions: 77,286, Global best: 99
+[00:00:20:03:374] Valid states checked so far: 600,000, Expansions: 115,336, Global best: 99
+[00:00:26:40:234] Valid states checked so far: 800,000, Expansions: 153,897, Global best: 99
+[00:00:33:40:594] Valid states checked so far: 1,000,000, Expansions: 190,936, Global best: 99
+[00:00:40:41:721] Valid states checked so far: 1,200,000, Expansions: 227,499, Global best: 99
+[00:00:47:43:874] Valid states checked so far: 1,400,000, Expansions: 264,671, Global best: 99
+[00:00:54:45:651] Valid states checked so far: 1,600,000, Expansions: 302,224, Global best: 99
+[00:01:01:44:637] Valid states checked so far: 1,800,000, Expansions: 340,124, Global best: 99
+[00:01:08:33:720] Valid states checked so far: 2,000,000, Expansions: 378,419, Global best: 99
+[00:01:15:11:377] Valid states checked so far: 2,200,000, Expansions: 417,254, Global best: 99
+[00:01:21:55:579] Valid states checked so far: 2,400,000, Expansions: 455,454, Global best: 99
+[00:01:28:51:409] Valid states checked so far: 2,600,000, Expansions: 493,027, Global best: 99
+[00:01:36:06:338] Valid states checked so far: 2,800,000, Expansions: 529,460, Global best: 99
+[00:01:42:29:906] Valid states checked so far: 3,000,000, Expansions: 559,775, Global best: 99
+[00:01:48:28:467] Valid states checked so far: 3,200,000, Expansions: 586,811, Global best: 99
+[00:01:54:58:629] Valid states checked so far: 3,400,000, Expansions: 617,717, Global best: 99
+[00:02:02:05:671] Valid states checked so far: 3,600,000, Expansions: 649,913, Global best: 99
+[00:02:09:27:071] Valid states checked so far: 3,800,000, Expansions: 679,529, Global best: 99
+[00:02:16:41:293] Valid states checked so far: 4,000,000, Expansions: 710,827, Global best: 99
+[00:02:19:10:318] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 20, 33, 46, 45, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 61, 60, 47, 34, 21, 8, 9, 10, 11, 12, 25, 38, 37, 36, 35, 48, 49, 50, 51, 64, 63, 62, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:02:19:10:319] ! Unidirectional s-t. expansions: 719,487, time: 8,350,318 [ms], path length: 98 [edges], generated: 4,064,413
+[00:00:04:08:456] Valid states checked so far: 200,000, Expansions: 29,209, Global best: 91
+[00:00:08:21:650] Valid states checked so far: 400,000, Expansions: 56,002, Global best: 91
+[00:00:12:33:670] Valid states checked so far: 600,000, Expansions: 83,525, Global best: 91
+[00:00:16:50:695] Valid states checked so far: 800,000, Expansions: 109,534, Global best: 91
+[00:00:21:35:874] Valid states checked so far: 1,000,000, Expansions: 134,695, Global best: 95
+[00:00:25:23:650] Valid states checked so far: 1,200,000, Expansions: 161,419, Global best: 95
+[00:00:29:12:767] Valid states checked so far: 1,400,000, Expansions: 188,044, Global best: 95
+[00:00:33:02:673] Valid states checked so far: 1,600,000, Expansions: 214,703, Global best: 95
+[00:00:36:59:156] Valid states checked so far: 1,800,000, Expansions: 240,715, Global best: 95
+[00:00:40:49:363] Path of length 98 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 57, 58, 71, 84, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 75, 62, 49, 48, 61, 60, 47, 34, 35, 36, 37, 50, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 20, 33, 46, 45, 32, 31, 30, 17, 4, 3, 2, 1, 0]
+[00:00:40:49:364] ! Unidirectional t-s. expansions: 262,469, time: 2,449,364 [ms], path length: 98 [edges], generated: 1,963,707
+[00:00:16:53:840] Expansions: 50,000. F states: 214,010, B states: 94,422. Checks: 445,606)
+[00:00:33:38:842] Expansions: 100,000. F states: 428,796, B states: 189,822. Checks: 897,619)
+[00:00:48:12:707] Expansions: 150,000. F states: 628,935, B states: 276,716. Checks: 1,302,581)
+[00:01:00:39:061] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 74, 61, 48, 35, 34, 21, 20, 33, 46, 47, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 50, 51, 64, 63, 62, 75, 88, 89, 90, 103, 116, 115, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:01:00:39:062] ! Bidirectional. expansions: 193,016, time: 3,639,061 [ms], path length: 98 [edges], g_F: 57, g_B: 41, generated: 0, MM: 16, MMPER: 15.161616161616163%
+[00:01:00:39:062] 
+---------- mazes/13x13_maze_with_2_open_diamonds_4 ----------
+[00:00:05:16:271] Valid states checked so far: 200,000, Expansions: 27,012, Global best: 107
+[00:00:06:39:082] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 124, 111, 112, 99, 98, 85, 72, 71, 84, 83, 70, 57, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 59, 60, 61, 74, 73, 86, 87, 88, 89, 90, 103, 116, 115, 114, 113, 126, 125, 138, 151, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:06:39:082] ! Unidirectional s-t. expansions: 31,082, time: 399,082 [ms], path length: 106 [edges], generated: 239,989
+[00:00:06:12:973] Valid states checked so far: 200,000, Expansions: 34,695, Global best: 107
+[00:00:12:01:865] Valid states checked so far: 400,000, Expansions: 65,464, Global best: 107
+[00:00:18:23:183] Valid states checked so far: 600,000, Expansions: 97,827, Global best: 107
+[00:00:24:18:066] Valid states checked so far: 800,000, Expansions: 127,866, Global best: 107
+[00:00:30:18:330] Valid states checked so far: 1,000,000, Expansions: 159,062, Global best: 107
+[00:00:36:23:821] Valid states checked so far: 1,200,000, Expansions: 191,134, Global best: 107
+[00:00:42:34:674] Valid states checked so far: 1,400,000, Expansions: 222,490, Global best: 107
+[00:00:48:31:565] Valid states checked so far: 1,600,000, Expansions: 253,967, Global best: 107
+[00:00:54:58:283] Valid states checked so far: 1,800,000, Expansions: 286,951, Global best: 107
+[00:01:01:11:507] Valid states checked so far: 2,000,000, Expansions: 321,190, Global best: 107
+[00:01:07:00:382] Valid states checked so far: 2,200,000, Expansions: 353,651, Global best: 107
+[00:01:12:36:685] Valid states checked so far: 2,400,000, Expansions: 386,035, Global best: 107
+[00:01:18:13:366] Valid states checked so far: 2,600,000, Expansions: 418,374, Global best: 107
+[00:01:25:04:575] Valid states checked so far: 2,800,000, Expansions: 452,028, Global best: 107
+[00:01:27:09:999] Path of length 106 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 60, 59, 46, 33, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 57, 70, 83, 84, 71, 72, 73, 86, 85, 98, 99, 112, 113, 126, 125, 138, 151, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 136, 137, 124, 111, 110, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:01:27:10:000] ! Unidirectional t-s. expansions: 461,294, time: 5,229,999 [ms], path length: 106 [edges], generated: 2,853,182
+[00:00:18:15:172] Expansions: 50,000. F states: 236,091, B states: 117,813. Checks: 557,750)
+[00:00:19:19:591] Path of length 106 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 110, 111, 124, 137, 136, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 151, 138, 125, 126, 113, 112, 99, 98, 85, 86, 73, 72, 71, 84, 83, 70, 57, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:19:19:591] ! Bidirectional. expansions: 52,087, time: 1,159,591 [ms], path length: 106 [edges], g_F: 68, g_B: 38, generated: 0, MM: 30, MMPER: 27.037383177570092%
+[00:00:19:19:592] 
+---------- mazes/13x13_maze_with_2_open_diamonds_5 ----------
+[00:00:05:38:425] Valid states checked so far: 200,000, Expansions: 29,641, Global best: 103
+[00:00:12:00:106] Valid states checked so far: 400,000, Expansions: 53,788, Global best: 103
+[00:00:12:24:577] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 110, 97, 98, 111, 124, 125, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 21, 34, 35, 36, 23, 22, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 48, 47, 60, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:12:24:577] ! Unidirectional s-t. expansions: 54,945, time: 744,577 [ms], path length: 102 [edges], generated: 410,337
+[00:00:05:48:697] Valid states checked so far: 200,000, Expansions: 27,286, Global best: 103
+[00:00:11:07:940] Valid states checked so far: 400,000, Expansions: 54,957, Global best: 103
+[00:00:16:22:078] Valid states checked so far: 600,000, Expansions: 83,005, Global best: 103
+[00:00:19:40:145] Path of length 102 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 48, 35, 22, 23, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 33, 34, 47, 60, 59, 58, 71, 84, 97, 110, 111, 98, 85, 86, 99, 112, 125, 124, 123, 136, 137, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:00:19:40:146] ! Unidirectional t-s. expansions: 99,623, time: 1,180,145 [ms], path length: 102 [edges], generated: 721,310
+[00:00:12:59:793] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 110, 97, 98, 111, 124, 125, 112, 99, 86, 85, 84, 71, 58, 59, 60, 47, 34, 33, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 23, 22, 35, 48, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:00:12:59:794] ! Bidirectional. expansions: 32,086, time: 779,793 [ms], path length: 102 [edges], g_F: 65, g_B: 37, generated: 0, MM: 28, MMPER: 26.184466019417474%
+[00:00:12:59:794] 
+---------- mazes/13x13_maze_with_2_open_diamonds_6 ----------
+[00:00:05:34:470] Valid states checked so far: 200,000, Expansions: 30,158, Global best: 101
+[00:00:11:43:052] Valid states checked so far: 400,000, Expansions: 59,500, Global best: 101
+[00:00:16:59:909] Valid states checked so far: 600,000, Expansions: 91,871, Global best: 101
+[00:00:22:51:883] Valid states checked so far: 800,000, Expansions: 122,708, Global best: 101
+[00:00:28:25:354] Valid states checked so far: 1,000,000, Expansions: 155,104, Global best: 101
+[00:00:34:43:001] Valid states checked so far: 1,200,000, Expansions: 182,025, Global best: 101
+[00:00:36:35:808] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 68, 81, 80, 67, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 69, 70, 83, 84, 85, 86, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 127, 114, 113, 100, 87, 74, 61, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 75, 88, 101, 102, 89, 90, 103, 116, 129, 142, 155, 168]
+[00:00:36:35:809] ! Unidirectional s-t. expansions: 188,200, time: 2,195,808 [ms], path length: 100 [edges], generated: 1,249,185
+[00:00:05:11:300] Valid states checked so far: 200,000, Expansions: 29,304, Global best: 101
+[00:00:10:32:363] Valid states checked so far: 400,000, Expansions: 55,815, Global best: 101
+[00:00:16:17:725] Valid states checked so far: 600,000, Expansions: 80,625, Global best: 101
+[00:00:21:42:519] Valid states checked so far: 800,000, Expansions: 106,816, Global best: 101
+[00:00:27:10:681] Valid states checked so far: 1,000,000, Expansions: 133,139, Global best: 101
+[00:00:32:42:772] Valid states checked so far: 1,200,000, Expansions: 158,867, Global best: 101
+[00:00:37:53:809] Valid states checked so far: 1,400,000, Expansions: 187,838, Global best: 101
+[00:00:41:52:313] Path of length 100 found: [168, 167, 166, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 110, 111, 112, 99, 86, 85, 84, 71, 70, 83, 82, 95, 108, 107, 106, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 67, 80, 81, 68, 55, 56, 57, 58, 59, 60, 61, 74, 87, 100, 113, 114, 127, 140, 141, 142, 129, 116, 115, 102, 103, 90, 89, 88, 75, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 31, 30, 17, 4, 3, 2, 1, 0]
+[00:00:41:52:313] ! Unidirectional t-s. expansions: 204,344, time: 2,512,313 [ms], path length: 100 [edges], generated: 1,542,681
+[00:00:21:22:519] Expansions: 50,000. F states: 220,218, B states: 106,592. Checks: 506,949)
+[00:00:40:31:629] Path of length 100 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 106, 107, 108, 95, 82, 81, 80, 67, 68, 69, 70, 83, 84, 85, 86, 99, 100, 87, 74, 61, 60, 59, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 75, 88, 89, 90, 103, 102, 115, 116, 129, 142, 141, 140, 127, 114, 113, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168]
+[00:00:40:31:629] ! Bidirectional. expansions: 82,436, time: 2,431,629 [ms], path length: 100 [edges], g_F: 59, g_B: 41, generated: 0, MM: 18, MMPER: 16.821782178217823%
+[00:00:40:31:630] 
+---------- mazes/13x13_maze_with_2_open_diamonds_7 ----------
+[00:00:05:45:019] Valid states checked so far: 200,000, Expansions: 30,077, Global best: 99
+[00:00:11:20:294] Valid states checked so far: 400,000, Expansions: 62,388, Global best: 99
+[00:00:17:12:073] Valid states checked so far: 600,000, Expansions: 90,357, Global best: 99
+[00:00:23:01:751] Valid states checked so far: 800,000, Expansions: 118,971, Global best: 99
+[00:00:28:36:894] Valid states checked so far: 1,000,000, Expansions: 152,290, Global best: 99
+[00:00:34:37:838] Valid states checked so far: 1,200,000, Expansions: 177,832, Global best: 99
+[00:00:40:23:963] Valid states checked so far: 1,400,000, Expansions: 207,037, Global best: 99
+[00:00:46:13:288] Valid states checked so far: 1,600,000, Expansions: 239,287, Global best: 99
+[00:00:52:00:500] Valid states checked so far: 1,800,000, Expansions: 267,556, Global best: 99
+[00:00:57:46:489] Valid states checked so far: 2,000,000, Expansions: 296,398, Global best: 99
+[00:01:03:41:309] Valid states checked so far: 2,200,000, Expansions: 322,888, Global best: 99
+[00:01:09:44:142] Valid states checked so far: 2,400,000, Expansions: 349,639, Global best: 99
+[00:01:16:09:092] Valid states checked so far: 2,600,000, Expansions: 375,992, Global best: 99
+[00:01:22:30:386] Valid states checked so far: 2,800,000, Expansions: 404,141, Global best: 99
+[00:01:28:56:813] Valid states checked so far: 3,000,000, Expansions: 432,769, Global best: 99
+[00:01:35:22:389] Valid states checked so far: 3,200,000, Expansions: 456,688, Global best: 99
+[00:01:41:48:963] Valid states checked so far: 3,400,000, Expansions: 480,054, Global best: 99
+[00:01:46:32:326] Valid states checked so far: 3,600,000, Expansions: 508,285, Global best: 99
+[00:01:51:10:338] Valid states checked so far: 3,800,000, Expansions: 539,696, Global best: 99
+[00:01:56:12:631] Valid states checked so far: 4,000,000, Expansions: 566,230, Global best: 99
+[00:02:01:05:347] Valid states checked so far: 4,200,000, Expansions: 592,112, Global best: 99
+[00:02:05:42:079] Valid states checked so far: 4,400,000, Expansions: 622,896, Global best: 99
+[00:02:10:21:310] Valid states checked so far: 4,600,000, Expansions: 651,686, Global best: 99
+[00:02:15:32:822] Valid states checked so far: 4,800,000, Expansions: 677,485, Global best: 99
+[00:02:21:27:541] Valid states checked so far: 5,000,000, Expansions: 703,379, Global best: 99
+[00:02:28:03:365] Valid states checked so far: 5,200,000, Expansions: 730,376, Global best: 99
+[00:02:34:40:082] Valid states checked so far: 5,400,000, Expansions: 758,780, Global best: 99
+[00:02:41:23:615] Valid states checked so far: 5,600,000, Expansions: 783,229, Global best: 99
+[00:02:48:07:765] Valid states checked so far: 5,800,000, Expansions: 806,970, Global best: 99
+[00:02:54:48:776] Valid states checked so far: 6,000,000, Expansions: 836,074, Global best: 99
+[00:03:01:23:600] Valid states checked so far: 6,200,000, Expansions: 860,666, Global best: 99
+[00:03:08:05:244] Valid states checked so far: 6,400,000, Expansions: 884,295, Global best: 99
+[00:03:15:11:144] Valid states checked so far: 6,600,000, Expansions: 909,603, Global best: 99
+[00:03:22:32:191] Valid states checked so far: 6,800,000, Expansions: 935,431, Global best: 99
+[00:03:29:52:423] Valid states checked so far: 7,000,000, Expansions: 961,232, Global best: 99
+[00:03:31:10:179] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 118, 117, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 122, 135, 134, 121, 108, 107, 120, 133, 132, 119, 106, 93, 80, 81, 82, 95, 96, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 37, 36, 49, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:03:31:10:179] ! Unidirectional s-t. expansions: 965,286, time: 12,670,179 [ms], path length: 98 [edges], generated: 7,034,711
+[00:00:05:16:813] Valid states checked so far: 200,000, Expansions: 32,007, Global best: 99
+[00:00:11:04:722] Valid states checked so far: 400,000, Expansions: 65,361, Global best: 99
+[00:00:16:49:081] Valid states checked so far: 600,000, Expansions: 99,235, Global best: 99
+[00:00:22:21:882] Valid states checked so far: 800,000, Expansions: 132,749, Global best: 99
+[00:00:27:59:519] Valid states checked so far: 1,000,000, Expansions: 163,627, Global best: 99
+[00:00:33:29:189] Valid states checked so far: 1,200,000, Expansions: 195,498, Global best: 99
+[00:00:38:51:745] Valid states checked so far: 1,400,000, Expansions: 227,512, Global best: 99
+[00:00:44:11:062] Valid states checked so far: 1,600,000, Expansions: 259,486, Global best: 99
+[00:00:49:31:505] Valid states checked so far: 1,800,000, Expansions: 291,729, Global best: 99
+[00:00:55:23:807] Valid states checked so far: 2,000,000, Expansions: 323,539, Global best: 99
+[00:01:00:53:260] Valid states checked so far: 2,200,000, Expansions: 357,345, Global best: 99
+[00:01:06:21:937] Valid states checked so far: 2,400,000, Expansions: 391,567, Global best: 99
+[00:01:11:50:295] Valid states checked so far: 2,600,000, Expansions: 424,805, Global best: 99
+[00:01:17:29:386] Valid states checked so far: 2,800,000, Expansions: 457,510, Global best: 99
+[00:01:23:16:266] Valid states checked so far: 3,000,000, Expansions: 490,458, Global best: 99
+[00:01:29:25:772] Valid states checked so far: 3,200,000, Expansions: 524,244, Global best: 99
+[00:01:35:37:907] Valid states checked so far: 3,400,000, Expansions: 558,045, Global best: 99
+[00:01:41:46:015] Valid states checked so far: 3,600,000, Expansions: 591,884, Global best: 99
+[00:01:47:58:952] Valid states checked so far: 3,800,000, Expansions: 624,431, Global best: 99
+[00:01:54:26:769] Valid states checked so far: 4,000,000, Expansions: 657,815, Global best: 99
+[00:02:01:06:241] Valid states checked so far: 4,200,000, Expansions: 689,987, Global best: 99
+[00:02:07:46:451] Valid states checked so far: 4,400,000, Expansions: 721,783, Global best: 99
+[00:02:14:25:663] Valid states checked so far: 4,600,000, Expansions: 753,341, Global best: 99
+[00:02:21:08:906] Valid states checked so far: 4,800,000, Expansions: 782,435, Global best: 99
+[00:02:27:51:363] Valid states checked so far: 5,000,000, Expansions: 811,910, Global best: 99
+[00:02:34:29:077] Valid states checked so far: 5,200,000, Expansions: 841,911, Global best: 99
+[00:02:40:55:927] Valid states checked so far: 5,400,000, Expansions: 872,407, Global best: 99
+[00:02:47:56:289] Valid states checked so far: 5,600,000, Expansions: 901,753, Global best: 99
+[00:02:55:25:201] Valid states checked so far: 5,800,000, Expansions: 935,502, Global best: 99
+[00:03:03:09:522] Valid states checked so far: 6,000,000, Expansions: 969,138, Global best: 99
+[00:03:10:50:845] Valid states checked so far: 6,200,000, Expansions: 1,002,645, Global best: 99
+[00:03:18:35:079] Valid states checked so far: 6,400,000, Expansions: 1,036,225, Global best: 99
+[00:03:26:14:108] Valid states checked so far: 6,600,000, Expansions: 1,070,015, Global best: 99
+[00:03:33:52:450] Valid states checked so far: 6,800,000, Expansions: 1,103,959, Global best: 99
+[00:03:41:50:880] Valid states checked so far: 7,000,000, Expansions: 1,137,123, Global best: 99
+[00:03:50:01:012] Valid states checked so far: 7,200,000, Expansions: 1,169,431, Global best: 99
+[00:03:58:13:030] Valid states checked so far: 7,400,000, Expansions: 1,200,315, Global best: 99
+[00:04:06:20:599] Valid states checked so far: 7,600,000, Expansions: 1,234,254, Global best: 99
+[00:04:14:17:761] Valid states checked so far: 7,800,000, Expansions: 1,267,548, Global best: 99
+[00:04:22:15:976] Valid states checked so far: 8,000,000, Expansions: 1,300,372, Global best: 99
+[00:04:28:56:110] Valid states checked so far: 8,200,000, Expansions: 1,335,495, Global best: 99
+[00:04:35:29:072] Valid states checked so far: 8,400,000, Expansions: 1,370,726, Global best: 99
+[00:04:42:02:983] Valid states checked so far: 8,600,000, Expansions: 1,406,051, Global best: 99
+[00:04:48:43:526] Valid states checked so far: 8,800,000, Expansions: 1,441,156, Global best: 99
+[00:04:55:22:300] Valid states checked so far: 9,000,000, Expansions: 1,476,302, Global best: 99
+[00:05:02:14:032] Valid states checked so far: 9,200,000, Expansions: 1,511,944, Global best: 99
+[00:05:08:58:409] Valid states checked so far: 9,400,000, Expansions: 1,547,035, Global best: 99
+[00:05:15:52:806] Valid states checked so far: 9,600,000, Expansions: 1,581,584, Global best: 99
+[00:05:22:26:758] Valid states checked so far: 9,800,000, Expansions: 1,617,227, Global best: 99
+[00:05:29:21:728] Valid states checked so far: 10,000,000, Expansions: 1,652,483, Global best: 99
+[00:05:36:04:198] Valid states checked so far: 10,200,000, Expansions: 1,687,960, Global best: 99
+[00:05:42:59:173] Valid states checked so far: 10,400,000, Expansions: 1,722,723, Global best: 99
+[00:05:49:50:412] Valid states checked so far: 10,600,000, Expansions: 1,758,259, Global best: 99
+[00:05:56:51:340] Valid states checked so far: 10,800,000, Expansions: 1,792,911, Global best: 99
+[00:06:03:40:846] Valid states checked so far: 11,000,000, Expansions: 1,827,946, Global best: 99
+[00:06:10:23:601] Valid states checked so far: 11,200,000, Expansions: 1,863,366, Global best: 99
+[00:06:17:22:167] Valid states checked so far: 11,400,000, Expansions: 1,898,194, Global best: 99
+[00:06:24:28:080] Valid states checked so far: 11,600,000, Expansions: 1,933,460, Global best: 99
+[00:06:31:23:675] Valid states checked so far: 11,800,000, Expansions: 1,968,172, Global best: 99
+[00:06:38:23:185] Valid states checked so far: 12,000,000, Expansions: 2,002,747, Global best: 99
+[00:06:45:26:738] Valid states checked so far: 12,200,000, Expansions: 2,037,200, Global best: 99
+[00:06:52:55:386] Valid states checked so far: 12,400,000, Expansions: 2,071,106, Global best: 99
+[00:06:59:10:171] Valid states checked so far: 12,600,000, Expansions: 2,105,075, Global best: 99
+[00:07:05:47:380] Valid states checked so far: 12,800,000, Expansions: 2,140,245, Global best: 99
+[00:07:13:41:334] Valid states checked so far: 13,000,000, Expansions: 2,175,193, Global best: 99
+[00:07:20:29:181] Valid states checked so far: 13,200,000, Expansions: 2,210,075, Global best: 99
+[00:07:27:09:821] Valid states checked so far: 13,400,000, Expansions: 2,245,239, Global best: 99
+[00:07:34:06:833] Valid states checked so far: 13,600,000, Expansions: 2,280,095, Global best: 99
+[00:07:42:01:843] Valid states checked so far: 13,800,000, Expansions: 2,316,189, Global best: 99
+[00:07:49:28:055] Valid states checked so far: 14,000,000, Expansions: 2,351,541, Global best: 99
+[00:07:56:09:144] Valid states checked so far: 14,200,000, Expansions: 2,386,603, Global best: 99
+[00:08:02:12:755] Valid states checked so far: 14,400,000, Expansions: 2,421,188, Global best: 99
+[00:08:08:28:927] Valid states checked so far: 14,600,000, Expansions: 2,453,841, Global best: 99
+[00:08:15:11:811] Valid states checked so far: 14,800,000, Expansions: 2,481,070, Global best: 99
+[00:08:22:47:067] Valid states checked so far: 15,000,000, Expansions: 2,510,492, Global best: 99
+[00:08:27:53:280] Path of length 98 found: [168, 167, 166, 165, 152, 139, 140, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 45, 58, 71, 84, 85, 86, 99, 112, 111, 110, 97, 96, 83, 82, 81, 80, 93, 106, 119, 132, 133, 120, 107, 108, 109, 122, 121, 134, 135, 136, 137, 150, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 117, 118, 105, 92, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:08:27:53:281] ! Unidirectional t-s. expansions: 2,531,138, time: 30,473,280 [ms], path length: 98 [edges], generated: 15,158,310
+[00:00:21:47:031] Expansions: 50,000. F states: 238,073, B states: 108,913. Checks: 547,857)
+[00:00:46:43:952] Expansions: 100,000. F states: 529,943, B states: 231,567. Checks: 1,260,799)
+[00:01:10:29:819] Path of length 98 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 92, 105, 118, 117, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 150, 137, 136, 123, 122, 135, 134, 121, 108, 107, 120, 133, 132, 119, 106, 93, 80, 81, 82, 95, 96, 109, 110, 111, 112, 99, 86, 85, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 61, 74, 87, 88, 89, 90, 103, 116, 129, 142, 141, 140, 139, 152, 165, 166, 167, 168]
+[00:01:10:29:820] ! Bidirectional. expansions: 142,223, time: 4,229,819 [ms], path length: 98 [edges], g_F: 65, g_B: 33, generated: 0, MM: 32, MMPER: 31.323232323232325%
+[00:01:10:29:820] 
+---------- mazes/13x13_maze_with_2_open_diamonds_8 ----------
+[00:00:06:43:870] Valid states checked so far: 200,000, Expansions: 36,468, Global best: 105
+[00:00:13:45:635] Valid states checked so far: 400,000, Expansions: 69,568, Global best: 105
+[00:00:20:18:885] Valid states checked so far: 600,000, Expansions: 103,043, Global best: 105
+[00:00:26:57:994] Valid states checked so far: 800,000, Expansions: 135,374, Global best: 105
+[00:00:33:17:065] Valid states checked so far: 1,000,000, Expansions: 171,670, Global best: 105
+[00:00:39:49:904] Valid states checked so far: 1,200,000, Expansions: 205,174, Global best: 105
+[00:00:42:56:210] Path of length 104 found: [0, 1, 2, 15, 16, 3, 4, 17, 30, 29, 28, 27, 26, 39, 52, 53, 54, 41, 42, 55, 56, 43, 44, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 70, 71, 72, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 84, 83, 82, 81, 80, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:42:56:210] ! Unidirectional s-t. expansions: 220,060, time: 2,576,210 [ms], path length: 104 [edges], generated: 1,292,600
+[00:00:00:30:241] Path of length 104 found: [168, 155, 142, 141, 140, 139, 152, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 108, 107, 106, 105, 92, 79, 80, 81, 82, 83, 84, 85, 86, 99, 112, 113, 114, 115, 116, 103, 90, 89, 88, 87, 74, 61, 60, 59, 72, 71, 70, 57, 58, 45, 46, 33, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 31, 44, 43, 56, 55, 42, 41, 54, 53, 52, 39, 26, 27, 28, 15, 16, 29, 30, 17, 4, 3, 2, 1, 0]
+[00:00:00:30:242] ! Unidirectional t-s. expansions: 3,418, time: 30,241 [ms], path length: 104 [edges], generated: 27,853
+[00:00:14:46:429] Path of length 104 found: [0, 1, 2, 15, 16, 3, 4, 17, 30, 29, 28, 27, 26, 39, 52, 53, 54, 41, 42, 55, 56, 43, 44, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 70, 71, 72, 59, 60, 61, 74, 87, 88, 89, 90, 103, 116, 115, 114, 113, 112, 99, 86, 85, 84, 83, 82, 81, 80, 79, 92, 105, 106, 107, 108, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 140, 141, 142, 155, 168]
+[00:00:14:46:430] ! Bidirectional. expansions: 48,138, time: 886,429 [ms], path length: 104 [edges], g_F: 68, g_B: 36, generated: 0, MM: 32, MMPER: 29.476190476190474%
+[00:00:14:46:430] 
+---------- mazes/13x13_maze_with_2_open_diamonds_9 ----------
+[00:00:04:14:724] Valid states checked so far: 200,000, Expansions: 28,607, Global best: 103
+[00:00:09:04:500] Valid states checked so far: 400,000, Expansions: 58,269, Global best: 103
+[00:00:13:51:483] Valid states checked so far: 600,000, Expansions: 88,212, Global best: 103
+[00:00:18:13:356] Valid states checked so far: 800,000, Expansions: 116,391, Global best: 103
+[00:00:23:03:674] Valid states checked so far: 1,000,000, Expansions: 145,006, Global best: 103
+[00:00:28:02:392] Valid states checked so far: 1,200,000, Expansions: 174,026, Global best: 103
+[00:00:33:14:715] Valid states checked so far: 1,400,000, Expansions: 199,955, Global best: 103
+[00:00:38:48:848] Valid states checked so far: 1,600,000, Expansions: 224,211, Global best: 103
+[00:00:44:21:853] Valid states checked so far: 1,800,000, Expansions: 248,452, Global best: 103
+[00:00:50:07:360] Valid states checked so far: 2,000,000, Expansions: 272,345, Global best: 103
+[00:00:55:02:835] Valid states checked so far: 2,200,000, Expansions: 298,023, Global best: 103
+[00:00:59:34:237] Valid states checked so far: 2,400,000, Expansions: 325,161, Global best: 103
+[00:01:04:03:682] Valid states checked so far: 2,600,000, Expansions: 351,887, Global best: 103
+[00:01:08:18:374] Valid states checked so far: 2,800,000, Expansions: 379,908, Global best: 103
+[00:01:12:46:263] Valid states checked so far: 3,000,000, Expansions: 407,807, Global best: 103
+[00:01:17:10:240] Valid states checked so far: 3,200,000, Expansions: 435,432, Global best: 103
+[00:01:22:37:002] Valid states checked so far: 3,400,000, Expansions: 459,668, Global best: 103
+[00:01:28:02:097] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 31, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 45, 58, 57, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 71, 72, 59, 60, 61, 74, 73, 86, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 152, 139, 126, 113, 100, 87, 88, 101, 114, 127, 140, 141, 128, 115, 102, 89, 90, 103, 116, 129, 142, 155, 168]
+[00:01:28:02:098] ! Unidirectional s-t. expansions: 479,798, time: 5,282,097 [ms], path length: 102 [edges], generated: 3,580,346
+[00:00:04:10:837] Valid states checked so far: 200,000, Expansions: 37,257, Global best: 97
+[00:00:08:27:070] Valid states checked so far: 400,000, Expansions: 74,818, Global best: 97
+[00:00:12:48:769] Valid states checked so far: 600,000, Expansions: 112,474, Global best: 97
+[00:00:17:03:767] Valid states checked so far: 800,000, Expansions: 149,914, Global best: 97
+[00:00:21:26:780] Valid states checked so far: 1,000,000, Expansions: 187,340, Global best: 97
+[00:00:26:01:647] Valid states checked so far: 1,200,000, Expansions: 228,388, Global best: 97
+[00:00:30:43:484] Valid states checked so far: 1,400,000, Expansions: 273,211, Global best: 97
+[00:00:36:06:339] Valid states checked so far: 1,600,000, Expansions: 312,567, Global best: 97
+[00:00:41:19:287] Valid states checked so far: 1,800,000, Expansions: 352,201, Global best: 97
+[00:00:47:29:763] Valid states checked so far: 2,000,000, Expansions: 389,816, Global best: 97
+[00:00:54:23:630] Valid states checked so far: 2,200,000, Expansions: 432,683, Global best: 97
+[00:01:00:31:742] Valid states checked so far: 2,400,000, Expansions: 470,463, Global best: 97
+[00:01:06:37:727] Valid states checked so far: 2,600,000, Expansions: 508,321, Global best: 97
+[00:01:12:47:848] Valid states checked so far: 2,800,000, Expansions: 546,418, Global best: 97
+[00:01:19:37:439] Valid states checked so far: 3,000,000, Expansions: 587,960, Global best: 97
+[00:01:25:42:369] Valid states checked so far: 3,200,000, Expansions: 625,606, Global best: 97
+[00:01:31:56:483] Valid states checked so far: 3,400,000, Expansions: 662,537, Global best: 97
+[00:01:38:13:594] Valid states checked so far: 3,600,000, Expansions: 699,210, Global best: 97
+[00:01:44:40:742] Valid states checked so far: 3,800,000, Expansions: 736,098, Global best: 97
+[00:01:50:42:863] Valid states checked so far: 4,000,000, Expansions: 773,573, Global best: 97
+[00:01:57:15:832] Valid states checked so far: 4,200,000, Expansions: 809,301, Global best: 97
+[00:02:03:26:656] Valid states checked so far: 4,400,000, Expansions: 846,023, Global best: 97
+[00:02:09:52:986] Valid states checked so far: 4,600,000, Expansions: 882,174, Global best: 97
+[00:02:16:37:394] Valid states checked so far: 4,800,000, Expansions: 923,343, Global best: 97
+[00:02:22:07:601] Valid states checked so far: 5,000,000, Expansions: 959,972, Global best: 97
+[00:02:27:07:653] Valid states checked so far: 5,200,000, Expansions: 996,473, Global best: 97
+[00:02:32:13:705] Valid states checked so far: 5,400,000, Expansions: 1,032,999, Global best: 97
+[00:02:37:19:459] Valid states checked so far: 5,600,000, Expansions: 1,069,639, Global best: 97
+[00:02:42:24:672] Valid states checked so far: 5,800,000, Expansions: 1,106,536, Global best: 97
+[00:02:47:39:978] Valid states checked so far: 6,000,000, Expansions: 1,142,698, Global best: 97
+[00:02:52:44:175] Valid states checked so far: 6,200,000, Expansions: 1,180,098, Global best: 97
+[00:02:58:05:158] Valid states checked so far: 6,400,000, Expansions: 1,215,905, Global best: 97
+[00:03:03:36:342] Valid states checked so far: 6,600,000, Expansions: 1,246,458, Global best: 103
+[00:03:10:00:017] Valid states checked so far: 6,800,000, Expansions: 1,276,244, Global best: 103
+[00:03:16:40:167] Valid states checked so far: 7,000,000, Expansions: 1,305,456, Global best: 103
+[00:03:23:14:004] Valid states checked so far: 7,200,000, Expansions: 1,334,635, Global best: 103
+[00:03:29:58:251] Valid states checked so far: 7,400,000, Expansions: 1,363,343, Global best: 103
+[00:03:36:50:310] Valid states checked so far: 7,600,000, Expansions: 1,392,309, Global best: 103
+[00:03:43:21:477] Valid states checked so far: 7,800,000, Expansions: 1,425,253, Global best: 103
+[00:03:48:55:826] Valid states checked so far: 8,000,000, Expansions: 1,454,836, Global best: 103
+[00:03:54:40:514] Valid states checked so far: 8,200,000, Expansions: 1,484,886, Global best: 103
+[00:04:00:32:793] Valid states checked so far: 8,400,000, Expansions: 1,516,154, Global best: 103
+[00:04:06:20:737] Valid states checked so far: 8,600,000, Expansions: 1,545,984, Global best: 103
+[00:04:11:43:826] Valid states checked so far: 8,800,000, Expansions: 1,577,864, Global best: 103
+[00:04:16:55:012] Valid states checked so far: 9,000,000, Expansions: 1,607,938, Global best: 103
+[00:04:22:22:053] Valid states checked so far: 9,200,000, Expansions: 1,638,531, Global best: 103
+[00:04:27:45:263] Valid states checked so far: 9,400,000, Expansions: 1,667,470, Global best: 103
+[00:04:33:22:145] Valid states checked so far: 9,600,000, Expansions: 1,697,341, Global best: 103
+[00:04:38:33:984] Valid states checked so far: 9,800,000, Expansions: 1,728,096, Global best: 103
+[00:04:44:07:993] Valid states checked so far: 10,000,000, Expansions: 1,758,130, Global best: 103
+[00:04:49:27:006] Valid states checked so far: 10,200,000, Expansions: 1,790,401, Global best: 103
+[00:04:54:41:891] Valid states checked so far: 10,400,000, Expansions: 1,821,876, Global best: 103
+[00:04:59:37:939] Valid states checked so far: 10,600,000, Expansions: 1,852,375, Global best: 103
+[00:05:04:59:182] Valid states checked so far: 10,800,000, Expansions: 1,882,147, Global best: 103
+[00:05:10:20:217] Valid states checked so far: 11,000,000, Expansions: 1,912,513, Global best: 103
+[00:05:15:55:430] Valid states checked so far: 11,200,000, Expansions: 1,941,300, Global best: 103
+[00:05:21:34:784] Valid states checked so far: 11,400,000, Expansions: 1,969,196, Global best: 103
+[00:05:27:03:590] Valid states checked so far: 11,600,000, Expansions: 1,997,723, Global best: 103
+[00:05:32:39:986] Valid states checked so far: 11,800,000, Expansions: 2,025,738, Global best: 103
+[00:05:38:21:163] Valid states checked so far: 12,000,000, Expansions: 2,053,908, Global best: 103
+[00:05:44:16:066] Valid states checked so far: 12,200,000, Expansions: 2,082,942, Global best: 103
+[00:05:50:09:797] Valid states checked so far: 12,400,000, Expansions: 2,111,748, Global best: 103
+[00:05:55:23:128] Valid states checked so far: 12,600,000, Expansions: 2,142,470, Global best: 103
+[00:06:00:39:955] Valid states checked so far: 12,800,000, Expansions: 2,172,565, Global best: 103
+[00:06:06:00:114] Valid states checked so far: 13,000,000, Expansions: 2,202,889, Global best: 103
+[00:06:11:00:670] Valid states checked so far: 13,200,000, Expansions: 2,234,345, Global best: 103
+[00:06:16:33:833] Valid states checked so far: 13,400,000, Expansions: 2,263,733, Global best: 103
+[00:06:22:06:865] Valid states checked so far: 13,600,000, Expansions: 2,292,085, Global best: 103
+[00:06:27:46:203] Valid states checked so far: 13,800,000, Expansions: 2,321,768, Global best: 103
+[00:06:33:10:187] Valid states checked so far: 14,000,000, Expansions: 2,353,209, Global best: 103
+[00:06:39:03:242] Valid states checked so far: 14,200,000, Expansions: 2,382,767, Global best: 103
+[00:06:44:06:810] Valid states checked so far: 14,400,000, Expansions: 2,413,131, Global best: 103
+[00:06:49:22:851] Valid states checked so far: 14,600,000, Expansions: 2,444,070, Global best: 103
+[00:06:54:56:026] Valid states checked so far: 14,800,000, Expansions: 2,473,712, Global best: 103
+[00:07:00:33:524] Valid states checked so far: 15,000,000, Expansions: 2,503,485, Global best: 103
+[00:07:06:22:955] Valid states checked so far: 15,200,000, Expansions: 2,531,803, Global best: 103
+[00:07:11:14:523] Valid states checked so far: 15,400,000, Expansions: 2,561,491, Global best: 103
+[00:07:16:01:337] Valid states checked so far: 15,600,000, Expansions: 2,592,791, Global best: 103
+[00:07:21:19:117] Valid states checked so far: 15,800,000, Expansions: 2,622,157, Global best: 103
+[00:07:26:52:434] Valid states checked so far: 16,000,000, Expansions: 2,651,229, Global best: 103
+[00:07:32:23:521] Valid states checked so far: 16,200,000, Expansions: 2,679,713, Global best: 103
+[00:07:37:55:276] Valid states checked so far: 16,400,000, Expansions: 2,707,759, Global best: 103
+[00:07:43:51:498] Valid states checked so far: 16,600,000, Expansions: 2,736,505, Global best: 103
+[00:07:49:50:553] Valid states checked so far: 16,800,000, Expansions: 2,765,223, Global best: 103
+[00:07:51:42:953] Path of length 102 found: [168, 167, 166, 165, 164, 163, 162, 161, 160, 159, 158, 157, 156, 143, 130, 131, 132, 133, 134, 135, 122, 109, 110, 111, 112, 99, 100, 113, 126, 139, 140, 127, 114, 101, 102, 115, 128, 141, 142, 129, 116, 103, 90, 89, 88, 87, 74, 61, 60, 47, 34, 35, 36, 49, 62, 63, 64, 51, 38, 25, 12, 11, 10, 9, 8, 7, 6, 19, 32, 33, 46, 45, 58, 71, 72, 73, 86, 85, 84, 83, 82, 81, 80, 79, 78, 65, 52, 39, 26, 27, 28, 41, 54, 55, 56, 43, 30, 17, 4, 3, 2, 1, 0]
+[00:07:51:42:953] ! Unidirectional t-s. expansions: 2,775,286, time: 28,302,953 [ms], path length: 102 [edges], generated: 16,871,667
+[00:00:19:55:335] Expansions: 50,000. F states: 243,009, B states: 115,799. Checks: 557,505)
+[00:00:39:34:366] Expansions: 100,000. F states: 487,836, B states: 233,624. Checks: 1,117,124)
+[00:00:58:29:771] Expansions: 150,000. F states: 730,339, B states: 346,988. Checks: 1,664,118)
+[00:01:19:17:867] Expansions: 200,000. F states: 988,895, B states: 468,429. Checks: 2,254,201)
+[00:01:39:57:851] Expansions: 250,000. F states: 1,244,384, B states: 588,163. Checks: 2,844,124)
+[00:01:59:29:547] Expansions: 300,000. F states: 1,482,551, B states: 705,815. Checks: 3,414,116)
+[00:02:19:01:737] Expansions: 350,000. F states: 1,738,836, B states: 827,168. Checks: 4,002,772)
+[00:02:41:28:099] Expansions: 400,000. F states: 2,015,861, B states: 956,478. Checks: 4,653,774)
+[00:03:01:16:927] Expansions: 450,000. F states: 2,252,425, B states: 1,072,166. Checks: 5,197,785)
+[00:03:22:09:644] Expansions: 500,000. F states: 2,510,841, B states: 1,194,226. Checks: 5,795,576)
+[00:03:41:43:876] Expansions: 550,000. F states: 2,758,972, B states: 1,311,137. Checks: 6,363,650)
+[00:04:03:27:608] Expansions: 600,000. F states: 3,027,722, B states: 1,436,342. Checks: 6,983,822)
+[00:04:24:02:060] Expansions: 650,000. F states: 3,282,040, B states: 1,561,651. Checks: 7,599,825)
+[00:04:45:44:561] Expansions: 700,000. F states: 3,534,990, B states: 1,684,077. Checks: 8,206,348)
+[00:05:05:50:915] Expansions: 750,000. F states: 3,794,322, B states: 1,805,923. Checks: 8,818,404)
+[00:05:16:17:766] Path of length 102 found: [0, 1, 2, 3, 4, 17, 30, 43, 56, 55, 54, 41, 28, 27, 26, 39, 52, 65, 78, 79, 80, 81, 82, 83, 84, 71, 58, 45, 32, 19, 6, 7, 8, 9, 10, 11, 12, 25, 38, 51, 64, 63, 62, 49, 36, 35, 34, 33, 46, 47, 60, 59, 72, 85, 86, 73, 74, 87, 88, 101, 102, 89, 90, 103, 116, 129, 142, 141, 128, 115, 114, 127, 140, 139, 126, 113, 100, 99, 112, 111, 110, 109, 122, 135, 134, 133, 132, 131, 130, 143, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168]
+[00:05:16:17:767] ! Bidirectional. expansions: 767,661, time: 18,977,767 [ms], path length: 102 [edges], g_F: 66, g_B: 36, generated: 0, MM: 30, MMPER: 28.12621359223301%
+[00:05:16:17:767] average expansions: (464,693, 1,081,849, 170,543, 0)
+[00:05:16:17:767] average time: (6,073,950, 12,592,423, 4,309,824, 0)
+[00:05:16:17:767] XDFBnB: 464,693 , 6,073,950 (expansions , time[ms])
+[00:05:16:17:768] BiXDFBnB: 170,543 , 4,309,824 (expansions , time[ms])
+

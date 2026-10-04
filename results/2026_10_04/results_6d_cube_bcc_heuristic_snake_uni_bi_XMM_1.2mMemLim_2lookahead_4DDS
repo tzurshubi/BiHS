@@ -1,0 +1,49 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['XMM']
+lookahead: 2
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:00:039] Expansion 2: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:120] Expansion 6: New longest path found with length 6: [15, 31, 27, 25, 24, 8, 0]
+[00:00:00:00:596] Expansion 23: New longest path found with length 8: [15, 31, 27, 25, 24, 28, 12, 4, 0]
+[00:00:00:01:397] Expansion 57: New longest path found with length 10: [15, 13, 12, 28, 20, 21, 53, 37, 36, 32, 0]
+[00:00:00:04:850] Expansion 224: New longest path found with length 12: [15, 31, 30, 22, 20, 21, 53, 55, 51, 50, 34, 32, 0]
+[00:00:00:08:611] Expansion 440: New longest path found with length 14: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 48, 32, 0]
+[00:00:00:15:424] Expansion 870: New longest path found with length 16: [15, 14, 12, 28, 29, 25, 27, 26, 18, 22, 54, 55, 51, 49, 48, 32, 0]
+[00:00:00:28:382] Expansion 1,822: New longest path found with length 20: [15, 31, 29, 21, 53, 37, 45, 41, 43, 59, 51, 50, 34, 38, 46, 62, 60, 56, 24, 8, 0]
+[00:00:00:50:410] Expansion 3,714: New longest path found with length 22: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
+[00:00:00:50:533] Path of length 22 found: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
+[00:00:00:50:533] ! Unidirectional s-t. expansions: 3,714, time: 50,533 [ms], path length: 22 [edges], generated: 32,960
+[00:00:00:00:126] Expansion 9: New longest path found with length 4: [15, 13, 12, 4, 0]. g_current=1, g_opposite=3, f_max=33, generated=34
+[00:00:00:00:195] Expansion 16: New longest path found with length 6: [15, 31, 30, 22, 18, 16, 0]. g_current=4, g_opposite=2, f_max=32, generated=55
+[00:00:00:00:443] Expansion 39: New longest path found with length 8: [15, 13, 12, 28, 30, 22, 18, 16, 0]. g_current=3, g_opposite=5, f_max=31, generated=136
+[00:00:00:00:980] Expansion 97: New longest path found with length 10: [15, 31, 29, 21, 20, 22, 18, 26, 10, 8, 0]. g_current=5, g_opposite=5, f_max=30, generated=321
+[00:00:00:02:019] Expansion 212: New longest path found with length 12: [15, 13, 29, 21, 53, 37, 36, 38, 46, 42, 10, 8, 0]. g_current=6, g_opposite=6, f_max=29, generated=677
+[00:00:00:03:687] Expansion 419: New longest path found with length 14: [15, 13, 12, 28, 20, 21, 53, 61, 63, 62, 46, 38, 34, 32, 0]. g_current=7, g_opposite=7, f_max=28, generated=1,267
+[00:00:00:07:337] Expansion 883: New longest path found with length 16: [15, 31, 29, 21, 20, 22, 18, 26, 10, 42, 43, 41, 45, 37, 36, 32, 0]. g_current=8, g_opposite=8, f_max=27, generated=2,572
+[00:00:00:08:551] Expansion 1,061: New longest path found with length 18: [15, 13, 29, 21, 53, 37, 36, 44, 60, 62, 30, 22, 18, 50, 34, 42, 10, 8, 0]. g_current=9, g_opposite=9, f_max=26, generated=3,065
+[00:00:00:15:903] Expansion 2,155: New longest path found with length 20: [15, 31, 29, 21, 20, 22, 18, 50, 51, 49, 57, 41, 45, 37, 36, 38, 46, 42, 10, 8, 0]. g_current=10, g_opposite=10, f_max=25, generated=5,958
+[00:00:00:34:014] Expansion 4,854: New longest path found with length 22: [15, 31, 29, 25, 24, 26, 18, 22, 54, 62, 60, 44, 45, 37, 53, 49, 51, 59, 43, 42, 34, 32, 0]. g_current=11, g_opposite=11, f_max=25, generated=13,089
+[00:00:01:52:428] Path of length 22 found: [15, 31, 29, 25, 24, 26, 18, 22, 54, 62, 60, 44, 45, 37, 53, 49, 51, 59, 43, 42, 34, 32, 0]
+[00:00:01:52:821] ! Bidirectional. expansions: 17,663, time: 112,428 [ms], path length: 22 [edges], g_F: 11, g_B: 11, generated: 43,817, MM: 0, MMPER: -1.0%
+[00:00:01:52:821] average expansions: (3,714, 0, 17,663, 0)
+[00:00:01:52:821] average time: (50,533, 0, 112,428, 0)
+[00:00:01:52:821] XA*: 3,714 , 50,533 (expansions , time[ms])
+[00:00:01:52:821] XMM: 17,663 , 112,428 (expansions , time[ms])
+

@@ -1,0 +1,32 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [4, 4]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['XMM']
+lookahead: 2
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/4d_cube ----------
+[00:00:00:00:005] Expansion 2: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:006] Path of length 4 found: [15, 13, 12, 4, 0]
+[00:00:00:00:007] ! Unidirectional s-t. expansions: 4, time: 7 [ms], path length: 4 [edges], generated: 16
+[00:00:00:00:005] Expansion 7: New longest path found with length 4: [15, 13, 12, 8, 0]. g_current=1, g_opposite=3, f_max=4, generated=12
+[00:00:00:00:006] Path of length 4 found: [15, 13, 12, 8, 0]
+[00:00:00:00:248] ! Bidirectional. expansions: 7, time: 6 [ms], path length: 4 [edges], g_F: 1, g_B: 3, generated: 12, MM: 2, MMPER: 39.0%
+[00:00:00:00:249] average expansions: (4, 0, 7, 0)
+[00:00:00:00:249] average time: (7, 0, 6, 0)
+[00:00:00:00:249] XA*: 4 , 7 (expansions , time[ms])
+[00:00:00:00:249] XMM: 7 , 6 (expansions , time[ms])
+
