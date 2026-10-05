@@ -1,0 +1,34 @@
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [5, 5]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['A']
+lookahead: -1
+bsd: False
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/5d_cube ----------
+[00:00:00:00:074] Expansion 35: New longest path found with length 10: [15, 13, 29, 21, 20, 22, 18, 26, 10, 8, 0]
+[00:00:00:00:075] Path of length 10 found: [15, 13, 29, 21, 20, 22, 18, 26, 10, 8, 0]
+[00:00:00:00:075] ! Unidirectional s-t. expansions: 35, time: 75 [ms], path length: 10 [edges], generated: 74
+[00:00:00:00:012] Expansion 3: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:022] Expansion 8: New longest path found with length 6: [15, 14, 30, 26, 24, 8, 0]
+[00:00:00:00:068] Expansion 32: New longest path found with length 10: [15, 13, 29, 25, 24, 26, 18, 22, 20, 4, 0]
+[00:00:00:00:069] Path of length 10 found: [15, 13, 29, 25, 24, 26, 18, 22, 20, 4, 0]
+[00:00:00:00:392] ! Bidirectional. expansions: 33, time: 69 [ms], path length: 10 [edges], g_F: 6, g_B: 4, generated: 0, MM: 2, MMPER: 17.181818181818183%
+[00:00:00:00:392] average expansions: (35, 0, 33, 0)
+[00:00:00:00:392] average time: (75, 0, 69, 0)
+[00:00:00:00:392] XA*: 35 , 75 (expansions , time[ms])
+[00:00:00:00:392] BiXA*: 33 , 69 (expansions , time[ms])
+

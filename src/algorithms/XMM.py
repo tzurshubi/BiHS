@@ -53,8 +53,8 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
     OPEN_B.push(initial_state_B, initial_f_value_B, initial_f_value_B)
     OPENvOPEN.insert_state(initial_state_F, True)
     OPENvOPEN.insert_state(initial_state_B, False)
-    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices)}
-    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices)}
+    FNV_F = {(initial_state_F.head, initial_state_F.path_vertices_and_neighbors if snake else initial_state_F.path_vertices): initial_state_F.g}
+    FNV_B = {(initial_state_B.head, initial_state_B.path_vertices_and_neighbors if snake else initial_state_B.path_vertices): initial_state_B.g}
 
     # Best path found and its length
     best_path = None        # S in the pseudocode
@@ -160,7 +160,8 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
 
         for successor in successors:
             successor.graph = current_state.graph.copy()
-            if args.bsd and (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices) in FNV_D:
+            state_key = (successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices)
+            if args.bsd and state_key in FNV_D and FNV_D[state_key] >= successor.g:
                 # logger(f"symmetric state removed: {successor.path}")
                 stats["symmetric_states_removed"] += 1
                 continue
@@ -201,7 +202,7 @@ def XMM(graph, start, goal, heuristic_name, snake, args):
                 if cube and args.backward_sym_generation: 
                     OPEN_D_hat.push(successor_symmetric, priority_successor, priority_successor)
             
-            FNV_D.add((successor.head, successor.path_vertices_and_neighbors if snake else successor.path_vertices))
+            if args.bsd: FNV_D[state_key] = successor.g
             OPENvOPEN.insert_state(successor,directionF)
             if cube and args.backward_sym_generation:
                 OPENvOPEN.insert_state(successor_symmetric, not directionF)
