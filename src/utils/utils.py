@@ -154,15 +154,20 @@ def calculate_averages(avgs, log_file_name=None, args=None):
     # Summary two lines
     exp_avgs = averages_per_metric.get("expansions", [])
     time_avgs = averages_per_metric.get("time", [])
+    touched_avgs = averages_per_metric.get("touched", [])
     if exp_avgs[1]==0: exp_avgs[1]=exp_avgs[0]
     if time_avgs[1]==0: time_avgs[1]=time_avgs[0]
+    if touched_avgs[1]==0: touched_avgs[1]=touched_avgs[0]
     if len(exp_avgs) >= 2 and len(time_avgs) >= 2:
         first_min_exp = min(exp_avgs[0], exp_avgs[1])
         first_min_time = min(time_avgs[0], time_avgs[1])
+        first_min_touched = min(touched_avgs[0], touched_avgs[1])
         mid_exp = exp_avgs[2] if len(exp_avgs) >=3 else 0
         mid_time = time_avgs[2] if len(time_avgs) >=3 else 0
+        mid_touched = touched_avgs[2] if len(touched_avgs) >=3 else 0
         last_exp = exp_avgs[-1]
         last_time = time_avgs[-1]
+        last_touched = touched_avgs[-1]
 
         uni_algo_name = ""
         bi_algo_name = ""
@@ -180,9 +185,9 @@ def calculate_averages(avgs, log_file_name=None, args=None):
             bi_algo_name = "BiXA*"
         elif args.algo == "BHK":
             uni_algo_name = "BHK"
-        line1 = f"{uni_algo_name}: {first_min_exp} , {first_min_time} (expansions , time[ms])"
-        line2 = f"{bi_algo_name}: {mid_exp} , {mid_time} (expansions , time[ms])"
-        line3 = f"MDS1: {last_exp} , {last_time} (expansions , time[ms])"
+        line1 = f"{uni_algo_name}: {first_min_exp} , {first_min_time} , {first_min_touched} (expansions , time[ms] , touched)"
+        line2 = f"{bi_algo_name}: {mid_exp} , {mid_time} , {mid_touched} (expansions , time[ms] , touched)"
+        line3 = f"MDS1: {last_exp} , {last_time} , {last_touched} (expansions , time[ms] , touched)"
         
         if args.logger:
             args.logger(line1)
@@ -220,7 +225,8 @@ def init_search_stats(N):
 
     return {
         "expansions": 0,
-        "generated": 0, 
+        "touched": 0,  # heuristic evaluations, incl. lookahead leaves never expanded
+        "generated": 0,
         "generated_by_frontier": {'F': 0, 'B': 0},
         "symmetric_states_removed": 0,
         "dominated_states_removed": 0,

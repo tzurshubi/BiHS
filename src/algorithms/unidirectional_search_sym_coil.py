@@ -22,7 +22,7 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
     initial_state = State(graph, [start], [], snake, args) if isinstance(start, int) else State(graph, start, [], snake, args)
 
     # Initial f_value
-    initial_h_value = heuristic(initial_state, goal, heuristic_name, snake)
+    initial_h_value = heuristic(initial_state, goal, heuristic_name, snake, args)
     initial_f_value = initial_state.g + initial_h_value
 
     # Push initial state with priority based on f_value
@@ -99,7 +99,7 @@ def unidirectional_search_sym_coil(graph, start, goal, heuristic_name, snake, ar
                         break
             else:
                 # Calculate the heuristic value
-                h_successor = heuristic(successor, goal, heuristic_name, snake)
+                h_successor = heuristic(successor, goal, heuristic_name, snake, args)
             # Calculate the g_successor
             g_successor = successor.g
             # Calculate the f_value

@@ -634,7 +634,7 @@ if __name__ == "__main__":
     results = []
     for algorithm in args.algorithms:
         args.algo = algorithm
-        avgs={"uni_st": {"expansions":[], "time":[]}, "uni_ts":{"expansions":[], "time":[]}, "bi":{"expansions":[], "time":[]}, "multi":{"expansions":[], "time":[]}}
+        avgs={"uni_st": {"expansions":[], "time":[], "touched":[]}, "uni_ts":{"expansions":[], "time":[], "touched":[]}, "bi":{"expansions":[], "time":[], "touched":[]}, "multi":{"expansions":[], "time":[], "touched":[]}}
         if (graph_type=="maze" and per_blocked==0) or graph_type=="cube": number_of_graphs = 1
         for i in list(range(args.init_graph_num, args.init_graph_num + number_of_graphs)):
         # for i in range(number_of_graphs, number_of_graphs+1):
@@ -680,8 +680,9 @@ if __name__ == "__main__":
                 )
                 avgs["uni_st"]["expansions"].append(logs['expansions'])
                 avgs["uni_st"]["time"].append(logs['time[ms]'])
-                if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated'] if "generated" in logs else "N/A"}") # , memory: {logs['memory[kB]']:,} [kB]
-                else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated'] if "generated" in logs else "N/A"}")
+                avgs["uni_st"]["touched"].append(logs['touched'])
+                if path: args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, path length: {len(path)-1:,} [edges], generated: {logs['generated'] if "generated" in logs else "N/A"}") # , memory: {logs['memory[kB]']:,} [kB]
+                else:    args.logger(f"! Unidirectional s-t. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, generated: {logs['generated'] if "generated" in logs else "N/A"}")
                 results.append(
                     {
                         "# blocks": i,
@@ -700,7 +701,8 @@ if __name__ == "__main__":
                     )
                     avgs["uni_ts"]["expansions"].append(logs['expansions'])
                     avgs["uni_ts"]["time"].append(logs['time[ms]'])
-                    args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated'] if "generated" in logs else "N/A"}") # , memory: {logs['memory[kB]']:,} [kB]
+                    avgs["uni_ts"]["touched"].append(logs['touched'])
+                    args.logger(f"! Unidirectional t-s. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, path length: {len(path)-1:,} [edges], generated: {logs['generated'] if "generated" in logs else "N/A"}") # , memory: {logs['memory[kB]']:,} [kB]
                     results.append(
                         {
                             "# blocks": i,
@@ -719,9 +721,10 @@ if __name__ == "__main__":
                 )
                 avgs["bi"]["expansions"].append(logs['expansions'])
                 avgs["bi"]["time"].append(logs['time[ms]'])
+                avgs["bi"]["touched"].append(logs['touched'])
                 # print(f"expanded states with g over C*/2 ({(len(path)-1)/2}): {len([s for s in logs["g_values"] if s > (len(path)-1)/2])}")
                 if not args.sym_coil: 
-                    args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                    args.logger(f"! Bidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, path length: {len(path)-1:,} [edges], g_F: {logs['g_F']:,}, g_B: {logs['g_B']:,}, generated: {logs['generated']}, MM: {abs(logs['g_F']-logs['g_B'])}, MMPER: {100*abs(logs['g_F']-logs['g_B'])/len(path)-1}%") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                     results.append(
                     {
                         "# blocks": i,
@@ -733,8 +736,8 @@ if __name__ == "__main__":
                     }
                 )
                 else:
-                    if path:    args.logger(f"! Bidirectional Symmetrical Coil. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
-                    else:       args.logger(f"! Bidirectional Symmetrical Coil. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                    if path:    args.logger(f"! Bidirectional Symmetrical Coil. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, path length: {len(path)-1:,} [edges], generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                    else:       args.logger(f"! Bidirectional Symmetrical Coil. No path found. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, generated: {logs['generated']}") #  , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                     results.append(
                     {
                         "# blocks": i,
@@ -751,7 +754,7 @@ if __name__ == "__main__":
                     name_of_graph, start, goal, "multidirectional", heuristic, snake,args
                 )
                 path_length = len(path)-1 if path else "N/A"
-                args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], path length: {path_length} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
+                args.logger(f"! Multidirectional. expansions: {logs['expansions']:,}, time: {logs['time[ms]']:,} [ms], touched: {logs['touched']:,}, path length: {path_length} [edges], generated: {logs['generated']}") # , memory: {logs['memory[kB]']:,} [kB] , moved_OPEN_to_AUXOPEN:{logs['moved_OPEN_to_AUXOPEN']}
                 results.append(
                     {
                         "# blocks": i,
@@ -766,6 +769,7 @@ if __name__ == "__main__":
 
                 avgs["multi"]["expansions"].append(logs['expansions'])
                 avgs["multi"]["time"].append(logs['time[ms]'])
+                avgs["multi"]["touched"].append(logs['touched'])
 
 
                 

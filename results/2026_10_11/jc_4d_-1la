@@ -1,0 +1,47 @@
+------------------------------------
+Mon 05 Oct 2026 19:13:30 IDT
+SLURM_JOBID:		22237089
+SLURM_JOB_NODELIST:	ise-cpu256-13
+SLURM_SCRATCH_DIR:	/scratch/shubit/22237089
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Mon 05 Oct 2026 19:13:30 IDT
+
+SLURM_JOBID:		 22237089
+SLURM_JOB_NODELIST:	 ise-cpu256-13 
+
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [4, 4]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['XMM']
+lookahead: -1
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/4d_cube ----------
+[00:00:00:00:005] Expansion 4: New longest path found with length 4: [15, 13, 12, 4, 0]
+[00:00:00:00:005] Path of length 4 found: [15, 13, 12, 4, 0]
+[00:00:00:00:005] ! Unidirectional s-t. expansions: 4, time: 5 [ms], path length: 4 [edges], generated: 6
+[00:00:00:00:005] Expansion 7: New longest path found with length 4: [15, 13, 12, 8, 0]. g_current=1, g_opposite=3, f_max=4, generated=12
+[00:00:00:00:005] Path of length 4 found: [15, 13, 12, 8, 0]
+[00:00:00:00:209] ! Bidirectional. expansions: 7, time: 5 [ms], path length: 4 [edges], g_F: 1, g_B: 3, generated: 12, MM: 2, MMPER: 39.0%
+
+[00:00:00:00:209] average expansions: (4, 0, 7, 0)
+[00:00:00:00:209] average time: (5, 0, 5, 0)
+[00:00:00:00:210] XA*: 4 , 5 (expansions , time[ms])
+[00:00:00:00:210] XMM: 7 , 5 (expansions , time[ms])
+

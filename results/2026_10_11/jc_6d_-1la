@@ -1,0 +1,56 @@
+------------------------------------
+Mon 05 Oct 2026 19:14:32 IDT
+SLURM_JOBID:		22237101
+SLURM_JOB_NODELIST:	ise-cpu256-02
+SLURM_SCRATCH_DIR:	/scratch/shubit/22237101
+Allocated Resouces:	cpu - 2 / mem - 61440 MB / gpu - 
+SLURM_GPU_INDEX:	
+Running as shubit from shimony account with normal QOS
+------------------------------------
+Mon 05 Oct 2026 19:14:33 IDT
+
+SLURM_JOBID:		 22237101
+SLURM_JOB_NODELIST:	 ise-cpu256-02 
+
+--------------------------
+date: cubes
+number_of_graphs: 10
+graph_type: cube
+size_of_graphs: [6, 6]
+heuristic: bcc_heuristic
+snake: True
+run_uni: True
+run_bi: True
+run_multi: False
+solution_vertices: []
+algorithms: ['XMM']
+lookahead: -1
+bsd: True
+cube_first_dims: 4
+cube_buffer_dim: None
+backward_sym_generation: False
+sym_coil: False
+prefix_set: None
+
+---------- cubes/6d_cube ----------
+[00:00:00:36:610] Expansion 6,437: New longest path found with length 22: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
+[00:00:00:36:717] Path of length 22 found: [15, 31, 29, 25, 24, 26, 10, 42, 43, 59, 51, 49, 53, 37, 45, 44, 60, 62, 54, 22, 20, 4, 0]
+[00:00:00:36:718] ! Unidirectional s-t. expansions: 6,437, time: 36,717 [ms], path length: 22 [edges], generated: 15,584
+[00:00:00:00:122] Expansion 9: New longest path found with length 4: [15, 13, 12, 4, 0]. g_current=1, g_opposite=3, f_max=33, generated=34
+[00:00:00:00:185] Expansion 16: New longest path found with length 6: [15, 31, 30, 22, 18, 16, 0]. g_current=4, g_opposite=2, f_max=32, generated=55
+[00:00:00:00:405] Expansion 39: New longest path found with length 8: [15, 13, 12, 28, 30, 22, 18, 16, 0]. g_current=3, g_opposite=5, f_max=31, generated=136
+[00:00:00:00:894] Expansion 97: New longest path found with length 10: [15, 31, 29, 21, 20, 22, 18, 26, 10, 8, 0]. g_current=5, g_opposite=5, f_max=30, generated=321
+[00:00:00:01:848] Expansion 212: New longest path found with length 12: [15, 13, 29, 21, 53, 37, 36, 38, 46, 42, 10, 8, 0]. g_current=6, g_opposite=6, f_max=29, generated=677
+[00:00:00:03:354] Expansion 419: New longest path found with length 14: [15, 13, 12, 28, 20, 21, 53, 61, 63, 62, 46, 38, 34, 32, 0]. g_current=7, g_opposite=7, f_max=28, generated=1,267
+[00:00:00:06:546] Expansion 883: New longest path found with length 16: [15, 31, 29, 21, 20, 22, 18, 26, 10, 42, 43, 41, 45, 37, 36, 32, 0]. g_current=8, g_opposite=8, f_max=27, generated=2,571
+[00:00:00:07:675] Expansion 1,061: New longest path found with length 18: [15, 13, 29, 21, 53, 37, 36, 44, 60, 62, 30, 22, 18, 50, 34, 42, 10, 8, 0]. g_current=9, g_opposite=9, f_max=26, generated=3,064
+[00:00:00:14:296] Expansion 2,145: New longest path found with length 20: [15, 31, 29, 21, 20, 22, 18, 50, 51, 49, 57, 41, 45, 37, 36, 38, 46, 42, 10, 8, 0]. g_current=10, g_opposite=10, f_max=25, generated=5,927
+[00:00:00:29:897] Expansion 4,832: New longest path found with length 22: [15, 31, 29, 25, 24, 26, 18, 22, 54, 62, 60, 44, 45, 37, 53, 49, 51, 59, 43, 42, 34, 32, 0]. g_current=11, g_opposite=11, f_max=25, generated=13,001
+[00:00:01:36:956] Path of length 22 found: [15, 31, 29, 25, 24, 26, 18, 22, 54, 62, 60, 44, 45, 37, 53, 49, 51, 59, 43, 42, 34, 32, 0]
+[00:00:01:37:340] ! Bidirectional. expansions: 17,515, time: 96,956 [ms], path length: 22 [edges], g_F: 11, g_B: 11, generated: 43,122, MM: 0, MMPER: -1.0%
+
+[00:00:01:37:340] average expansions: (6,437, 0, 17,515, 0)
+[00:00:01:37:340] average time: (36,717, 0, 96,956, 0)
+[00:00:01:37:341] XA*: 6,437 , 36,717 (expansions , time[ms])
+[00:00:01:37:341] XMM: 17,515 , 96,956 (expansions , time[ms])
+

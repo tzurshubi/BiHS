@@ -98,7 +98,7 @@ def initialize_segments_and_frontiers(graph, start, goal, solution_vertices, heu
             if isinstance(frontier["start"], int)
             else State(graph, frontier["start"], [], snake)
         )
-        initial_state.h = heuristic(initial_state, frontier["goal"], heuristic_name, snake)
+        initial_state.h = heuristic(initial_state, frontier["goal"], heuristic_name, snake, args)
         initial_f_value = initial_state.g + initial_state.h
 
         # Push initial state
@@ -259,7 +259,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
 
                     generated += 1
                     multi_generated += 1
-                    h_successor = heuristic(successor, seg_goal, heuristic_name, snake)
+                    h_successor = heuristic(successor, seg_goal, heuristic_name, snake, args)
                     if h_successor >= 0:
                         g_successor = current_path_length + 1
                         f_successor = g_successor + h_successor
@@ -277,7 +277,7 @@ def multidirectional_search(graph, start, goal, solution_vertices, heuristic_nam
                     # If this is not Forward from start or Backward from goal, we need to add this state to another OPEN list
                     if additional_frontier:
                         additional_segment = additional_frontier["segment"]
-                        h_successor = heuristic(successor, additional_frontier["goal"] if directionF else additional_frontier["start"], heuristic_name, snake)
+                        h_successor = heuristic(successor, additional_frontier["goal"] if directionF else additional_frontier["start"], heuristic_name, snake, args)
                         if h_successor >= 0:
                             f_successor = g_successor + h_successor
                             

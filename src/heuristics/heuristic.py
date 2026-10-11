@@ -1807,6 +1807,9 @@ def find_component_containing_vertex(tric, vertex):
 
 def heuristic(state, goal, heuristic_name, snake, args=None, h_graph=None):
     # print(f"Calculating heuristic {heuristic_name} for {state.materialize_path()} and {goal.materialize_path() if isinstance(goal, State) else goal} with snake={snake}")
+    # Every algorithm evaluates h through here, so this counts touched nodes for all of them.
+    if args is not None:
+        args.stats["touched"] += 1
     if heuristic_name == "heuristic0": return len(h_graph.nodes) if h_graph else len(state.graph.nodes)
     #F2F heuristics
     if isinstance(goal, State) and isinstance(state, State): #F2F heuristic

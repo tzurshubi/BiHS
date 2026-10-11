@@ -160,7 +160,7 @@ def parse_and_check_results(directory):
 
             # 4. Extract final summary stats
             summary_match = re.search(
-                r"(XA\*|XMM|XDFBnB|BiXA\*|BiXDFBnB|XIDA|BiXIDA):\s*([\d,]+)\s*,\s*([\d,]+)\s*\(expansions", line)
+                r"(XA\*|XMM|XDFBnB|BiXA\*|BiXDFBnB|XIDA|BiXIDA):\s*([\d,]+)\s*,\s*([\d,]+)\s*(?:,\s*[\d,]+\s*)?\(expansions", line)
             if summary_match:
                 alg = summary_match.group(1)
                 expansions = summary_match.group(2).replace(',', '')

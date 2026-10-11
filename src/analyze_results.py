@@ -9,7 +9,7 @@ file_name_must_include = ["results"]
 file_name_must_not_include = ["csv"]
 
 # Regex patterns
-result_pattern = re.compile(r"(A\*|XMM):\s*(\d+)\s*,\s*(\d+)\s*\(expansions\s*,\s*time\[ms\]\)")
+result_pattern = re.compile(r"(A\*|XMM):\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*\d+\s*)?\(expansions\s*,\s*time\[ms\](?:\s*,\s*touched)?\)")
 size_pattern = re.compile(r"\s*(\d+)\s*x\s*(\d+)", re.IGNORECASE)
 blocks_pattern = re.compile(r"_\s*(\d+)per", re.IGNORECASE)
 

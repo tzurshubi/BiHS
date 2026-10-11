@@ -39,22 +39,22 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
 
     # Initial state
     s0F = State(graph, [s], [], snake)
-    s0F.h = heuristic(s0F, v, heuristic_name, snake)
+    s0F.h = heuristic(s0F, v, heuristic_name, snake, args)
     OPEN_0F.push(s0F, s0F.g + s0F.h)
     OPENvOPEN0.insert_state(s0F, True)
 
     s0B = State(graph, [v], [], snake)
-    s0B.h = heuristic(s0B, s, heuristic_name, snake)
+    s0B.h = heuristic(s0B, s, heuristic_name, snake, args)
     OPEN_0B.push(s0B, s0B.g + s0B.h)
     OPENvOPEN0.insert_state(s0B, False)
 
     s1F = State(graph, [v], [], snake)
-    s1F.h = heuristic(s1F, t, heuristic_name, snake)
+    s1F.h = heuristic(s1F, t, heuristic_name, snake, args)
     OPEN_1F.push(s1F, s1F.g + s1F.h)
     OPENvOPEN1.insert_state(s1F, True)
 
     s1B = State(graph, [t], [], snake)
-    s1B.h = heuristic(s1B, v, heuristic_name, snake)
+    s1B.h = heuristic(s1B, v, heuristic_name, snake, args)
     OPEN_1B.push(s1B, s1B.g + s1B.h)
     OPENvOPEN1.insert_state(s1B, False)
 
@@ -189,7 +189,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
             # into BOTH OPEN_0B and OPEN_1F with different heuristics.
             if (i == 0 and D == "B") or (i == 1 and D == "F"):
                 # Heuristic for OPEN_0B (target = s)
-                h_to_s = heuristic(Np, s, heuristic_name, snake)
+                h_to_s = heuristic(Np, s, heuristic_name, snake, args)
                 if h_to_s >= 0:
                     f_to_s = Np.g + h_to_s
                     # Do NOT rely on Np.h staying as h_to_s; just push with key.
@@ -199,7 +199,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
                         gui_successors.append((Np, f_to_s, h_to_s))
 
                 # Heuristic for OPEN_1F (target = t)
-                h_to_t = heuristic(Np, t, heuristic_name, snake)
+                h_to_t = heuristic(Np, t, heuristic_name, snake, args)
                 if h_to_t >= 0:
                     f_to_t = Np.g + h_to_t
                     OPEN_1F.push(Np, f_to_t)
@@ -210,7 +210,7 @@ def multidirectional_search1(graph, s, t, v, heuristic_name, snake, args):
                 continue
 
             # Otherwise: normal single-OPEN insertion (your original)
-            h_single = heuristic(Np, h_target, heuristic_name, snake)
+            h_single = heuristic(Np, h_target, heuristic_name, snake, args)
             if h_single < 0:
                 continue
             f_single = Np.g + h_single
